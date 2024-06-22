@@ -5,6 +5,8 @@
 
 - Laravel 11.x
 - Laravel Sail for docker
+- Vue 3
+- PrimeVue 3 (Unstyled)
 
 ### Docker:
 

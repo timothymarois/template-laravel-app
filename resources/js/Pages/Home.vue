@@ -5,7 +5,14 @@
     <p class="mb-8 leading-normal text-red-500">This is a home page.</p>
 
     <div>
-      {{  $page.component  }}
+      <!-- {{  $page.component  }} -->
+      <Button label="Save Changes" disabled />
+
+      <Link href="/about">About</Link>
     </div>
   </div>
 </template>
+
+<script setup>
+import Button from 'primevue/button';
+</script>
