@@ -6,8 +6,11 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@inertiajs/vue3": "^1.2.0",
+        "@vitejs/plugin-vue": "^5.0.5",
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0",
+        "lodash": "^4.17.21",
         "vite": "^5.0"
     }
 }
