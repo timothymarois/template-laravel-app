@@ -1,10 +1,10 @@
 <template>
-    <div class="max-w-8xl lg:max-w-full mx-auto px-6 lg:px-8">
+    <AppContainer>
         <div>Example Layout Nav with page-level prop: "{{  props.example }}")</div>
         <slot />
 
-        <!-- {{  page }} -->
-    </div>
+        {{  page }}
+    </AppContainer>
 </template>
 
 <script setup>
@@ -13,5 +13,5 @@ const props = defineProps({
     'example': String
 });
 
-// const page = usePage();
+const page = usePage();
 </script>

@@ -60,6 +60,13 @@ npm run build
 - ❌ Example: Pagination (with filters)
 ---
 
+### Auto-imports
+
+Simplifies the import if reusable functionality. Thes packages will auto-import components, stores and other reusable methods.
+
+- ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
+- ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)
+
 ### Client-side state management
 
 **Note:** You should only use pinia state management if you need to save additional items that the client-side creates (unrelated to the server). A good example of this; saving the user's table columns and sorting. You can also use the persisted state option to save data in localstorage.
