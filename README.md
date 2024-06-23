@@ -63,7 +63,7 @@ npm run build
 
 Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing. You can modify the import settings inside your `vite.config.js`.
 
-*Note: Since this will auto-import components based on their name, keep in mind of same name components across the application. There is auto-import component option to use directory prefix, but does not seem to work yet.*
+*Note: Auto-import components supports directory name prefix for same name components.*
 
 - ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
 - ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)

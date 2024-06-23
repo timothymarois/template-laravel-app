@@ -22,11 +22,12 @@ export default defineConfig({
             },
         }),
         Components({
+            extensions: ['vue','svg'],
             directoryAsNamespace: true,
             collapseSamePrefixes: true,
             dirs: [
-                './resources/js/Layouts/**',
-                './resources/js/Components/**',
+                './resources/js/Layouts/',
+                './resources/js/Components/',
             ],
             imports: [
                 {

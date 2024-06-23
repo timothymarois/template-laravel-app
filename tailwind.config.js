@@ -5,7 +5,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/presets/**/*.{js,vue,ts}',
         './resources/views/**/*.blade.php',
-        './resources/js/**/*.{js,vue}',
+        './resources/js/**/*.{js,ts,vue}',
     ],
     plugins: [
         require('@tailwindcss/forms'),

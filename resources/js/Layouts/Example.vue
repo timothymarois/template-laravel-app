@@ -1,8 +1,8 @@
 <template>
-    <Container>
+    <OtherContainer>
         <div>Example Layout Nav with page-level prop: "{{  props.example }}"</div>
         <slot />
-    </Container>
+    </OtherContainer>
 </template>
 
 <script setup>
