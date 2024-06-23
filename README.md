@@ -48,10 +48,11 @@ npm run build
 ---
 - ❌ Example: loading external component data
 - ❌ Example: loading external component data (using auth)
-- ❌ Example: sign up form and controller
-- ❌ Example: login form
-- ❌ Example: Login controller and routes
-- ❌ Example: Logout
+- ❌ Example: public API
+- ✅ Example: sign up form and controller
+- ✅ Example: login form
+- ✅ Example: Login controller and routes
+- ✅ Example: Logout
 - ❌ Example: Pagination (with filters)
 
 ---

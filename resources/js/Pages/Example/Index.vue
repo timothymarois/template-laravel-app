@@ -3,7 +3,7 @@
         <Head title="Home Example" />
         <h1 class="mb-8 text-3xl font-bold">Home</h1>
         <div>
-            <Link href="/example/about">About</Link> | <Link href="/example/store">Store</Link>
+            <Link href="/example/about">About</Link> | <Link href="/example/store">Store</Link> | <Link v-if="user" href="/logout">Logout</Link>
         </div>
         <div class="mt-6">
             <div>Page Prop:</div>
@@ -25,10 +25,3 @@ const props = defineProps({
     'user': Object
 });
 </script>
-
-<!-- <script>
-import Layout from '@/Layouts/Example.vue';
-export default defineComponent({
-	layout: Layout,
-});
-</script> -->

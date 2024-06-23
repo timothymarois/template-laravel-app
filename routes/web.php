@@ -18,6 +18,7 @@ Route::get('register', [RegisterController::class, 'registerView'])->name('regis
 Route::get('login', [LoginController::class, 'loginView'])->name('login');
 Route::post('auth/register', [RegisterController::class, 'store'])->name('auth.register');
 Route::post('auth/login', [LoginController::class, 'authenticate'])->name('auth.login');
+Route::get('logout', [LoginController::class, 'destroy'])->name('auth.logout');
 
 /**
  * Example routes

@@ -1,5 +1,5 @@
 <template>
     <div>
-        This is the home page.
+        This is the home page. <Link href="/example">Example</Link>
     </div>
 </template>
