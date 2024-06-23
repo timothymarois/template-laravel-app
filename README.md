@@ -34,16 +34,19 @@ npm run build
 - ✅ Vuejs 3
 - ✅ Tailwind 3
 - ✅ PrimeVue 3 (unstyled)
+- ✅ Inertia (Laravel + Vue)
 ---
+- Run docker: `./vendor/bin/sail up` and then you can use the container in VSC or docker desktop
 - ✅ Docker with php 8.3
 - ✅ Docker with mysql 8
 - ✅ Docker with redis
 - ✅ Docker with supervisor (for job queue workers)
 ---
+- ✅ Phpunit `php artisan test`
 - ❌ Larastan
 - ❌ Laravel Pint
-- ✅ Phpunit `php artisan test`
 ---
+- ✅ Example: Pages, routes and controllers
 - ✅ Example: Page titles
 - ✅ Example: Shared page layouts
 - ✅ Example: Page props (data from controller) 
@@ -57,4 +60,4 @@ npm run build
 ---
 - ❌ Pinia state management 
 - ❌ Pinia persistent state 
-- ❌ Example Pinia store
+- ❌ Example: Pinia store usage
