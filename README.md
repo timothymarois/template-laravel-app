@@ -58,8 +58,8 @@ npm run build
 - ❌ Example: Login controller and routes
 - ❌ Example: Logout
 ---
-- ❌ Pinia state management 
-- ❌ Pinia persistent state 
+- ✅ Pinia state management 
+- ✅ Pinia persistent state (local storage)
 - ❌ Example: Pinia store usage
 
 

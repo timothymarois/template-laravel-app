@@ -4,6 +4,7 @@ import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import PrimeVue from 'primevue/config';
 import Lara from '/resources/presets/lara';
@@ -23,6 +24,7 @@ createInertiaApp({
     title: title => title ? `${title} - Brand` : 'Brand',
     setup({ el, App, props, plugin }) {
         const pinia = createPinia()
+        pinia.use(piniaPluginPersistedstate)
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(pinia)
