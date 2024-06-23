@@ -58,10 +58,14 @@ npm run build
 - ❌ Example: Login controller and routes
 - ❌ Example: Logout
 ---
+
+### Client State Management
+
+You only should use this pinia state management if you need to save additional items that the client-side creates unrelated to the server. A good example might be, saving the user's table columns with sorting. You can use persisted store for this in localstorage.
+
 - ✅ Pinia state management 
 - ✅ Pinia persistent state (local storage)
 - ❌ Example: Pinia store usage
-
 
 ## Performance:
 
