@@ -46,11 +46,6 @@ npm run build
 - ❌ Larastan
 - ❌ Laravel Pint
 ---
-- ✅ Example: Pages, routes and controllers
-- ✅ Example: Page titles
-- ✅ Example: Shared page layouts
-- ✅ Example: Page props (page-level props from controllers) 
-- ✅ Example: Shared props (across all pages)
 - ❌ Example: loading external component data
 - ❌ Example: loading external component data (using auth)
 - ❌ Example: sign up form and controller
@@ -58,6 +53,54 @@ npm run build
 - ❌ Example: Login controller and routes
 - ❌ Example: Logout
 - ❌ Example: Pagination (with filters)
+
+## Page props (by Inertia)
+
+Page level props are passed by controller data. You can also pass shared props here since Inertia will merge them into one. Keep in mind that page data and shared data will need to have unique key names to avoid being replaced.
+
+*Note: The layout and all components on the page can access these props.*
+
+- ✅ Example: Pages, routes and controllers
+- ✅ Example: [Page props](https://inertiajs.com/pages) (page-level props from controllers) 
+- ✅ Example: [Shared props](https://inertiajs.com/shared-data) (across all pages)
+
+*In controller:* 
+```php
+return Inertia::render('Example/Index',[
+    'example' => 'Example Prop 1'
+]);
+```
+*In page component:*
+```js
+const props = defineProps({
+    'example': String
+});
+```
+
+## Page title (by Inertia)
+
+Dynamically change the page title based on the page or layout.
+
+- ✅ Example: Page titles
+
+```vue
+<!-- include the inertia Head on the page -->
+<Head title="Home Page" />
+```
+
+## Page layouts
+
+The ability to create universal layouts for specific pages.
+
+- ✅ Page layouts
+- ✅ Example: Shared page layouts
+
+```js
+// include layout name or omit it to use default
+const props = defineProps({
+    'layout': 'Example'
+});
+```
 
 ## Auto-imports
 
