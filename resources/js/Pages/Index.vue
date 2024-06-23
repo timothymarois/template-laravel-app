@@ -1,5 +1,5 @@
 <template>
-    <ExamplesAppContainer>
+    <div>
         This is the home page.
-    </ExamplesAppContainer>
+    </div>
 </template>
