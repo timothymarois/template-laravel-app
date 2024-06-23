@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue'
 
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite';
+import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
     plugins: [
@@ -33,7 +34,10 @@ export default defineConfig({
                 },
             ],
             dts: true,
-            deep: true
+            deep: true,
+            resolvers: [
+                PrimeVueResolver()
+            ]
         }),
         AutoImport({
             defaultExportByFilename: true,

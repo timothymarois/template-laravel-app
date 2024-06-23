@@ -67,6 +67,7 @@ Saves you time by simplifying the import of reusable stores, components and func
 
 - ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
 - ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)
+- ✅ Includes the auto-import of [PrimeVue components](https://primevue.org/autocomplete/)
 
 ## Client-side state management
 

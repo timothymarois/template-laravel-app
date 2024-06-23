@@ -18,7 +18,6 @@
 </template>
 
 <script setup>
-import Button from 'primevue/button';
 const props = defineProps({
     'example': String,
     'shared': String
