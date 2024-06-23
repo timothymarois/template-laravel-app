@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SessionController;
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ExampleController;
@@ -15,10 +15,10 @@ Route::get('/', [PageController::class, 'index'])->name('index');
  * - Login
  */
 Route::get('register', [RegisterController::class, 'registerView'])->name('register');
-Route::get('login', [LoginController::class, 'loginView'])->name('login');
-Route::post('auth/register', [RegisterController::class, 'store'])->name('auth.register');
-Route::post('auth/login', [LoginController::class, 'authenticate'])->name('auth.login');
-Route::get('logout', [LoginController::class, 'destroy'])->name('auth.logout');
+Route::get('login', [SessionController::class, 'loginView'])->name('login');
+Route::post('auth/register', [SessionController::class, 'store'])->name('auth.register');
+Route::post('auth/login', [SessionController::class, 'authenticate'])->name('auth.login');
+Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
 
 /**
  * Example routes
