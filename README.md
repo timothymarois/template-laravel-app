@@ -49,8 +49,8 @@ npm run build
 - ✅ Example: Pages, routes and controllers
 - ✅ Example: Page titles
 - ✅ Example: Shared page layouts
-- ✅ Example: Page props (data from controller) 
-- ✅ Example: Shared props (like user data)
+- ✅ Example: Page props (page-level props from controllers) 
+- ✅ Example: Shared props (across all pages)
 - ❌ Example: loading external component data
 - ❌ Example: loading external component data (using auth)
 - ❌ Example: sign up form and controller
@@ -67,7 +67,7 @@ npm run build
 - ✅ [Pinia](https://pinia.vuejs.org/) state management 
 - ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate)
 - ✅ Example: Pinia store (with state, getters and actions)
-- ❌ Example: Pinia store (with persist localstorage)
+- ✅ Example: Pinia store (with persist localstorage)
 - ❌ Example: Pinia store (shared across pages)
 
 ## Performance:
