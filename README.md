@@ -61,16 +61,18 @@ npm run build
 
 ## Auto-imports
 
-Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing.
+Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing. You can modify the import settings inside your `vite.config.js`.
 
-**Note:** Since this will auto-import components based on their name, keep in mind of same name components across the application.
+*Note: Since this will auto-import components based on their name, keep in mind of same name components across the application.*
 
 - ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
 - ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)
 
 ## Client-side state management
 
-**Note:** You should only use pinia state management if you need to save additional items that the client-side creates (unrelated to the server). A good example of this; saving the user's table columns and sorting. You can also use the persisted state option to save data in localstorage.
+Allows you to have client-side state management across your application. This also includes using LocalStorage to save (persisted state). 
+
+*Note: For most of the use-cases, using page props from Laravel controllers, you should only use state management in rare cases that you need to control the state only on the client-side. A good example of this; saving the user's table columns and sorting.*
 
 - ✅ [Pinia](https://pinia.vuejs.org/) state management 
 - ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate)
