@@ -14,8 +14,9 @@ export const shoppingCart = defineStore('shopping-cart-store', {
         add(product) {
             const existingProduct = this.products.find(p => p.id === product.id);
             if (existingProduct) {
-                existingProduct.qty += product.qty;
+                existingProduct.qty += 1;
             } else {
+                product.qty = 1
                 this.products.push(product);
             }
         },
@@ -29,6 +30,7 @@ export const shoppingCart = defineStore('shopping-cart-store', {
             this.products = [];
         }
     },
+    // persist: false,
     persist: {
         key: 'cart',
     }

@@ -81,7 +81,7 @@ Allows you to have client-side state management across your application. This al
 - ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate)
 - ✅ Example: Pinia store (with state, getters and actions)
 - ✅ Example: Pinia store (with persist localstorage)
-- ❌ Example: Pinia store (shared across pages)
+- ✅ Example: Pinia store (shared across pages)
 
 ## Performance:
 

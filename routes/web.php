@@ -12,3 +12,4 @@ Route::get('/', [PageController::class, 'index'])->name('index');
  */
 Route::get('/example', [ExampleController::class, 'index'])->name('example.index');
 Route::get('/example/about', [ExampleController::class, 'about'])->name('example.about');
+Route::get('/example/store', [ExampleController::class, 'store'])->name('example.store');

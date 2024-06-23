@@ -20,4 +20,9 @@ class ExampleController extends Controller
             'example' => 'Example Prop 2'
         ]);
     }
+
+    public function store(): Response
+    {
+        return Inertia::render('Example/Store');
+    }
 }
