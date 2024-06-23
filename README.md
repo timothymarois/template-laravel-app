@@ -147,7 +147,7 @@ const path = route('login')
 Easily add svg icons that can change size and color.
 
 - ✅ [PrimeVue Icons](https://primevue.org/icons/)
-- ✅ Thousands of searching svg icons at [Iconify](https://icon-sets.iconify.design/)
+- ✅ Search thousands of icons at [Iconify](https://icon-sets.iconify.design/)
 
 <details>
 <summary>Show example</summary>
