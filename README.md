@@ -66,6 +66,9 @@ Page level props are passed by controller data. You can also pass shared props h
 - ✅ Example: [Page props](https://inertiajs.com/pages) (page-level props from controllers) 
 - ✅ Example: [Shared props](https://inertiajs.com/shared-data) (across all pages)
 
+<details>
+<summary>Show example</summary>
+
 *In controller:* 
 ```php
 return Inertia::render('Example/Index',[
@@ -79,6 +82,8 @@ const props = defineProps({
 });
 ```
 
+</details>
+
 ---
 
 ## Page title (by Inertia)
@@ -87,10 +92,15 @@ Dynamically change the page title based on the page or layout.
 
 - ✅ Example: Page titles
 
+<details>
+<summary>Show example</summary>
+
 ```vue
 <!-- include the inertia Head on the page -->
 <Head title="Home Page" />
 ```
+</details>
+
 ---
 
 ## Page layouts
@@ -103,7 +113,7 @@ The ability to create universal layouts for specific pages.
 <details>
 <summary>Show example</summary>
 
-Define your layout name in props or omit it for default layout.
+*Define your layout name in props or omit it for default layout.*
 
 ```js
 const props = defineProps({
@@ -121,9 +131,14 @@ The ability to grab the routes in Vue based on the laravel route names. You can 
 - ✅ [Named routes](https://github.com/tighten/ziggy)
 - ✅ Example: Route name to path
 
+<details>
+<summary>Show example</summary>
+
 ```js
 const path = route('api.login')
 ```
+</details>
+
 ---
 
 ## Auto-imports
