@@ -2,7 +2,7 @@ export default {
     root: ({ state }) => ({
         class: [
             // Shape
-            'rounded-lg',
+            'rounded-md',
             'shadow-lg',
             'border-0',
 
@@ -42,8 +42,8 @@ export default {
 
             // Shape
             'border-t-0',
-            'rounded-tl-lg',
-            'rounded-tr-lg',
+            'rounded-tl-md',
+            'rounded-tr-md',
 
             // Colors
             'bg-surface-0 dark:bg-surface-800',
@@ -51,7 +51,7 @@ export default {
         ]
     },
     title: {
-        class: ['font-bold text-lg']
+        class: ['font-semibold text-lg']
     },
     icons: {
         class: ['flex items-center']
@@ -152,8 +152,8 @@ export default {
             // Shape
             {
                 grow: state.maximized,
-                'rounded-bl-lg': !instance.$slots.footer,
-                'rounded-br-lg': !instance.$slots.footer
+                'rounded-bl-md': !instance.$slots.footer,
+                'rounded-br-md': !instance.$slots.footer
             },
 
             // Colors
@@ -178,7 +178,7 @@ export default {
 
             // Shape
             'border-t-0',
-            'rounded-b-lg',
+            'rounded-b-md',
 
             // Colors
             'bg-surface-0 dark:bg-surface-800',

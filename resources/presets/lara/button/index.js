@@ -9,8 +9,8 @@ export default {
             // Sizes & Spacing
             'leading-[normal]',
             {
-                'px-4 py-3': props.size === null,
-                'text-sm py-2 px-3': props.size === 'small',
+                'px-6 py-3': props.size === null,
+                'text-sm py-2 px-4': props.size === 'small',
                 'text-xl py-3 px-4': props.size === 'large'
             },
             {
@@ -18,7 +18,7 @@ export default {
             },
 
             // Shapes
-            { 'shadow-lg': props.raised },
+            { 'shadow-md': props.raised }, 
             { 'rounded-md': !props.rounded, 'rounded-full': props.rounded },
             { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name == 'InputGroup' },
 
@@ -197,7 +197,7 @@ export default {
     label: ({ props }) => ({
         class: [
             'duration-200',
-            'font-bold',
+            'font-semibold',
             {
                 'hover:underline': props.link
             },

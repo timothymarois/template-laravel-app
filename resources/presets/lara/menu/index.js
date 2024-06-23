@@ -3,7 +3,8 @@ export default {
         class: [
             // Sizing and Shape
             'min-w-[12rem]',
-            'rounded-md',
+            'rounded-sm',
+            'shadow-md',
             // Spacing
             'py-2',
             // Colors
@@ -21,15 +22,21 @@ export default {
             'outline-none'
         ]
     },
+    separator: {
+        class: [
+            // border
+            'my-1 border-t border-surface-200 dark:border-surface-600'
+        ]
+    },
     content: ({ context }) => ({
         class: [
             //Shape
             'rounded-none',
             // Colors
             'text-surface-700 dark:text-white/80',
-            {
-                'bg-surface-200 text-surface-700 dark:bg-surface-300/10 dark:text-white': context.focused
-            },
+            // {
+            //     'bg-surface-200 text-surface-700 dark:bg-surface-300/10 dark:text-white': context.focused
+            // },
             // Transitions
             'transition-shadow',
             'duration-200',

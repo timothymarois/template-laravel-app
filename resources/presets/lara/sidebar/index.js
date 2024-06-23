@@ -8,9 +8,9 @@ export default {
             'relative',
             { '!transition-none !transform-none !w-screen !h-screen !max-h-full !top-0 !left-0': props.position == 'full' },
 
-            // Size
+            // Size w-80  w-full
             {
-                'h-full w-80': props.position == 'left' || props.position == 'right',
+                'h-full w-full sm:w-auto sm:max-w-4xl': props.position == 'left' || props.position == 'right',
                 'h-auto w-full': props.position == 'top' || props.position == 'bottom'
             },
 
@@ -97,7 +97,7 @@ export default {
     content: {
         class: [
             // Spacing and Size
-            'p-5',
+            // 'p-5',
             'pt-0',
             'h-full',
             'w-full',

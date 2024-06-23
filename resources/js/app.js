@@ -1,14 +1,14 @@
 import './bootstrap';
 import '../css/app.css'
+import 'primeicons/primeicons.css'
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+// import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import { createPersistedState } from 'pinia-plugin-persistedstate'
 
 import PrimeVue from 'primevue/config';
 import Lara from '/resources/presets/lara';
-import DefaultLayout from '/resources/js/Layouts/Default.vue';
 
 createInertiaApp({
     resolve: async (name) => {
@@ -29,13 +29,22 @@ createInertiaApp({
     title: title => title ? `${title} - Brand` : 'Brand',
     setup({ el, App, props, plugin }) {
         const pinia = createPinia()
-        pinia.use(piniaPluginPersistedstate)
+        pinia.use(createPersistedState({
+            storage: localStorage,
+        }))
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(pinia)
             .use(PrimeVue, {
+                ripple: true,
                 unstyled: true,
-                pt: Lara
+                pt: Lara,
+                components: {
+                    exclude: [
+                        "Editor",
+                        "Chart"
+                    ]
+                }
             })
             .component('Link', Link)
             .component('Head', Head)
