@@ -99,10 +99,13 @@ The ability to create universal layouts for specific pages.
 
 - ✅ Page layouts
 - ✅ Example: Shared page layouts
+
 <details>
 <summary>Show example</summary>
+
+Define your layout name in props or omit it for default layout.
+
 ```js
-// include layout name or omit it to use default
 const props = defineProps({
     'layout': 'Example'
 });
