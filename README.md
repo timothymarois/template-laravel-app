@@ -96,7 +96,7 @@ Dynamically change the page title based on the page or layout.
 <summary>Show example</summary>
 
 ```vue
-<!-- include the inertia Head on the page -->
+<!-- include the inertia Head component on the page -->
 <Head title="Home Page" />
 ```
 </details>
@@ -135,7 +135,8 @@ The ability to grab the routes in Vue based on the laravel route names. You can 
 <summary>Show example</summary>
 
 ```js
-const path = route('api.login')
+const path = route('login')
+// http://localhost/api/login
 ```
 </details>
 
