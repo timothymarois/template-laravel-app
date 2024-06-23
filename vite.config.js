@@ -21,6 +21,9 @@ export default defineConfig({
             },
         }),
         Components({
+            globalNamespaces: ['global'],
+            directoryAsNamespace: true,
+            collapseSamePrefixes: true,
             dirs: [
                 './resources/js/Components/**',
             ],
@@ -30,6 +33,7 @@ export default defineConfig({
                 },
             ],
             dts: true,
+            deep: true
         }),
         AutoImport({
             defaultExportByFilename: true,
@@ -50,7 +54,6 @@ export default defineConfig({
                 './resources/js/Composables/**',
                 './resources/js/Stores/**',
             ],
-
         }),
     ],
 })
