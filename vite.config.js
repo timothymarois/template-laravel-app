@@ -56,8 +56,8 @@ export default defineConfig({
                 },
             ],
             dirs: [
-                './resources/js/Composables/**',
-                './resources/js/Stores/**',
+                './resources/js/Composables/',
+                './resources/js/Stores/',
             ],
         }),
     ],
