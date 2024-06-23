@@ -7,17 +7,8 @@ use Inertia\Response;
 
 class PageController extends Controller
 {
-    public function home(): Response
+    public function index(): Response
     {
-        return Inertia::render('Home', [
-            'example' => 'Example Prop 1'
-        ]);
-    }
-
-    public function about(): Response
-    {
-        return Inertia::render('About', [
-            'example' => 'Example Prop 2'
-        ]);
+        return Inertia::render('Index');
     }
 }

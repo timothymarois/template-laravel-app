@@ -1,9 +1,9 @@
 <template>
     <div>
-        <Head title="About" />
-        <h1 class="mb-8 text-3xl font-bold">About</h1>
+        <Head title="Home Example" />
+        <h1 class="mb-8 text-3xl font-bold">Home</h1>
         <div>
-            <Link href="/">Home</Link>
+            <Link href="/example/about">About</Link>
         </div>
         <div class="mt-6">
             <div>Page Prop:</div>
@@ -13,12 +13,22 @@
             <div>Shared Prop:</div>
             <div>{{ props.shared }}</div>
         </div>
+        <Button label="Example Button" disabled />
     </div>
 </template>
 
 <script setup>
+import Button from 'primevue/button';
 const props = defineProps({
     'example': String,
     'shared': String
+});
+</script>
+
+<script>
+import Layout from '@/Layouts/Example.vue';
+import { defineComponent } from 'vue';
+export default defineComponent({
+	layout: Layout,
 });
 </script>
