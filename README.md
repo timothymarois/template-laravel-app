@@ -85,5 +85,5 @@ Allows you to have client-side state management across your application. This al
 
 ## Performance:
 
-- Controllers are directly impacting the speed of page loads, keep shared and page-level props to a minimum.
-- Do not load everything in page-level controllers. Load the minimum required to serve the page and additional (or high impact) items for component specific data loaded after page load.
+- Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum.
+- Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.

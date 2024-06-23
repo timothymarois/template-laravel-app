@@ -18,14 +18,15 @@
 
 <script setup>
 const props = defineProps({
+    'layout': 'Example',
     'example': String,
     'shared': String
 });
 </script>
 
-<script>
+<!-- <script>
 import Layout from '@/Layouts/Example.vue';
 export default defineComponent({
 	layout: Layout,
 });
-</script>
+</script> -->

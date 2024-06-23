@@ -14,6 +14,11 @@
 </template>
 
 <script setup>
+
+const props = defineProps({
+    'layout': 'Example',
+});
+
 const products = [
     {
         id: 1,
@@ -39,9 +44,9 @@ const addToCart = () => {
 };
 </script>
 
-<script>
+<!-- <script>
 import Layout from '@/Layouts/Example.vue';
 export default defineComponent({
 	layout: Layout,
 });
-</script>
+</script> -->

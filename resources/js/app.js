@@ -12,13 +12,18 @@ import DefaultLayout from '/resources/js/Layouts/Default.vue';
 
 createInertiaApp({
     resolve: async (name) => {
-        const page = resolvePageComponent(
-            `./Pages/${name}.vue`,
-            (await import.meta.glob("./Pages/**/*.vue", { eager: false }))
-        );
-        page.then((module) => {
-            module.default.layout = module.default.layout != false ? module.default.layout || DefaultLayout : '';
-        });
+
+        const pages = import.meta.glob("./Pages/**/*.vue");
+        const page = await pages[`./Pages/${name}.vue`]();
+
+        let layoutName = 'Default';
+        if (page.default?.props?.layout && typeof page.default.props.layout === 'string') {
+            layoutName = page.default.props.layout;
+        }
+
+        const layout = await import(`./Layouts/${layoutName}.vue`);
+        page.default.layout = layout.default;
+
         return page;
     },
     title: title => title ? `${title} - Brand` : 'Brand',
