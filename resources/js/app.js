@@ -3,6 +3,8 @@ import '../css/app.css'
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { createPinia } from 'pinia'
+
 import PrimeVue from 'primevue/config';
 import Lara from '/resources/presets/lara';
 import DefaultLayout from '/resources/js/Layouts/Default.vue';
@@ -20,8 +22,10 @@ createInertiaApp({
     },
     title: title => title ? `${title} - Brand` : 'Brand',
     setup({ el, App, props, plugin }) {
+        const pinia = createPinia()
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(pinia)
             .use(PrimeVue, {
                 unstyled: true,
                 pt: Lara
@@ -31,7 +35,7 @@ createInertiaApp({
             .mount(el)
     },
     progress: {
-        delay: 250,
+        delay: 25,
         color: '#29d',
         includeCSS: true,
         showSpinner: true,
