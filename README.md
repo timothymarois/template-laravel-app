@@ -57,6 +57,7 @@ npm run build
 - ❌ Example: login form
 - ❌ Example: Login controller and routes
 - ❌ Example: Logout
+- ❌ Example: Pagination (with filters)
 ---
 
 ### Client-side state management
@@ -65,7 +66,7 @@ npm run build
 
 - ✅ [Pinia](https://pinia.vuejs.org/) state management 
 - ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate)
-- ❌ Example: Pinia store (with state, getters and actions)
+- ✅ Example: Pinia store (with state, getters and actions)
 - ❌ Example: Pinia store (with persist localstorage)
 - ❌ Example: Pinia store (shared across pages)
 
