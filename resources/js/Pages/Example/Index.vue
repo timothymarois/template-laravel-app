@@ -10,8 +10,8 @@
             <div>{{ props.example }}</div>
         </div>
         <div>
-            <div>Shared Prop:</div>
-            <div>{{ props.shared }}</div>
+            <div>User:</div>
+            <div>{{ props.user }}</div>
         </div>
         {{ cartStore.products }}
     </div>
@@ -22,7 +22,7 @@ const cartStore = shoppingCart();
 const props = defineProps({
     'layout': 'Example',
     'example': String,
-    'shared': String
+    'user': Object
 });
 </script>
 

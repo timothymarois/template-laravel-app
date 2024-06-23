@@ -1,6 +1,11 @@
 <template>
     <ExampleContainer>
-        <div>Example Layout Nav with page-level prop: "{{  props.example }}"</div>
+        <div>
+            <Link href="/example">Home</Link> |
+            <Link href="/example/about">About</Link> |
+            <Link href="/example/store">Store</Link> |
+            <Link href="/example/signup">Signup</Link>
+        </div>
         <slot />
     </ExampleContainer>
 </template>
