@@ -1,29 +1,28 @@
 <template>
-  <div>
-    <Head title="Home" />
-    <h1 class="mb-8 text-3xl font-bold">Home</h1>
-    <p class="mb-8 leading-normal text-red-500">This is a home page!!!</p>
-
     <div>
+        <Head title="About" />
+        <h1 class="mb-8 text-3xl font-bold">Home</h1>
+        <div>
+            <Link href="/about">About</Link>
+        </div>
+        <div class="mt-6">
+            <div>Page Prop:</div>
+            <div>{{ props.example }}</div>
+        </div>
+        <div>
+            <div>Shared Prop:</div>
+            <div>{{ props.shared }}</div>
+        </div>
 
-      <!-- {{  $page.component preserve-state  }} -->
-      <Button label="Save Changes" disabled />
-
-      {{ props.example }}
-
-      <div>
-        <Link href="/about">About</Link>
-      </div>
+        <Button label="Example Button" disabled />
 
     </div>
-  </div>
 </template>
 
 <script setup>
 import Button from 'primevue/button';
-
 const props = defineProps({
-    'example': String
+    'example': String,
+    'shared': String
 });
-
 </script>

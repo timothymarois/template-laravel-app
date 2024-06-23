@@ -50,7 +50,7 @@ npm run build
 - ✅ Example: Page titles
 - ✅ Example: Shared page layouts
 - ✅ Example: Page props (data from controller) 
-- ❌ Example: Shared props (like user data)
+- ✅ Example: Shared props (like user data)
 - ❌ Example: loading external component data
 - ❌ Example: loading external component data (using auth)
 - ❌ Example: sign up form and controller
