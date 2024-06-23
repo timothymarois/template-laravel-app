@@ -61,3 +61,9 @@ npm run build
 - ❌ Pinia state management 
 - ❌ Pinia persistent state 
 - ❌ Example: Pinia store usage
+
+
+## Performance:
+
+- Controllers are directly impacting the speed of page loads, keep shared and page-level props to a minimum.
+- Do not load everything in page-level controllers. Load the minimum required to serve the page and additional (or high impact) items for component specific data loaded after page load.
