@@ -22,10 +22,10 @@ export default defineConfig({
             },
         }),
         Components({
-            globalNamespaces: ['global'],
             directoryAsNamespace: true,
             collapseSamePrefixes: true,
             dirs: [
+                './resources/js/Layouts/**',
                 './resources/js/Components/**',
             ],
             imports: [
@@ -60,4 +60,7 @@ export default defineConfig({
             ],
         }),
     ],
+    build: {
+        sourcemap: true,
+    },
 })

@@ -1,3 +1,5 @@
 <template>
-    <slot />
+    <ExampleContainer>
+        <slot />
+    </ExampleContainer>
 </template>

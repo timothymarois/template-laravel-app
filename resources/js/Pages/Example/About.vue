@@ -25,7 +25,6 @@ const props = defineProps({
 
 <script>
 import Layout from '@/Layouts/Example.vue';
-import { defineComponent } from 'vue';
 export default defineComponent({
 	layout: Layout,
 });
