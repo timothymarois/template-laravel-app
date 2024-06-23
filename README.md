@@ -108,6 +108,18 @@ const props = defineProps({
 ```
 ---
 
+## Routes (by Ziggy)
+
+The ability to grab the routes in Vue based on the laravel route names. You can control what routes are visible to end-users by modifying `/config/ziggy.php`.
+
+- ✅ [Named routes](https://github.com/tighten/ziggy)
+- ✅ Example: Route name to path
+
+```js
+const path = route('api.login')
+```
+---
+
 ## Auto-imports
 
 Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing. You can modify the import settings inside your `vite.config.js`.
