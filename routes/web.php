@@ -8,5 +8,6 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/about', function () {
+    // sleep(3);
     return Inertia::render('About');
 })->name('about');
