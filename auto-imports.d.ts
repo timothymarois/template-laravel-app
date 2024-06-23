@@ -57,6 +57,7 @@ declare global {
   const useForm: typeof import('@inertiajs/vue3')['useForm']
   const usePage: typeof import('@inertiajs/vue3')['usePage']
   const useSlots: typeof import('vue')['useSlots']
+  const useStorage: typeof import('@vueuse/core')['useStorage']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
