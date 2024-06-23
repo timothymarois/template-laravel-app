@@ -30,31 +30,31 @@ npm run build
 
 ## Features:
 
-✅ Laravel 11
-✅ Vuejs 3
-✅ Tailwind 3
-✅ PrimeVue 3 (unstyled)
+- ✅ Laravel 11
+- ✅ Vuejs 3
+- ✅ Tailwind 3
+- ✅ PrimeVue 3 (unstyled)
 ---
-✅ Docker with php 8.3
-✅ Docker with mysql 8
-✅ Docker with redis
-✅ Docker with supervisor (for job queue workers)
+- ✅ Docker with php 8.3
+- ✅ Docker with mysql 8
+- ✅ Docker with redis
+- ✅ Docker with supervisor (for job queue workers)
 ---
-❌ Larastan
-❌ Laravel Pint
-✅ Phpunit `php artisan test`
+- ❌ Larastan
+- ❌ Laravel Pint
+- ✅ Phpunit `php artisan test`
 ---
-✅ Example: Page titles
-✅ Example: Shared page layouts
-✅ Example: Page props (data from controller) 
-❌ Example: Shared props (like user data)
-❌ Example: loading external component data
-❌ Example: loading external component data (using auth)
-❌ Example: sign up form and controller
-❌ Example: login form
-❌ Example: Login controller and routes
-❌ Example: Logout
+- ✅ Example: Page titles
+- ✅ Example: Shared page layouts
+- ✅ Example: Page props (data from controller) 
+- ❌ Example: Shared props (like user data)
+- ❌ Example: loading external component data
+- ❌ Example: loading external component data (using auth)
+- ❌ Example: sign up form and controller
+- ❌ Example: login form
+- ❌ Example: Login controller and routes
+- ❌ Example: Logout
 ---
-❌ Pinia state management 
-❌ Pinia persistent state 
-❌ Example Pinia store
+- ❌ Pinia state management 
+- ❌ Pinia persistent state 
+- ❌ Example Pinia store
