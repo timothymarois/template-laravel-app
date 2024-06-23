@@ -99,13 +99,16 @@ The ability to create universal layouts for specific pages.
 
 - ✅ Page layouts
 - ✅ Example: Shared page layouts
-
+<details>
+<summary>Show example</summary>
 ```js
 // include layout name or omit it to use default
 const props = defineProps({
     'layout': 'Example'
 });
 ```
+</details>
+
 ---
 
 ## Routes (by Ziggy)
