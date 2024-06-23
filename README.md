@@ -63,9 +63,11 @@ npm run build
 
 **Note:** You should only use pinia state management if you need to save additional items that the client-side creates (unrelated to the server). A good example of this; saving the user's table columns and sorting. You can also use the persisted state option to save data in localstorage.
 
-- ✅ Pinia state management 
-- ✅ Pinia persistent state (local storage)
-- ❌ Example: Pinia store usage
+- ✅ [Pinia](https://pinia.vuejs.org/) state management 
+- ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate) (local storage)
+- ❌ Example: Pinia store
+- ❌ Example: Pinia store (with persist)
+- ❌ Example: Pinia store (shared across pages)
 
 ## Performance:
 
