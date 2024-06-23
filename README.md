@@ -58,11 +58,12 @@ npm run build
 - ❌ Example: Login controller and routes
 - ❌ Example: Logout
 - ❌ Example: Pagination (with filters)
----
 
 ### Auto-imports
 
-Simplifies the import if reusable functionality. Thes packages will auto-import components, stores and other reusable methods.
+Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing.
+
+**Note:** Since this will auto-import components based on their name, keep in mind of same name components across the application.
 
 - ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
 - ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)
