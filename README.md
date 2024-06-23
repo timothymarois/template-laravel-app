@@ -54,6 +54,8 @@ npm run build
 - ❌ Example: Logout
 - ❌ Example: Pagination (with filters)
 
+---
+
 ## Page props (by Inertia)
 
 Page level props are passed by controller data. You can also pass shared props here since Inertia will merge them into one. Keep in mind that page data and shared data will need to have unique key names to avoid being replaced.
@@ -77,6 +79,8 @@ const props = defineProps({
 });
 ```
 
+---
+
 ## Page title (by Inertia)
 
 Dynamically change the page title based on the page or layout.
@@ -87,6 +91,7 @@ Dynamically change the page title based on the page or layout.
 <!-- include the inertia Head on the page -->
 <Head title="Home Page" />
 ```
+---
 
 ## Page layouts
 
@@ -101,6 +106,7 @@ const props = defineProps({
     'layout': 'Example'
 });
 ```
+---
 
 ## Auto-imports
 
@@ -114,6 +120,8 @@ Saves you time by simplifying the import of reusable stores, components and func
 - ✅ Includes the auto-import of Layouts, Components, Stores and Composables.
 - ✅ Includes the auto-import of [PrimeVue components](https://primevue.org/autocomplete/)
 
+---
+
 ## Client-side state management
 
 Allows you to have client-side state management across your application. This also includes using LocalStorage to save persisted state. 
@@ -125,6 +133,8 @@ Allows you to have client-side state management across your application. This al
 - ✅ Example: Pinia store (with state, getters and actions)
 - ✅ Example: Pinia store (with persist localstorage)
 - ✅ Example: Pinia store (shared across pages)
+
+---
 
 ## Performance:
 
