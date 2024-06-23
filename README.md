@@ -54,8 +54,6 @@ npm run build
 - ❌ Example: Logout
 - ❌ Example: Pagination (with filters)
 
----
-
 ## Page props (by Inertia)
 
 Page level props are passed by controller data. You can also pass shared props here since Inertia will merge them into one. Keep in mind that page data and shared data will need to have unique key names to avoid being replaced.
@@ -84,8 +82,6 @@ const props = defineProps({
 
 </details>
 
----
-
 ## Page title (by Inertia)
 
 Dynamically change the page title based on the page or layout.
@@ -100,8 +96,6 @@ Dynamically change the page title based on the page or layout.
 <Head title="Home Page" />
 ```
 </details>
-
----
 
 ## Page layouts
 
@@ -122,8 +116,6 @@ const props = defineProps({
 ```
 </details>
 
----
-
 ## Routes (by Ziggy)
 
 The ability to grab the routes in Vue based on the laravel route names. You can control what routes are visible to end-users by modifying `/config/ziggy.php`.
@@ -139,8 +131,6 @@ const path = route('login')
 // http://localhost/api/login
 ```
 </details>
-
----
 
 ## Icons
 
@@ -166,8 +156,6 @@ Easily add svg icons that can change size and color.
 
 </details>
 
----
-
 ## Auto-imports
 
 Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing. You can modify the import settings inside your `vite.config.js`.
@@ -180,7 +168,6 @@ Saves you time by simplifying the import of reusable stores, components and func
 - ✅ Includes the auto-import of Layouts, Components, Stores and Composables.
 - ✅ Includes the auto-import of [PrimeVue components](https://primevue.org/autocomplete/)
 
----
 
 ## Client-side state management
 
