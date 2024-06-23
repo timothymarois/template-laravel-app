@@ -7,6 +7,8 @@
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.2.0",
+        "@tailwindcss/forms": "^0.5.7",
+        "@tailwindcss/typography": "^0.5.13",
         "@vitejs/plugin-vue": "^5.0.5",
         "@vue/server-renderer": "^3.4.30",
         "autoprefixer": "^10.4.19",

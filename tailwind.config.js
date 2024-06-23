@@ -1,9 +1,19 @@
 
 export default {
     content: [
-        './resources/**/*.{js,vue,blade.php}'
+        './node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}',
+        './storage/framework/views/*.php',
+        './resources/presets/**/*.{js,vue,ts}',
+        './resources/views/**/*.blade.php',
+        './resources/js/**/*.{js,vue}',
     ],
+    plugins: [
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
+    ],
+    darkMode: 'class',
     theme: {
+        mode: 'jit',
         extend: {
             colors: {
                 primary: 'rgb(var(--primary))',
