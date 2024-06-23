@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('home');
+Route::get('/', [PageController::class, 'home'])
+    ->name('home')
+    ->middleware('guest');
 
-Route::get('/about', function () {
-    // sleep(3);
-    return Inertia::render('About');
-})->name('about');
+Route::get('/about', [PageController::class, 'about'])
+    ->name('about')
+    ->middleware('guest');
