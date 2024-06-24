@@ -73,6 +73,8 @@ For user authentication with Laravel and Vuejs we will use Laravel Sanctum.
 - ✅ Example: Register form and controller
 - ✅ Example: Login form and controller
 - ✅ Example: Logout
+- ❌ Example: Middleware auth route and auth-only page
+- ❌ Example: Login redirect back location
 - ❌ Example: Email verification
 - ❌ Example: Forgot/reset password form and controller
 
