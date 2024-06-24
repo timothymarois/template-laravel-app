@@ -57,11 +57,11 @@ npm run build
 
 For user authentication with Laravel and Vuejs we will use Laravel Sanctum. 
 
-- ✅ [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum)
-- ❌ [Laravel Passport](https://laravel.com/docs/11.x/passport)
+- ✅ [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum) *(local session auth)*
+- ❌ [Laravel Passport](https://laravel.com/docs/11.x/passport) *(oauth and third parties)*
 - ❌ OAUTH: Google SSO
-- ✅ csrf-token protected (XSRF)
-- ✅ Rate-limit login protected
+- ✅ Security: csrf-token protected (XSRF)
+- ✅ Security: Rate-limit login protected
 - ✅ Example: register form and controller
 - ✅ Example: login form and controller
 - ✅ Example: Logout and controller
