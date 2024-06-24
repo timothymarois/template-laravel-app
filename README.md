@@ -59,6 +59,11 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 - ❌ Larastan
 - ❌ Laravel Pint
 
+### Monitoring
+
+- ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) `/log-viewer`
+- ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) `/horizon`
+
 ---
 
 ### Authentication
