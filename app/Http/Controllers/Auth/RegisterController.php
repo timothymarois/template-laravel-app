@@ -19,12 +19,6 @@ class RegisterController extends Controller
         return Inertia::render('Register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     *
-     */
     public function store(RegisterRequest $request): RedirectResponse
     {
         $data = $request->validated();
