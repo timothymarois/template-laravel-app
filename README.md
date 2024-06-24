@@ -164,11 +164,21 @@ The ability to grab the routes in Vue based on the laravel route names. You can 
 - ✅ Example: Route name to path
 
 <details>
-<summary>Show example</summary>
+<summary>Show example</summary><br>
+
+You can use `php artisan route:list` to get the full named routes that are available.
+
+To get the path of a named route
 
 ```js
 const path = route('login')
 // http://localhost/api/login
+```
+
+or you can do links in templates based on @click
+
+```js
+$inertia.visit(route('posts.create'))
 ```
 </details>
 
@@ -236,7 +246,6 @@ Allows you to have client-side state management across your application. This al
 
 ### TODO:
 
-- ❌ Example: loading external component data
-- ❌ Example: loading external component data (using auth)
+- ❌ Example: loading external component data (JSON??)
 - ❌ Example: public API
 - ❌ Example: Pagination (with filters)

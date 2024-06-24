@@ -2,7 +2,7 @@
     <div class="container mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Posts</h1>
-            <button @click="$inertia.visit('/posts/create')" class="bg-blue-500 text-white px-4 py-2 rounded">Create Post</button>
+            <Button @click="$inertia.visit(route('posts.create'))">Create Post</Button>
         </div>
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <ul>
@@ -16,9 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-
 const props = defineProps({
     posts: Array
-})
+});
 </script>

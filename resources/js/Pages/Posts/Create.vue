@@ -18,14 +18,11 @@
 </template>
 
 <script setup>
-import {useForm} from '@inertiajs/vue3'
-
 const form = useForm({
     title: '',
     body: ''
 })
-
 const submitForm = () => {
-    form.post('/posts')
+    form.post(route('posts.store'))
 }
 </script>

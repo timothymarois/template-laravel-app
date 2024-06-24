@@ -28,11 +28,14 @@ createInertiaApp({
     },
     title: title => title ? `${title} - Brand` : 'Brand',
     setup({ el, App, props, plugin }) {
+
         const pinia = createPinia()
+
         pinia.use(createPersistedState({
             storage: localStorage,
         }))
-        createApp({ render: () => h(App, props) })
+
+        const app = createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(pinia)
             .use(PrimeVue, {
@@ -47,8 +50,11 @@ createInertiaApp({
                 }
             })
             .component('Link', Link)
-            .component('Head', Head)
-            .mount(el)
+            .component('Head', Head);
+
+        app.config.globalProperties.route = window.route = route;
+        app.mount(el);
+        return app;
     },
     progress: {
         delay: 25,
