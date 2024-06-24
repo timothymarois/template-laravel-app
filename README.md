@@ -30,41 +30,49 @@ npm run build
 
 ## Features:
 
+### Tech Stack
+
 - ✅ Laravel 11
 - ✅ Vuejs 3
+- ✅ Inertia (Laravel + Vue)
 - ✅ Tailwind 3
 - ✅ PrimeVue 3 (unstyled)
-- ✅ Inertia (Laravel + Vue)
+
 ---
-- Run docker: `./vendor/bin/sail up` and then you can use the container in VSC or docker desktop
+
+### Docker
+
+Docker is used for your local env.
+
+Run: `./vendor/bin/sail up`
+
 - ✅ Docker with php 8.3
 - ✅ Docker with mysql 8
 - ✅ Docker with redis
 - ✅ Docker with supervisor (for job queue workers)
+
 ---
+
+### Tests and Linting
+
 - ✅ Phpunit `php artisan test`
 - ❌ Larastan
 - ❌ Laravel Pint
----
-- ❌ Example: loading external component data
-- ❌ Example: loading external component data (using auth)
-- ❌ Example: public API
-- ❌ Example: Pagination (with filters)
 
 ---
 
-### Auth
+### Authentication
 
 For user authentication with Laravel and Vuejs we will use Laravel Sanctum. 
 
 - ✅ [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum) *(local session auth)*
 - ❌ [Laravel Passport](https://laravel.com/docs/11.x/passport) *(oauth and third parties)*
 - ❌ OAUTH: Google SSO
-- ✅ Security: csrf-token protected (XSRF)
+- ✅ Security: CSRF-token protected (XSRF)
 - ✅ Security: Rate-limit login protected
-- ✅ Example: register form and controller
-- ✅ Example: login form and controller
-- ✅ Example: Logout and controller
+- ✅ Example: Register form and controller
+- ✅ Example: Login form and controller
+- ✅ Example: Logout
 - ❌ Example: Email verification
 - ❌ Example: Forgot/reset password form and controller
 
@@ -213,3 +221,12 @@ Allows you to have client-side state management across your application. This al
 
 - Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum.
 - Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
+
+---
+
+### TODO:
+
+- ❌ Example: loading external component data
+- ❌ Example: loading external component data (using auth)
+- ❌ Example: public API
+- ❌ Example: Pagination (with filters)
