@@ -180,6 +180,21 @@ or you can do links in templates based on @click
 ```js
 $inertia.visit(route('posts.create'))
 ```
+
+Using model id in routes ([learn more](https://github.com/tighten/ziggy?tab=readme-ov-file#parameters))
+
+```js
+route('posts.show', 123); 
+// http://localhost/posts/123'
+```
+
+Using multiple models in routes ([learn more](https://github.com/tighten/ziggy?tab=readme-ov-file#parameters))
+
+```js
+route('accounts.posts.show', [1, 123]); 
+// http://localhost/accounts/1/posts/123'
+```
+
 </details>
 
 ---
