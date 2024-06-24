@@ -42,9 +42,9 @@ npm run build
 
 ### Docker
 
-Docker is used for your local env.
+Docker is used for your local env. *Do not use your custom or OS php/env*.
 
-Run: `./vendor/bin/sail up`
+Run: `./vendor/bin/sail up`, once containers are built, you can also run them within VSC using the [docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) or if you perfer the [docker desktop](https://www.docker.com/products/docker-desktop/) app.
 
 - ✅ Docker with php 8.3
 - ✅ Docker with mysql 8
