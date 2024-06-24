@@ -199,6 +199,47 @@ route('accounts.posts.show', [1, 123]);
 
 ---
 
+### Form requests (by Inertia)
+
+You should use the built-in `useForm` method, it will handle all the states of submission.
+
+- ✅ [Form helper](https://inertiajs.com/forms#form-helper)
+
+<details>
+<summary>Show example</summary><br>
+
+Define the form:
+
+```js
+const form = useForm({
+    email: null,
+    password: null
+})
+```
+
+To submit the form and with the named routes:
+
+```js
+form.post(route('post.store'))
+```
+
+Additional reactive form attributes:
+
+```js
+// identify if the form values have changed
+form.isDirty
+
+// get the reported errors from the submission (based on field name)
+form.errors.email
+
+// if the form is currenting being processed
+form.processing
+```
+
+</details>
+
+---
+
 ### Icons
 
 Easily add svg icons that can change size and color.
