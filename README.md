@@ -49,11 +49,24 @@ npm run build
 - ❌ Example: loading external component data
 - ❌ Example: loading external component data (using auth)
 - ❌ Example: public API
-- ✅ Example: sign up form and controller
-- ✅ Example: login form
-- ✅ Example: Login controller and routes
-- ✅ Example: Logout
 - ❌ Example: Pagination (with filters)
+
+---
+
+### Auth
+
+For user authentication with Laravel and Vuejs we will use Laravel Sanctum. 
+
+- ✅ [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum)
+- ❌ [Laravel Passport](https://laravel.com/docs/11.x/passport)
+- ❌ OAUTH: Google SSO
+- ✅ csrf-token protected (XSRF)
+- ✅ Rate-limit login protected
+- ✅ Example: register form and controller
+- ✅ Example: login form and controller
+- ✅ Example: Logout and controller
+- ❌ Example: Email verification
+- ❌ Example: Forgot/reset password form and controller
 
 ---
 
