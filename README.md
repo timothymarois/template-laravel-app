@@ -94,7 +94,7 @@ Page level props are passed by controller data. You can also pass shared props h
 
 *Note: The layout and all components on the page can access these props.*
 
-- ✅ Example: Pages, routes and controllers
+- ✅ Return Inertia view or JSON response based Content-Type
 - ✅ Example: [Page props](https://inertiajs.com/pages) (page-level props from controllers) 
 - ✅ Example: [Shared props](https://inertiajs.com/shared-data) (across all pages)
 
