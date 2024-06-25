@@ -8,8 +8,7 @@
             </div>
             <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <Link :class="{'bg-gray-900 text-white' : $page.url === '/example' }" href="/example" class="rounded-md px-3 py-2 text-sm font-medium text-white" aria-current="page">Dashboard</Link>
+                <Link :class="{'bg-gray-900 text-white' : $page.url === '/example' }" href="/example" class="hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium text-white" aria-current="page">Dashboard</Link>
                 <Link :class="{'bg-gray-900 text-white' : $page.url.startsWith('/example/posts') }" href="/example/posts" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Posts</Link>
                 <Link :class="{'bg-gray-900 text-white' : $page.url.startsWith('/example/store') }" href="/example/store" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Store</Link>
                 </div>
