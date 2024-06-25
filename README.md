@@ -240,6 +240,45 @@ form.processing
 
 ---
 
+### Router requests (by Inertia & Axois)
+
+You can use the built-in methods to fetch data or make manual visits
+
+- ✅ [Router requests](https://inertiajs.com/manual-visits)
+- ✅ [Axois requests](https://axios-http.com/docs/example)
+
+<details>
+<summary>Show example</summary>
+
+*Define your layout name in props or omit it for default layout.*
+
+```js
+// best to use replace = true to avoid browser history from being added
+router.get(route('users'), { search: 'John' }, { replace: true })
+
+// all available methods
+router.get(url, data, options)
+router.post(url, data, options)
+router.put(url, data, options)
+router.patch(url, data, options)
+router.delete(url, options)
+router.reload(options)
+
+// events 
+router.get(url, data, {
+  onBefore: (visit) => {},
+  onStart: (visit) => {},
+  onProgress: (progress) => {},
+  onSuccess: (page) => {},
+  onError: (errors) => {},
+  onCancel: () => {},
+  onFinish: visit => {},
+})
+```
+</details>
+
+---
+
 ### Icons
 
 Easily add svg icons that can change size and color.
