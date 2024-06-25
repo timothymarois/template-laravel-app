@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Example;
 
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Controllers\Controller;
 
 class ExampleController extends Controller
 {

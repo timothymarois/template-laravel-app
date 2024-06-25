@@ -1,24 +1,39 @@
 <template>
-    <div>
-        <Head title="Store Example" />
-        <h1 class="mb-8 text-3xl font-bold">Store</h1>
-        <div>
-            <Link href="/example">Home</Link>
+    <Head title="Store - Example" />
+    <header class="bg-white shadow-sm">
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <h1 class="text-lg font-semibold leading-6 text-gray-900">Store</h1>
         </div>
-        <Button label="Add to cart" @click="addToCart" />
+    </header>
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="mb-4">This is an example store page. This uses pinia persisted storage.</div>
 
-        <div class="mt-6">
-            products: {{ cartStore.products }}
+            <Card class="mb-4">
+                <template #title>Products in cart</template>
+                <template #content>
+                    <div>{{ cartStore.products }}</div>
+                </template>
+            </Card>
+
+            <Card>
+                <template #content>
+                    <div class="flex space-x-4 items-center">
+                        <Button size="small" label="Add product A" @click="cartStore.add(products[0])" />
+                        <Button size="small" label="Add product B" @click="cartStore.add(products[1])" />
+                        <Button size="small" label="Clear cart" @click="cartStore.clear()" outlined />
+                        <div>Cart total: <span class="font-semibold">{{ formatCurrency(cartStore.total || 0) }}</span></div>
+                    </div>
+                </template>
+            </Card>
+
         </div>
-    </div>
+    </main>
 </template>
-
 <script setup>
-
 const props = defineProps({
-    'layout': 'Example',
+    layout: 'Example'
 });
-
 const products = [
     {
         id: 1,
@@ -36,17 +51,5 @@ const products = [
         sale_price: 39.99
     }
 ];
-
 const cartStore = shoppingCart();
-
-const addToCart = () => {
-    cartStore.add(products[0])
-};
 </script>
-
-<!-- <script>
-import Layout from '@/Layouts/Example.vue';
-export default defineComponent({
-	layout: Layout,
-});
-</script> -->

@@ -1,17 +1,6 @@
 <template>
-    <ExampleContainer>
-        <div>
-            <Link href="/example">Home</Link> |
-            <Link href="/example/about">About</Link> |
-            <Link href="/example/store">Store</Link> |
-            <Link href="/example/signup">Signup</Link>
-        </div>
+    <div class="min-h-full">
+        <ExampleNav />
         <slot />
-    </ExampleContainer>
+    </div>
 </template>
-
-<script setup>
-const props = defineProps({
-    'example': String
-});
-</script>

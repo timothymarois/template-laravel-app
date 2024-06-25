@@ -3,7 +3,6 @@ import '../css/app.css'
 import 'primeicons/primeicons.css'
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
-// import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 
@@ -13,20 +12,20 @@ import Lara from '/resources/presets/lara';
 createInertiaApp({
     resolve: async (name) => {
 
-        const pages = import.meta.glob("./Pages/**/*.vue");
-        const page = await pages[`./Pages/${name}.vue`]();
+        const pages = import.meta.glob("./pages/**/*.vue");
+        const page = await pages[`./pages/${name}.vue`]();
 
         let layoutName = 'Default';
         if (page.default?.props?.layout && typeof page.default.props.layout === 'string') {
             layoutName = page.default.props.layout;
         }
 
-        const layout = await import(`./Layouts/${layoutName}.vue`);
+        const layout = await import(`./layouts/${layoutName}.vue`);
         page.default.layout = layout.default;
 
         return page;
     },
-    title: title => title ? `${title} - Brand` : 'Brand',
+    title: title => title ? `${title}` : '',
     setup({ el, App, props, plugin }) {
 
         const pinia = createPinia()

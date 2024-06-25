@@ -10,7 +10,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: 'resources/js/app.js',
-            ssr: 'resources/js/ssr.js',
+            // ssr: 'resources/js/ssr.js', this has not been tested
             refresh: true,
         }),
         vue({
@@ -26,8 +26,8 @@ export default defineConfig({
             directoryAsNamespace: true,
             collapseSamePrefixes: true,
             dirs: [
-                './resources/js/Layouts/',
-                './resources/js/Components/',
+                './resources/js/layouts/',
+                './resources/js/components/',
             ],
             imports: [
                 {
@@ -41,23 +41,31 @@ export default defineConfig({
             ]
         }),
         AutoImport({
+            vueTemplate: true,
             defaultExportByFilename: true,
             dts: true,
             include: [
-                /\.vue$/, /\.vue\?vue/,
+                /\.vue$/,
+                /\.vue\?vue/,
+                /\.js$/
             ],
             imports: [
                 'vue',
                 {
-                    '@inertiajs/vue3': ['usePage', 'router', 'useForm',],
+                    '@inertiajs/vue3': [
+                        'usePage',
+                        'router',
+                        'useForm',
+                    ],
                     '@vueuse/core': [
 						'useStorage',
 					],
                 },
             ],
             dirs: [
-                './resources/js/Composables/',
-                './resources/js/Stores/',
+                './resources/js/composables/',
+                './resources/js/stores/',
+                './resources/js/utils/',
             ],
         }),
     ],

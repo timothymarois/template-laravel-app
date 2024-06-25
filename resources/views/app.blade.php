@@ -10,7 +10,7 @@
         @vite('resources/js/app.js')
         @inertiaHead
     </head>
-    <body class="font-sans leading-none text-gray-700 antialiased">
+    <body class="h-full font-sans leading-none text-gray-700 antialiased">
         @routes
         @inertia
     </body>

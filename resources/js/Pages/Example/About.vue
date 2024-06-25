@@ -18,9 +18,9 @@
 
 <script setup>
 const props = defineProps({
-    'layout': 'Example',
-    'example': String,
-    'user': Object
+    layout: 'Example',
+    example: String,
+    user: Object
 });
 </script>
 

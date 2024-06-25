@@ -1,27 +1,19 @@
-<template>
-    <div>
-        <Head title="Home Example" />
-        <h1 class="mb-8 text-3xl font-bold">Home</h1>
-        <div>
-            <Link href="/example/about">About</Link> | <Link href="/example/store">Store</Link> | <Link v-if="user" href="/logout">Logout</Link>
-        </div>
-        <div class="mt-6">
-            <div>Page Prop:</div>
-            <div>{{ props.example }}</div>
-        </div>
-        <div>
-            <div>User:</div>
-            <div>{{ props.user }}</div>
-        </div>
-        {{ cartStore.products }}
-    </div>
-</template>
 
+<template>
+    <Head title="Dashboard - Example" />
+    <header class="bg-white shadow-sm">
+        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <h1 class="text-lg font-semibold leading-6 text-gray-900">Dashboard</h1>
+        </div>
+    </header>
+    <main>
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <div class="mb-4">This is an example dashboard page.</div>
+        </div>
+    </main>
+</template>
 <script setup>
-const cartStore = shoppingCart();
 const props = defineProps({
-    'layout': 'Example',
-    'example': String,
-    'user': Object
+    layout: 'Example'
 });
 </script>

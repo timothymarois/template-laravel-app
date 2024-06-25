@@ -7,8 +7,7 @@ export const shoppingCart = defineStore('shopping-cart-store', {
         };
     },
     getters: {
-        totalQty: (state) => state.products.reduce((total, product) => total + product.qty, 0),
-        totalCost: (state) => state.products.reduce((total, product) => total + (product.qty * product.sale_price), 0),
+        total: (state) => state.products.reduce((total, product) => total + (product.qty * product.sale_price), 0),
     },
     actions: {
         add(product) {

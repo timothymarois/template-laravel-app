@@ -4,8 +4,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\ExampleController;
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\Example\ExampleController;
+use App\Http\Controllers\Example\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('index');
@@ -29,4 +29,4 @@ Route::get('/example/about', [ExampleController::class, 'about'])->name('example
 Route::get('/example/store', [ExampleController::class, 'store'])->name('example.store');
 Route::get('/example/signup', [ExampleController::class, 'signup'])->name('example.signup');
 
-Route::resource('posts', PostController::class);
+Route::resource('/example/posts', PostController::class);
