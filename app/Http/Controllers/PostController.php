@@ -26,12 +26,15 @@ class PostController extends Controller
             'body' => 'required',
         ]);
 
-        Post::query()->create($request->all());
+        $post = Post::query()->create($request->all());
 
-        return redirect()->route('posts.index');
+        // return redirect()->route('posts.index');
+
+        // if you want to redirect to the post
+        return redirect()->route('posts.show', [$post->id]);
     }
 
-    public function edit(Post $post)
+    public function show(Post $post)
     {
         return response()->inertiaOrJson('Posts/Edit', ['post' => $post]);
     }
