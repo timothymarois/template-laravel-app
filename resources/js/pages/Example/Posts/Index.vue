@@ -19,13 +19,16 @@
                             <p class="text-xs text-gray-700">{{ post.body }}</p>
                         </div>
                         <div>
-                            <div class="flex space-x-2 items-center">
-                                <Button @click.prevent.stop="" text label="Edit" icon="pi pi-pencil" size="small" />
-                                <Button @click.prevent.stop="deletePost(post)" text  icon="pi pi-trash" size="small" :loading="deleteLoading" />
-                            </div>
+                            <!-- <div class="flex space-x-2 items-center"> -->
+                                <InputGroup>
+                                    <Button @click.prevent.stop="" outlined label="Edit" icon="pi pi-pencil" size="small" />
+                                    <Button @click.prevent.stop="deletePost(post)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
+                                </InputGroup>
+                            <!-- </div> -->
                         </div>
                 </li>
             </ul>
+            <!-- <div>{{ pageLoaded }}</div> -->
         </div>
     </main>
 </template>
@@ -49,4 +52,16 @@ const deletePost = (post) => {
         },
     })
 }
+
+// const pageLoaded = ref(null)
+// onMounted(() => {
+
+//     // Create a new Date object
+//     const now = new Date();
+//     // Get the current date and time as a string
+//     const dateString = now.toLocaleString();
+
+//     pageLoaded.value = dateString
+
+// });
 </script>
