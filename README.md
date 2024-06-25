@@ -103,21 +103,19 @@ Page level props are passed by controller data. You can also pass shared props h
 
 *In controller: (inertia only response)* 
 ```php
-return Inertia::render('Example/Index',[
-    'example' => 'Example Prop 1'
-]);
+return Inertia::render('Example/Index', ['posts' => $posts->paginate()]);
 ```
 
 *You can return inertia or json response:*
 
 ```php
-return response()->inertiaOrJson('Posts/Index', $data);
+return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
 ```
 
 *In page component:*
 ```js
 const props = defineProps({
-    'example': String
+    'posts': Object
 });
 ```
 

@@ -17,6 +17,6 @@
 
 <script setup>
 const props = defineProps({
-    posts: Array
+    posts: Object
 });
 </script>
