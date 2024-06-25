@@ -371,10 +371,10 @@ You can create global utility functions in `/utils` and they will be auto-import
 
 Built-in methods:
 
-- ✅ `transformNumber()` - Transform a string/number into a comma seperated number.
-- ✅ `formatCurrency()` - Formats a string or number into a currency.
-- ✅ `formatSlug()` - Creates a safe slug for URL from string.
-- ✅ `formatURL()` - Formats a string and ensures its a URL (has https://)
+- ✅ `transformNumber(n, decimals = 2)` - Transform a string/number into a comma seperated number.
+- ✅ `formatCurrency(n, currency = 'USD', invalid = 'Invalid')` - Formats a string or number into a currency.
+- ✅ `formatIntoSlug(str)` - Creates a safe slug for URL from string.
+- ✅ `formatIntoURL(str)` - Formats a string and ensures its a URL (has https://)
 
 ---
 
