@@ -6,7 +6,7 @@
         </div>
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <ul>
-                <li v-for="post in posts" :key="post.id" class="border-b last:border-none p-4">
+                <li v-for="post in data" :key="post.id" class="border-b last:border-none p-4">
                     <h2 class="text-xl font-semibold">{{ post.title }}</h2>
                     <p class="text-gray-700">{{ post.body }}</p>
                 </li>
@@ -17,6 +17,6 @@
 
 <script setup>
 const props = defineProps({
-    posts: Array
+    data: Array
 });
 </script>
