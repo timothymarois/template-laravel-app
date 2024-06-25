@@ -33,7 +33,7 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        return Inertia::render('Posts/Edit', ['post' => $post]);
+        return response()->inertiaOrJson('Posts/Edit', ['post' => $post]);
     }
 
     public function update(Request $request, Post $post)
