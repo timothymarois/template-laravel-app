@@ -1,13 +1,13 @@
 <template>
     <Head title="Posts - Example" />
     <header class="bg-white shadow-sm">
-        <div class="flex justify-between items-center mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mx-auto max-w-7xl px-8 py-4">
             <h1 class="text-lg font-semibold leading-6 text-gray-900">Posts</h1>
             <Button @click="router.visit($route('posts.create'))" size="small">Create Post</Button>
         </div>
     </header>
     <main>
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 ">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
             <ul>
                 <li
                     v-for="post in posts.data"
