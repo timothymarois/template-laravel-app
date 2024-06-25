@@ -361,6 +361,20 @@ Allows you to have client-side state management across your application. This al
 
 ---
 
+### Utilities
+
+You can create utility global functions in `/utils` and they will be auto-imported into your components. 
+
+*Note: Currently, you can not use these methods in `<template>` but you can use them in your component script. If you really need to use a method in your template, you can add them within the `app.js` and prefix it with a `$` to keep consistent.*
+
+- ✅ Auto-load utility methods
+- ✅ `transformNumber()` - Transform a string/number into a comma seperated number.
+- ✅ `formatCurrency()` - Formats a string or number into a currency.
+- ✅ `formatSlug()` - Creates a safe slug for URL from string.
+- ✅ `formatURL()` - Formats a string and ensures its a URL (has https://)
+
+---
+
 ## Performance:
 
 - Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum.

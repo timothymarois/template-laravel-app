@@ -46,8 +46,8 @@ export const formatURL = (url) => {
     url = url.trim();
     // check if the URL starts with 'http://' or 'https://'
     if (!/^https?:\/\//i.test(url)) {
-        // if it doesn't, add 'http://' to the start of the URL
-        url = 'http://' + url;
+        // if it doesn't, add 'https://' to the start of the URL
+        url = 'https://' + url;
     }
     return url;
 }
