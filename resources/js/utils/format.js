@@ -19,7 +19,7 @@ export const transformNumber = (n, decimals = 2) => {
  * @param { String<USD>} currency
  * @returns
  */
-export const formatCurrency = (n, currency = 'USD', invalid = 'Invalid') => {
+export const formatToCurrency = (n, currency = 'USD', invalid = 'Invalid') => {
     if (isNaN(n)) return invalid;
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(n);
 };
@@ -29,7 +29,7 @@ export const formatCurrency = (n, currency = 'USD', invalid = 'Invalid') => {
  * @param { String } str
  * @returns a formatted string
  */
-export const formatIntoSlug = (str) => {
+export const formatToSlug = (str) => {
     return str
       .toLowerCase()
       .replace(/[^a-z0-9-]+/g, '-')
@@ -41,7 +41,7 @@ export const formatIntoSlug = (str) => {
  * @param { String } url
  * @returns formatted URL string
  */
-export const formatIntoURL = (url) => {
+export const formatToURL = (url) => {
     // remove any whitespace at the start or end of the URL
     url = url.trim();
     // check if the URL starts with 'http://' or 'https://'

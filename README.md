@@ -374,9 +374,9 @@ You can create global utility functions for the client-side at `/resources/js/ut
 *Included methods:*
 
 - ✅ `transformNumber(n, decimals = 2)` - Transform a string/number into a comma seperated number.
-- ✅ `formatCurrency(n, currency = 'USD', invalid = 'Invalid')` - Formats a string or number into a currency.
-- ✅ `formatIntoSlug(str)` - Creates a safe slug for URL from string.
-- ✅ `formatIntoURL(str)` - Formats a string and ensures its a URL (has https://)
+- ✅ `formatToCurrency(n, currency = 'USD', invalid = 'Invalid')` - Formats a string or number into a currency.
+- ✅ `formatToSlug(str)` - Creates a safe slug for URL from string.
+- ✅ `formatToURL(str)` - Formats a string and ensures its a URL (has https://)
 
 ---
 

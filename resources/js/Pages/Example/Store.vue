@@ -22,7 +22,7 @@
                         <Button size="small" label="Add product A" @click="cartStore.add(products[0])" />
                         <Button size="small" label="Add product B" @click="cartStore.add(products[1])" />
                         <Button size="small" label="Clear cart" @click="cartStore.clear()" outlined />
-                        <div>Cart total: <span class="font-semibold">{{ formatCurrency(cartStore.total || 0) }}</span></div>
+                        <div>Cart total: <span class="font-semibold">{{ formatToCurrency(cartStore.total || 0) }}</span></div>
                     </div>
                 </template>
             </Card>
