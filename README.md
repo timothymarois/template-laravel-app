@@ -99,14 +99,14 @@ Page level props are passed by controller data. You can also pass shared props h
 - ✅ Example: [Shared props](https://inertiajs.com/shared-data) (across all pages)
 
 <details>
-<summary>Show example</summary>
+<summary>Show example</summary><br>
 
-*In controller: (inertia only response)* 
+*In controller, return only inertia view* 
 ```php
 return Inertia::render('Example/Index', ['posts' => $posts->paginate()]);
 ```
 
-*You can return inertia or json response:*
+*In controller, return inertia view or json*
 
 ```php
 return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
