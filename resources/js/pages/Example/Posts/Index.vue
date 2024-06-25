@@ -3,7 +3,7 @@
     <header class="bg-white shadow-sm">
         <div class="flex justify-between items-center mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
             <h1 class="text-lg font-semibold leading-6 text-gray-900">Posts</h1>
-            <Button @click="router.visit(route('posts.create'))" size="small">Create Post</Button>
+            <Button @click="router.visit($route('posts.create'))" size="small">Create Post</Button>
         </div>
     </header>
     <main>
@@ -12,7 +12,7 @@
                 <li
                     v-for="post in posts.data"
                     :key="post.id"
-                    @click="router.visit(route('posts.show', [post.id]))"
+                    @click="router.visit($route('posts.show', [post.id]))"
                     class="border-b last:border-none p-4 cursor-pointer hover:bg-gray-200/50 flex items-center justify-between">
                         <div>
                             <h2 class="text-sm font-semibold">{{ post.title }}</h2>

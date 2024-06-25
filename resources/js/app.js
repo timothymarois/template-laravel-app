@@ -51,7 +51,7 @@ createInertiaApp({
             .component('Link', Link)
             .component('Head', Head);
 
-        app.config.globalProperties.route = window.route = route;
+        app.config.globalProperties.$route = window.route = route;
         app.mount(el);
         return app;
     },

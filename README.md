@@ -171,6 +171,8 @@ The ability to grab the routes in Vue based on the laravel route names. You can 
 - ✅ [Named routes](https://github.com/tighten/ziggy)
 - ✅ Example: Route name to path
 
+Note: If you are trying to use `route()` inside your vue `<template>` use `$route()`
+
 <details>
 <summary>Show example</summary><br>
 
