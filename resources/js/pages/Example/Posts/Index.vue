@@ -32,7 +32,7 @@
         </div>
     </main>
 
-    <Dialog v-model:visible="showModal" modal header="Edit Profile">
+    <Dialog v-model:visible="showModal" modal header="Edit Post">
         <form  class="p-6">
             <div class="mb-4">
                 <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
