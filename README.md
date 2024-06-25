@@ -275,7 +275,6 @@ router.get(url, data, {
   onFinish: visit => {},
 })
 ```
-</details>
 
 Using the Axois methods:
 
@@ -291,6 +290,8 @@ axios.get(url)
 
     });
 ```
+</details>
+
 ---
 
 ### Icons
