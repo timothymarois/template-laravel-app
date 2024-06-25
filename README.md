@@ -371,7 +371,7 @@ You can create global utility functions for the client-side at `/resources/js/ut
 
 - ✅ Auto-load utility methods
 
-Built-in methods:
+*Included methods:*
 
 - ✅ `transformNumber(n, decimals = 2)` - Transform a string/number into a comma seperated number.
 - ✅ `formatCurrency(n, currency = 'USD', invalid = 'Invalid')` - Formats a string or number into a currency.
