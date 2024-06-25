@@ -21,7 +21,7 @@
                         <div>
                             <!-- <div class="flex space-x-2 items-center"> -->
                                 <InputGroup>
-                                    <Button @click.prevent.stop="" outlined label="Edit" icon="pi pi-pencil" size="small" />
+                                    <Button @click.prevent.stop="openEditModal(post)" outlined label="Edit" icon="pi pi-pencil" size="small" />
                                     <Button @click.prevent.stop="deletePost(post)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
                                 </InputGroup>
                             <!-- </div> -->
@@ -31,6 +31,25 @@
             <!-- <div>{{ pageLoaded }}</div> -->
         </div>
     </main>
+
+    <Dialog v-model:visible="showModal" modal header="Edit Profile">
+        <form  class="p-6">
+            <div class="mb-4">
+                <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
+                <input v-model="form.title" id="title" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Title">
+                <div v-if="form.errors.title" class="text-red-600 text-sm">{{ form.errors.title  }}</div>
+            </div>
+            <div class="mb-4">
+                <label for="body" class="block text-gray-700 text-sm font-bold mb-2">Body:</label>
+                <textarea v-model="form.body" id="body" rows="5" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Body"></textarea>
+                <div v-if="form.errors.body" class="text-red-600 text-sm">{{ form.errors.body  }}</div>
+            </div>
+        </form>
+        <div class="flex justify-end gap-2">
+            <Button type="button" label="Cancel" severity="secondary" @click="showModal = false;form.reset()"></Button>
+            <Button type="button" label="Save" @click="savePost" :disabled="form.processing" :loading="form.processing"></Button>
+        </div>
+    </Dialog>
 </template>
 
 <script setup>
@@ -39,7 +58,14 @@ const props = defineProps({
     posts: Object
 });
 
+const showModal = ref(false)
 const deleteLoading = ref(false)
+
+const form = useForm({
+    id: null,
+    title: null,
+    body: null
+})
 
 const deletePost = (post) => {
     // { preserveState: true  }
@@ -53,15 +79,20 @@ const deletePost = (post) => {
     })
 }
 
-// const pageLoaded = ref(null)
-// onMounted(() => {
+const openEditModal = (post) => {
+    showModal.value = true
+    form.id = post.id
+    form.title = post.title
+    form.body = post.body
+};
 
-//     // Create a new Date object
-//     const now = new Date();
-//     // Get the current date and time as a string
-//     const dateString = now.toLocaleString();
-
-//     pageLoaded.value = dateString
-
-// });
+const savePost = () => {
+    if (form.id) {
+        form.put(route('posts.update', [form.id]), {
+            onSuccess: post => {
+                showModal.value = false
+            },
+        })
+    }
+};
 </script>

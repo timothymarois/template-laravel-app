@@ -214,6 +214,8 @@ route('accounts.posts.show', [1, 123]);
 You should use the built-in `useForm` method, it will handle all the states of submission.
 
 - ✅ [Form helper](https://inertiajs.com/forms#form-helper)
+- ✅ Example: page forms and submissions
+- ✅ Example: modal forms and submissions
 
 <details>
 <summary>Show example</summary><br>
@@ -384,9 +386,3 @@ Built-in methods:
 - Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
 
 ---
-
-### TODO:
-
-- ❌ Example: loading external component data (JSON??)
-- ❌ Example: public API
-- ❌ Example: Pagination (with filters)
