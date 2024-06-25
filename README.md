@@ -250,7 +250,7 @@ You can use the built-in methods to fetch data or make manual visits
 <details>
 <summary>Show example</summary>
 
-*Define your layout name in props or omit it for default layout.*
+Using the built-int router methods:
 
 ```js
 // best to use replace = true to avoid browser history from being added
@@ -277,6 +277,20 @@ router.get(url, data, {
 ```
 </details>
 
+Using the Axois methods:
+
+```js
+axios.get(url)
+    .then(function (response) {
+        // handle success
+    })
+    .catch(function (error) {
+        // handle error
+    })
+    .finally(function () {
+
+    });
+```
 ---
 
 ### Icons
