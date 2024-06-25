@@ -11,7 +11,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::query();
-        return response()->inertiaOrJson('Posts/Index', $posts->paginate());
+        return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
     }
 
     public function create()
