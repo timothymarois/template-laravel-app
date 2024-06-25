@@ -108,6 +108,8 @@ return Inertia::render('Example/Index', ['posts' => $posts->paginate()]);
 
 *In controller, return inertia view or json*
 
+For json response, you should use `axois` requests.
+
 ```php
 return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
 ```
@@ -255,7 +257,7 @@ You can use the built-in methods to fetch data or make manual visits
 <details>
 <summary>Show example</summary>
 
-Using the built-int router methods:
+Use Inertia built-in `router` to visit routes and modify browser histoty.
 
 ```js
 // best to use replace = true to avoid browser history from being added
@@ -281,7 +283,11 @@ router.get(url, data, {
 })
 ```
 
-Using the Axois methods:
+Using the Axois for background fetching of data without modifying routes. 
+
+These are useful if you want to maintain current page state and load external data in components.
+
+By default, running a axois request, should return json response.
 
 ```js
 axios.get(url)

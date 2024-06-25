@@ -9,12 +9,7 @@
 
 
 onMounted(() => {
-  axios.get(route('posts.index'), {
-    headers: {
-      'Accept': 'application/json',  // Explicitly request JSON response
-      'Content-Type': 'application/json'  // Set content type to JSON for consistency, usually more relevant for POST/PUT requests
-    }
-  })
+  axios.get(route('posts.index'))
   .then(function (response) {
     // handle success
     console.log(response.data);  // Assuming the server responds with JSON
