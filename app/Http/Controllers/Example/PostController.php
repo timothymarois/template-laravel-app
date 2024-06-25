@@ -11,7 +11,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::query();
+        $posts = Post::query()->orderBy('created_at', 'DESC');
         return response()->inertiaOrJson('Example/Posts/Index', ['posts' => $posts->paginate()]);
     }
 

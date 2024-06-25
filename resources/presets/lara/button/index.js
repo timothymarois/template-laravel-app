@@ -14,11 +14,13 @@ export default {
                 'text-xl py-3 px-4': props.size === 'large'
             },
             {
-                'w-12 p-0 py-3': props.label == null && props.icon !== null
+                'w-12 p-0 py-3': props.label == null && props.icon !== null && props.size === null,
+                'w-6 py-2 px-2': props.label == null && props.icon !== null && props.size === 'small',
+                'w-12 py-3': props.label == null && props.icon !== null && props.size === 'large'
             },
 
             // Shapes
-            { 'shadow-md': props.raised }, 
+            { 'shadow-md': props.raised },
             { 'rounded-md': !props.rounded, 'rounded-full': props.rounded },
             { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name == 'InputGroup' },
 

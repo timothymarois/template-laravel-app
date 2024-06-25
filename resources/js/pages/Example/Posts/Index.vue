@@ -13,9 +13,17 @@
                     v-for="post in posts.data"
                     :key="post.id"
                     @click="router.visit(route('posts.show', [post.id]))"
-                    class="border-b last:border-none p-4 cursor-pointer hover:bg-gray-200">
-                        <h2 class="text-sm font-semibold">{{ post.title }}</h2>
-                        <p class="text-xs text-gray-700">{{ post.body }}</p>
+                    class="border-b last:border-none p-4 cursor-pointer hover:bg-gray-200/50 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-sm font-semibold">{{ post.title }}</h2>
+                            <p class="text-xs text-gray-700">{{ post.body }}</p>
+                        </div>
+                        <div>
+                            <div class="flex space-x-2 items-center">
+                                <Button @click.prevent.stop="" text label="Edit" icon="pi pi-pencil" size="small" />
+                                <Button @click.prevent.stop="deletePost(post)" text  icon="pi pi-trash" size="small" :loading="deleteLoading" />
+                            </div>
+                        </div>
                 </li>
             </ul>
         </div>
@@ -27,4 +35,18 @@ const props = defineProps({
     layout: 'Example',
     posts: Object
 });
+
+const deleteLoading = ref(false)
+
+const deletePost = (post) => {
+    // { preserveState: true  }
+    router.delete(route('posts.destroy', [post.id]), {
+        onStart: visit => {
+            // deleteLoading.value = true
+        },
+        onSuccess: page => {
+            // deleteLoading.value = false
+        },
+    })
+}
 </script>
