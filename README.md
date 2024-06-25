@@ -363,7 +363,7 @@ Allows you to have client-side state management across your application. This al
 
 ### Utilities
 
-You can create global utility functions in `/utils` and they will be auto-imported into your components. 
+You can create global utility functions for the client-side at `/resources/js/utils` and they will be auto-imported into your components. 
 
 *Note: Currently, you can not use these methods in `<template>` but you can use them in your component script. If you really need to use a method in your template, you can add them within the `app.js` and prefix it with a `$` to keep consistent.*
 
