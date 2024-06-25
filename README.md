@@ -108,13 +108,14 @@ return Inertia::render('Example/Index', ['posts' => $posts->paginate()]);
 
 *In controller, return inertia view or json*
 
-For json response, you should use `axois` requests.
+Note: For json response, you should use `axois` requests.
 
 ```php
 return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
 ```
 
-*In page component:*
+*In page component for Inertia views*
+
 ```js
 const props = defineProps({
     'posts': Object
