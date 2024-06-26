@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Example;
 
+use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
     public function index()
     {
         $posts = Post::query()->orderBy('created_at', 'DESC');
+
         return response()->inertiaOrJson('Example/Posts/Index', ['posts' => $posts->paginate()]);
     }
 

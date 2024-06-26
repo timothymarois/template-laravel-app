@@ -2,10 +2,9 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
-
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\Example\ExampleController;
 use App\Http\Controllers\Example\PostController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('index');

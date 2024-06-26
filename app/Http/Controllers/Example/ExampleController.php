@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Example;
 
+use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Http\Controllers\Controller;
 
 class ExampleController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Example/Index',[
-            'example' => 'Example Prop 1'
+        return Inertia::render('Example/Index', [
+            'example' => 'Example Prop 1',
         ]);
     }
 
     public function about(): Response
     {
         return Inertia::render('Example/About', [
-            'example' => 'Example Prop 2'
+            'example' => 'Example Prop 2',
         ]);
     }
 
