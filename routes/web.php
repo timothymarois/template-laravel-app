@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
