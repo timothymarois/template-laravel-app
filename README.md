@@ -56,8 +56,8 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 ### Tests and Linting
 
 - ✅ Phpunit `php artisan test`
-- ❌ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
-- ❌ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
+- ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
+- ✅ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
 
 ---
 
@@ -65,7 +65,7 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 
 - ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) `/log-viewer`
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) `/horizon`
-- ❌ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) `/telescope`
+- ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
 
 ---
 
