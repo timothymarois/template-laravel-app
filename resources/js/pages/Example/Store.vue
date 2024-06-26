@@ -1,6 +1,6 @@
 <template>
-    <Head title="Store - Example" />
-    <header class="bg-white dark:bg-surface-700 shadow-sm">
+    <Head title="Store" />
+    <header class="bg-white dark:bg-surface-700 shadow-md">
         <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
         <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">Store</h1>
         </div>
@@ -31,9 +31,9 @@
     </main>
 </template>
 <script setup>
-const props = defineProps({
-    layout: 'Example'
-});
+// const props = defineProps({
+//     layout: 'Example'
+// });
 const products = [
     {
         id: 1,

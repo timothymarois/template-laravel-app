@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+
+class UserController extends Controller
+{
+    public function index()
+    {
+        $users = User::query()->orderBy('created_at', 'DESC');
+
+        return response()->inertiaOrJson('Admin/Users', ['users' => $users->paginate()]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Admin/CreateUser');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+        ]);
+
+        $data = $request->all();
+        $data['password'] = Hash::make(Str::random(24));
+
+        User::query()->create($data);
+
+        return redirect()->route('users.index');
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user->id)
+            ],
+        ]);
+
+        $user->update($request->all());
+
+        return redirect()->route('users.index');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return redirect()->route('users.index');
+    }
+}

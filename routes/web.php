@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\Example\ExampleController;
-use App\Http\Controllers\Example\PostController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +22,5 @@ Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout')
 /**
  * Example routes
  */
-Route::get('/example', [ExampleController::class, 'index'])->name('example.index');
-Route::get('/example/about', [ExampleController::class, 'about'])->name('example.about');
-Route::get('/example/store', [ExampleController::class, 'store'])->name('example.store');
-Route::get('/example/signup', [ExampleController::class, 'signup'])->name('example.signup');
-
-Route::resource('/example/posts', PostController::class);
+Route::get('/example/store', [PageController::class, 'exampleStore'])->name('example.store');
+Route::resource('/admin/users', UserController::class)->middleware('auth:sanctum');

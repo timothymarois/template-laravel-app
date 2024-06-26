@@ -8,8 +8,8 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
-                        <Link :class="{'bg-surface-900 text-white' : $page.url === '/example' }" href="/example" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" aria-current="page">Dashboard</Link>
-                        <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/example/posts') }" href="/example/posts" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Posts</Link>
+                        <Link :class="{'bg-surface-900 text-white' : $page.url === '/' }" href="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" aria-current="page">Home</Link>
+                        <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/admin/users') }" href="/admin/users" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Users</Link>
                         <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/example/store') }" href="/example/store" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Store</Link>
                         </div>
                     </div>
@@ -21,33 +21,99 @@
                     <div class="relative">
                         <OptionsColorPalette />
                     </div>
-                </div>
-                <!-- <div class="hidden md:block">
-                    <div class="ml-4 flex items-center md:ml-6">
-                        <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span class="absolute -inset-1.5"></span>
-                        <span class="sr-only">View notifications</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                        </svg>
+                    <div v-if="user && user?.id" class="flex justify-content-center">
+                        <button
+                            type="button"
+                            aria-haspopup="true"
+                            aria-controls="overlay_menu"
+                            @click="toggle"
+                            class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2">
+                            <div class="pr-1">{{ user.name }}</div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-3"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clip-rule="evenodd" /></svg>
                         </button>
-                        <div class="relative ml-3">
-                        <div>
-                            <button type="button" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                            <span class="absolute -inset-1.5"></span>
-                            <span class="sr-only">Open user menu</span>
-                            <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                            </button>
-                        </div>
-                        <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-                        </div>
-                        </div>
+                        <Menu
+                            ref="menu"
+                            :model="items"
+                            class="w-[245px]"
+                            :popup="true"
+                        >
+                            <template #start>
+                                <button
+                                    class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-color hover:bg-surface-200 dark:hover:bg-surface-600 border-noround">
+                                    <!-- <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" /> -->
+                                    <Avatar :label="user.name[0]"  class="mr-4 border border-surface-200 dark:border-surface-400" shape="circle" />
+                                    <div class="flex flex-col text-left">
+                                        <span class="font-bold">{{ user.name }}</span>
+                                        <span class="text-sm">{{ user.email }}</span>
+                                    </div>
+                                </button>
+                            </template>
+                            <template #item="{ item, props }">
+                                <Link class="flex align-items-center" :href="item.href" v-bind="props.action">
+                                    <span :class="item.icon" />
+                                    <span class="ml-2 text-sm">{{ item.label }}</span>
+                                    <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
+                                    <span v-if="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
+                                </Link>
+                            </template>
+                        </Menu>
                     </div>
-                </div> -->
+                    <div v-else>
+                        <Link href="/login" class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2">Login or Register</Link>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 </template>
+
+<script setup>
+
+const page = usePage()
+const user = computed(() => page.props?.user)
+
+const menu = ref();
+const items = ref([
+    {
+        separator: true
+    },
+    {
+        label: 'Company Name',
+        icon: 'pi pi-building-columns',
+        href: '/'
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Billing & Plan',
+        icon: 'pi pi-credit-card',
+        href: '/'
+    },
+    {
+        label: 'Manage Access',
+        icon: 'pi pi-users',
+        href: '/'
+    },
+    {
+        label: 'Integrations',
+        icon: 'pi pi-objects-column',
+        href: '/'
+    },
+    {
+        label: 'Settings',
+        icon: 'pi pi-cog',
+        href: '/'
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        href: '/logout'
+    }
+]);
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
+</script>

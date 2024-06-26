@@ -1,8 +1,31 @@
-# Laravel App Template
+# Laravel Vue Inertia Template
 
-This is a starter kit for any project and it can be used as a quick playground to get you from 0 to 100 in 5 minutes.
+This is a starter kit for any project. It can also be used as a quick playground to get you from 0 to 100 within 5 minutes of setup. The goal of this project is to give you the perfect starting place so that you don't have to reinvent the wheel for each project. It handles all the common use cases so **you can focus only on your application requirements.**
 
-## Setup
+> Inertia empowers you to build a modern, JavaScript-based single-page application without the tiresome complexity.
+
+---
+
+## Tech Stack
+
+#### Core
+
+This template uses **Laravel** as your backend and **Vuejs** as your frontend. Inertia is implemented so that both can communicate seamlessly. 
+
+- ✅ Laravel 11 – [Documentation](https://laravel.com/docs/11.x)
+- ✅ Vuejs 3 – [Documentation](https://vuejs.org/guide/introduction.html)
+- ✅ Inertia – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
+
+#### Design
+
+For the design side, we want to focus on customization, theming and utility.
+
+- ✅ Tailwind 3 – [Documentation](https://tailwindcss.com/docs/installation)
+- ✅ PrimeVue 3 – [Documentation](https://primevue.org/) | [Unstyled with Tailwind](https://tailwind.primevue.org/)
+
+--- 
+
+## Installation
 
 Install client-side:
 
@@ -10,10 +33,16 @@ Install client-side:
 npm install
 ```
 
-Install server-side: (should do this through the docker container)
+Install server-side: *(should do this through the docker container)*
 
 ```bash
 composer install
+```
+
+Run any migrations:
+
+```bash
+php artisan migrate
 ```
 
 ## Build
@@ -24,21 +53,13 @@ For local testing:
 npm run dev
 ```
 
+For deployment: 
+
 ```bash
 npm run build
 ```
 
 ## Features:
-
-### Tech Stack
-
-- ✅ Laravel 11
-- ✅ Vuejs 3
-- ✅ Inertia (Laravel + Vue)
-- ✅ Tailwind 3
-- ✅ PrimeVue 3 (unstyled)
-
----
 
 ### Docker
 
@@ -81,8 +102,8 @@ For user authentication with Laravel and Vuejs we will use Laravel Sanctum.
 - ✅ Example: Register form and controller
 - ✅ Example: Login form and controller
 - ✅ Example: Logout
-- ❌ Example: Middleware auth route and auth-only page
-- ❌ Example: Login redirect back location
+- ✅ Example: Middleware auth route and auth-only page
+- ✅ Example: Redirect back to page after login
 - ❌ Example: Email verification
 - ❌ Example: Forgot/reset password form and controller
 
@@ -120,6 +141,13 @@ return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()])
 const props = defineProps({
     'posts': Object
 });
+```
+
+*In non-page components*
+
+```js
+const page = usePage()
+const posts = computed(() => page.props?.posts)
 ```
 
 </details>
@@ -371,7 +399,7 @@ You can create global utility functions for the client-side at `/resources/js/ut
 
 - ✅ Auto-load utility methods
 
-*Included methods:*
+*Included client-side methods:*
 
 - ✅ `transformNumber(n, decimals = 2)` - Transform a string/number into a comma seperated number.
 - ✅ `formatToCurrency(n, currency = 'USD', invalid = 'Invalid')` - Formats a string or number into a currency.
