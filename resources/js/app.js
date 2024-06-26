@@ -1,6 +1,8 @@
 import './bootstrap';
 import '../css/app.css'
 import 'primeicons/primeicons.css'
+import StyleClass from 'primevue/styleclass';
+
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
 import { createPinia } from 'pinia'
@@ -51,6 +53,7 @@ createInertiaApp({
             .component('Link', Link)
             .component('Head', Head);
 
+        app.directive('styleclass', StyleClass);
         app.config.globalProperties.$route = window.route = route;
         app.mount(el);
         return app;

@@ -23,6 +23,7 @@ export default {
             { 'shadow-md': props.raised },
             { 'rounded': !props.rounded, 'rounded-full': props.rounded },
             { 'rounded-none first:rounded-l last:rounded-r': parent.instance.$name == 'InputGroup' },
+            { 'first:border-r-0': parent.instance.$name == 'InputGroup' },
 
             // Link Button
             { 'text-primary-600 bg-transparent border-transparent': props.link },

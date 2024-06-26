@@ -1,8 +1,8 @@
 <template>
     <Head title="Posts - Example" />
-    <header class="bg-white shadow-sm">
+    <header class="bg-white dark:bg-surface-700 shadow-sm">
         <div class="flex justify-between items-center mx-auto max-w-7xl px-8 py-4">
-            <h1 class="text-lg font-semibold leading-6 text-gray-900">Posts</h1>
+            <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">Posts</h1>
             <Button @click="router.visit($route('posts.create'))" size="small">Create Post</Button>
         </div>
     </header>
@@ -13,10 +13,10 @@
                     v-for="post in posts.data"
                     :key="post.id"
                     @click="router.visit($route('posts.show', [post.id]))"
-                    class="border-b last:border-none p-4 cursor-pointer hover:bg-gray-200/50 flex items-center justify-between">
+                    class="border-b last:border-none border-gray-100 dark:border-gray-700 p-4 cursor-pointer hover:bg-surface-200/50 dark:hover:bg-surface-700/50 flex items-center justify-between">
                         <div>
                             <h2 class="text-sm font-semibold">{{ post.title }}</h2>
-                            <p class="text-xs text-gray-700">{{ post.body }}</p>
+                            <p class="text-xs text-gray-700 dark:text-gray-200">{{ post.body }}</p>
                         </div>
                         <div>
                             <!-- <div class="flex space-x-2 items-center"> -->
@@ -35,13 +35,13 @@
     <Dialog v-model:visible="showModal" modal header="Edit Post">
         <form  class="p-6">
             <div class="mb-4">
-                <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
-                <input v-model="form.title" id="title" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Title">
+                <label for="title" class="block text-sm font-bold mb-2">Title:</label>
+                <InputText type="text" v-model="form.title" placeholder="Title" />
                 <div v-if="form.errors.title" class="text-red-600 text-sm">{{ form.errors.title  }}</div>
             </div>
             <div class="mb-4">
-                <label for="body" class="block text-gray-700 text-sm font-bold mb-2">Body:</label>
-                <textarea v-model="form.body" id="body" rows="5" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Body"></textarea>
+                <label for="body" class="block text-sm font-bold mb-2">Body:</label>
+                <Textarea v-model="form.body" rows="5" placeholder="Body" />
                 <div v-if="form.errors.body" class="text-red-600 text-sm">{{ form.errors.body  }}</div>
             </div>
         </form>

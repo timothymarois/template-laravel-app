@@ -1,8 +1,8 @@
 <template>
     <Head title="Store - Example" />
-    <header class="bg-white shadow-sm">
+    <header class="bg-white dark:bg-surface-700 shadow-sm">
         <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-        <h1 class="text-lg font-semibold leading-6 text-gray-900">Store</h1>
+        <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">Store</h1>
         </div>
     </header>
     <main>
@@ -51,5 +51,5 @@ const products = [
         sale_price: 39.99
     }
 ];
-const cartStore = shoppingCart();
+const cartStore = useCartStore();
 </script>

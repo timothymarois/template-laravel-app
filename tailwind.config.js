@@ -11,7 +11,8 @@ export default {
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
     ],
-    darkMode: 'class',
+    // darkMode: 'class',
+    darkMode: 'selector',
     theme: {
         mode: 'jit',
         extend: {

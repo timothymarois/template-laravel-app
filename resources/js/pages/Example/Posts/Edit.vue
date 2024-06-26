@@ -1,23 +1,23 @@
 
 <template>
     <Head title="Edit Post - Example" />
-    <header class="bg-white shadow-sm">
+    <header class="bg-white dark:bg-surface-700 shadow-sm">
         <div class="flex justify-between items-center mx-auto max-w-7xl px-8 py-4">
-            <h1 class="text-lg font-semibold leading-6 text-gray-900">Edit Post: {{ props.post.id }}</h1>
+            <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">Edit Post: {{ props.post.id }}</h1>
             <Button outlined @click="router.visit($route('posts.index'))" size="small">View All</Button>
         </div>
     </header>
     <main>
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-            <form  class="bg-white shadow-md rounded-lg p-6">
+            <form  class="shadow-md rounded-lg p-6">
                 <div class="mb-4">
-                    <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>
-                    <input v-model="form.title" id="title" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Title">
+                    <label for="title" class="block text-sm font-bold mb-2">Title:</label>
+                    <InputText type="text" v-model="form.title" placeholder="Title" />
                     <div v-if="form.errors.title" class="text-red-600 text-sm">{{ form.errors.title  }}</div>
                 </div>
                 <div class="mb-4">
-                    <label for="body" class="block text-gray-700 text-sm font-bold mb-2">Body:</label>
-                    <textarea v-model="form.body" id="body" rows="5" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Body"></textarea>
+                    <label for="body" class="block text-sm font-bold mb-2">Body:</label>
+                    <Textarea v-model="form.body" rows="5" placeholder="Body" />
                     <div v-if="form.errors.body" class="text-red-600 text-sm">{{ form.errors.body  }}</div>
                 </div>
                 <div class="flex items-center justify-between">
