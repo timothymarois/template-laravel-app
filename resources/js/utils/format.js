@@ -13,6 +13,16 @@ export const transformNumber = (n, decimals = 2) => {
 };
 
 /**
+ * Convert a timestamp with UTC to a timestamp with users timezone
+ * @param { String } utcDatetime
+ * @param { String } userTimezone
+ * @returns
+ */
+export const formatDatetime = (utcDatetime, userTimezone = 'UTC') => {
+    return new Date(utcDatetime).toLocaleString("en-US", { timeZone: userTimezone });
+}
+
+/**
  * Formats a string or number into a currency
  * like: 1000000 into $1,000,000
  * @param { String|Number } v

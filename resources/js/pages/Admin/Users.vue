@@ -14,9 +14,15 @@
                     :key="user.id"
                     class="border-b last:border-none border-gray-100 dark:border-gray-700 p-4 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 flex items-center justify-between"
                 >
-                    <div>
-                        <h2 class="text-sm font-semibold">{{ user.name }}</h2>
-                        <p class="text-xs text-gray-700 dark:text-gray-200">{{ user.email }}</p>
+                    <div class="flex items-center space-x-4">
+                        <div class="min-w-[300px]">
+                            <h2 class="text-sm font-semibold">{{ user.name }}</h2>
+                            <p class="text-xs text-gray-700 dark:text-gray-200">{{ user.email }}</p>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-semibold">Updated</h2>
+                            <p class="text-xs text-gray-700 dark:text-gray-200">{{ convertLocalTimezone(user.updated_at) }}</p>
+                        </div>
                     </div>
                     <div>
                         <InputGroup>
@@ -62,6 +68,11 @@ const form = useForm({
     name: null,
     email: null
 })
+
+const convertLocalTimezone = (time) => {
+    // 'America/New_York' (pass current users timezone)
+    return formatDatetime(time);
+}
 
 const openEditModal = (user) => {
     showModal.value = true
