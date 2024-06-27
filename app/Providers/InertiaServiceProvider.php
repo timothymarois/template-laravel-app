@@ -17,5 +17,13 @@ class InertiaServiceProvider extends ServiceProvider
                 return Inertia::render($component, $props);
             }
         });
+
+        Response::macro('redirectOrJson', function ($route, $props = []) {
+            if (request()->wantsJson()) {
+                return response()->json($props);
+            } else {
+                return redirect()->route($route);
+            }
+        });
     }
 }

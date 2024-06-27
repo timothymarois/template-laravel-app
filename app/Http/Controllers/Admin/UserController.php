@@ -34,9 +34,9 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make(Str::random(24));
 
-        User::query()->create($data);
+        $user = User::query()->create($data);
 
-        return redirect()->route('users.index');
+        return response()->redirectOrJson('users.index', $user);
     }
 
     public function update(Request $request, User $user)
@@ -55,13 +55,13 @@ class UserController extends Controller
 
         $user->update($request->all());
 
-        return redirect()->route('users.index');
+        return response()->redirectOrJson('users.index', $user);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return redirect()->route('users.index');
+        return response()->redirectOrJson('users.index', []);
     }
 }

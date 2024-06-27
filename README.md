@@ -135,6 +135,14 @@ Note: For json response, you should use `axois` requests.
 return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
 ```
 
+*In controller, redirect or json*
+
+If you want to use as an API, you can return the JSON, or if you want to redirect the user's page with inertia.
+
+```php
+return response()->redirectOrJson('route.name', ['posts' => $posts->paginate()]);
+```
+
 *In page component for Inertia views*
 
 ```js
