@@ -288,7 +288,7 @@ form.processing
 
 ---
 
-### Router requests (by Inertia & Axois)
+### Router & API requests (by Inertia & Axois)
 
 You can use the built-in methods to fetch data or make manual visits
 
@@ -299,6 +299,8 @@ You can use the built-in methods to fetch data or make manual visits
 <summary>Show example</summary>
 
 Use Inertia built-in `router` to visit routes and modify browser histoty.
+
+*Note: `router` should respond with an inertia response. Use `Axois` for API JSON responses.*
 
 ```js
 // best to use replace = true to avoid browser history from being added
@@ -332,15 +334,15 @@ By default, running a axois request, should return json response.
 
 ```js
 axios.get(url)
-    .then(function (response) {
-        // handle success
-    })
-    .catch(function (error) {
-        // handle error
-    })
-    .finally(function () {
+.then(function (response) {
+    // handle success
+})
+.catch(function (error) {
+    // handle error
+})
+.finally(function () {
 
-    });
+});
 ```
 </details>
 
