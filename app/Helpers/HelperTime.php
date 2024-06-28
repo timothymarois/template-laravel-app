@@ -19,7 +19,9 @@ class HelperTime
      */
     public static function convertTz(string $datetime, string $useTimezone, string $defaultTimezone = 'UTC'): Carbon
     {
-        return Carbon::parse($datetime.' '.$defaultTimezone)->tz($useTimezone);
+        // return Carbon::parse($datetime.' '.$defaultTimezone)->tz($useTimezone);
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $defaultTimezone);
+        return $date->setTimezone($useTimezone);
     }
 
     /**
