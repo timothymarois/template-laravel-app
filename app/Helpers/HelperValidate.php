@@ -6,11 +6,8 @@ class HelperValidate
 {
     /**
      * Check if string is valid JSON
-     *
-     * @param string|null $string
-     * @return boolean
      */
-    public static function isJson(string|null $string): bool
+    public static function isJson(?string $string): bool
     {
         if (! $string) {
             return false;

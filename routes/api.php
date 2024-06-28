@@ -7,6 +7,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/timezones', function() {
+Route::get('/timezones', function () {
     return DateTimeZone::listIdentifiers();
 })->name('timezones');

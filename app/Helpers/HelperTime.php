@@ -12,23 +12,18 @@ class HelperTime
     /**
      * Convert a given date/time to a date/time of a different timezone
      *
-     * @param string $datetime
-     * @param string $useTimezone
      * @param string #defaultTimezone
-     * @return Carbon
      */
     public static function convertTz(string $datetime, string $useTimezone, string $defaultTimezone = 'UTC'): Carbon
     {
         // return Carbon::parse($datetime.' '.$defaultTimezone)->tz($useTimezone);
         $date = Carbon::createFromFormat('Y-m-d H:i:s', $datetime, $defaultTimezone);
+
         return $date->setTimezone($useTimezone);
     }
 
     /**
      * Get the total seconds from an array of timestamps
-     *
-     * @param Array $timestamps
-     * @return int
      */
     public static function calcTotalSeconds(array $timestamps = []): int
     {
@@ -46,8 +41,7 @@ class HelperTime
     /**
      * Get an array of dates between a date range
      *
-     * @param string $startDate
-     * @param ?string $endDate
+     * @param  ?string  $endDate
      */
     public static function datesBetween(string $startDate, ?string $endDate)
     {
