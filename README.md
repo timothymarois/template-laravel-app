@@ -65,6 +65,8 @@ npm run build
 
 Docker is used for your local env. *Do not use your custom or OS php/env*.
 
+Build your images by `./vendor/bin/sail build --no-cache`
+
 Run: `./vendor/bin/sail up`, once containers are built, you can also run them within VSC using the [docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) or if you perfer the [docker desktop](https://www.docker.com/products/docker-desktop/) app.
 
 - ✅ Docker with php 8.3
@@ -425,3 +427,8 @@ You can create global utility functions for the client-side at `/resources/js/ut
 - Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
 
 ---
+
+## Todo:
+
+- ❌ Forgot/reset password
+- ❌ Pagination
