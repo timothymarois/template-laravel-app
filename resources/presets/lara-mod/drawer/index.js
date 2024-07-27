@@ -10,7 +10,7 @@ export default {
 
             // Size
             {
-                'h-full w-full sm:w-auto sm:max-w-4xl': props.position == 'left' || props.position == 'right',
+                'h-full w-full sm:min-w-80 sm:w-auto sm:max-w-4xl': props.position == 'left' || props.position == 'right',
                 'h-auto w-full': props.position == 'top' || props.position == 'bottom'
             },
 
@@ -38,10 +38,10 @@ export default {
             'shrink-0',
 
             // Spacing
-            'p-5',
+            'py-4 px-6',
 
             // Colors
-            'bg-surface-0 dark:bg-surface-800',
+            'bg-surface-0 dark:bg-surface-800 border-b border-surface-200 dark:border-surface-600',
             'text-surface-700 dark:text-surface-0/80'
         ]
     },
@@ -141,8 +141,8 @@ export default {
               }
             : {
                   enterFromClass: 'opacity-0 mask-active',
-                  enterActiveClass: 'transition-opacity duration-400 ease-in',
-                  leaveActiveClass: 'transition-opacity duration-400 ease-in',
+                  enterActiveClass: 'transition-opacity duration-300 ease-in',
+                  leaveActiveClass: 'transition-opacity duration-300 ease-in',
                   leaveToClass: 'opacity-0 mask-active'
               };
     }
