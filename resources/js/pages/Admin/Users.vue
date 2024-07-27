@@ -53,7 +53,7 @@
     </Dialog>
 
     <Drawer v-model:visible="showModal" header="Edit User" position="right">
-        <div class="h-full w-[450px]">
+        <div class="h-full w-[450px] h-[1000px]">
             <div class="w-full p-6">
                 <form>
                     <div class="mb-4">
