@@ -8,7 +8,7 @@ export default {
             { '-translate-x-2/4': props.position == 'top-center' || props.position == 'bottom-center' }
         ]
     }),
-    container: ({ props }) => ({
+    message: ({ props }) => ({
         class: [
             'my-4 rounded-md w-full',
             'border-solid border-0 border-l-[6px]',
@@ -35,23 +35,23 @@ export default {
             }
         ]
     }),
-    content: ({ props }) => ({
+    messageContent: ({ props }) => ({
         class: [
-          'flex p-4',
-          {
-            'items-start': props.message.summary,
-            'items-center': !props.message.summary,
-          },
-        ],
+            'flex p-4',
+            {
+                'items-start': props.message.summary,
+                'items-center': !props.message.summary
+            }
+        ]
     }),
-    icon: {
+    messageIcon: {
         class: [
             // Sizing and Spacing
             'w-6 h-6',
             'text-lg leading-none mr-2 shrink-0'
         ]
     },
-    text: {
+    messageText: {
         class: [
             // Font and Text
             'text-base leading-none',
@@ -63,9 +63,9 @@ export default {
         class: 'font-bold block'
     },
     detail: ({ props }) => ({
-        class: ['block', { 'mt-2': props.message.summary }],
+        class: ['block', { 'mt-2': props.message.summary }]
     }),
-    closebutton: {
+    closeButton: {
         class: [
             // Flexbox
             'flex items-center justify-center',

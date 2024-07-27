@@ -5,25 +5,24 @@ export default {
 
             // Alignments
             'items-center inline-flex text-center align-bottom justify-center',
+            { 'flex-col': (props.iconPos === 'top' || props.iconPos === 'bottom') && props.label },
 
             // Sizes & Spacing
             'leading-[normal]',
             {
-                'px-6 py-3': props.size === null,
-                'text-sm py-2 px-4': props.size === 'small',
+                'px-4 py-[0.625rem]': props.size === null,
+                'text-sm py-2 px-3': props.size === 'small',
                 'text-xl py-3 px-4': props.size === 'large'
             },
+            { 'gap-2': props.label !== null },
             {
-                'w-12 p-0 py-3': props.label == null && props.icon !== null && props.size === null,
-                'w-6 py-2 px-2': props.label == null && props.icon !== null && props.size === 'small',
-                'w-12 py-3': props.label == null && props.icon !== null && props.size === 'large'
+                'w-12 px-0 py-3': props.label == null && props.icon !== null
             },
 
             // Shapes
-            { 'shadow-md': props.raised },
-            { 'rounded': !props.rounded, 'rounded-full': props.rounded },
-            { 'rounded-none first:rounded-l last:rounded-r': parent.instance.$name == 'InputGroup' },
-            { 'first:border-r-0': parent.instance.$name == 'InputGroup' },
+            { 'shadow-lg': props.raised },
+            { 'rounded-md': !props.rounded, 'rounded-full': props.rounded },
+            { 'rounded-none first:rounded-l-md last:rounded-r-md': parent.instance.$name == 'InputGroup' },
 
             // Link Button
             { 'text-primary-600 bg-transparent border-transparent': props.link },
@@ -45,7 +44,7 @@ export default {
 
             // Primary Button
             {
-                'text-primary-inverse': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
+                'text-primary-contrast': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 'bg-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain,
                 'border border-primary': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain
             },
@@ -89,14 +88,14 @@ export default {
 
             // Warning Button
             {
-                'text-white dark:text-surface-900': props.severity === 'warning' && !props.text && !props.outlined && !props.plain,
-                'bg-orange-500 dark:bg-orange-400': props.severity === 'warning' && !props.text && !props.outlined && !props.plain,
-                'border border-orange-500 dark:border-orange-400': props.severity === 'warning' && !props.text && !props.outlined && !props.plain
+                'text-white dark:text-surface-900': props.severity === 'warn' && !props.text && !props.outlined && !props.plain,
+                'bg-orange-500 dark:bg-orange-400': props.severity === 'warn' && !props.text && !props.outlined && !props.plain,
+                'border border-orange-500 dark:border-orange-400': props.severity === 'warn' && !props.text && !props.outlined && !props.plain
             },
             // Warning Text Button
-            { 'text-orange-500 dark:text-orange-400': props.text && props.severity === 'warning' && !props.plain },
+            { 'text-orange-500 dark:text-orange-400': props.text && props.severity === 'warn' && !props.plain },
             // Warning Outlined Button
-            { 'text-orange-500 border border-orange-500 hover:bg-orange-300/20': props.outlined && props.severity === 'warning' && !props.plain },
+            { 'text-orange-500 border border-orange-500 hover:bg-orange-300/20': props.outlined && props.severity === 'warn' && !props.plain },
 
             // Help Button
             {
@@ -142,7 +141,7 @@ export default {
             { 'hover:bg-surface-300/20': props.plain && (props.text || props.outlined) },
 
             // Primary
-            { 'hover:bg-primary-hover hover:border-primary-hover': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain },
+            { 'hover:bg-primary-emphasis hover:border-primary-emphasis': !props.link && props.severity === null && !props.text && !props.outlined && !props.plain },
             { 'focus:ring-primary': props.severity === null },
             // Text & Outlined Button
             { 'hover:bg-primary-300/20': (props.text || props.outlined) && props.severity === null && !props.plain },
@@ -166,10 +165,10 @@ export default {
             { 'hover:bg-blue-300/20': (props.text || props.outlined) && props.severity === 'info' && !props.plain },
 
             // Warning
-            { 'hover:bg-orange-600 dark:hover:bg-orange-300 hover:border-orange-600 dark:hover:border-orange-300': props.severity === 'warning' && !props.text && !props.outlined && !props.plain },
-            { 'focus:ring-orange-400/50 dark:focus:ring-orange-300/50': props.severity === 'warning' },
+            { 'hover:bg-orange-600 dark:hover:bg-orange-300 hover:border-orange-600 dark:hover:border-orange-300': props.severity === 'warn' && !props.text && !props.outlined && !props.plain },
+            { 'focus:ring-orange-400/50 dark:focus:ring-orange-300/50': props.severity === 'warn' },
             // Text & Outlined Button
-            { 'hover:bg-orange-300/20': (props.text || props.outlined) && props.severity === 'warning' && !props.plain },
+            { 'hover:bg-orange-300/20': (props.text || props.outlined) && props.severity === 'warn' && !props.plain },
 
             // Help
             { 'hover:bg-purple-600 dark:hover:bg-purple-300 hover:border-purple-600 dark:hover:border-purple-300': props.severity === 'help' && !props.text && !props.outlined && !props.plain },
@@ -194,13 +193,16 @@ export default {
             'transition duration-200 ease-in-out',
 
             // Misc
-            'cursor-pointer overflow-hidden select-none'
+            'cursor-pointer overflow-hidden select-none',
+
+            // Badge
+            '[&>[data-pc-name=badge]]:min-w-4 [&>[data-pc-name=badge]]:h-4 [&>[data-pc-name=badge]]:leading-4'
         ]
     }),
     label: ({ props }) => ({
         class: [
             'duration-200',
-            'font-semibold',
+            'font-bold',
             {
                 'hover:underline': props.link
             },
@@ -213,12 +215,11 @@ export default {
             {
                 'mr-2': props.iconPos == 'left' && props.label != null,
                 'ml-2 order-1': props.iconPos == 'right' && props.label != null,
-                'mb-2': props.iconPos == 'top' && props.label != null,
-                'mt-2': props.iconPos == 'bottom' && props.label != null
+                'order-2': props.iconPos == 'bottom' && props.label != null
             }
         ]
     }),
-    loadingicon: ({ props }) => ({
+    loadingIcon: ({ props }) => ({
         class: [
             'h-4 w-4',
             'mx-0',

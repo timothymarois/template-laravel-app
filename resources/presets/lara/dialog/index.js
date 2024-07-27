@@ -2,13 +2,12 @@ export default {
     root: ({ state }) => ({
         class: [
             // Shape
-            'rounded-md',
+            'rounded-lg',
             'shadow-lg',
             'border-0',
 
             // Size
             'max-h-[90vh]',
-            'w-[50vw]',
             'm-0',
 
             // Color
@@ -42,8 +41,8 @@ export default {
 
             // Shape
             'border-t-0',
-            'rounded-tl-md',
-            'rounded-tr-md',
+            'rounded-tl-lg',
+            'rounded-tr-lg',
 
             // Colors
             'bg-surface-0 dark:bg-surface-800',
@@ -51,96 +50,10 @@ export default {
         ]
     },
     title: {
-        class: ['font-semibold text-lg']
+        class: ['font-bold text-lg']
     },
-    icons: {
+    headerActions: {
         class: ['flex items-center']
-    },
-    closeButton: {
-        class: [
-            'relative',
-
-            // Flexbox and Alignment
-            'flex items-center justify-center',
-
-            // Size and Spacing
-            'mr-2',
-            'last:mr-0',
-            'w-8 h-8',
-
-            // Shape
-            'border-0',
-            'rounded-full',
-
-            // Colors
-            'text-surface-500',
-            'bg-transparent',
-
-            // Transitions
-            'transition duration-200 ease-in-out',
-
-            // States
-            'hover:text-surface-700 dark:hover:text-white/80',
-            'hover:bg-surface-100 dark:hover:bg-surface-800/80',
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-inset',
-            'focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
-
-            // Misc
-            'overflow-hidden'
-        ]
-    },
-    maximizablebutton: {
-        class: [
-            'relative',
-
-            // Flexbox and Alignment
-            'flex items-center justify-center',
-
-            // Size and Spacing
-            'mr-2',
-            'last:mr-0',
-            'w-8 h-8',
-
-            // Shape
-            'border-0',
-            'rounded-full',
-
-            // Colors
-            'text-surface-500',
-            'bg-transparent',
-
-            // Transitions
-            'transition duration-200 ease-in-out',
-
-            // States
-            'hover:text-surface-700 dark:hover:text-white/80',
-            'hover:bg-surface-100 dark:hover:bg-surface-800/80',
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-inset',
-            'focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
-
-            // Misc
-            'overflow-hidden'
-        ]
-    },
-    closeButtonIcon: {
-        class: [
-            // Display
-            'inline-block',
-
-            // Size
-            'w-4',
-            'h-4'
-        ]
-    },
-    maximizableicon: {
-        class: [
-            // Display
-            'inline-block',
-
-            // Size
-            'w-4',
-            'h-4'
-        ]
     },
     content: ({ state, instance }) => ({
         class: [
@@ -152,8 +65,8 @@ export default {
             // Shape
             {
                 grow: state.maximized,
-                'rounded-bl-md': !instance.$slots.footer,
-                'rounded-br-md': !instance.$slots.footer
+                'rounded-bl-lg': !instance.$slots.footer,
+                'rounded-br-lg': !instance.$slots.footer
             },
 
             // Colors
@@ -178,7 +91,7 @@ export default {
 
             // Shape
             'border-t-0',
-            'rounded-b-md',
+            'rounded-b-lg',
 
             // Colors
             'bg-surface-0 dark:bg-surface-800',

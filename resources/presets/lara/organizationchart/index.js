@@ -17,7 +17,7 @@ export default {
             'py-0 px-3'
         ]
     },
-    node: ({ props, context }) => ({
+    node: ({ context }) => ({
         class: [
             'relative inline-block',
 
@@ -32,21 +32,20 @@ export default {
                 'text-surface-600 dark:text-white/80': !context?.selected,
                 'bg-surface-0 dark:bg-surface-800': !context?.selected,
                 'border-surface-200 dark:border-surface-700': !context?.selected,
-                'text-primary-highlight-inverse': context?.selected,
-                'bg-primary-highlight': context?.selected,
+                'bg-highlight': context?.selected,
                 'border-primary-200 dark:border-primary-600': context?.selected
             },
 
             // States
             {
                 'hover:bg-surface-100 dark:hover:bg-surface-700': context?.selectable && !context?.selected,
-                'hover:bg-primary-highlight-hover': context?.selectable && context?.selected
+                'hover:bg-highlight-emphasis': context?.selectable && context?.selected
             },
 
             { 'cursor-pointer': context?.selectable }
         ]
     }),
-    linecell: {
+    lineCell: {
         class: [
             // Alignment
             'text-center align-top',
@@ -55,7 +54,7 @@ export default {
             'py-0 px-3'
         ]
     },
-    linedown: {
+    connectorDown: {
         class: [
             // Spacing
             'mx-auto my-0',
@@ -67,7 +66,7 @@ export default {
             'bg-surface-200 dark:bg-surface-700'
         ]
     },
-    lineleft: ({ context }) => ({
+    connectorLeft: ({ context }) => ({
         class: [
             // Alignment
             'text-center align-top',
@@ -83,7 +82,7 @@ export default {
             'border-surface-200 dark:border-surface-700'
         ]
     }),
-    lineright: ({ context }) => ({
+    connectorRight: ({ context }) => ({
         class: [
             // Alignment
             'text-center align-top',
@@ -98,10 +97,10 @@ export default {
             { 'border-t border-surface-200 dark:border-surface-700': context.lineTop }
         ]
     }),
-    nodecell: {
+    nodeCell: {
         class: 'text-center align-top py-0 px-3'
     },
-    nodetoggler: {
+    nodeToggleButton: {
         class: [
             // Position
             'absolute bottom-[-0.75rem] left-2/4 -ml-3',
@@ -126,7 +125,7 @@ export default {
             'cursor-pointer no-underline select-none'
         ]
     },
-    nodetogglericon: {
+    nodeToggleButtonIcon: {
         class: [
             // Position
             'relative inline-block',

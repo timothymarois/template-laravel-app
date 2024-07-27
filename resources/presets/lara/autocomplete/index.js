@@ -4,7 +4,10 @@ export default {
             'relative',
 
             // Flex
-            'inline-flex',
+            {
+                flex: props.fluid,
+                'inline-flex': !props.fluid
+            },
 
             // Size
             { 'w-full': props.multiple },
@@ -18,7 +21,7 @@ export default {
             }
         ]
     }),
-    container: ({ props, state }) => ({
+    inputMultiple: ({ props, state }) => ({
         class: [
             // Font
             'text-base leading-[normal]',
@@ -60,118 +63,64 @@ export default {
             'cursor-text overflow-hidden'
         ]
     }),
-    inputtoken: {
+    inputToken: {
         class: ['py-1.5 px-0', 'inline-flex flex-auto']
     },
-    input: ({ props, parent }) => ({
-        class: [
-            // Font
-            'text-base leading-[normal]',
-
-            // Shape
-            'appearance-none rounded-md',
-            { 'rounded-tr-none rounded-br-none': props.dropdown },
-            { 'outline-none shadow-none rounded-none': props.multiple },
-
-            // Size
-            { 'w-full': props.multiple },
-
-            // Spacing
-            'm-0',
-            { 'p-3': !props.multiple, 'p-0': props.multiple },
-
-            // Colors
-            'text-surface-700 dark:text-white/80',
-            'border',
-            {
-                'bg-surface-0 dark:bg-surface-900': !props.multiple,
-                ' border-surface-300 dark:border-surface-700': !props.multiple && !props.invalid,
-                'border-0 bg-transparent': props.multiple
-            },
-
-            // Invalid State
-            { 'border-red-500 dark:border-red-400': props.invalid },
-
-            // States
-            { 'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-400/50 dark:focus:ring-primary-300/50': !props.multiple },
-
-            // Filled State *for FloatLabel
-            { filled: parent.instance?.$name == 'FloatLabel' && props.modelValue !== '' },
-
-            // Transition
-            'transition-colors duration-200'
-        ]
-    }),
-    token: {
-        class: [
-            // Flex
-            'inline-flex items-center',
-
-            // Spacings
-            'py-1.5 px-3',
-
-            // Shape
-            'rounded-[1.14rem]',
-
-            // Colors
-            'bg-surface-200 dark:bg-surface-700',
-            'text-surface-700 dark:text-white/70',
-
-            // Misc
-            'cursor-default'
-        ]
+    inputChip: {
+        class: 'flex-auto inline-flex pt-1 pb-1'
     },
-    label: {
-        class: 'leading-[normal]'
+    input: {
+        class: 'border-none outline-none bg-transparent m-0 p-0 shadow-none rounded-none w-full'
     },
-    removeTokenIcon: {
-        class: [
-            // Shape
-            'rounded-md leading-6',
-
-            // Spacing
-            'ml-2',
-
-            // Size
-            'w-4 h-4',
-
-            // Transition
-            'transition duration-200 ease-in-out',
-
-            // Misc
-            'cursor-pointer'
-        ]
-    },
-    dropdownbutton: {
+    chipItem: {
         root: {
             class: [
-                'relative',
+                // Flex
+                'inline-flex items-center',
 
-                // Alignments
-                'items-center inline-flex text-center align-bottom',
+                // Spacings
+                'py-1.5 px-3',
 
                 // Shape
-                'rounded-r-md',
-
-                // Size
-                'px-4 py-3 leading-[normal]',
+                'rounded-[1.14rem]',
 
                 // Colors
-                'text-primary-inverse',
-                'bg-primary',
-                'border border-primary',
+                'bg-surface-200 dark:bg-surface-700',
+                'text-surface-700 dark:text-white/70',
 
-                // States
-                'focus:outline-none focus:outline-offset-0 focus:ring',
-                'hover:bg-primary-hover hover:border-primary-hover',
-                'focus:ring-primary-400/50 dark:focus:ring-primary-300/50'
+                // Misc
+                'cursor-default'
             ]
         }
     },
-    loadingicon: {
+    dropdown: {
+        class: [
+            'relative',
+
+            // Alignments
+            'items-center inline-flex text-center align-bottom',
+
+            // Shape
+            'rounded-r-md',
+
+            // Size
+            'px-4 py-3 leading-[normal]',
+
+            // Colors
+            'text-primary-contrast',
+            'bg-primary',
+            'border border-primary',
+
+            // States
+            'focus:outline-none focus:outline-offset-0 focus:ring',
+            'hover:bg-primary-emphasis hover:border-primary-emphasis',
+            'focus:ring-primary-400/50 dark:focus:ring-primary-300/50'
+        ]
+    },
+    loader: {
         class: ['text-surface-500 dark:text-surface-0/70', 'absolute top-[50%] right-[0.5rem] -mt-2 animate-spin']
     },
-    panel: {
+    overlay: {
         class: [
             // Colors
             'bg-surface-0 dark:bg-surface-800',
@@ -189,7 +138,7 @@ export default {
     list: {
         class: 'py-3 px-0 list-none m-0'
     },
-    item: ({ context }) => ({
+    option: ({ context }) => ({
         class: [
             'relative',
 
@@ -207,14 +156,12 @@ export default {
                 'text-surface-700 dark:text-white/80': !context.focused && !context.selected,
                 'bg-surface-200 dark:bg-surface-600/60': context.focused && !context.selected,
                 'text-surface-700 dark:text-white/80': context.focused && !context.selected,
-
-                'text-primary-highlight-inverse': context.selected,
-                'bg-primary-highlight': context.selected
+                'bg-highlight': context.selected
             },
 
             //States
             { 'hover:bg-surface-100 dark:hover:bg-surface-600/80': !context.focused && !context.selected },
-            { 'hover:bg-primary-highlight-hover': context.selected },
+            { 'hover:bg-highlight-emphasis': context.selected },
             'focus-visible:outline-none focus-visible:outline-offset-0 focus-visible:ring focus-visible:ring-inset focus-visible:ring-primary-400/50 dark:focus-visible:ring-primary-300/50',
 
             // Transition
@@ -224,7 +171,7 @@ export default {
             'cursor-pointer overflow-hidden whitespace-nowrap'
         ]
     }),
-    itemgroup: {
+    optionGroup: {
         class: [
             'font-bold',
 
@@ -239,7 +186,7 @@ export default {
             'cursor-auto'
         ]
     },
-    emptymessage: {
+    emptyMessage: {
         class: [
             // Font
             'leading-[normal]',

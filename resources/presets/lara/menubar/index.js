@@ -14,11 +14,11 @@ export default {
             'rounded-md',
 
             // Color
-            // 'bg-surface-50 dark:bg-surface-700',
-            // 'border border-surface-200 dark:border-surface-700'
+            'bg-surface-50 dark:bg-surface-700',
+            'border border-surface-200 dark:border-surface-700'
         ]
     },
-    menu: ({ props }) => ({
+    rootList: ({ props }) => ({
         class: [
             // Flexbox
             'sm:flex',
@@ -51,10 +51,10 @@ export default {
             'outline-none'
         ]
     }),
-    menuitem: {
+    item: {
         class: 'sm:relative sm:w-auto w-full static'
     },
-    content: ({ props, context }) => ({
+    itemContent: ({ props, context }) => ({
         class: [
             // Shape
             { 'rounded-md': props.root },
@@ -63,13 +63,13 @@ export default {
             {
                 'text-surface-500 dark:text-white/70': !context.focused && !context.active,
                 'text-surface-500 dark:text-white/70 bg-surface-200 dark:bg-surface-600/90': context.focused && !context.active,
-                'text-primary-highlight-inverse bg-primary-highlight': (context.focused && context.active) || context.active || (!context.focused && context.active)
+                'bg-highlight': (context.focused && context.active) || context.active || (!context.focused && context.active)
             },
 
             // Hover States
             {
                 'hover:bg-surface-100 dark:hover:bg-surface-600/80': !context.active,
-                'hover:bg-primary-highlight-hover text-primary-highlight-inverse': context.active
+                'hover:bg-highlight-emphasis': context.active
             },
 
             // Transitions
@@ -77,7 +77,7 @@ export default {
             'duration-200'
         ]
     }),
-    action: ({ context }) => ({
+    itemLink: ({ context }) => ({
         class: [
             'relative',
 
@@ -103,10 +103,10 @@ export default {
             'overflow-hidden'
         ]
     }),
-    icon: {
+    itemIcon: {
         class: 'mr-2'
     },
-    submenuicon: ({ props }) => ({
+    submenuIcon: ({ props }) => ({
         class: [
             {
                 'ml-auto sm:ml-2': props.root,
@@ -116,6 +116,7 @@ export default {
     }),
     submenu: ({ props }) => ({
         class: [
+            'flex flex-col',
             // Size
             'w-full sm:w-48',
 

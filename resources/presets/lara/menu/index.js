@@ -3,8 +3,7 @@ export default {
         class: [
             // Sizing and Shape
             'min-w-[12rem]',
-            'rounded-sm',
-            'shadow-md',
+            'rounded-md',
             // Spacing
             'py-2',
             // Colors
@@ -13,7 +12,7 @@ export default {
             'border border-surface-200 dark:border-surface-700'
         ]
     },
-    menu: {
+    list: {
         class: [
             // Spacings and Shape
             'list-none',
@@ -22,21 +21,15 @@ export default {
             'outline-none'
         ]
     },
-    separator: {
-        class: [
-            // border
-            'my-1 border-t border-surface-200 dark:border-surface-600'
-        ]
-    },
-    content: ({ context }) => ({
+    itemContent: ({ context }) => ({
         class: [
             //Shape
             'rounded-none',
             // Colors
             'text-surface-700 dark:text-white/80',
-            // {
-            //     'bg-surface-200 text-surface-700 dark:bg-surface-300/10 dark:text-white': context.focused
-            // },
+            {
+                'bg-surface-200 text-surface-700 dark:bg-surface-300/10 dark:text-white': context.focused
+            },
             // Transitions
             'transition-shadow',
             'duration-200',
@@ -45,7 +38,7 @@ export default {
             'hover:bg-surface-100 dark:bg-surface-700 dark:hover:bg-surface-400/10'
         ]
     }),
-    action: {
+    itemLink: {
         class: [
             'relative',
             // Flexbox
@@ -67,7 +60,7 @@ export default {
             'select-none'
         ]
     },
-    icon: {
+    itemIcon: {
         class: [
             // Spacing
             'mr-2',
@@ -76,10 +69,10 @@ export default {
             'text-surface-600 dark:text-white/70'
         ]
     },
-    label: {
+    itemLabel: {
         class: ['leading-none']
     },
-    submenuheader: {
+    submenuLabel: {
         class: [
             // Font
             'font-bold',

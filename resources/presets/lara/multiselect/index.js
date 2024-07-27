@@ -30,9 +30,7 @@ export default {
             { 'opacity-60': props.disabled, 'pointer-events-none': props.disabled, 'cursor-default': props.disabled }
         ]
     }),
-    labelContainer: {
-        class: 'overflow-hidden flex flex-auto cursor-pointer '
-    },
+    labelContainer: 'overflow-hidden flex flex-auto cursor-pointer',
     label: ({ props }) => ({
         class: [
             'leading-[normal]',
@@ -56,44 +54,7 @@ export default {
             'overflow-hidden whitespace-nowrap cursor-pointer overflow-ellipsis'
         ]
     }),
-    token: {
-        class: [
-            // Flex
-            'inline-flex items-center',
-
-            // Spacings
-            'py-1.5 px-3 mr-2',
-
-            // Shape
-            'rounded-[1.14rem]',
-
-            // Colors
-            'bg-surface-200 dark:bg-surface-700',
-            'text-surface-700 dark:text-white/70',
-
-            // Misc
-            'cursor-default'
-        ]
-    },
-    removeTokenIcon: {
-        class: [
-            // Shape
-            'rounded-md leading-6',
-
-            // Spacing
-            'ml-2',
-
-            // Size
-            'w-4 h-4',
-
-            // Transition
-            'transition duration-200 ease-in-out',
-
-            // Misc
-            'cursor-pointer'
-        ]
-    },
-    trigger: {
+    dropdown: {
         class: [
             // Flexbox
             'flex items-center justify-center',
@@ -111,10 +72,9 @@ export default {
             'rounded-br-md'
         ]
     },
-    panel: {
+    overlay: {
         class: [
             // Position
-            'absolute top-0 left-0',
 
             // Shape
             'border-0 dark:border',
@@ -131,7 +91,7 @@ export default {
         class: [
             'flex items-center justify-between',
             // Spacing
-            'py-3 px-5',
+            'py-3 px-5 gap-2',
             'm-0',
 
             //Shape
@@ -142,265 +102,13 @@ export default {
             // Color
             'text-surface-700 dark:text-white/80',
             'bg-surface-100 dark:bg-surface-800',
-            'border-surface-300 dark:border-surface-700'
+            'border-surface-300 dark:border-surface-700',
+
+            '[&_[data-pc-name=pcfiltercontainer]]:!flex-auto',
+            '[&_[data-pc-name=pcfilter]]:w-full'
         ]
     },
-    headerCheckboxContainer: {
-        class: [
-            'relative',
-
-            // Alignment
-            'inline-flex',
-            'align-bottom',
-
-            // Size
-            'w-6',
-            'h-6',
-
-            // Misc
-            'cursor-pointer',
-            'select-none'
-        ]
-    },
-    headerCheckbox: {
-        root: {
-            class: [
-                'relative',
-
-                // Alignment
-                'inline-flex',
-                'align-bottom',
-
-                // Size
-                'w-6',
-                'h-6',
-
-                // Spacing
-                'mr-2',
-
-                // Misc
-                'cursor-pointer',
-                'select-none'
-            ]
-        },
-        box: ({ props, context }) => ({
-            class: [
-                // Alignment
-                'flex',
-                'items-center',
-                'justify-center',
-
-                // Size
-                'w-6',
-                'h-6',
-
-                // Shape
-                'rounded-md',
-                'border-2',
-
-                // Colors
-                {
-                    'border-surface-200 bg-surface-0 dark:border-surface-700 dark:bg-surface-900': !context.checked,
-                    'border-primary bg-primary': context.checked
-                },
-
-                // States
-                {
-                    'peer-hover:border-primary': !props.disabled && !context.checked,
-                    'peer-hover:bg-primary-hover peer-hover:border-primary-hover': !props.disabled && context.checked,
-                    'peer-focus-visible:border-primary-500 dark:peer-focus-visible:border-primary-400 peer-focus-visible:ring-2 peer-focus-visible:ring-primary-400/20 dark:peer-focus-visible:ring-primary-300/20': !props.disabled,
-                    'cursor-default opacity-60': props.disabled
-                },
-
-                // Transitions
-                'transition-colors',
-                'duration-200'
-            ]
-        }),
-        input: {
-            class: [
-                'peer',
-
-                // Size
-                'w-full ',
-                'h-full',
-
-                // Position
-                'absolute',
-                'top-0 left-0',
-                'z-10',
-
-                // Spacing
-                'p-0',
-                'm-0',
-
-                // Shape
-                'opacity-0',
-                'rounded-md',
-                'outline-none',
-                'border-2 border-surface-200 dark:border-surface-700',
-
-                // Misc
-                'appearance-none',
-                'cursor-pointer'
-            ]
-        },
-        icon: {
-            class: [
-                // Font
-                'text-base leading-none',
-
-                // Size
-                'w-4',
-                'h-4',
-
-                // Colors
-                'text-white dark:text-surface-900',
-
-                // Transitions
-                'transition-all',
-                'duration-200'
-            ]
-        }
-    },
-    itemCheckbox: {
-        root: {
-            class: [
-                'relative',
-
-                // Alignment
-                'inline-flex',
-                'align-bottom',
-
-                // Size
-                'w-6',
-                'h-6',
-
-                // Spacing
-                'mr-2',
-
-                // Misc
-                'cursor-pointer',
-                'select-none'
-            ]
-        },
-        box: ({ props, context }) => ({
-            class: [
-                // Alignment
-                'flex',
-                'items-center',
-                'justify-center',
-
-                // Size
-                'w-6',
-                'h-6',
-
-                // Shape
-                'rounded-md',
-                'border-2',
-
-                // Colors
-                {
-                    'border-surface-200 bg-surface-0 dark:border-surface-700 dark:bg-surface-900': !context.checked,
-                    'border-primary bg-primary': context.checked
-                },
-
-                // States
-                {
-                    'peer-hover:border-primary': !props.disabled && !context.checked,
-                    'peer-hover:bg-primary-hover peer-hover:border-primary-hover': !props.disabled && context.checked,
-                    'peer-focus-visible:border-primary-500 dark:peer-focus-visible:border-primary-400 peer-focus-visible:ring-2 peer-focus-visible:ring-primary-400/20 dark:peer-focus-visible:ring-primary-300/20': !props.disabled,
-                    'cursor-default opacity-60': props.disabled
-                },
-
-                // Transitions
-                'transition-colors',
-                'duration-200'
-            ]
-        }),
-        input: {
-            class: [
-                'peer',
-
-                // Size
-                'w-full ',
-                'h-full',
-
-                // Position
-                'absolute',
-                'top-0 left-0',
-                'z-10',
-
-                // Spacing
-                'p-0',
-                'm-0',
-
-                // Shape
-                'opacity-0',
-                'rounded-md',
-                'outline-none',
-                'border-2 border-surface-200 dark:border-surface-700',
-
-                // Misc
-                'appearance-none',
-                'cursor-pointer'
-            ]
-        },
-        icon: {
-            class: [
-                // Font
-                'text-base leading-none',
-
-                // Size
-                'w-4',
-                'h-4',
-
-                // Colors
-                'text-white dark:text-surface-900',
-
-                // Transitions
-                'transition-all',
-                'duration-200'
-            ]
-        }
-    },
-    closeButton: {
-        class: [
-            'relative',
-
-            // Flexbox and Alignment
-            'flex items-center justify-center',
-
-            // Size and Spacing
-            'mr-2',
-            'last:mr-0',
-            'w-8 h-8',
-
-            // Shape
-            'border-0',
-            'rounded-full',
-
-            // Colors
-            'text-surface-500',
-            'bg-transparent',
-
-            // Transitions
-            'transition duration-200 ease-in-out',
-
-            // States
-            'hover:text-surface-700 dark:hover:text-white/80',
-            'hover:bg-surface-100 dark:hover:bg-surface-800/80',
-            'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-inset',
-            'focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
-
-            // Misc
-            'overflow-hidden'
-        ]
-    },
-    closeButtonIcon: {
-        class: 'w-4 h-4 inline-block'
-    },
-    wrapper: {
+    listContainer: {
         class: [
             // Sizing
             'max-h-[200px]',
@@ -412,7 +120,7 @@ export default {
     list: {
         class: 'py-3 list-none m-0'
     },
-    item: ({ context }) => ({
+    option: ({ context }) => ({
         class: [
             // Font
             'font-normal',
@@ -430,12 +138,12 @@ export default {
 
             // Spacing
             'm-0',
-            'py-3 px-5',
+            'py-3 px-5 gap-2',
 
             // Color
             { 'text-surface-700 dark:text-white/80': !context.focused && !context.selected },
             { 'bg-surface-200 dark:bg-surface-600/60 text-surface-700 dark:text-white/80': context.focused && !context.selected },
-            { 'bg-primary-highlight text-primary-highlight-inverse': context.selected },
+            { 'bg-highlight': context.selected },
 
             //States
             { 'hover:bg-surface-100 dark:hover:bg-surface-600/80': !context.focused && !context.selected },
@@ -451,7 +159,7 @@ export default {
             'whitespace-nowrap'
         ]
     }),
-    itemgroup: {
+    optionGroup: {
         class: [
             //Font
             'font-bold',
@@ -468,61 +176,7 @@ export default {
             'cursor-auto'
         ]
     },
-    filtercontainer: {
-        class: 'relative w-full mx-2'
-    },
-    filterinput: {
-        class: [
-            // Font
-            'leading-[normal]',
-
-            // Sizing
-            'pr-7 py-3 px-3',
-            '-mr-7',
-            'w-full',
-
-            //Color
-            'text-surface-700 dark:text-white/80',
-            'bg-surface-0 dark:bg-surface-900',
-            'border-surface-200 dark:border-surface-700',
-            'placeholder:text-surface-400 dark:placeholder:text-surface-500',
-
-            // Shape
-            'border',
-            'rounded-lg',
-            'appearance-none',
-
-            // Transitions
-            'transition',
-            'duration-200',
-
-            // States
-            'hover:border-primary',
-            'focus:ring focus:outline-none focus:outline-offset-0',
-            'focus:ring-primary-400/50 dark:focus:ring-primary-300/50',
-
-            // Misc
-            'appearance-none'
-        ]
-    },
-    filtericon: {
-        class: ['absolute', 'top-1/2 right-3', '-mt-2']
-    },
-    clearicon: {
-        class: [
-            // Color
-            'text-surface-500',
-
-            // Position
-            'absolute',
-            'top-1/2',
-            'right-12',
-
-            // Spacing
-            '-mt-2'
-        ]
-    },
-    emptymessage: {
+    emptyMessage: {
         class: [
             // Font
             'leading-none',
@@ -534,6 +188,9 @@ export default {
             'text-surface-800 dark:text-white/80',
             'bg-transparent'
         ]
+    },
+    loadingIcon: {
+        class: 'text-surface-400 dark:text-surface-500 animate-spin'
     },
     transition: {
         enterFromClass: 'opacity-0 scale-y-[0.8]',

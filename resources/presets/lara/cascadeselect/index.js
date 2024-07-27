@@ -1,9 +1,13 @@
 export default {
     root: ({ props, state }) => ({
         class: [
-            // Display and Position
-            'inline-flex',
             'relative',
+
+            // Flex
+            {
+                flex: props.fluid,
+                'inline-flex': !props.fluid
+            },
 
             // Shape
             'rounded-md',
@@ -66,7 +70,7 @@ export default {
             'appearance-none'
         ]
     }),
-    dropdownbutton: {
+    dropdown: {
         class: [
             // Flexbox
             'flex items-center justify-center',
@@ -84,7 +88,7 @@ export default {
             'rounded-br-md'
         ]
     },
-    panel: {
+    overlay: {
         class: [
             // Position
             'absolute top-0 left-0',
@@ -100,19 +104,10 @@ export default {
             'dark:border-surface-700'
         ]
     },
-    wrapper: {
-        class: [
-            // Sizing
-            'max-h-[200px]',
-
-            // Misc
-            'overflow-auto'
-        ]
-    },
     list: {
-        class: 'py-3 list-none m-0'
+        class: 'flex flex-col list-none p-0 m-0 gap-[2px] min-w-full'
     },
-    item: ({ context }) => ({
+    option: ({ context }) => ({
         class: [
             // Font
             'font-normal',
@@ -129,13 +124,13 @@ export default {
             {
                 'text-surface-500 dark:text-white/70': !context.focused && !context.active,
                 'text-surface-500 dark:text-white/70 bg-surface-200 dark:bg-surface-600/90': context.focused && !context.active,
-                'text-primary-highlight-inverse bg-primary-highlight': (context.focused && context.active) || context.active || (!context.focused && context.active)
+                'bg-highlight': (context.focused && context.active) || context.active || (!context.focused && context.active)
             },
 
             // Hover States
             {
                 'hover:bg-surface-100 dark:hover:bg-surface-600/80': !context.active,
-                'hover:bg-primary-highlight-hover text-primary-highlight-inverse': context.active
+                'hover:bg-highlight-emphasis': context.active
             },
 
             // Transitions
@@ -148,7 +143,7 @@ export default {
             'whitespace-nowrap'
         ]
     }),
-    content: {
+    optionContent: {
         class: [
             'relative',
 
@@ -167,16 +162,16 @@ export default {
             'select-none'
         ]
     },
-    groupicon: {
+    groupIcon: {
         class: [
             // Alignment
             'ml-auto'
         ]
     },
-    sublist: {
+    optionList: {
         class: [
             // Size
-            'w-full',
+            'min-w-full',
 
             // Spacing
             'py-1',
@@ -194,9 +189,6 @@ export default {
             // Color
             'bg-surface-0 dark:bg-surface-700'
         ]
-    },
-    separator: {
-        class: 'border-t border-surface-200 dark:border-surface-600 my-1'
     },
     transition: {
         enterFromClass: 'opacity-0 scale-y-[0.8]',

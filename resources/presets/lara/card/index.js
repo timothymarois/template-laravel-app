@@ -3,7 +3,7 @@ export default {
         class: [
             //Shape
             'rounded-md',
-            'shadow-sm',
+            'shadow-md',
 
             //Color
             'bg-surface-0 dark:bg-surface-900',
@@ -14,7 +14,7 @@ export default {
         class: 'p-5'
     },
     title: {
-        class: 'text-lg font-semibold mb-2'
+        class: 'text-2xl font-bold mb-2'
     },
     subtitle: {
         class: [
@@ -29,7 +29,7 @@ export default {
         ]
     },
     content: {
-        // class: 'py-5' // Vertical padding.
+        class: 'py-5' // Vertical padding.
     },
     footer: {
         class: 'pt-5' // Top padding.
