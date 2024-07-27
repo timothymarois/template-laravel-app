@@ -12,6 +12,7 @@
     --p-primary-800: var(--p-surface-800);
     --p-primary-900: var(--p-surface-900);
     --p-primary-950: var(--p-surface-950);
+
     --p-surface-0: #ffffff;
     --p-surface-50: #f8fafc;
     --p-surface-100: #f1f5f9;
@@ -24,8 +25,26 @@
     --p-surface-800: #1e293b;
     --p-surface-900: #0f172a;
     --p-surface-950: #020617;
+
+    /*
+    PURPLE:
+    --p-surface-0: #ffffff;
+    --p-surface-50: rgba(250 245 255);
+    --p-surface-100: rgba(250 245 255);
+    --p-surface-200: rgba(233 213 255);
+    --p-surface-300: rgba(216 180 254);
+    --p-surface-400: rgba(192 132 252);
+    --p-surface-500: rgba(168 85 247);
+    --p-surface-600: rgba(147 51 234);
+    --p-surface-700: rgba(126 34 206);
+    --p-surface-800: rgba(107 33 168);
+    --p-surface-900: rgba(88 28 135);
+    --p-surface-950: rgba(59 20 100);
+    */
+
     --p-content-border-radius: 6px;
 }
+
 
 /* Light Mode */
 :root {
