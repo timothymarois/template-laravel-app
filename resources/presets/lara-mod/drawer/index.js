@@ -10,7 +10,7 @@ export default {
 
             // Size
             {
-                'h-full w-80': props.position == 'left' || props.position == 'right',
+                'h-full w-full sm:w-auto sm:max-w-4xl': props.position == 'left' || props.position == 'right',
                 'h-auto w-full': props.position == 'top' || props.position == 'bottom'
             },
 
@@ -97,8 +97,8 @@ export default {
     content: {
         class: [
             // Spacing and Size
-            'p-5',
-            'pt-0',
+            // 'p-5',
+            // 'pt-0',
             'h-full',
             'w-full',
 
