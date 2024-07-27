@@ -9,8 +9,9 @@ import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 
 import PrimeVue from 'primevue/config';
-import Lara from '/resources/presets/lara';
+// import Lara from '/resources/presets/lara';
 // import Aura from '/resources/presets/aura';
+import LaraMod from '/resources/presets/lara-mod';
 
 /*
 
@@ -171,7 +172,7 @@ createInertiaApp({
             .use(PrimeVue, {
                 ripple: true,
                 unstyled: true,
-                pt: Lara
+                pt: LaraMod
             })
             .component('Link', Link)
             .component('Head', Head);
