@@ -25,10 +25,16 @@
                         </div>
                     </div>
                     <div>
-                        <InputGroup>
+                        <!-- <InputGroup>
                             <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
                             <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
-                        </InputGroup>
+                        </InputGroup> -->
+
+                        <ButtonGroup>
+                            <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
+                            <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
+                        </ButtonGroup>
+
                     </div>
                 </li>
             </ul>
@@ -56,6 +62,8 @@
 </template>
 
 <script setup>
+import ButtonGroup from 'primevue/buttongroup';
+
 const props = defineProps({
     users: Object
 });
