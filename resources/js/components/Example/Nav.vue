@@ -40,7 +40,13 @@
                                 <button
                                     class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-color hover:bg-surface-200 dark:hover:bg-surface-600 border-noround">
                                     <!-- <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" class="mr-2" shape="circle" /> -->
-                                    <Avatar :label="user.name[0]"  class="mr-4 border border-surface-200 dark:border-surface-400" shape="circle" />
+                                    <div>
+                                        <Avatar
+                                            :label="user.name[0]"
+                                            class="mr-2 border border-surface-200 dark:border-surface-400"
+                                            shape="circle"
+                                        />
+                                    </div>
                                     <div class="flex flex-col text-left">
                                         <span class="font-bold">{{ user.name }}</span>
                                         <span class="text-sm">{{ user.email }}</span>

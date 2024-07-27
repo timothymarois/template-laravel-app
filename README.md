@@ -428,7 +428,11 @@ You can create global utility functions for the client-side at `/resources/js/ut
 
 ---
 
-## Todo:
+## PrimeVue (Lara-mod)
 
-- ❌ Forgot/reset password
-- ❌ Pagination
+Modifies the lara mod preset.
+
+- Button
+- Menu
+- MenuBar
+- SideBar
