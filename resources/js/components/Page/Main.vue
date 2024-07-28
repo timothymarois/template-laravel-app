@@ -1,6 +1,6 @@
 <template>
     <main ref="pagemain" class="page-body-h overflow-y-auto">
-        <div class="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6">
+        <div class="mx-auto max-w-screen-2xl p-4">
             <slot />
         </div>
     </main>
