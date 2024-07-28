@@ -1,12 +1,11 @@
 <template>
     <Head title="New User" />
-    <header class="bg-white dark:bg-surface-700 shadow-md">
-        <div class="flex justify-between items-center mx-auto max-w-7xl px-8 py-4">
-            <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">New User</h1>
+    <PageHeader title="New User">
+        <template #actions>
             <Button outlined @click="router.visit($route('users.index'))" size="small">View All</Button>
-        </div>
-    </header>
-    <main>
+        </template>
+    </PageHeader>
+    <PageMain>
         <div class="mx-auto max-w-2xl px-4 py-6 sm:px-6">
             <form  class="shadow-md rounded-lg p-6 border border-surface-200 dark:border-surface-700">
                 <div class="mb-4">
@@ -24,7 +23,7 @@
                 </div>
             </form>
         </div>
-    </main>
+    </PageMain>
 </template>
 
 <script setup>

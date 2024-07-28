@@ -1,45 +1,42 @@
 <template>
     <Head title="Users" />
-    <header class="bg-white dark:bg-surface-700 shadow-md">
-        <div class="flex justify-between items-center mx-auto max-w-7xl px-8 py-4">
-            <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">Users</h1>
+    <PageHeader title="Users">
+        <template #actions>
             <Button @click="router.visit($route('users.create'))" size="small">Add</Button>
-        </div>
-    </header>
-    <main>
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-            <ul>
-                <li
-                    v-for="user in users.data"
-                    :key="user.id"
-                    class="border-b last:border-none border-gray-100 dark:border-gray-700 p-4 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 flex items-center justify-between"
-                >
-                    <div class="flex items-center space-x-4">
-                        <div class="min-w-[300px]">
-                            <h2 class="text-sm font-semibold">{{ user.name }}</h2>
-                            <p class="text-xs text-gray-700 dark:text-gray-200">{{ user.email }}</p>
-                        </div>
-                        <div>
-                            <h2 class="text-sm font-semibold">Updated</h2>
-                            <p class="text-xs text-gray-700 dark:text-gray-200">{{ convertLocalTimezone(user.updated_at) }}</p>
-                        </div>
+        </template>
+    </PageHeader>
+    <PageMain>
+        <ul>
+            <li
+                v-for="user in users.data"
+                :key="user.id"
+                class="border-b last:border-none border-gray-100 dark:border-gray-700 p-4 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 flex items-center justify-between"
+            >
+                <div class="flex items-center space-x-4">
+                    <div class="min-w-[300px]">
+                        <h2 class="text-sm font-semibold">{{ user.name }}</h2>
+                        <p class="text-xs text-gray-700 dark:text-gray-200">{{ user.email }}</p>
                     </div>
                     <div>
-                        <!-- <InputGroup>
-                            <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
-                            <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
-                        </InputGroup> -->
-
-                        <ButtonGroup>
-                            <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
-                            <Button @click.prevent.stop="openDeleteModal(user)" outlined  icon="pi pi-trash" size="small" />
-                        </ButtonGroup>
-
+                        <h2 class="text-sm font-semibold">Updated</h2>
+                        <p class="text-xs text-gray-700 dark:text-gray-200">{{ convertLocalTimezone(user.updated_at) }}</p>
                     </div>
-                </li>
-            </ul>
-        </div>
-    </main>
+                </div>
+                <div>
+                    <!-- <InputGroup>
+                        <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
+                        <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
+                    </InputGroup> -->
+
+                    <ButtonGroup>
+                        <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
+                        <Button @click.prevent.stop="openDeleteModal(user)" outlined  icon="pi pi-trash" size="small" />
+                    </ButtonGroup>
+
+                </div>
+            </li>
+        </ul>
+    </PageMain>
 
     <Dialog v-model:visible="showDelete" modal header="Delete user" :style="{ width: '25rem' }">
         <div class="relative text-center">

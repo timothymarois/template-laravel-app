@@ -1,6 +1,6 @@
 <template>
-    <nav class="dark bg-surface-800">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <nav class="w-full dark bg-surface-800">
+        <div class="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -16,10 +16,7 @@
                 </div>
                 <div class="relative flex space-x-2 items-center">
                     <div class="relative">
-                        <OptionsDarkToggle />
-                    </div>
-                    <div class="relative">
-                        <OptionsColorPalette />
+                        <NavDarkToggle />
                     </div>
                     <NavProfileMenu />
                 </div>
