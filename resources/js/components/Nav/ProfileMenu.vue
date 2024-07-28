@@ -17,7 +17,7 @@
             >
                 <template #start>
                     <button
-                        class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-color hover:bg-surface-200 dark:hover:bg-surface-600 border-noround">
+                        class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround">
                         <div>
                             <Avatar
                                 :label="user.name[0]"

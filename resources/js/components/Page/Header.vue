@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full page-header bg-white border-b border-gray-300 z-20 sticky top-0 shadow-sm" :class="{
+    <div class="w-full page-header bg-white dark:bg-surface-700 border-b border-surface-300 dark:border-surface-600 z-20 sticky top-0 shadow-sm" :class="{
         '!shadow-md': !isTop
     }">
         <div class="flex justify-center w-full">
