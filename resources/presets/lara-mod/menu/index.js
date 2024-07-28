@@ -10,7 +10,7 @@ export default {
             // Colors
             'bg-surface-0 dark:bg-surface-700',
             'text-surface-700 dark:text-white/80',
-            'border border-surface-200 dark:border-surface-700'
+            'border border-surface-200 dark:border-surface-600'
         ]
     },
     list: {

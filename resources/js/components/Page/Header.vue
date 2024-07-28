@@ -1,6 +1,6 @@
 <template>
     <div class="w-full page-header bg-white dark:bg-surface-700 border-b border-surface-300 dark:border-surface-600 z-20 sticky top-0 shadow-sm" :class="{
-        '!shadow-md': !isTop
+        '!shadow-md dark:!shadow-lg': !isTop
     }">
         <div class="flex justify-center w-full">
             <div class="w-full max-w-screen-2xl">

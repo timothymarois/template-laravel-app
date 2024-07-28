@@ -3,3 +3,7 @@ html, body {
 	overflow-x: hidden;
 	overflow-y: hidden;
 }
+
+.page-body-h {
+    height: calc(100vh - var(--dynamic-height));
+}
