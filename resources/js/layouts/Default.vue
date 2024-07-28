@@ -1,7 +1,7 @@
 <template>
 
     <div class="min-h-full">
-        <ExampleNav />
+        <Nav />
         <slot />
     </div>
 
