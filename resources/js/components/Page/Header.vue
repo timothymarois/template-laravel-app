@@ -15,7 +15,7 @@
                                             <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
                                         </div>
                                     </li>
-                                    <li class="font-medium">{{ props.title }}</li>
+                                    <li class="font-semibold">{{ props.title }}</li>
                                 </ul>
                                 <div v-if="slots.badge" class="ml-4"><slot name="badge" /></div>
                             </div>
@@ -24,7 +24,7 @@
                             <div class="grow">
                                 <ul class="flex flex-wrap -mb-px">
                                     <li v-for="tab in props.tabs" :key="tab.href" class="mr-2">
-                                        <Link :href="tab.href" style="position: relative;bottom: 1px;" class="text-base inline-block py-2 px-4 border-b-4 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300">{{ tab.title }}</Link>
+                                        <Link :href="tab.href" style="position: relative;bottom: 1px;" class="text-base text-gray-500 inline-block py-2 px-4 border-b-4 border-transparent rounded-t-lg hover:text-gray-600 hover:border-surface-300 dark:hover:border-surface-400 dark:hover:text-gray-300 dark:text-gray-300" :class="{'text-gray-800 !border-surface-500 dark:!border-surface-300 dark:!text-gray-100' : $page.url == tab.href }">{{  tab.title }}</Link>
                                     </li>
                                 </ul>
                             </div>

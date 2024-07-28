@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('index');
 Route::get('/example/store', [PageController::class, 'exampleStore'])->name('example.store');
+Route::get('/example/store/active', [PageController::class, 'exampleStoreActive'])->name('example.active');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('register', [RegisterController::class, 'registerView'])->name('register');

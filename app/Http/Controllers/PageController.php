@@ -16,4 +16,9 @@ class PageController extends Controller
     {
         return Inertia::render('Example/Store');
     }
+
+    public function exampleStoreActive(): Response
+    {
+        return Inertia::render('Example/Store');
+    }
 }

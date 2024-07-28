@@ -1,11 +1,7 @@
 <template>
     <Head title="Store" />
-    <header class="bg-white dark:bg-surface-700 shadow-md">
-        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-        <h1 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">Store</h1>
-        </div>
-    </header>
-    <main>
+    <PageHeader title="Store" :tabs="tabs" />
+    <PageMain>
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <div class="mb-4">This is an example store page. This uses pinia persisted storage.</div>
 
@@ -28,7 +24,7 @@
             </Card>
 
         </div>
-    </main>
+    </PageMain>
 </template>
 <script setup>
 // const props = defineProps({
@@ -52,4 +48,15 @@ const products = [
     }
 ];
 const cartStore = useCartStore();
+
+const tabs = [
+    {
+        href: '/example/store',
+        title: 'Store'
+    },
+    {
+        href: '/example/store/active',
+        title: 'Active'
+    },
+];
 </script>
