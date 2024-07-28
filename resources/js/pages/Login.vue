@@ -8,7 +8,7 @@
                 <div class="w-full">
                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Email address</label>
                     <div class="mt-2 w-full">
-                        <InputText type="text" v-model="form.email" />
+                        <InputText fluid type="text" v-model="form.email" />
                         <div v-if="form.errors.email" class="text-sm text-red-500">{{ form.errors.email }}</div>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Password</label>
                     </div>
                     <div class="mt-2 w-full">
-                        <InputText type="password" v-model="form.password" />
+                        <InputText fluid type="password" v-model="form.password" />
                         <div v-if="form.errors.password" class="text-sm text-red-500">{{ form.errors.password }}</div>
                     </div>
                 </div>

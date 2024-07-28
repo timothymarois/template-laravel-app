@@ -52,8 +52,8 @@
         </div>
     </Dialog>
 
-    <Drawer v-model:visible="showModal" header="Edit User" position="right" :pt="{'header':'shadow'}" :ptOptions="{ mergeProps: true }">
-        <div class="h-full w-[450px] h-[2000px]">
+    <Drawer v-model:visible="showModal" header="Edit User" position="right" :pt="{'header': 'shadow'}" :ptOptions="{ mergeProps: true }">
+        <div class="w-[450px] h-[2000px]">
             <div class="w-full p-6">
                 <form>
                     <div class="mb-4">
