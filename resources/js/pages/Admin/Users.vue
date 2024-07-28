@@ -49,7 +49,8 @@
         </div>
     </Dialog>
 
-    <Drawer v-model:visible="showModal" header="Edit User" position="right" :pt="{'header': 'shadow'}" :ptOptions="{ mergeProps: true }">
+    <!-- :pt="{'header': '!shadow border-surface-300'}" :ptOptions="{ mergeProps: true }" -->
+    <Drawer v-model:visible="showModal" header="Edit User" position="right">
         <div class="w-[450px] h-[2000px]">
             <div class="w-full p-6">
                 <form>
