@@ -439,3 +439,15 @@ Currently modified components:
 - Menu
 - MenuBar
 - Drawer
+
+## Architectural Reasoning:
+
+With over 15 years of development experience, I have built various web-based platforms, from static websites and management systems to custom CRMs and e-commerce websites. This template aims to address many of the challenges in creating and maintaining long-term projects.
+
+Creating a separate API and UI project was once considered the best approach and remains popular today. However, after numerous projects, it has become clear that this separation introduces unnecessary complexities for building web-based applications at scale.
+
+JavaScript frameworks, though powerful, are still in their early stages and lack the maturity of Laravel and PHP. For instance, you can maintain a Laravel project from over 5 years ago, and it will still function, install, and be testable today. This level of backward compatibility is rare in the JavaScript ecosystem. While it's possible to maintain older JS projects, it is often impractical due to their rapid obsolescence and lack of focus on testable code. Revisiting a JS project from 5 years ago can feel like entering a time capsule.
+
+This is why minimizing JavaScript's control over the server is beneficial. The frontend work already becomes outdated quickly enough; adding server-side complexities only exacerbates the issue. Laravel offers a stable, testable, and maintainable backend solution, making web-based app development more enjoyable and sustainable.
+
+This template leverages the strengths of Laravel and Vue.js, using Inertia.js to seamlessly bridge the gap between them, allowing you to focus on your application requirements without reinventing the wheel.
