@@ -15,6 +15,7 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 - ✅ Laravel 11 – [Documentation](https://laravel.com/docs/11.x)
 - ✅ Vuejs 3 – [Documentation](https://vuejs.org/guide/introduction.html)
 - ✅ Inertia – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
+- ✅ MySQL 8 – Database can be changed to any other engine. Since MySQL is the most common and practical for most use-cases, it is included by default.
 
 #### Design
 
