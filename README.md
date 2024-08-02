@@ -1,6 +1,6 @@
 # Laravel Vue Inertia Template
 
-This is a starter kit for any project. It can also be used as a quick playground to get you from 0 to 100 within 5 minutes of setup. The goal of this project is to give you the perfect starting place so that you don't have to re-invent the wheel for each project or re-implement dozens of foundational systems. It handles all the common use cases so **you can focus only on your application requirements.**
+This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use cases, **allowing you to focus solely on your application requirements**.
 
 > Inertia empowers you to build a modern, JavaScript-based single-page application without the tiresome complexity.
 
