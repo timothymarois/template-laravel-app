@@ -6,7 +6,7 @@ This file lists the changes that are made with this template and how to migrate 
 
 ## 07/27/2024
 
-PrimeVue 3 to PrimeVue 4
+Updated this template from PrimeVue 3 to PrimeVue 4
 
 1. `npm remove primevue`
 2. `npm install -D primevue`
