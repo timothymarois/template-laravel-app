@@ -422,13 +422,6 @@ You can create global utility functions for the client-side at `/resources/js/ut
 
 ---
 
-## Performance:
-
-- Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum or at least cache common ones that don't need to run database queries with each page view. 
-- Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
-
----
-
 ## PrimeVue Presets:
 
 Modifies the lara preset as "lara-mod". You can create or use the default presets as they are included.
@@ -451,3 +444,10 @@ JavaScript frameworks, though powerful, are still in their early stages and lack
 This is why minimizing JavaScript's control over the server is beneficial. The frontend work already becomes outdated quickly enough; adding server-side complexities only exacerbates the issue. Laravel offers a stable, testable, and maintainable backend solution, making web-based app development more enjoyable and sustainable.
 
 This template leverages the strengths of Laravel and Vue.js, using Inertia.js to seamlessly bridge the gap between them, allowing you to focus on your application requirements without reinventing the wheel.
+
+### Performance Concerns
+
+With this approach, there are also some concerns to discuss:
+
+1. Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum or at least cache common ones that don't need to run database queries with each page view. 
+2. Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
