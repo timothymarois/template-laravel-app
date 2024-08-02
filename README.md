@@ -451,3 +451,4 @@ With this approach, there are also some concerns to discuss:
 
 1. Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum or at least cache common ones that don't need to run database queries with each page view. 
 2. Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
+3. What if you need an API response instead of inertia view without duplicating controllers? This has been handled with different responses based on content type. You can [request JSON](https://github.com/timothymarois/template-laravel-app/blob/main/app/Providers/InertiaServiceProvider.php) and instead be given the properties as you normally do.
