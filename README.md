@@ -1,6 +1,6 @@
 # Laravel Vue Inertia Template
 
-This is a starter kit for any project. It can also be used as a quick playground to get you from 0 to 100 within 5 minutes of setup. The goal of this project is to give you the perfect starting place so that you don't have to reinvent the wheel for each project. It handles all the common use cases so **you can focus only on your application requirements.**
+This is a starter kit for any project. It can also be used as a quick playground to get you from 0 to 100 within 5 minutes of setup. The goal of this project is to give you the perfect starting place so that you don't have to re-invent the wheel for each project or re-implement dozens of foundational systems. It handles all the common use cases so **you can focus only on your application requirements.**
 
 > Inertia empowers you to build a modern, JavaScript-based single-page application without the tiresome complexity.
 
@@ -10,7 +10,7 @@ This is a starter kit for any project. It can also be used as a quick playground
 
 #### Core
 
-This template uses **Laravel** as your backend and **Vuejs** as your frontend. Inertia is implemented so that both can communicate seamlessly. 
+This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) as your frontend. Inertia is implemented so that both can communicate seamlessly. Inertia can save you a monumental amount of time when trying to handle client-side state management. 
 
 - ✅ Laravel 11 – [Documentation](https://laravel.com/docs/11.x)
 - ✅ Vuejs 3 – [Documentation](https://vuejs.org/guide/introduction.html)
@@ -18,7 +18,7 @@ This template uses **Laravel** as your backend and **Vuejs** as your frontend. I
 
 #### Design
 
-For the design side, we want to focus on customization, theming and utility.
+For the design side, we want to focus on customization, theming, and utility components. PrimeVue offers the most comprehensive set of utility components that are fully customizable without bloating. Tree-shaking makes sure you only import the components you actually use keeping your overall project light-weight. 
 
 - ✅ Tailwind 3 – [Documentation](https://tailwindcss.com/docs/installation)
 - ✅ PrimeVue 3 – [Documentation](https://primevue.org/) | [Unstyled with Tailwind](https://tailwind.primevue.org/)
@@ -423,14 +423,16 @@ You can create global utility functions for the client-side at `/resources/js/ut
 
 ## Performance:
 
-- Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum.
+- Controllers will directly impact the speed of page loads, keep shared and page-level props to a minimum or at least cache common ones that don't need to run database queries with each page view. 
 - Do not load everything in page-level controllers. Load the minimum required to serve the page and additional data in components after the page is loaded or mounted.
 
 ---
 
-## PrimeVue (Lara-mod)
+## PrimeVue Presets:
 
-Modifies the lara mod preset.
+Modifies the lara preset as "lara-mod". You can create or use the default presets as they are included.
+
+Currently modified components:
 
 - Button
 - Menu
