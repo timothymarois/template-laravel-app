@@ -90,6 +90,7 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 - ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) `/log-viewer`
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) `/horizon`
 - ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
+- ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) `APP_DEBUG=true`
 
 ---
 
