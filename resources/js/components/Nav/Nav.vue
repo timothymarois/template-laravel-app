@@ -8,9 +8,9 @@
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
-                        <Link :class="{'bg-surface-900 text-white' : $page.url === '/' }" href="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" aria-current="page">Home</Link>
-                        <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/admin/users') }" href="/admin/users" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Users</Link>
-                        <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/example/store') }" href="/example/store" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Store</Link>
+                            <Link :class="{'bg-surface-900 text-white' : $page.url === '/' }" href="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" aria-current="page">Home</Link>
+                            <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/admin/users') }" href="/admin/users" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Users</Link>
+                            <Link :class="{'bg-surface-900 text-white' : $page.url.startsWith('/example/store') }" href="/example/store" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Store</Link>
                         </div>
                     </div>
                 </div>
