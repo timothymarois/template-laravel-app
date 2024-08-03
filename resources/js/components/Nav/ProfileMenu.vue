@@ -1,13 +1,28 @@
 <template>
     <div class="relative">
-        <div v-if="user && user?.id" class="flex justify-content-center">
+        <div
+            v-if="user && user?.id"
+            class="flex justify-content-center"
+        >
             <button
                 type="button"
                 aria-haspopup="true"
                 aria-controls="overlay_menu"
+                class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2"
                 @click="toggle"
-                class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2">
-                <div class="pr-1">{{ user.name }}</div> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-3"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clip-rule="evenodd" /></svg>
+            >
+                <div class="pr-1">
+                    {{ user.name }}
+                </div> <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="size-3"
+                ><path
+                    fill-rule="evenodd"
+                    d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z"
+                    clip-rule="evenodd"
+                /></svg>
             </button>
             <Menu
                 ref="menu"
@@ -17,7 +32,8 @@
             >
                 <template #start>
                     <button
-                        class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround">
+                        class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround"
+                    >
                         <div>
                             <Avatar
                                 :label="user.name[0]"
@@ -32,17 +48,33 @@
                     </button>
                 </template>
                 <template #item="{ item, props }">
-                    <Link class="flex align-items-center" :href="item.href" v-bind="props.action">
+                    <Link
+                        class="flex align-items-center"
+                        :href="item.href"
+                        v-bind="props.action"
+                    >
                         <span :class="item.icon" />
                         <span class="ml-2 text-sm">{{ item.label }}</span>
-                        <Badge v-if="item.badge" class="ml-auto" :value="item.badge" />
-                        <span v-if="item.shortcut" class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1">{{ item.shortcut }}</span>
+                        <Badge
+                            v-if="item.badge"
+                            class="ml-auto"
+                            :value="item.badge"
+                        />
+                        <span
+                            v-if="item.shortcut"
+                            class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1"
+                        >{{ item.shortcut }}</span>
                     </Link>
                 </template>
             </Menu>
         </div>
         <div v-else>
-            <Link href="/login" class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2">Login or Register</Link>
+            <Link
+                href="/login"
+                class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2"
+            >
+                Login or Register
+            </Link>
         </div>
     </div>
 </template>

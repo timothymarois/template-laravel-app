@@ -1,5 +1,8 @@
 <template>
-    <main ref="pagemain" class="page-body-h overflow-y-auto">
+    <main
+        ref="pagemain"
+        class="page-body-h overflow-y-auto"
+    >
         <div class="mx-auto max-w-screen-2xl p-4">
             <slot />
         </div>
