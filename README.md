@@ -82,16 +82,16 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 - ✅ Phpunit `php artisan test`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
 - ✅ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
-- ✅ [Vue ESLint](https://eslint.vuejs.org/) `npx eslint  "resources/js/**/*.{js,vue}" --quiet --fix`
+- ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npx eslint  "resources/js/**/*.{js,vue}" --quiet --fix`
 
 ---
 
 ### Monitoring
 
-- ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) `/log-viewer`
-- ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) `/horizon`
-- ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
-- ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) `APP_DEBUG=true`
+- ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) - `/log-viewer`
+- ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) - `/horizon`
+- ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) - `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
+- ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
 - ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) Chrome Extension
 
 ---
