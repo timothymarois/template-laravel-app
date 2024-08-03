@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <Head title="Register" />
+    <PageMain>
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border border-2 border-gray-200 dark:border-surface-700 p-6 rounded-lg">
             <div class="pb-4">
                 <div class="leading-3 font-semibold text-lg">Create Account</div>
@@ -52,7 +53,7 @@
                 <Link href="/login">Already have an account? Login</Link>
             </div>
         </div>
-    </div>
+    </PageMain>
 </template>
 
 <script setup>

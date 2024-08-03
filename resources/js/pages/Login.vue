@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <Head title="Login" />
+    <PageMain>
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border border-2 border-gray-200 dark:border-surface-700 p-6 rounded-lg">
             <div class="pb-4">
                 <div class="leading-3 font-semibold text-lg">Login</div>
@@ -38,7 +39,7 @@
             </div>
 
         </div>
-    </div>
+    </PageMain>
 </template>
 
 <script setup>
