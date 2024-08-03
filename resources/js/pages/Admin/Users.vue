@@ -180,7 +180,10 @@ import ButtonGroup from 'primevue/buttongroup';
 import Drawer from 'primevue/drawer';
 
 const props = defineProps({
-    users: Object
+    users: {
+        type: Object,
+        default: () => {}
+    }
 });
 
 const userTotal = computed(() => {
