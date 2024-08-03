@@ -79,7 +79,7 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 
 ### Tests and Linting
 
-Pre-installed code-linting and automated test services to help keep your CI pipeline protected from breaking changes and lower code quality.
+Pre-installed code-linting and automated test services to help keep your CI pipeline protected from lower code quality and breaking changes.
 
 - ✅ Phpunit - `php artisan test`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
@@ -90,7 +90,7 @@ Pre-installed code-linting and automated test services to help keep your CI pipe
 
 ### Monitoring
 
-Built-in monitoring packages and services allow you to view logs, worker jobs, and debug effortlessly in real-time.
+Built-in monitoring packages allow you to view logs, worker jobs, and debug effortlessly in real-time.
 
 - ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) - `/log-viewer`
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) - `/horizon`
@@ -98,6 +98,7 @@ Built-in monitoring packages and services allow you to view logs, worker jobs, a
 - ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
 - ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) - Chrome Extension
 - ❌ [Sentry.io](https://sentry.io/) - For production applications, it's recommended to use a paid service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
+- ❌ [Codecov.io](https://codecov.io/) - For production applications, it's recommended to use a code coverage service to monitor your automate test coverage across your business logic. 
 
 ---
 
