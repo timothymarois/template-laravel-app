@@ -4,7 +4,8 @@
     "version": "0.0.0",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "eslint": "npx eslint  \"resources/js/**/*.{js,vue}\""
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.2.0",
