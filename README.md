@@ -24,10 +24,6 @@ For the design side, we want to focus on customization, theming, and utility com
 - ✅ Tailwind 3 – [Documentation](https://tailwindcss.com/docs/installation)
 - ✅ PrimeVue 4 – [Documentation](https://primevue.org/) | [Unstyled with Tailwind](https://tailwind.primevue.org/)
 
---- 
-
-
-
 ## Docker
 
 Docker is used for your local env. *Do not use your custom or OS php/env*.
@@ -41,8 +37,6 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 - ✅ Docker with redis
 - ✅ Docker with supervisor (for job queue workers)
 
----
-
 ## Tests and Linting
 
 Pre-installed code-linting and automated test services to help keep your CI pipeline protected from lower code quality and breaking changes.
@@ -51,8 +45,6 @@ Pre-installed code-linting and automated test services to help keep your CI pipe
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
 - ✅ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
 - ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npm run eslint -- --fix` (or with `--quiet`)
-
----
 
 ## Monitoring
 
@@ -68,8 +60,6 @@ Built-in monitoring packages allow you to view logs, worker jobs, and debug effo
 
 - ❌ [Sentry.io](https://sentry.io/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
 - ❌ [Codecov.io](https://codecov.io/) - It's recommended to use a code coverage service to monitor your automate test coverage across your application's business logic. 
-
----
 
 ## Installation
 
