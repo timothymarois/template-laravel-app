@@ -91,6 +91,7 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) `/horizon`
 - ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
 - ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) `APP_DEBUG=true`
+- ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) Chrome Extension
 
 ---
 
