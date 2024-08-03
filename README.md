@@ -97,8 +97,11 @@ Built-in monitoring packages allow you to view logs, worker jobs, and debug effo
 - ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) - `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
 - ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
 - ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) - Chrome Extension
-- ❌ [Sentry.io](https://sentry.io/) - For production applications, it's recommended to use a paid service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
-- ❌ [Codecov.io](https://codecov.io/) - For production applications, it's recommended to use a code coverage service to monitor your automate test coverage across your business logic. 
+
+**External Services:**
+
+- ❌ [Sentry.io](https://sentry.io/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
+- ❌ [Codecov.io](https://codecov.io/) - It's recommended to use a code coverage service to monitor your automate test coverage across your application's business logic. 
 
 ---
 
