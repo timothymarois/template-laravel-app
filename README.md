@@ -424,14 +424,6 @@ You can create global utility functions for the client-side at `/resources/js/ut
 
 - ✅ Auto-load utility methods
 
-*Included client-side methods:*
-
-- ✅ `transformNumber(n, decimals = 2)` - Transform a string/number into a comma seperated number.
-- ✅ `formatDatetime = (utcDatetime, userTimezone = 'UTC')` Convert a timestamp to a timezone for the user.
-- ✅ `formatToCurrency(n, currency = 'USD', invalid = 'Invalid')` - Formats a string or number into a currency.
-- ✅ `formatToSlug(str)` - Creates a safe slug for URL from string.
-- ✅ `formatToURL(str)` - Formats a string and ensures its a URL (has https://)
-
 ---
 
 ## PrimeVue Presets:
