@@ -79,7 +79,7 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 
 ### Tests and Linting
 
-- ✅ Phpunit `php artisan test`
+- ✅ Phpunit - `php artisan test`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
 - ✅ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
 - ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npx eslint  "resources/js/**/*.{js,vue}" --quiet --fix`
