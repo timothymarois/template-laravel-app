@@ -11,12 +11,12 @@
                 <template #content>
                     <div class="flex flex-col space-y-4">
                         <div class="flex space-x-4">
-                            <Button label="Default" />
+                            <Button label="Default" @click="showSuccess" />
                             <Button label="Loading" loading />
                             <Button label="Disabled" disabled />
                         </div>
                         <div class="flex space-x-4">
-                            <Button label="Default" outlined />
+                            <Button label="Default" @click="showError" outlined />
                             <Button label="Loading" outlined loading />
                             <Button label="Disabled" outlined disabled />
                         </div>
@@ -291,5 +291,15 @@
     </PageMain>
 </template>
 <script setup>
+import { useToast } from 'primevue/usetoast';
 
+const toast = useToast();
+
+const showSuccess = () => {
+    toast.add({ severity: 'success', summary: 'Success', detail: 'The project has been saved.', life: 3000 });
+};
+
+const showError = () => {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Could not process request. Please try again.', life: 4000 });
+};
 </script>

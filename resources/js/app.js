@@ -10,6 +10,7 @@ import { createPersistedState } from 'pinia-plugin-persistedstate'
 // import * as Sentry from "@sentry/vue";
 
 import PrimeVue from 'primevue/config';
+import ToastService from 'primevue/toastservice';
 // import Lara from '/resources/presets/lara';
 // import Aura from '/resources/presets/aura';
 import LaraMod from '/resources/presets/lara-mod';
@@ -52,6 +53,7 @@ createInertiaApp({
                 unstyled: true,
                 pt: LaraMod
             })
+            .use(ToastService)
             .component('Link', Link)
             .component('Head', Head);
 

@@ -176,8 +176,15 @@
 </template>
 
 <script setup>
+import { useToast } from 'primevue/usetoast';
 import ButtonGroup from 'primevue/buttongroup';
 import Drawer from 'primevue/drawer';
+
+const toast = useToast();
+
+// const showError = () => {
+//     toast.add({ severity: 'error', summary: 'Error', detail: 'Could not process request. Please try again.', life: 4000 });
+// };
 
 const props = defineProps({
     users: {
@@ -222,10 +229,16 @@ const openDeleteModal = (user) => {
 const remove = () => {
     if (form.id) {
         form.delete(route('users.destroy', [form.id]), {
+            preserveState: true,
             onSuccess: page => {
                 deleteLoading.value = false
                 showDelete.value = false
+                toast.add({ severity: 'success', summary: 'Deleted', detail: 'The user has been deleted.', life: 3000 });
             },
+            onError: err => {
+                console.log(err)
+                toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'Failed processing this request.', life: 4000 });
+            }
         })
     }
 }
@@ -235,6 +248,7 @@ const save = () => {
         form.put(route('users.update', [form.id]), {
             onSuccess: user => {
                 showModal.value = false
+                toast.add({ severity: 'success', summary: 'Saved', detail: 'The user has been saved.', life: 3000 });
             },
         })
     }
