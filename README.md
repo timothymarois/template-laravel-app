@@ -419,6 +419,27 @@ axios.get(url)
 
 ---
 
+### Toast Notifications (by PrimeVue)
+
+You can dispatch global toast notifications on the platform using the PrimeVue [Toast Service](https://primevue.org/toast/).
+
+- ✅ Example: Success Toast Notification
+
+<details>
+<summary>Show example</summary>
+
+```js
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+// succes 
+toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
+// error
+toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Content', life: 3000 });
+```
+</details>
+
+---
+
 ### Icons
 
 Easily add svg icons that can change size and color.
