@@ -229,7 +229,6 @@ const openDeleteModal = (user) => {
 const remove = () => {
     if (form.id) {
         form.delete(route('users.destroy', [form.id]), {
-            preserveState: true,
             onSuccess: page => {
                 deleteLoading.value = false
                 showDelete.value = false
