@@ -7,7 +7,7 @@ import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
-import * as Sentry from "@sentry/vue";
+// import * as Sentry from "@sentry/vue";
 
 import PrimeVue from 'primevue/config';
 // import Lara from '/resources/presets/lara';
@@ -15,9 +15,9 @@ import PrimeVue from 'primevue/config';
 import LaraMod from '/resources/presets/lara-mod';
 
 // ENABLE SENTRY ERROR TRACKING
-Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN_PUBLIC,
-});
+// Sentry.init({
+//     dsn: import.meta.env.VITE_SENTRY_DSN_PUBLIC,
+// });
 
 createInertiaApp({
     resolve: async (name) => {
