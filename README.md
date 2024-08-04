@@ -91,18 +91,54 @@ php artisan migrate
 
 ---
 
-## Build
+## Build and Deploy
 
-For local testing:
+### Local:
 
 ```bash
 npm run dev
 ```
 
-For deployment: 
+### Deployment: 
+
+For deployment you will need to run a series of commands.
+
+#### Before release
+
+*These commands should run BEFORE new code is deployed.*
+
+(1) Install composer deps:
+
+```bash
+composer install
+```
+
+(2) Install package deps
+
+```bash
+npm ci
+```
+
+(3) Database migrations: 
+
+```bash
+php artisan migrate --force
+```
+
+(4) Build Client-side:
 
 ```bash
 npm run build
+```
+
+#### After release
+
+*These commands should run AFTER new code is deployed.*
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan queue:restart
 ```
 
 ---
