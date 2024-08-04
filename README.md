@@ -71,39 +71,40 @@ Built-in monitoring packages allow you to view logs, worker jobs, and debug effo
 
 ## Installation
 
-Install client-side:
+<details>
+<summary>Install client-side</summary>
 
 ```bash
 npm install
 ```
+</details>
 
-Install server-side: *(should do this through the docker container)*
+<details>
+<summary>Install server-side</summary>
+
+*(should do this through the docker container)*
 
 ```bash
 composer install
 ```
+</details>
 
-Run any migrations:
+<details>
+<summary>Run database migrations</summary>
 
 ```bash
 php artisan migrate
 ```
+</details>
 
 ---
 
-## Build and Deploy
+## Deployment: 
 
-### Local:
+For deployment you will need to run a series of commands before and after new code release.
 
-```bash
-npm run dev
-```
-
-### Deployment: 
-
-For deployment you will need to run a series of commands.
-
-#### Before release
+<details>
+<summary>Before release</summary>
 
 *These commands should run BEFORE new code is deployed.*
 
@@ -131,7 +132,10 @@ php artisan migrate --force
 npm run build
 ```
 
-#### After release
+</details>
+
+<details>
+<summary>After release</summary>
 
 *These commands should run AFTER new code is deployed.*
 
@@ -140,6 +144,8 @@ php artisan config:cache
 php artisan route:cache
 php artisan queue:restart
 ```
+
+</details>
 
 ---
 
