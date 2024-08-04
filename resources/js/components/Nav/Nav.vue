@@ -37,6 +37,31 @@
                             >
                                 Store
                             </Link>
+                            <div
+                                :class="{'bg-surface-900 text-white' : $page.url.startsWith('/components') }"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"
+                                @click="toggleComponentMenu"
+                            >
+                                <span>Components</span>
+                                <span class="pi pi-fw pi-angle-down ml-2" />
+                            </div>
+                            <Menu
+                                ref="componentMenu"
+                                :model="componentItems"
+                                popup
+                            >
+                                <template #item="{ item, props }">
+                                    <Link
+                                        class="flex align-items-center"
+                                        :class="{'bg-surface-200 dark:bg-surface-800 dark:text-white' : $page.url === item.href }"
+                                        :href="item.href"
+                                        v-bind="props.action"
+                                    >
+                                        <span :class="item.icon" />
+                                        <span class="ml-2 text-sm">{{ item.label }}</span>
+                                    </Link>
+                                </template>
+                            </Menu>
                         </div>
                     </div>
                 </div>
@@ -52,4 +77,18 @@
 </template>
 
 <script setup>
+const componentMenu = ref();
+const componentItems = [
+{
+        label: 'Buttons',
+        href: '/components/buttons'
+    },
+    {
+        label: 'Forms',
+        href: '/components/forms'
+    }
+];
+const toggleComponentMenu = (event) => {
+    componentMenu.value.toggle(event);
+};
 </script>

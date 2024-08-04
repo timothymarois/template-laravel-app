@@ -14,8 +14,8 @@ export default {
             'rounded-md',
 
             // Color
-            // 'bg-surface-50 dark:bg-surface-700',
-            // 'border border-surface-200 dark:border-surface-700'
+            'bg-surface-50 dark:bg-surface-800',
+            'border border-surface-200 dark:border-surface-800'
         ]
     },
     rootList: ({ props }) => ({
@@ -131,7 +131,7 @@ export default {
 
             // Position
             'static sm:absolute',
-            'z-10',
+            'z-80 z-[999]',
             { 'sm:absolute sm:left-full sm:top-0': props.level > 1 },
 
             // Color

@@ -5,7 +5,7 @@
         :tabs="tabs"
     />
     <PageMain>
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div>
             <div class="mb-4">
                 This is an example store page. This uses pinia persisted storage.
             </div>

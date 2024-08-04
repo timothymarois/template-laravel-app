@@ -21,4 +21,14 @@ class PageController extends Controller
     {
         return Inertia::render('Example/Store');
     }
+
+    public function pButtons(): Response
+    {
+        return Inertia::render('Example/Components/Buttons');
+    }
+
+    public function pForms(): Response
+    {
+        return Inertia::render('Example/Components/Forms');
+    }
 }
