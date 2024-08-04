@@ -21,6 +21,8 @@ export default {
                 'w-12 py-3': props.label == null && props.icon !== null && props.size === 'large'
             },
 
+            { 'w-full': props.fluid },
+
             // Shapes
             { 'shadow-md': props.raised },
             { 'rounded': !props.rounded, 'rounded-full': props.rounded },
