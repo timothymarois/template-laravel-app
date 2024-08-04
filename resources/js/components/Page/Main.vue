@@ -24,8 +24,6 @@ const calculateOffsets = () => {
     const pageBodyElement = document.querySelector('.page-body-h');
     let totalOffset = 0;
     if (pageBodyElement) {
-
-        console.log(pageBodyElement.parentElement.children)
         const siblings = [...pageBodyElement.parentElement.children];
         siblings.forEach(sibling => {
             if (sibling !== pageBodyElement) {
@@ -33,8 +31,6 @@ const calculateOffsets = () => {
             }
         });
     }
-
-    console.log(totalOffset)
     return totalOffset;
 };
 
