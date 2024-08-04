@@ -34,5 +34,8 @@
     },
     "overrides": {
         "vue": "latest"
+    },
+    "dependencies": {
+        "@sentry/vue": "^7.40.0"
     }
 }

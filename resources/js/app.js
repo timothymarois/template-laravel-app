@@ -7,11 +7,71 @@ import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
+import * as Sentry from "@sentry/vue";
 
 import PrimeVue from 'primevue/config';
 // import Lara from '/resources/presets/lara';
 // import Aura from '/resources/presets/aura';
 import LaraMod from '/resources/presets/lara-mod';
+
+// ENABLE SENTRY ERROR TRACKING
+Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN_PUBLIC,
+});
+
+createInertiaApp({
+    resolve: async (name) => {
+
+        const pages = import.meta.glob("./pages/**/*.vue");
+        const page = await pages[`./pages/${name}.vue`]();
+
+        let layoutName = 'Default';
+        if (page.default?.props?.layout && typeof page.default.props.layout === 'string') {
+            layoutName = page.default.props.layout;
+        }
+
+        const layout = await import(`./layouts/${layoutName}.vue`);
+        page.default.layout = layout.default;
+
+        return page;
+    },
+    title: title => title ? `${title}` : '',
+    setup({ el, App, props, plugin }) {
+
+        const pinia = createPinia()
+
+        pinia.use(createPersistedState({
+            storage: localStorage,
+        }))
+
+        const app = createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .use(pinia)
+            .use(PrimeVue, {
+                ripple: true,
+                unstyled: true,
+                pt: LaraMod
+            })
+            .component('Link', Link)
+            .component('Head', Head);
+
+        app.directive('styleclass', StyleClass);
+        app.config.globalProperties.$route = window.route = route;
+        app.mount(el);
+        return app;
+    },
+    progress: {
+        delay: 25,
+        color: '#29d',
+        includeCSS: true,
+        showSpinner: true,
+    },
+})
+
+
+
+
+
 
 /*
 
@@ -140,52 +200,3 @@ import TreeTable from 'primevue/treetable';
 import VirtualScroller from 'primevue/virtualscroller';
 
 */
-
-createInertiaApp({
-    resolve: async (name) => {
-
-        const pages = import.meta.glob("./pages/**/*.vue");
-        const page = await pages[`./pages/${name}.vue`]();
-
-        let layoutName = 'Default';
-        if (page.default?.props?.layout && typeof page.default.props.layout === 'string') {
-            layoutName = page.default.props.layout;
-        }
-
-        const layout = await import(`./layouts/${layoutName}.vue`);
-        page.default.layout = layout.default;
-
-        return page;
-    },
-    title: title => title ? `${title}` : '',
-    setup({ el, App, props, plugin }) {
-
-        const pinia = createPinia()
-
-        pinia.use(createPersistedState({
-            storage: localStorage,
-        }))
-
-        const app = createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(pinia)
-            .use(PrimeVue, {
-                ripple: true,
-                unstyled: true,
-                pt: LaraMod
-            })
-            .component('Link', Link)
-            .component('Head', Head);
-
-        app.directive('styleclass', StyleClass);
-        app.config.globalProperties.$route = window.route = route;
-        app.mount(el);
-        return app;
-    },
-    progress: {
-        delay: 25,
-        color: '#29d',
-        includeCSS: true,
-        showSpinner: true,
-    },
-})

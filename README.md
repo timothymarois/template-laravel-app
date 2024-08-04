@@ -64,7 +64,7 @@ Built-in monitoring packages allow you to view logs, worker jobs, and debug effo
 
 **External Services:**
 
-- ❌ [Sentry.io](https://sentry.io/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
+- ✅ [Sentry.io](https://sentry.io/) | [Docs](https://docs.sentry.io/platforms/php/guides/laravel/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
 - ❌ [Codecov.io](https://codecov.io/) - It's recommended to use a code coverage service to monitor your automate test coverage across your application's business logic. 
 
 ---
