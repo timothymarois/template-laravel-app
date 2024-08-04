@@ -69,7 +69,9 @@ Built-in monitoring packages allow you to view logs, worker jobs, and debug effo
 
 ---
 
-## Installation
+## Local Installation
+
+These simple steps allow you to install this project on your local env. For production, you should follow the #deployment section
 
 <details>
 <summary>Install client-side</summary>
@@ -97,6 +99,14 @@ php artisan migrate
 ```
 </details>
 
+<details>
+<summary>Run local Dev</summary>
+
+```bash
+npm run dev
+```
+</details>
+
 ---
 
 ## Deployment: 
@@ -108,25 +118,25 @@ For deployment you will need to run a series of commands before and after new co
 
 *These commands should run BEFORE new code is deployed.*
 
-(1) Install composer deps:
+**(1) Install composer deps:**
 
 ```bash
 composer install
 ```
 
-(2) Install package deps
+**(2) Install package deps**
 
 ```bash
 npm ci
 ```
 
-(3) Database migrations: 
+**(3) Database migrations:**
 
 ```bash
 php artisan migrate --force
 ```
 
-(4) Build Client-side:
+**(4) Build Client-side:**
 
 ```bash
 npm run build
