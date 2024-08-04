@@ -76,12 +76,22 @@
 </template>
 
 <script setup>
+import { useToast } from 'primevue/usetoast';
 const form = useForm({
     name: null,
     email: null,
 })
 
+const toast = useToast();
+
 const submitForm = () => {
-    form.post(route('users.store'))
+    form.post(route('users.store'),  {
+        onSuccess: r => {
+            toast.add({ severity: 'success', summary: 'User Created', detail: 'The user has been created.', life: 3000 });
+        },
+        onError: err => {
+            toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 5000 });
+        }
+    })
 }
 </script>

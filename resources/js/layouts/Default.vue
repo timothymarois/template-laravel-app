@@ -3,6 +3,10 @@
         <Nav />
         <slot />
         <Toast />
+        <Toast
+            position="bottom-left"
+            group="bl"
+        />
     </div>
 </template>
 

@@ -217,6 +217,7 @@ const openEditModal = (user) => {
     form.id = user.id
     form.name = user.name
     form.email = user.email
+    form.clearErrors()
 };
 
 const openDeleteModal = (user) => {
@@ -232,11 +233,10 @@ const remove = () => {
             onSuccess: page => {
                 deleteLoading.value = false
                 showDelete.value = false
-                toast.add({ severity: 'success', summary: 'Deleted', detail: 'The user has been deleted.', life: 3000 });
+                toast.add({ severity: 'success', summary: 'User Deleted', detail: 'The user has been deleted.', life: 3000 });
             },
             onError: err => {
-                console.log(err)
-                toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'Failed processing this request.', life: 4000 });
+                toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 4000 });
             }
         })
     }
@@ -247,8 +247,11 @@ const save = () => {
         form.put(route('users.update', [form.id]), {
             onSuccess: user => {
                 showModal.value = false
-                toast.add({ severity: 'success', summary: 'Saved', detail: 'The user has been saved.', life: 3000 });
+                toast.add({ severity: 'success', summary: 'User Saved', detail: 'The user has been saved.', life: 3000 });
             },
+            onError: err => {
+                toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', group: 'bl', life: 5000 });
+            }
         })
     }
 };
