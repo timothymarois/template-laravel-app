@@ -10,7 +10,7 @@ This starter kit is designed for any project, providing a quick playground that 
 
 #### Core
 
-This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) as your frontend. Inertia is implemented so that both can communicate seamlessly. Inertia can save you a monumental amount of time when trying to handle client-side state management. 
+This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) as your frontend. Inertia is implemented so that both can communicate seamlessly. Inertia can save you a monumental amount of time when trying to handle client-side state management.
 
 - ✅ Laravel 11 – [Documentation](https://laravel.com/docs/11.x)
 - ✅ Vuejs 3 – [Documentation](https://vuejs.org/guide/introduction.html)
@@ -28,7 +28,7 @@ For the design side, we want to focus on customization, theming, and utility com
 
 ## Docker
 
-Docker is used for your local env. *Do not use your custom or OS php/env*.
+Docker is used for your local env to be sure all collaborators have the same environment. *Do not use your custom or OS php/env*.
 
 Build your images by `./vendor/bin/sail build --no-cache`
 
@@ -44,6 +44,8 @@ Run: `./vendor/bin/sail up`, once containers are built, you can also run them wi
 ## Tests and Linting
 
 Pre-installed code-linting and automated test services to help keep your CI pipeline protected from lower code quality and breaking changes.
+
+Linting is used on both PHP and JS side to keep all collaborators using the same format.
 
 - ✅ Phpunit - `php artisan test`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
@@ -164,6 +166,8 @@ php artisan queue:restart
 ### Authentication
 
 For user authentication with Laravel and Vuejs we will use Laravel Sanctum. 
+
+This list is to keep track of the examples that are pre-installed and ready out of the box.
 
 - ✅ [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum) *(local session auth)*
 - ❌ [Laravel Passport](https://laravel.com/docs/11.x/passport) *(oauth and third parties)*
@@ -484,7 +488,7 @@ Saves you time by simplifying the import of reusable stores, components and func
 
 Allows you to have client-side state management across your application. This also includes using LocalStorage to save persisted state. 
 
-*Note: For most of the use-cases, you can use page props from Laravel controllers; you should only use state management in rare cases that you need to control the state on the client-side only. A good example of this, saving the user's table columns and sorting.*
+*Note: For most of the use-cases, you can use page props from Laravel controllers (with Inertia); you should only use state management in rare cases that you need to control the state on the client-side only. A good example of this, saving the user's table columns and sorting.*
 
 - ✅ [Pinia](https://pinia.vuejs.org/) state management 
 - ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate)
@@ -518,13 +522,40 @@ Currently modified components:
 
 With over 15 years of development experience, I have built various web-based platforms, from static websites and management systems to custom CRMs and e-commerce websites. This template aims to address many of the challenges in creating and maintaining long-term projects.
 
-Creating a separate API and UI project was once considered the best approach and remains popular today. However, after numerous projects, it has become clear that this separation introduces unnecessary complexities for building web-based applications at scale.
+**Challenges of Separate UI and API Projects**
 
-JavaScript frameworks, though powerful, are still in their early stages and lack the maturity of Laravel and PHP. For instance, you can maintain a Laravel project from over 5 years ago, and it will still function, install, and be testable today. This level of backward compatibility is rare in the JavaScript ecosystem. While it's possible to maintain older JS projects, it is often impractical due to their rapid obsolescence and lack of focus on testable code. Revisiting a JS project from 5 years ago can feel like entering a time capsule.
+Creating a separate API and UI project was once considered the best approach and remains popular today. However, after numerous projects, it has become clear that this separation introduces unnecessary complexities for building web-based applications at scale. These complexities in devops, deployments, local environments, team organization and even your data source of truth are the reasons why you should not split your UI and API.
 
-This is why minimizing JavaScript's control over the server is beneficial. The frontend work already becomes outdated quickly enough; adding server-side complexities only exacerbates the issue. Laravel offers a stable, testable, and maintainable backend solution, making web-based app development more enjoyable and sustainable.
+1. **Source of Truth:** 
+    - **Issue:** Splitting the UI and API encourages maintaining two sources of truth. Data is stored and manipulated both on the server and client-side state management.
+    - **Impact:** This dual maintenance increases complexity and the risk of inconsistencies, leading to potential data integrity issues.
 
-This template leverages the strengths of Laravel and Vue.js, using Inertia.js to seamlessly bridge the gap between them, allowing you to focus on your application requirements without reinventing the wheel.
+2. **DevOps and Deployments:**
+    - **Issue:** Managing deployments becomes more complicated as the application scales. Database migrations, dependency installs, and update sequences need to be synchronized between the UI and API.
+    - **Impact:** Ensuring synchronized deployments is challenging, especially when one part fails. This requires sophisticated orchestration tools like Kubernetes, adding unnecessary complexity.
+
+3. **Team Organization:**
+    - **Issue:** Splitting the UI and API can hinder collaboration and flexibility. Full-stack developers need to navigate two separate codebases, complicating changes and feature implementation.
+    - **Impact:** This split can introduce authentication challenges and security holes that could have been avoided with a unified project structure.
+
+**Laravel and PHP: A Mature and Stable Choice**
+
+JavaScript frameworks, though powerful, are still in their early stages and lack the maturity of Laravel and PHP. For instance, maintaining a Laravel project from over 5 years ago is feasible due to its stability and backward compatibility. In contrast, JavaScript projects often become impractical to maintain due to rapid obsolescence and lack of testable code focus.
+
+**Minimizing JavaScript's Control Over the Server**
+
+By leveraging Laravel for the backend and Vue.js for the frontend, using Inertia.js to bridge the gap, we minimize JavaScript's control over the server. This approach benefits from Laravel's stability, testability, and maintainability while keeping the frontend modern and dynamic.
+
+**Benefits of a Unified Approach**
+
+- **Consistency:** A single source of truth for data reduces complexity and potential errors.
+- **Simplified Deployments:** Coordinated deployments for the entire application, reducing the risk of synchronization issues.
+- **Enhanced Collaboration:** Full-stack developers can seamlessly work on both frontend and backend, improving efficiency and code quality.
+- **Security:** Unified projects reduce the attack surface by eliminating separate authentication mechanisms and potential security holes.
+
+**Conclusion**
+
+This template leverages the strengths of Laravel and Vue.js, using Inertia.js to seamlessly bridge the gap between them. This approach allows you to focus on your application requirements without reinventing the wheel, ensuring a stable, maintainable, and enjoyable development experience. As the development landscape evolves, this architecture remains aligned with modern trends, ensuring long-term viability and scalability.
 
 ### Performance and Concerns
 
