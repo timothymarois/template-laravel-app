@@ -546,12 +546,18 @@ JavaScript frameworks, though powerful, are still in their early stages and lack
 
 By leveraging Laravel for the backend and Vue.js for the frontend, using Inertia.js to bridge the gap, we minimize JavaScript's control over the server. This approach benefits from Laravel's stability, testability, and maintainability while keeping the frontend modern and dynamic.
 
+In short, the frontend's job should only be to visually display the data, keeping business logic and manipulation to a minimum.
+
 **Benefits of a Unified Approach**
 
-- **Consistency:** A single source of truth for data reduces complexity and potential errors.
-- **Simplified Deployments:** Coordinated deployments for the entire application, reducing the risk of synchronization issues.
-- **Enhanced Collaboration:** Full-stack developers can seamlessly work on both frontend and backend, improving efficiency and code quality.
-- **Security:** Unified projects reduce the attack surface by eliminating separate authentication mechanisms and potential security holes.
+- **Consistency:** 
+    - A single source of truth for data reduces complexity and potential errors.
+- **Simplified Deployments:** 
+    - Coordinated deployments for the entire application, reducing the risk of synchronization issues.
+- **Enhanced Collaboration:** 
+    - Full-stack developers can seamlessly work on both frontend and backend, improving efficiency and code quality.
+- **Security:** 
+    - Unified projects reduce the attack surface by eliminating separate authentication mechanisms and potential security holes.
 
 **Conclusion**
 
