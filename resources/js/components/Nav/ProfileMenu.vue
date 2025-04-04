@@ -46,7 +46,7 @@
                     >
                         <span :class="item.icon" />
                         <span class="ml-2 text-sm">{{ item.label }}</span>
-                        <Badge
+                        <VoltBadge
                             v-if="item.badge"
                             class="ml-auto"
                             :value="item.badge"
