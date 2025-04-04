@@ -26,21 +26,6 @@ For the design side, we want to focus on customization, theming, and utility com
 
 ---
 
-## Docker
-
-Docker is used for your local env to be sure all collaborators have the same environment. *Do not use your custom or OS php/env*.
-
-Build your images by `./vendor/bin/sail build --no-cache`
-
-Run: `./vendor/bin/sail up`, once containers are built, you can also run them within VSC using the [docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) or if you perfer the [docker desktop](https://www.docker.com/products/docker-desktop/) app.
-
-- ✅ Docker with php 8.3
-- ✅ Docker with mysql 8
-- ✅ Docker with redis
-- ✅ Docker with supervisor (for job queue workers)
-
----
-
 ## Tests and Linting
 
 Pre-installed code-linting and automated test services to help keep your CI pipeline protected from lower code quality and breaking changes.
