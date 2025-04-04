@@ -29,12 +29,11 @@ export function useTheme() {
     const toggleDark = () => setDark(!dark.value);
 
     const initTheme = () => {
-        setDark(false);
-        // if (auto.value) {
-        //     setDark(checkSystemTheme());
-        // } else {
-        //     setDark(dark.value);
-        // }
+        if (auto.value) {
+            setDark(checkSystemTheme());
+        } else {
+            setDark(dark.value);
+        }
     };
 
     watchEffect(() => {

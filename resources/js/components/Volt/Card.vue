@@ -21,8 +21,8 @@ interface Props extends /* @vue-ignore */ CardProps {}
 defineProps<Props>();
 
 const theme = ref<CardPassThroughOptions>({
-    root: `flex flex-col rounded-xl
-        bg-surface-0 dark:bg-surface-900 
+    root: `flex flex-col rounded
+        bg-surface-0 dark:bg-surface-900
         text-surface-700 dark:text-surface-0
         shadow-md`,
     header: ``,

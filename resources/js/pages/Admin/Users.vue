@@ -3,16 +3,16 @@
     <LayoutDefault>
         <PageHeader :title="`Users (${userTotal})`">
             <template #actions>
-                <Button
+                <VoltButton
                     size="small"
                     @click="router.visit($route('users.create'))"
                 >
                     Add
-                </Button>
+                </VoltButton>
             </template>
         </PageHeader>
         <PageMain>
-            <Card>
+            <VoltCard>
                 <template #content>
                     <ul>
                         <li
@@ -44,30 +44,29 @@
                                     <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
                                 </InputGroup> -->
 
-                                <ButtonGroup>
-                                    <Button
+                                <VoltButtonGroup>
+                                    <VoltButton
                                         outlined
                                         label="Edit"
                                         icon="pi pi-pencil"
                                         size="small"
                                         @click.prevent.stop="openEditModal(user)"
                                     />
-                                    <Button
+                                    <VoltButton
                                         outlined
                                         icon="pi pi-trash"
                                         size="small"
                                         @click.prevent.stop="openDeleteModal(user)"
                                     />
-                                </ButtonGroup>
+                                </VoltButtonGroup>
                             </div>
                         </li>
                     </ul>
                 </template>
-            </Card>
+            </VoltCard>
         </PageMain>
     </LayoutDefault>
-
-    <Dialog
+    <VoltDialog
         v-model:visible="showDelete"
         modal
         header="Delete user"
@@ -89,7 +88,7 @@
                 Are you sure you want to delete this item?
             </p>
             <div class="flex justify-center items-center space-x-4 py-2">
-                <Button
+                <VoltButton
                     type="button"
                     label="Yes, delete"
                     severity="danger"
@@ -97,7 +96,7 @@
                     :loading="form.processing"
                     @click="remove"
                 />
-                <Button
+                <VoltButton
                     text
                     type="button"
                     label="Cancel"
@@ -106,10 +105,9 @@
                 />
             </div>
         </div>
-    </Dialog>
-
+    </VoltDialog>
     <!-- :pt="{'header': '!shadow border-surface-300'}" :ptOptions="{ mergeProps: true }" -->
-    <Drawer
+    <VoltDrawer
         v-model:visible="showModal"
         header="Edit User"
         position="right"
@@ -122,7 +120,7 @@
                             for="name"
                             class="block text-sm font-bold mb-2"
                         >Name:</label>
-                        <InputText
+                        <VoltInputText
                             v-model="form.name"
                             fluid
                             type="text"
@@ -140,7 +138,7 @@
                             for="email"
                             class="block text-sm font-bold mb-2"
                         >Email Address:</label>
-                        <InputText
+                        <VoltInputText
                             v-model="form.email"
                             fluid
                             type="text"
@@ -158,14 +156,14 @@
         </div>
         <template #footer>
             <div class="flex items-center gap-2 py-4 px-6 border-t border-surface-200 dark:border-surface-600">
-                <Button
+                <VoltButton
                     type="button"
                     label="Save"
                     :disabled="form.processing"
                     :loading="form.processing"
                     @click="save"
                 />
-                <Button
+                <VoltButton
                     text
                     type="button"
                     label="Cancel"
@@ -174,20 +172,12 @@
                 />
             </div>
         </template>
-    </Drawer>
+    </VoltDrawer>
 </template>
 
 <script setup>
 import { useToast } from 'primevue/usetoast';
-import ButtonGroup from 'primevue/buttongroup';
-import Drawer from 'primevue/drawer';
-
 const toast = useToast();
-
-// const showError = () => {
-//     toast.add({ severity: 'error', summary: 'Error', detail: 'Could not process request. Please try again.', life: 4000 });
-// };
-
 const props = defineProps({
     users: {
         type: Object,
