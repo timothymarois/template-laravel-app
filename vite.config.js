@@ -7,22 +7,14 @@ import tailwindcss from '@tailwindcss/vite'
 
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite';
-import { PrimeVueResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
     plugins: [
+        vue(),
         tailwindcss(),
         laravel({
             input: 'resources/js/app.js',
             refresh: true,
-        }),
-        vue({
-            template: {
-                transformAssetUrls: {
-                    base: null,
-                    includeAbsolute: false,
-                },
-            },
         }),
         Components({
             extensions: ['vue','svg'],
@@ -37,10 +29,7 @@ export default defineConfig({
                 },
             ],
             dts: true,
-            deep: true,
-            resolvers: [
-                PrimeVueResolver()
-            ]
+            deep: true
         }),
         AutoImport({
             vueTemplate: true,
