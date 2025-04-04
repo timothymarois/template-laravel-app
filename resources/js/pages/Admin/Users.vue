@@ -1,69 +1,71 @@
 <template>
     <Head title="Users" />
-    <PageHeader :title="`Users (${userTotal})`">
-        <template #actions>
-            <Button
-                size="small"
-                @click="router.visit($route('users.create'))"
-            >
-                Add
-            </Button>
-        </template>
-    </PageHeader>
-    <PageMain>
-        <Card>
-            <template #content>
-                <ul>
-                    <li
-                        v-for="user in users.data"
-                        :key="user.id"
-                        class="border-b last:border-none border-gray-100 dark:border-gray-700 p-4 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 flex items-center justify-between rounded"
-                    >
-                        <div class="flex items-center space-x-4">
-                            <div class="min-w-[300px]">
-                                <h2 class="text-sm font-semibold">
-                                    {{ user.name }}
-                                </h2>
-                                <p class="text-xs text-gray-700 dark:text-gray-200">
-                                    {{ user.email }}
-                                </p>
+    <LayoutDefault>
+        <PageHeader :title="`Users (${userTotal})`">
+            <template #actions>
+                <Button
+                    size="small"
+                    @click="router.visit($route('users.create'))"
+                >
+                    Add
+                </Button>
+            </template>
+        </PageHeader>
+        <PageMain>
+            <Card>
+                <template #content>
+                    <ul>
+                        <li
+                            v-for="user in users.data"
+                            :key="user.id"
+                            class="border-b last:border-none border-gray-100 dark:border-gray-700 p-4 hover:bg-surface-200/50 dark:hover:bg-surface-700/50 flex items-center justify-between rounded"
+                        >
+                            <div class="flex items-center space-x-4">
+                                <div class="min-w-[300px]">
+                                    <h2 class="text-sm font-semibold">
+                                        {{ user.name }}
+                                    </h2>
+                                    <p class="text-xs text-gray-700 dark:text-gray-200">
+                                        {{ user.email }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <h2 class="text-sm font-semibold">
+                                        Updated
+                                    </h2>
+                                    <p class="text-xs text-gray-700 dark:text-gray-200">
+                                        {{ convertLocalTimezone(user.updated_at) }}
+                                    </p>
+                                </div>
                             </div>
                             <div>
-                                <h2 class="text-sm font-semibold">
-                                    Updated
-                                </h2>
-                                <p class="text-xs text-gray-700 dark:text-gray-200">
-                                    {{ convertLocalTimezone(user.updated_at) }}
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                            <!-- <InputGroup>
-                                <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
-                                <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
-                            </InputGroup> -->
+                                <!-- <InputGroup>
+                                    <Button @click.prevent.stop="openEditModal(user)" outlined label="Edit" icon="pi pi-pencil" size="small" />
+                                    <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
+                                </InputGroup> -->
 
-                            <ButtonGroup>
-                                <Button
-                                    outlined
-                                    label="Edit"
-                                    icon="pi pi-pencil"
-                                    size="small"
-                                    @click.prevent.stop="openEditModal(user)"
-                                />
-                                <Button
-                                    outlined
-                                    icon="pi pi-trash"
-                                    size="small"
-                                    @click.prevent.stop="openDeleteModal(user)"
-                                />
-                            </ButtonGroup>
-                        </div>
-                    </li>
-                </ul>
-            </template>
-        </Card>
-    </PageMain>
+                                <ButtonGroup>
+                                    <Button
+                                        outlined
+                                        label="Edit"
+                                        icon="pi pi-pencil"
+                                        size="small"
+                                        @click.prevent.stop="openEditModal(user)"
+                                    />
+                                    <Button
+                                        outlined
+                                        icon="pi pi-trash"
+                                        size="small"
+                                        @click.prevent.stop="openDeleteModal(user)"
+                                    />
+                                </ButtonGroup>
+                            </div>
+                        </li>
+                    </ul>
+                </template>
+            </Card>
+        </PageMain>
+    </LayoutDefault>
 
     <Dialog
         v-model:visible="showDelete"

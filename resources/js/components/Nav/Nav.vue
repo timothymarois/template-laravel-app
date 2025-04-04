@@ -67,7 +67,7 @@
                 </div>
                 <div class="relative flex space-x-2 items-center">
                     <div class="relative">
-                        <NavDarkToggle />
+                        <!-- <NavDarkToggle /> -->
                     </div>
                     <NavProfileMenu />
                 </div>

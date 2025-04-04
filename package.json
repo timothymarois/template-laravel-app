@@ -8,7 +8,8 @@
         "eslint": "npx eslint  \"resources/js/**/*.{js,vue}\""
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^1.2.0",
+        "@inertiajs/vue3": "^2.0.0",
+        "@tailwindcss/container-queries": "^0.1.1",
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/typography": "^0.5.13",
         "@vitejs/plugin-vue": "^5.0.5",
@@ -20,12 +21,10 @@
         "eslint-plugin-vue": "^9.27.0",
         "laravel-vite-plugin": "^1.0",
         "lodash": "^4.17.21",
-        "pinia": "^2.1.7",
-        "pinia-plugin-persistedstate": "^3.2.1",
         "postcss": "^8.4.38",
         "postcss-import": "^16.1.0",
         "primeicons": "^7.0.0",
-        "primevue": "^4.0.2",
+        "primevue": "^4.0.7",
         "tailwindcss": "^3.4.4",
         "tailwindcss-primeui": "^0.3.4",
         "unplugin-auto-import": "^0.17.6",

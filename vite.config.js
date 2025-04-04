@@ -10,7 +10,6 @@ export default defineConfig({
     plugins: [
         laravel({
             input: 'resources/js/app.js',
-            // ssr: 'resources/js/ssr.js', this has not been tested
             refresh: true,
         }),
         vue({
@@ -26,7 +25,6 @@ export default defineConfig({
             directoryAsNamespace: true,
             collapseSamePrefixes: true,
             dirs: [
-                './resources/js/layouts/',
                 './resources/js/components/',
             ],
             imports: [
@@ -64,7 +62,6 @@ export default defineConfig({
             ],
             dirs: [
                 './resources/js/composables/',
-                './resources/js/stores/',
                 './resources/js/utils/',
             ],
         }),

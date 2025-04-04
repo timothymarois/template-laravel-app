@@ -16,7 +16,9 @@ class UserController extends Controller
     {
         $users = User::query()->orderBy('created_at', 'DESC');
 
-        return response()->inertiaOrJson('Admin/Users', ['users' => $users->paginate()]);
+        return Inertia::render('Admin/Users', [
+            'users' => $users->paginate()
+        ]);
     }
 
     public function create()
@@ -34,9 +36,9 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make(Str::random(24));
 
-        $user = User::query()->create($data);
-
-        return response()->redirectOrJson('users.index', $user);
+        return Inertia::render('users.index', [
+            'user' => $user,
+        ]);
     }
 
     public function update(Request $request, User $user)
@@ -55,13 +57,15 @@ class UserController extends Controller
 
         $user->update($request->all());
 
-        return response()->redirectOrJson('users.index', $user);
+        return Inertia::render('users.index', [
+            'user' => $user,
+        ]);
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return response()->redirectOrJson('users.index', []);
+        return back();
     }
 }
