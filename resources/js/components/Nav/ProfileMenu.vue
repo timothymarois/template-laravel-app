@@ -15,7 +15,7 @@
                     {{ user.name }}
                 </div> <span class="pi pi-fw pi-angle-down" />
             </button>
-            <Menu
+            <VoltMenu
                 ref="menu"
                 :model="items"
                 class="w-[245px]"
@@ -26,7 +26,7 @@
                         class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround"
                     >
                         <div>
-                            <Avatar
+                            <VoltAvatar
                                 :label="user.name[0]"
                                 class="mr-2 border border-surface-200 dark:border-surface-400"
                                 shape="circle"
@@ -57,7 +57,7 @@
                         >{{ item.shortcut }}</span>
                     </Link>
                 </template>
-            </Menu>
+            </VoltMenu>
         </div>
         <div v-else>
             <Link

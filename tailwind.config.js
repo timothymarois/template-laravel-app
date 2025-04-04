@@ -8,7 +8,7 @@ export default {
         './resources/js/**/*.{js,ts,vue}',
     ],
     plugins: [
-        require('tailwindcss-primeui'),
+        // require('tailwindcss-primeui'),
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
     ],

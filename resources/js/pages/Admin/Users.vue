@@ -211,7 +211,7 @@ const form = useForm({
 
 const convertLocalTimezone = (time) => {
     // 'America/New_York' (pass current users timezone)
-    return formatDatetime(time);
+    return (time);
 }
 
 const openEditModal = (user) => {

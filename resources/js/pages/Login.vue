@@ -15,7 +15,7 @@
                             class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
                         >Email address</label>
                         <div class="mt-2 w-full">
-                            <InputText
+                            <VoltInputText
                                 v-model="form.email"
                                 fluid
                                 type="text"
@@ -36,7 +36,7 @@
                             >Password</label>
                         </div>
                         <div class="mt-2 w-full">
-                            <InputText
+                            <VoltInputText
                                 v-model="form.password"
                                 fluid
                                 type="password"
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <div class="w-full">
-                        <Button
+                        <VoltButton
                             label="Login"
                             :disabled="form.processing"
                             :loading="form.processing"
