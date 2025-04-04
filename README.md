@@ -469,19 +469,6 @@ Saves you time by simplifying the import of reusable stores, components and func
 
 ---
 
-### Client-side state management
-
-Allows you to have client-side state management across your application. This also includes using LocalStorage to save persisted state. 
-
-*Note: For most of the use-cases, you can use page props from Laravel controllers (with Inertia); you should only use state management in rare cases that you need to control the state on the client-side only. A good example of this, saving the user's table columns and sorting.*
-
-- ✅ [Pinia](https://pinia.vuejs.org/) state management 
-- ✅ [Pinia persistent state](https://github.com/prazdevs/pinia-plugin-persistedstate)
-- ✅ Example: Pinia store (with state, getters and actions)
-- ✅ Example: Pinia store (with persist localstorage)
-
----
-
 ### Utilities
 
 You can create global utility functions for the client-side at `/resources/js/utils` and they will be auto-imported into your components. 
