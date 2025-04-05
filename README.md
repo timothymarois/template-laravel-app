@@ -12,17 +12,17 @@ This starter kit is designed for any project, providing a quick playground that 
 
 This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) as your frontend. Inertia is implemented so that both can communicate seamlessly. Inertia can save you a monumental amount of time when trying to handle client-side state management.
 
-- ✅ Laravel 11 – [Documentation](https://laravel.com/docs/11.x)
-- ✅ Vuejs 3 – [Documentation](https://vuejs.org/guide/introduction.html)
-- ✅ Inertia – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
-- ✅ MySQL 8 – Database can be changed to any other engine. Since MySQL is the most common and practical for most use-cases, it is included by default.
+- ✅ Laravel v12 – [Documentation](https://laravel.com/docs/12.x)
+- ✅ Vuejs v3 – [Documentation](https://vuejs.org/guide/introduction.html)
+- ✅ Inertiajs v2 – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
+- ✅ MySQL v8 – Database can be changed to any other engine. Since MySQL is the most common and practical for most use-cases, it is included by default.
 
 #### Design
 
 For the design side, we want to focus on customization, theming, and utility components. PrimeVue offers the most comprehensive set of utility components that are fully customizable without bloating. Tree-shaking makes sure you only import the components you actually use keeping your overall project light-weight. 
 
-- ✅ Tailwind 3 – [Documentation](https://tailwindcss.com/docs/installation)
-- ✅ PrimeVue 4 – [Documentation](https://primevue.org/) | [Unstyled with Tailwind](https://tailwind.primevue.org/)
+- ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
+- ✅ PrimeVue v4 – [Documentation](https://primevue.org/) | [Unstyled with Tailwind](https://tailwind.primevue.org/)
 
 ---
 
@@ -185,22 +185,6 @@ Page level props are passed by controller data. You can also pass shared props h
 *In controller, return only inertia view* 
 ```php
 return Inertia::render('Example/Index', ['posts' => $posts->paginate()]);
-```
-
-*In controller, return inertia view or json*
-
-Note: For json response, you should use `axois` requests.
-
-```php
-return response()->inertiaOrJson('Posts/Index', ['posts' => $posts->paginate()]);
-```
-
-*In controller, redirect or json*
-
-If you want to use as an API, you can return the JSON, or if you want to redirect the user's page with inertia.
-
-```php
-return response()->redirectOrJson('route.name', ['posts' => $posts->paginate()]);
 ```
 
 *In page component for Inertia views*
@@ -476,16 +460,3 @@ You can create global utility functions for the client-side at `/resources/js/ut
 *Note: Currently, you can not use these methods in `<template>` but you can use them in your component script. If you really need to use a method in your template, you can add them within the `app.js` and prefix it with a `$` to keep consistent.*
 
 - ✅ Auto-load utility methods
-
----
-
-### PrimeVue Presets:
-
-Modifies the lara preset as "lara-mod". You can create or use the default presets as they are included.
-
-Currently modified components:
-
-- Button
-- Menu
-- MenuBar
-- Drawer
