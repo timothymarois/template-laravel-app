@@ -22,7 +22,7 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 For the design side, we want to focus on customization, theming, and utility components. PrimeVue offers the most comprehensive set of utility components that are fully customizable without bloating. Tree-shaking makes sure you only import the components you actually use keeping your overall project light-weight. 
 
 - ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
-- ✅ PrimeVue v4 – [Documentation](https://primevue.org/) | [Unstyled with Tailwind](https://tailwind.primevue.org/)
+- ✅ PrimeVue v4 – [Documentation](https://primevue.org/) | [Unstyled using Volt](https://volt.primevue.org/)
 
 ---
 
@@ -32,7 +32,7 @@ Pre-installed code-linting and automated test services to help keep your CI pipe
 
 Linting is used on both PHP and JS side to keep all collaborators using the same format.
 
-- ✅ Phpunit - `php artisan test`
+- ✅ PHPUnit - `php artisan test`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
 - ✅ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
 - ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npm run eslint -- --fix` (or with `--quiet`)
