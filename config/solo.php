@@ -58,7 +58,7 @@ return [
         'ESlint' => Command::from('npm run eslint')->lazy(),
         'Test' => Command::from('php artisan test')->lazy(),
         'Migrations' => Command::from('php artisan migrate')->lazy(),
-        // 'Fresh' => Command::from('php artisan start:fresh --non-interactive')->lazy(),
+        'Fresh' => Command::from('php artisan start:fresh')->lazy(),
         // 'Larastan' => Command::from('php artisan solo:larastan')->lazy(),
         // 'Tests' => Command::from('php artisan test --colors=always')->lazy(),
         // 'Commands' => Command::from('php artisan command-helper')->interactive(),
