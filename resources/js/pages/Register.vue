@@ -15,7 +15,7 @@
                             class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
                         >Name</label>
                         <div class="mt-2 w-full">
-                            <VoltInputText
+                            <InputText
                                 v-model="form.name"
                                 fluid
                                 type="text"
@@ -34,7 +34,7 @@
                             class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
                         >Email address</label>
                         <div class="mt-2 w-full">
-                            <VoltInputText
+                            <InputText
                                 v-model="form.email"
                                 fluid
                                 type="text"
@@ -55,7 +55,7 @@
                             >Password</label>
                         </div>
                         <div class="mt-2 w-full">
-                            <VoltInputText
+                            <InputText
                                 v-model="form.password"
                                 fluid
                                 type="password"
@@ -76,7 +76,7 @@
                             >Password Confirmation</label>
                         </div>
                         <div class="mt-2 w-full">
-                            <VoltInputText
+                            <InputText
                                 v-model="form.password_confirmation"
                                 fluid
                                 type="password"
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div class="w-full">
-                        <VoltButton
+                        <Button
                             label="Create Account"
                             :disabled="form.processing"
                             :loading="form.processing"

@@ -45,7 +45,7 @@
                                 <span>Components</span>
                                 <span class="pi pi-fw pi-angle-down ml-2" />
                             </div>
-                            <VoltMenu
+                            <Menu
                                 ref="componentMenu"
                                 :model="componentItems"
                                 popup
@@ -61,7 +61,7 @@
                                         <span class="ml-2 text-sm">{{ item.label }}</span>
                                     </Link>
                                 </template>
-                            </VoltMenu>
+                            </Menu>
                         </div>
                     </div>
                 </div>

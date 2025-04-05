@@ -3,16 +3,16 @@
     <LayoutDefault>
         <PageHeader :title="`Users (${userTotal})`">
             <template #actions>
-                <VoltButton
-                    size="small"
+                <Button
+                    raised
                     @click="router.visit($route('users.create'))"
                 >
                     Add
-                </VoltButton>
+                </Button>
             </template>
         </PageHeader>
         <PageMain>
-            <VoltCard>
+            <Card>
                 <template #content>
                     <ul>
                         <li
@@ -44,29 +44,29 @@
                                     <Button @click.prevent.stop="remove(user)" outlined  icon="pi pi-trash" size="small" :loading="deleteLoading" />
                                 </InputGroup> -->
 
-                                <VoltButtonGroup>
-                                    <VoltButton
+                                <ButtonGroup>
+                                    <Button
                                         outlined
                                         label="Edit"
                                         icon="pi pi-pencil"
                                         size="small"
                                         @click.prevent.stop="openEditModal(user)"
                                     />
-                                    <VoltButton
+                                    <Button
                                         outlined
                                         icon="pi pi-trash"
                                         size="small"
                                         @click.prevent.stop="openDeleteModal(user)"
                                     />
-                                </VoltButtonGroup>
+                                </ButtonGroup>
                             </div>
                         </li>
                     </ul>
                 </template>
-            </VoltCard>
+            </Card>
         </PageMain>
     </LayoutDefault>
-    <VoltDialog
+    <Dialog
         v-model:visible="showDelete"
         modal
         header="Delete user"
@@ -88,7 +88,7 @@
                 Are you sure you want to delete this item?
             </p>
             <div class="flex justify-center items-center space-x-4 py-2">
-                <VoltButton
+                <Button
                     type="button"
                     label="Yes, delete"
                     severity="danger"
@@ -96,7 +96,7 @@
                     :loading="form.processing"
                     @click="remove"
                 />
-                <VoltButton
+                <Button
                     text
                     type="button"
                     label="Cancel"
@@ -105,9 +105,9 @@
                 />
             </div>
         </div>
-    </VoltDialog>
+    </Dialog>
     <!-- :pt="{'header': '!shadow border-surface-300'}" :ptOptions="{ mergeProps: true }" -->
-    <VoltDrawer
+    <Drawer
         v-model:visible="showModal"
         header="Edit User"
         position="right"
@@ -120,7 +120,7 @@
                             for="name"
                             class="block text-sm font-bold mb-2"
                         >Name:</label>
-                        <VoltInputText
+                        <InputText
                             v-model="form.name"
                             fluid
                             type="text"
@@ -138,7 +138,7 @@
                             for="email"
                             class="block text-sm font-bold mb-2"
                         >Email Address:</label>
-                        <VoltInputText
+                        <InputText
                             v-model="form.email"
                             fluid
                             type="text"
@@ -156,14 +156,14 @@
         </div>
         <template #footer>
             <div class="flex items-center gap-2 py-4 px-6 border-t border-surface-200 dark:border-surface-600">
-                <VoltButton
+                <Button
                     type="button"
                     label="Save"
                     :disabled="form.processing"
                     :loading="form.processing"
                     @click="save"
                 />
-                <VoltButton
+                <Button
                     text
                     type="button"
                     label="Cancel"
@@ -172,7 +172,7 @@
                 />
             </div>
         </template>
-    </VoltDrawer>
+    </Drawer>
 </template>
 
 <script setup>

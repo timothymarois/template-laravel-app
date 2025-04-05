@@ -1,6 +1,6 @@
 
 /* Primary and Surface Palettes */
-:root {
+/* :root {
     --p-primary-50: #ecfdf5;
     --p-primary-100: #d1fae5;
     --p-primary-200: #a7f3d0;
@@ -25,7 +25,38 @@
     --p-surface-900: #18181b;
     --p-surface-950: #09090b;
     --p-content-border-radius: 6px;
+} */
+
+:root {
+    --p-primary-50: #dbeafe;
+    --p-primary-100: #bfdbfe;
+    --p-primary-200: #93c5fd;
+    --p-primary-300: #60a5fa;
+    --p-primary-400: #3b82f6;
+    --p-primary-500: #2563eb;
+    --p-primary-600: #1d4ed8;
+    --p-primary-700: #1e40af;
+    --p-primary-800: #1e3a8a;
+    --p-primary-900: #172554;
+    --p-primary-950: #0f172a;
+
+    --p-surface-0: #ffffff;
+    --p-surface-50: #f8fafc;
+    --p-surface-100: #f1f5f9;
+    --p-surface-200: #e2e8f0;
+    --p-surface-300: #cbd5e1;
+    --p-surface-400: #94a3b8;
+    --p-surface-500: #64748b;
+    --p-surface-600: #475569;
+    --p-surface-700: #334155;
+    --p-surface-800: #1e293b;
+    --p-surface-900: #0f172a;
+    --p-surface-950: #020617;
+
+    --p-content-border-radius: 6px;
 }
+
+
 
 /* Light */
 :root {

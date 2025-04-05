@@ -21,6 +21,7 @@ export default defineConfig({
             directoryAsNamespace: true,
             collapseSamePrefixes: true,
             dirs: [
+                './resources/js/components/_volt/',
                 './resources/js/components/',
             ],
             imports: [
