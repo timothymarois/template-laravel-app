@@ -17,7 +17,7 @@ class UserController extends Controller
         $users = User::query()->orderBy('created_at', 'DESC');
 
         return Inertia::render('Admin/Users', [
-            'users' => $users->paginate()
+            'users' => $users->paginate(),
         ]);
     }
 

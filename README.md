@@ -15,7 +15,6 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 - ✅ Laravel v12 – [Documentation](https://laravel.com/docs/12.x)
 - ✅ Vuejs v3 – [Documentation](https://vuejs.org/guide/introduction.html)
 - ✅ Inertiajs v2 – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
-- ✅ MySQL v8 – Database can be changed to any other engine. Since MySQL is the most common and practical for most use-cases, it is included by default.
 
 #### Design
 
@@ -41,12 +40,12 @@ Linting is used on both PHP and JS side to keep all collaborators using the same
 
 ## Monitoring
 
-Built-in monitoring packages allow you to view logs, worker jobs, and debug effortlessly in real-time.
+Pre-installed monitoring packages allow you to view logs, worker jobs, and debug effortlessly in real-time.
 
 - ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) - `/log-viewer`
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) - `/horizon`
-- ✅ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) - `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
-- ✅ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
+- ❌ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) - `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
+- ❌ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
 - ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) - Chrome Extension
 
 **External Services:**
