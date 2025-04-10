@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a19ddac403b21fd8eb2998c3c8dcaf5",
+    "content-hash": "137e0cb6ec657d7dcd33a016d8a44363",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -7268,6 +7268,57 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.3.0"
             },
             "time": "2024-12-21T16:25:41+00:00"
+        },
+        {
+            "name": "tmarois/laravel-code-truncator",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tmarois/LaravelCodeTruncator.git",
+                "reference": "18539c5ccffdfd1869c9cc829827abd59c8a8030"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tmarois/LaravelCodeTruncator/zipball/18539c5ccffdfd1869c9cc829827abd59c8a8030",
+                "reference": "18539c5ccffdfd1869c9cc829827abd59c8a8030",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^11.0 || ^12.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tmarois\\LaravelCodeTruncator\\CodeTruncatorServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tmarois\\LaravelCodeTruncator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Timothy Marois",
+                    "email": "timothymarois@gmail.com"
+                }
+            ],
+            "description": "A Laravel command to truncate your codebase to fit within AI token limits.",
+            "support": {
+                "issues": "https://github.com/tmarois/LaravelCodeTruncator/issues",
+                "source": "https://github.com/tmarois/LaravelCodeTruncator/tree/v1.0.2"
+            },
+            "time": "2025-04-10T21:22:53+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
