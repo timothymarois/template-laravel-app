@@ -1,8 +1,6 @@
 # Laravel Vue Inertia Template
 
-This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use cases, **allowing you to focus solely on your application requirements**.
-
-> Inertia empowers you to build a modern, JavaScript-based single-page application without the tiresome complexity.
+This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web based applications; **allowing you to focus solely on your application requirements**.
 
 ---
 
@@ -15,6 +13,8 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 - ✅ Laravel v12 – [Documentation](https://laravel.com/docs/12.x)
 - ✅ Vuejs v3 – [Documentation](https://vuejs.org/guide/introduction.html)
 - ✅ Inertiajs v2 – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
+
+> Inertia empowers you to build a modern, JavaScript-based single-page application without the tiresome complexity.
 
 #### Design
 
@@ -46,7 +46,7 @@ Pre-installed monitoring packages allow you to view logs, worker jobs, and debug
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) - `/horizon`
 - ❌ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) - `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
 - ❌ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
-- ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) - Chrome Extension
+- ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) - With Google Chrome Extension
 
 **External Services:**
 
@@ -416,22 +416,31 @@ toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Conten
 
 Easily add svg icons that can change size and color.
 
+- ✅ [Tabler Icons](https://tabler.io/icons) *(recommended)*
 - ✅ [PrimeVue Icons](https://primevue.org/icons/)
+- ❌ [Heroicons](https://heroicons.com/)
 - ✅ Search thousands of icons at [Iconify](https://icon-sets.iconify.design/)
 
 <details>
 <summary>Show example</summary>
 
-*From PrimeVue icons*
+
+**From Tabler**
+
+```vue
+<template>
+    <IconHome class="text-gray-800 size-6" /> 
+</template>
+
+<script setup>
+import { IconHome } from '@tabler/icons-vue';
+</script>
+
+```
+**From PrimeVue icons**
 
 ```html
 <i class="pi pi-check"></i>
-```
-
-*SVG icon example*
-
-```html
-<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3m-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3m0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5m8 0c-.29 0-.62.02-.97.05c1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5"/></svg>
 ```
 
 </details>
