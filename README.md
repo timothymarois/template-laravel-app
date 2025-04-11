@@ -147,7 +147,7 @@ php artisan queue:restart
 
 ## Features: 
 
-### Authentication
+<!-- ### Authentication
 
 For user authentication with Laravel and Vuejs we will use Laravel Sanctum. 
 
@@ -166,9 +166,9 @@ This list is to keep track of the examples that are pre-installed and ready out 
 - ❌ Example: Email verification
 - ❌ Example: Forgot/reset password form and controller
 
----
+--- -->
 
-### Page props (by Inertia)
+<!-- ### Page props (by Inertia)
 
 Page level props are passed by controller data. You can also pass shared props here since Inertia will merge them into one. Keep in mind that page data and shared data will need to have unique key names to avoid being replaced.
 
@@ -201,49 +201,11 @@ const page = usePage()
 const posts = computed(() => page.props?.posts)
 ```
 
-</details>
+</details> -->
 
 ---
 
-### Page title (by Inertia)
-
-Dynamically change the page title based on the page or layout.
-
-- ✅ Example: Page titles
-
-<details>
-<summary>Show example</summary>
-
-```vue
-<!-- include the inertia Head component on the page -->
-<Head title="Home Page" />
-```
-</details>
-
----
-
-### Page layouts
-
-The ability to create universal layouts for specific pages.
-
-- ✅ Page layouts
-- ✅ Example: Shared page layouts
-
-<details>
-<summary>Show example</summary>
-
-*Define your layout name in props or omit it for default layout.*
-
-```js
-const props = defineProps({
-    'layout': 'Example'
-});
-```
-</details>
-
----
-
-### Routes (by Ziggy)
+<!-- ### Routes (by Ziggy)
 
 The ability to grab the routes in Vue based on the laravel route names. You can control what routes are visible to end-users by modifying `/config/ziggy.php`.
 
@@ -284,9 +246,9 @@ route('accounts.posts.show', [1, 123]);
 // http://localhost/accounts/1/posts/123'
 ```
 
-</details>
+</details> -->
 
----
+<!-- ---
 
 ### Form requests (by Inertia)
 
@@ -327,7 +289,7 @@ form.errors.email
 form.processing
 ```
 
-</details>
+</details> -->
 
 ---
 
@@ -456,15 +418,5 @@ Saves you time by simplifying the import of reusable stores, components and func
 - ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
 - ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)
 - ✅ Includes the auto-import of Vue & Inertia methods.
-- ✅ Includes the auto-import of Layouts, Components, Stores and Composables.
-- ✅ Includes the auto-import of [PrimeVue components](https://primevue.org/autocomplete/)
-
----
-
-### Utilities
-
-You can create global utility functions for the client-side at `/resources/js/utils` and they will be auto-imported into your components. 
-
-*Note: Currently, you can not use these methods in `<template>` but you can use them in your component script. If you really need to use a method in your template, you can add them within the `app.js` and prefix it with a `$` to keep consistent.*
-
-- ✅ Auto-load utility methods
+- ✅ Includes the auto-import of Utils and Composables.
+- ✅ Includes the auto-import of [PrimeVue Volt components](https://volt.primevue.org/accordion/)
