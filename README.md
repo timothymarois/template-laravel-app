@@ -205,7 +205,7 @@ const posts = computed(() => page.props?.posts)
 
 ---
 
-<!-- ### Routes (by Ziggy)
+### Routes (by Ziggy)
 
 The ability to grab the routes in Vue based on the laravel route names. You can control what routes are visible to end-users by modifying `/config/ziggy.php`.
 
@@ -246,7 +246,7 @@ route('accounts.posts.show', [1, 123]);
 // http://localhost/accounts/1/posts/123'
 ```
 
-</details> -->
+</details>
 
 <!-- ---
 
