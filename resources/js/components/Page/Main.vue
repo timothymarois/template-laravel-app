@@ -44,11 +44,12 @@ onMounted(() => {
     pagemain.value.addEventListener('scroll', handleScroll);
     nextTick(() => {
         updateHeight();
-    })
-});
+    });
 
-watch(dynamicHeight, (newValue) => {
-    document.documentElement.style.setProperty('--dynamic-height', newValue);
+    watch(dynamicHeight, (newValue) => {
+        document.documentElement.style.setProperty('--dynamic-height', newValue);
+    });
+
 });
 
 const handleScroll = () => {

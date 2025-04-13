@@ -1,14 +1,18 @@
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, onMounted } from 'vue';
 
 export function useTheme() {
     const auto = ref(false);
     const dark = ref(false);
-
     const isDark = computed(() => dark.value);
 
-    const checkSystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const checkSystemTheme = () => {
+        if (typeof window === 'undefined') return false;
+        return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    };
 
     const updateDocumentClass = () => {
+        if (typeof document === 'undefined') return;
+
         const className = 'dark';
         const classList = document.documentElement.classList;
 
@@ -22,7 +26,6 @@ export function useTheme() {
     const setDark = (value) => {
         dark.value = value;
         updateDocumentClass();
-
         auto.value = checkSystemTheme() === dark.value;
     };
 
@@ -36,7 +39,7 @@ export function useTheme() {
         }
     };
 
-    watchEffect(() => {
+    onMounted(() => {
         initTheme();
     });
 
