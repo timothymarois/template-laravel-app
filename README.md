@@ -420,3 +420,9 @@ Saves you time by simplifying the import of reusable stores, components and func
 - ✅ Includes the auto-import of Vue & Inertia methods.
 - ✅ Includes the auto-import of Utils and Composables.
 - ✅ Includes the auto-import of [PrimeVue Volt components](https://volt.primevue.org/accordion/)
+
+
+
+SSR:
+
+herd php artisan inertia:start-ssr

@@ -18,6 +18,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/bootstrap/ssr
 
 # VSCode
 .vscode/*

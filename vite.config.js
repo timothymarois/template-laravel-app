@@ -14,6 +14,7 @@ export default defineConfig({
         tailwindcss(),
         laravel({
             input: 'resources/js/app.js',
+            ssr: 'resources/js/ssr.js',
             refresh: true,
         }),
         Components({
