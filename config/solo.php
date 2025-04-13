@@ -46,8 +46,10 @@ return [
     |
     */
     'commands' => [
-        // 'Vite' => Command::from('npm run dev')->lazy(),
+        // 'Dev' => Command::from('npm run dev')->lazy(),
         'Horizon' => Command::from('php artisan horizon')->lazy(),
+        // 'Schedule' => Command::from('php artisan schedule:run')->lazy(),
+        'SSR' => Command::from('herd php artisan inertia:start-ssr')->lazy(),
         // 'Stripe' => Command::from('stripe listen --forward-to https://LOCATION')->lazy(),
         // 'Logs' => EnhancedTailCommand::file(storage_path('logs/laravel.log'))->lazy(),
         // 'HTTP' => 'php artisan serve',
@@ -57,6 +59,7 @@ return [
         'Pint' => Command::from('php ./vendor/bin/pint')->lazy(),
         'ESlint' => Command::from('npm run eslint')->lazy(),
         'Test' => Command::from('php artisan test')->lazy(),
+        'Build-SSR' => Command::from('npm run build-ssr')->lazy(),
         'Migrations' => Command::from('php artisan migrate')->lazy(),
         'Fresh' => Command::from('php artisan start:fresh')->lazy(),
         // 'Larastan' => Command::from('php artisan solo:larastan')->lazy(),

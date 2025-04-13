@@ -122,10 +122,26 @@ npm ci
 php artisan migrate --force
 ```
 
-**(4) Build Client-side:**
+**(4) Build Client-side (non-SSR):**
 
 ```bash
 npm run build
+```
+
+**(4) Build (with SSR):**
+
+[Learn more about SSR](https://inertiajs.com/server-side-rendering)
+
+```bash
+npm run build-ssr
+```
+
+**(5) Restart SSR server:**
+
+You only need to do this if you are running SSR.
+
+```bash
+php artisan inertia:stop-ssr
 ```
 
 </details>
@@ -421,8 +437,17 @@ Saves you time by simplifying the import of reusable stores, components and func
 - ✅ Includes the auto-import of Utils and Composables.
 - ✅ Includes the auto-import of [PrimeVue Volt components](https://volt.primevue.org/accordion/)
 
+---
 
+### Supervisor workers
 
-SSR:
+#### Horizon
+```bash
+php artisan horizon
+```
 
-herd php artisan inertia:start-ssr
+#### SSR-only
+
+```bash
+php artisan inertia:start-ssr
+```
