@@ -18,9 +18,10 @@ export async function setupApp({ App, props, plugin, isServer = false }) {
     app.directive('styleclass', StyleClass);
     app.use(ZiggyPlugin);
 
+    const { default: ToastService } = await import('primevue/toastservice');
+    app.use(ToastService);
+
     if (!isServer) {
-        const { default: ToastService } = await import('primevue/toastservice');
-        app.use(ToastService);
         app.config.globalProperties.$route = window.route = route;
     }
 

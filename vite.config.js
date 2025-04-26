@@ -22,8 +22,8 @@ export default defineConfig({
             directoryAsNamespace: true,
             collapseSamePrefixes: true,
             dirs: [
-                './resources/js/components/_volt/',
                 './resources/js/components/',
+                './node_modules/atlas-ui/src/components/Volt'
             ],
             imports: [
                 {
@@ -45,19 +45,15 @@ export default defineConfig({
             imports: [
                 'vue',
                 {
-                    '@inertiajs/vue3': [
-                        'usePage',
-                        'router',
-                        'useForm',
-                    ],
-                    '@vueuse/core': [
-						'useStorage',
-					],
+                    '@inertiajs/vue3': ['usePage', 'useForm', 'router'],
+                    '@vueuse/core': ['useStorage'],
+                    'atlas-ui': ['useModal', 'usePageProp', 'useTheme'],
+                    'primevue': ['useToast'],
                 },
             ],
             dirs: [
                 './resources/js/composables/',
-                './resources/js/utils/',
+                './resources/js/utils/'
             ],
         }),
     ],
@@ -68,6 +64,8 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
             '@components': path.resolve(__dirname, 'resources/js/components'),
+            'atlas-ui': path.resolve(__dirname, 'node_modules/atlas-ui/src'),
+            'primevue': path.resolve(__dirname, 'node_modules/primevue'),
             ziggy: path.resolve(__dirname, 'vendor/tightenco/ziggy/src/js'),
         },
     },

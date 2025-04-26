@@ -1,4 +1,3 @@
-
 export default {
     content: [
         './resources/js/**/*.{js,ts,vue}',
@@ -9,11 +8,8 @@ export default {
     ],
     darkMode: 'false',
     theme: {
-        mode: 'jit',
         extend: {
-            colors: {
-
-            }
-        }
+            colors: {},
+        },
     },
 }
