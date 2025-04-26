@@ -21,7 +21,7 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 For the design side, we want to focus on customization, theming, and utility components. PrimeVue offers the most comprehensive set of utility components that are fully customizable without bloating. Tree-shaking makes sure you only import the components you actually use keeping your overall project light-weight. 
 
 - ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
-- ✅ PrimeVue v4 – [Documentation](https://primevue.org/) | [Unstyled using Volt](https://volt.primevue.org/)
+- ✅ PrimeVue v4 – [Documentation](https://primevue.org/) | [Unstyled using Volt](https://volt.primevue.org/) - via [Atlas UI](https://github.com/tmarois/atlas-ui)
 
 ---
 
