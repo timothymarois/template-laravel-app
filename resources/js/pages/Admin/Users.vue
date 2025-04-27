@@ -122,7 +122,7 @@
 
 <script setup>
 import { useModal } from '@atlas/composables';
-import { formatToDatetime } from '@atlas/utils';
+import { formatToDatetime } from '@atlas/utils/format';
 
 const props = defineProps({
     users: {
@@ -149,11 +149,6 @@ const form = useForm({
     name: null,
     email: null
 });
-
-const convertLocalTimezone = (time) => {
-    // 'America/New_York' (pass current users timezone)
-    return (time);
-};
 
 const openEditModal = (user) => {
     showModal.value = true;

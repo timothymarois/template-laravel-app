@@ -68,11 +68,10 @@
 </template>
 
 <script setup>
-// import { useToast } from 'primevue/usetoast';
 const form = useForm({
     name: null,
     email: null,
-})
+});
 
 const toast = useToast();
 
@@ -84,6 +83,6 @@ const submitForm = () => {
         onError: err => {
             toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 5000 });
         }
-    })
-}
+    });
+};
 </script>

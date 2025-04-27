@@ -71,5 +71,4 @@ const submit = () => {
         onSuccess: () => form.reset('password'),
     });
 };
-
 </script>
