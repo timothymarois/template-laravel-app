@@ -56,8 +56,6 @@
     --p-content-border-radius: 6px;
 }
 
-
-
 /* Light */
 :root {
     --p-primary-color: var(--p-primary-500);

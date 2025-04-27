@@ -87,11 +87,12 @@
 </template>
 
 <script setup>
-const { modal } = useModal();
+const { modalActiveState } = useModal();
 
-const userEditModal = modal('UserEditModal')
+const userEditModal = modalActiveState('UserEditModal');
 
-const user = usePageProp('user');
+const page = usePage();
+const user = computed(() => page.props.user);
 const menu = ref();
 const items = ref([
     {

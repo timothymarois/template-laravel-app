@@ -23,7 +23,8 @@ export default defineConfig({
             collapseSamePrefixes: true,
             dirs: [
                 './resources/js/components/',
-                './node_modules/atlas-ui/src/components/Volt'
+                './node_modules/atlas-ui/src/components/Volt',
+                './node_modules/atlas-ui/src/components'
             ],
             imports: [
                 {
@@ -47,7 +48,7 @@ export default defineConfig({
                 {
                     '@inertiajs/vue3': ['usePage', 'useForm', 'router'],
                     '@vueuse/core': ['useStorage'],
-                    'atlas-ui': ['useModal', 'usePageProp', 'useTheme'],
+                    'atlas-ui': ['useModal', 'useTheme'],
                     'primevue': ['useToast'],
                 },
             ],

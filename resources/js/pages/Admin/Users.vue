@@ -54,7 +54,14 @@
             </div>
         </PageMain>
     </LayoutDefault>
-    <Dialog
+    <AtlasModalConfirmation
+        v-model="showDelete"
+        title="Delete user"
+        message="Are you sure you want to delete this user?"
+        :loading="form.processing"
+        @confirm="remove"
+    />
+    <!-- <Dialog
         v-model:visible="showDelete"
         modal
         header="Delete user"
@@ -93,7 +100,7 @@
                 />
             </div>
         </div>
-    </Dialog>
+    </Dialog> -->
     <Drawer
         v-model:visible="showModal"
         header="Edit User"
