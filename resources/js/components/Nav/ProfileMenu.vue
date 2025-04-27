@@ -87,6 +87,8 @@
 </template>
 
 <script setup>
+import { useModal } from '@atlas/composables';
+
 const { modalActiveState } = useModal();
 
 const userEditModal = modalActiveState('UserEditModal');

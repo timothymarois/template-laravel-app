@@ -15,7 +15,10 @@
     </button>
 </template>
 <script setup>
-const { initTheme, toggleDark, isDark } = useTheme()
+import { useTheme } from '@atlas/composables';
+
+const { initTheme, toggleDark, isDark } = useTheme();
+
 onMounted(() => {
     initTheme();
 });

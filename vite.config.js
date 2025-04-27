@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite'
-import laravel from 'laravel-vite-plugin'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
 
 import path from 'path';
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 
-import AutoImport from 'unplugin-auto-import/vite'
+import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 
 export default defineConfig({
@@ -47,8 +47,6 @@ export default defineConfig({
                 'vue',
                 {
                     '@inertiajs/vue3': ['usePage', 'useForm', 'router'],
-                    '@vueuse/core': ['useStorage'],
-                    'atlas-ui': ['useModal', 'useTheme'],
                     'primevue': ['useToast'],
                 },
             ],
@@ -65,9 +63,9 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
             '@components': path.resolve(__dirname, 'resources/js/components'),
-            'atlas-ui': path.resolve(__dirname, 'node_modules/atlas-ui/src'),
+            '@atlas': path.resolve(__dirname, 'node_modules/atlas-ui/src'),
             'primevue': path.resolve(__dirname, 'node_modules/primevue'),
-            ziggy: path.resolve(__dirname, 'vendor/tightenco/ziggy/src/js'),
+            'ziggy': path.resolve(__dirname, 'vendor/tightenco/ziggy/src/js'),
         },
     },
-})
+});
