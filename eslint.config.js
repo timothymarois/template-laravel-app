@@ -3,8 +3,12 @@ export default [
     ...pluginVue.configs['flat/recommended'],
     {
         rules: {
-            "vue/multi-word-component-names": "off",
-            "vue/html-indent": [
+            'vue/no-unused-vars': 'warn',
+            'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: 1 }],
+            'vue/multi-word-component-names': "off",
+            'vue/singleline-html-element-content-newline': 'off',
+            'vue/multi-word-component-names': 'off',
+            'vue/html-indent': [
                 "error",
                 4, {
                     "attribute": 1,
@@ -13,7 +17,17 @@ export default [
                     "alignAttributesVertically": true,
                     "ignores": []
                 }
-            ]
+            ],
+            'vue/html-closing-bracket-newline': [
+                'error',
+                {
+                    multiline: 'always',
+                    singleline: 'never',
+                },
+            ],
+            'quotes': ['error', 'single'],
+            'semi': ['error', 'always'],
+            'indent': ['error', 4],
         }
     }
 ]

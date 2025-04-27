@@ -2,7 +2,7 @@
     <Head title="Register" />
     <LayoutDefault>
         <PageMain>
-            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border border-2 border-gray-200 dark:border-surface-700 p-6 rounded-lg">
+            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm border-2 border-gray-200 dark:border-surface-700 p-6 rounded-lg">
                 <div class="pb-4">
                     <div class="leading-3 font-semibold text-lg">
                         Create Account
@@ -20,10 +20,7 @@
                                 fluid
                                 type="text"
                             />
-                            <div
-                                v-if="form.errors.name"
-                                class="text-sm text-red-500"
-                            >
+                            <div v-if="form.errors.name" class="text-sm text-red-500">
                                 {{ form.errors.name }}
                             </div>
                         </div>
@@ -39,10 +36,7 @@
                                 fluid
                                 type="text"
                             />
-                            <div
-                                v-if="form.errors.email"
-                                class="text-sm text-red-500"
-                            >
+                            <div v-if="form.errors.email" class="text-sm text-red-500">
                                 {{ form.errors.email }}
                             </div>
                         </div>
@@ -60,10 +54,7 @@
                                 fluid
                                 type="password"
                             />
-                            <div
-                                v-if="form.errors.password"
-                                class="text-sm text-red-500"
-                            >
+                            <div v-if="form.errors.password" class="text-sm text-red-500">
                                 {{ form.errors.password }}
                             </div>
                         </div>
@@ -81,10 +72,7 @@
                                 fluid
                                 type="password"
                             />
-                            <div
-                                v-if="form.errors.password_confirmation"
-                                class="text-sm text-red-500"
-                            >
+                            <div v-if="form.errors.password_confirmation" class="text-sm text-red-500">
                                 {{ form.errors.password_confirmation }}
                             </div>
                         </div>

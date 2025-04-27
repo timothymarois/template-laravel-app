@@ -36,9 +36,9 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = Hash::make(Str::random(24));
 
-        return Inertia::render('users.index', [
-            'user' => $user,
-        ]);
+        User::create($data);
+
+        return redirect(route('users.index'));
     }
 
     public function update(Request $request, User $user)
@@ -57,9 +57,7 @@ class UserController extends Controller
 
         $user->update($request->all());
 
-        return Inertia::render('users.index', [
-            'user' => $user,
-        ]);
+        return back();
     }
 
     public function destroy(User $user)

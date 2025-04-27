@@ -18,7 +18,6 @@
                     <template #title>
                         Add User
                     </template>
-                    <!-- <template #subtitle></template> -->
                     <template #content>
                         <form>
                             <div class="mb-4">
@@ -32,10 +31,7 @@
                                     type="text"
                                     placeholder="Name"
                                 />
-                                <div
-                                    v-if="form.errors.name"
-                                    class="text-red-600 text-sm"
-                                >
+                                <div v-if="form.errors.name" class="text-red-600 text-sm">
                                     {{ form.errors.name }}
                                 </div>
                             </div>
@@ -50,16 +46,10 @@
                                     type="text"
                                     placeholder="Email"
                                 />
-                                <div
-                                    v-if="form.errors.email"
-                                    class="text-red-600 text-sm"
-                                >
+                                <div v-if="form.errors.email" class="text-red-600 text-sm">
                                     {{ form.errors.email }}
                                 </div>
                             </div>
-                            <!-- <div class="flex items-center justify-between">
-                                <Button size="small" @click="submitForm" :disabled="form.processing" :loading="form.processing" label="Add User" />
-                            </div> -->
                         </form>
                     </template>
                     <template #footer>

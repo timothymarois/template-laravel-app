@@ -7,8 +7,6 @@ use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('index');
-Route::get('/example/store', [PageController::class, 'exampleStore'])->name('example.store');
-Route::get('/example/store/active', [PageController::class, 'exampleStoreActive'])->name('example.active');
 
 Route::get('/components/buttons', [PageController::class, 'pButtons']);
 Route::get('/components/forms', [PageController::class, 'pForms']);
