@@ -3,9 +3,7 @@
     <LayoutDefault>
         <PageHeader :title="`Users (${userTotal})`">
             <template #actions>
-                <Button raised @click="router.visit($route('users.create'))">
-                    Add
-                </Button>
+                <Button raised label="Add" size="small" @click="router.visit($route('users.create'))" />
             </template>
         </PageHeader>
         <PageMain>
@@ -37,12 +35,14 @@
                         <div>
                             <ButtonGroup>
                                 <Button
+                                    raised
                                     label="Edit"
                                     icon="pi pi-pencil"
                                     size="small"
                                     @click.prevent.stop="openEditModal(user)"
                                 />
                                 <Button
+                                    raised
                                     icon="pi pi-trash"
                                     size="small"
                                     @click.prevent.stop="openDeleteModal(user)"
@@ -170,10 +170,10 @@ const remove = () => {
         form.delete(route('users.destroy', [form.id]), {
             onSuccess: page => {
                 userDeleteModal.value = false;
-                toast.add({ severity: 'success', summary: 'User Deleted', detail: 'The user has been deleted.', life: 3000 });
+                toast.add({ severity: 'success', summary: 'User deleted', life: 5000 });
             },
             onError: err => {
-                toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 4000 });
+                // toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 4000 });
             }
         });
     }
@@ -184,10 +184,10 @@ const save = () => {
         form.put(route('users.update', [form.id]), {
             onSuccess: user => {
                 showModal.value = false;
-                toast.add({ severity: 'success', summary: 'User Saved', detail: 'The user has been saved.', life: 3000 });
+                toast.add({ severity: 'success', summary: 'User updated', life: 5000 });
             },
             onError: err => {
-                toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', group: 'bl', life: 5000 });
+                // toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', group: 'bl', life: 5000 });
             }
         });
     }

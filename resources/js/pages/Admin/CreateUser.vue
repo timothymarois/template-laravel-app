@@ -3,13 +3,7 @@
     <LayoutDefault>
         <PageHeader title="New User">
             <template #actions>
-                <Button
-                    outlined
-                    size="small"
-                    @click="router.visit($route('users.index'))"
-                >
-                    View All
-                </Button>
+                <Button outlined size="small" label="Back" @click="router.visit($route('users.index'))" />
             </template>
         </PageHeader>
         <PageMain>
@@ -19,45 +13,22 @@
                         Add User
                     </template>
                     <template #content>
-                        <form>
-                            <div class="mb-4">
-                                <label
-                                    for="name"
-                                    class="block text-sm font-bold mb-2"
-                                >Name:</label>
-                                <InputText
-                                    v-model="form.name"
-                                    fluid
-                                    type="text"
-                                    placeholder="Name"
-                                />
-                                <div v-if="form.errors.name" class="text-red-600 text-sm">
-                                    {{ form.errors.name }}
-                                </div>
-                            </div>
-                            <div class="mb-4">
-                                <label
-                                    for="email"
-                                    class="block text-sm font-bold mb-2"
-                                >Email Address:</label>
-                                <InputText
-                                    v-model="form.email"
-                                    fluid
-                                    type="text"
-                                    placeholder="Email"
-                                />
-                                <div v-if="form.errors.email" class="text-red-600 text-sm">
-                                    {{ form.errors.email }}
-                                </div>
-                            </div>
+                        <form class="space-y-4 w-full">
+                            <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                                <InputText v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
+                            </AtlasFormSlot>
+                            <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
+                                <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
+                            </AtlasFormSlot>
                         </form>
                     </template>
                     <template #footer>
                         <Button
+                            raised
                             size="small"
                             :disabled="form.processing"
                             :loading="form.processing"
-                            label="Add User"
+                            label="Add user"
                             @click="submitForm"
                         />
                     </template>
@@ -78,10 +49,11 @@ const toast = useToast();
 const submitForm = () => {
     form.post(route('users.store'),  {
         onSuccess: r => {
-            toast.add({ severity: 'success', summary: 'User Created', detail: 'The user has been created.', life: 3000 });
+            toast.add({ severity: 'success', summary: 'User created', life: 5000 });
         },
         onError: err => {
-            toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 5000 });
+            // toast.add({ severity: 'success', summary: 'User created', life: 3000 });
+            // toast.add({ severity: 'error', summary: 'An error occured', life: 5000 });
         }
     });
 };
