@@ -8,40 +8,16 @@
                         Login
                     </div>
                 </div>
-                <form class="space-y-6 w-full">
-                    <div class="w-full">
-                        <label
-                            for="email"
-                            class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
-                        >Email address</label>
-                        <div class="mt-2 w-full">
-                            <InputText
-                                v-model="form.email"
-                                fluid
-                                type="text"
-                            />
-                            <div v-if="form.errors.email" class="text-sm text-red-500">
-                                {{ form.errors.email }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full">
-                        <div class="flex items-center justify-between">
-                            <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">Password</label>
-                        </div>
-                        <div class="mt-2 w-full">
-                            <InputText
-                                v-model="form.password"
-                                fluid
-                                type="password"
-                            />
-                            <div v-if="form.errors.password" class="text-sm text-red-500">
-                                {{ form.errors.password }}
-                            </div>
-                        </div>
-                    </div>
+                <form class="space-y-4 w-full">
+                    <AtlasFormSlot name="email" label="Email address" required :error="form.errors.email">
+                        <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
+                    </AtlasFormSlot>
+                    <AtlasFormSlot name="password" label="Password" required :error="form.errors.password">
+                        <InputText v-model="form.password" type="password" fluid :invalid="!!form.errors.password" />
+                    </AtlasFormSlot>
                     <div class="w-full">
                         <Button
+                            raised
                             label="Login"
                             :disabled="form.processing"
                             :loading="form.processing"

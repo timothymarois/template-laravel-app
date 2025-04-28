@@ -8,75 +8,19 @@
                         Create Account
                     </div>
                 </div>
-                <form class="space-y-6 w-full">
-                    <div class="w-full">
-                        <label
-                            for="name"
-                            class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
-                        >Name</label>
-                        <div class="mt-2 w-full">
-                            <InputText
-                                v-model="form.name"
-                                fluid
-                                type="text"
-                            />
-                            <div v-if="form.errors.name" class="text-sm text-red-500">
-                                {{ form.errors.name }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full">
-                        <label
-                            for="email"
-                            class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
-                        >Email address</label>
-                        <div class="mt-2 w-full">
-                            <InputText
-                                v-model="form.email"
-                                fluid
-                                type="text"
-                            />
-                            <div v-if="form.errors.email" class="text-sm text-red-500">
-                                {{ form.errors.email }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full">
-                        <div class="flex items-center justify-between">
-                            <label
-                                for="password"
-                                class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
-                            >Password</label>
-                        </div>
-                        <div class="mt-2 w-full">
-                            <InputText
-                                v-model="form.password"
-                                fluid
-                                type="password"
-                            />
-                            <div v-if="form.errors.password" class="text-sm text-red-500">
-                                {{ form.errors.password }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-full">
-                        <div class="flex items-center justify-between">
-                            <label
-                                for="password"
-                                class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200"
-                            >Password Confirmation</label>
-                        </div>
-                        <div class="mt-2 w-full">
-                            <InputText
-                                v-model="form.password_confirmation"
-                                fluid
-                                type="password"
-                            />
-                            <div v-if="form.errors.password_confirmation" class="text-sm text-red-500">
-                                {{ form.errors.password_confirmation }}
-                            </div>
-                        </div>
-                    </div>
+                <form class="space-y-4 w-full">
+                    <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                        <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
+                    </AtlasFormSlot>
+                    <AtlasFormSlot name="email" label="Email address" required :error="form.errors.email">
+                        <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
+                    </AtlasFormSlot>
+                    <AtlasFormSlot name="password" label="Password" required :error="form.errors.password">
+                        <InputText id="password" v-model="form.password" type="password" fluid :invalid="!!form.errors.password" />
+                    </AtlasFormSlot>
+                    <AtlasFormSlot name="password_confirmation" label="Password confirmation" required :error="form.errors.password_confirmation">
+                        <InputText id="password_confirmation" v-model="form.password_confirmation" type="password" fluid :invalid="!!form.errors.password_confirmation" />
+                    </AtlasFormSlot>
                     <div class="w-full">
                         <Button
                             label="Create Account"
