@@ -92,12 +92,11 @@
 <script setup>
 import { useModal } from '@atlas/composables';
 
-const { modalActiveState, getModalData } = useModal();
+const { activeState, data } = useModal();
 
-const userEditModal = modalActiveState('userEditModal');
-const userDataModal = modalActiveState('userDataModal');
-
-const userData = getModalData('userDataModal');
+const userEditModal = activeState('userEditModal');
+const userDataModal = activeState('userDataModal');
+const userData = data('userDataModal');
 
 const page = usePage();
 const user = computed(() => page.props.user);
