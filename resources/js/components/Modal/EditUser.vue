@@ -115,6 +115,7 @@ onOpen('EDIT_USER', (data) => {
 
 onClose('EDIT_USER', (data) => {
     // console.log('modal closed', data);
+    form.clearErrors();
     form.reset();
 });
 </script>
