@@ -85,7 +85,7 @@
         </Card>
         <Card>
             <template #header>
-                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Permissions</div>
+                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Permissions <AtlasHelpTooltip text="User permissions are set on a per role basis. If a user has a role with a permission, they will have that permission." /></div>
             </template>
             <template #content>
                 <form>

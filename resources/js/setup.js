@@ -2,6 +2,8 @@ import { h, createSSRApp, createApp } from 'vue';
 import { Link, Head } from '@inertiajs/vue3';
 import PrimeVue from 'primevue/config';
 import StyleClass from 'primevue/styleclass';
+import Tooltip from 'primevue/tooltip';
+import ToastService from 'primevue/toastservice';
 import ZiggyPlugin from './plugins/ziggy';
 
 export async function setupApp({ App, props, plugin, isServer = false }) {
@@ -10,16 +12,15 @@ export async function setupApp({ App, props, plugin, isServer = false }) {
         : createApp({ render: () => h(App, props) });
 
     app.use(plugin);
+    app.use(ToastService);
     app.use(PrimeVue, { unstyled: true });
 
     app.component('Link', Link);
     app.component('Head', Head);
 
+    app.directive('tooltip', Tooltip);
     app.directive('styleclass', StyleClass);
     app.use(ZiggyPlugin);
-
-    const { default: ToastService } = await import('primevue/toastservice');
-    app.use(ToastService);
 
     if (!isServer) {
         app.config.globalProperties.$route = window.route = route;
