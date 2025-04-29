@@ -66,7 +66,12 @@
     >
         <Card>
             <template #header>
-                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Details</div>
+                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
+                    <div>Details</div>
+                    <AtlasHelpInfo>
+                        <div>This is an info bubble tooltip</div>
+                    </AtlasHelpInfo>
+                </div>
             </template>
             <template #content>
                 <form>
