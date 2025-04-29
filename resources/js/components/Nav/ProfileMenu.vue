@@ -69,7 +69,7 @@
             </Link>
         </div>
     </div>
-    <Dialog v-model:visible="userEditModal" header="Edit Profile" :style="{ width: '25rem' }">
+    <Dialog v-model:visible="userEditModal" modal header="Edit Profile" :draggable="false" :dismissable-mask="true" :style="{ width: '25rem' }" @update:visible="userEditModal=false">
         <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span>
         <div class="flex items-center gap-4 mb-4">
             <label for="username" class="font-semibold w-24">Username</label>
@@ -84,14 +84,20 @@
             <Button type="button" label="Save" @click="visible = false"></Button>
         </div>
     </Dialog>
+    <Dialog v-model:visible="userDataModal" modal :draggable="false" :dismissable-mask="true" header="Data Modal" :style="{ width: '25rem' }" @update:visible="userDataModal=false">
+        {{ userData }}
+    </Dialog>
 </template>
 
 <script setup>
 import { useModal } from '@atlas/composables';
 
-const { modalActiveState } = useModal();
+const { modalActiveState, getModalData } = useModal();
 
-const userEditModal = modalActiveState('UserEditModal');
+const userEditModal = modalActiveState('userEditModal');
+const userDataModal = modalActiveState('userDataModal');
+
+const userData = getModalData('userDataModal');
 
 const page = usePage();
 const user = computed(() => page.props.user);

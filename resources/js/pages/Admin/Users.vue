@@ -135,10 +135,10 @@ const props = defineProps({
     }
 });
 
-const { modalActiveState } = useModal();
+const { modalActiveState, openModal } = useModal();
 
 const userDeleteModal = modalActiveState('userDeleteModal');
-const userEditModal = modalActiveState('userEditModal');
+// const userDataModal = modalActiveState('userDataModal');
 
 const toast = useToast();
 
@@ -176,6 +176,10 @@ const openEditModal = (user) => {
     form.name = user.name;
     form.email = user.email;
     form.clearErrors();
+    // userEditModal.value = true;
+    // setTimeout(() => {
+    //     openModal('userDataModal', user);
+    // },2000);
 };
 
 const openDeleteModal = (user) => {
