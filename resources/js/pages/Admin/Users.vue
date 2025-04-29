@@ -3,7 +3,7 @@
     <LayoutDefault>
         <PageHeader :title="`Users (${userTotal})`">
             <template #actions>
-                <Button raised label="Add" @click="router.visit($route('users.create'))" />
+                <Button label="Add" @click="router.visit($route('users.create'))" />
             </template>
         </PageHeader>
         <PageMain>
@@ -35,14 +35,12 @@
                         <div>
                             <ButtonGroup>
                                 <Button
-                                    raised
                                     label="Edit"
                                     icon="pi pi-pencil"
                                     size="small"
                                     @click.prevent.stop="openEditModal(user)"
                                 />
                                 <Button
-                                    raised
                                     icon="pi pi-trash"
                                     size="small"
                                     @click.prevent.stop="openDeleteModal(user)"
@@ -71,13 +69,36 @@
                 <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Details</div>
             </template>
             <template #content>
-                <form class="space-y-4 w-full">
-                    <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
-                        <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                    </AtlasFormSlot>
-                    <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
-                        <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                    </AtlasFormSlot>
+                <form>
+                    <div class="space-y-4 w-full">
+                        <div class="grid grid-cols-2 items-center gap-6 w-full">
+                            <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                                <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
+                            </AtlasFormSlot>
+                            <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
+                                <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
+                            </AtlasFormSlot>
+                        </div>
+                    </div>
+                </form>
+            </template>
+        </Card>
+        <Card>
+            <template #header>
+                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Permissions</div>
+            </template>
+            <template #content>
+                <form>
+                    <div class="space-y-4 w-full">
+                        <div class="grid grid-cols-2 items-center gap-6 w-full">
+                            <AtlasFormSlot name="role" label="Role" :error="form.errors.name">
+                                <Select v-model="form.role" showClear :options="roles" option-label="name" option-value="id" fluid />
+                            </AtlasFormSlot>
+                            <AtlasFormSlot name="roles" label="Roles" :error="form.errors.name">
+                                <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter />
+                            </AtlasFormSlot>
+                        </div>
+                    </div>
                 </form>
             </template>
         </Card>
@@ -125,8 +146,24 @@ const showModal = ref(false);
 const form = useForm({
     id: null,
     name: null,
-    email: null
+    email: null,
+    role: 'user',
+    roles: [],
 });
+
+const roles = ref([
+    { id: 'admin', name: 'Admin' },
+    { id: 'user', name: 'User' },
+    { id: 'guest', name: 'Guest' },
+    { id: 'disabled', name: 'Disabled' },
+    { id: 'banned', name: 'Banned' },
+    { id: 'pending', name: 'Pending' },
+    { id: 'suspended', name: 'Suspended' },,
+    { id: 'deleted', name: 'Deleted' },
+    { id: 'blacklisted', name: 'Blacklisted' },
+    { id: 'archived', name: 'Archived' },
+    { id: 'deleted', name: 'Deleted' },
+]);
 
 const openEditModal = (user) => {
     showModal.value = true;
@@ -148,10 +185,7 @@ const remove = () => {
         form.delete(route('users.destroy', [form.id]), {
             onSuccess: page => {
                 userDeleteModal.value = false;
-                toast.add({ severity: 'success', summary: 'User deleted', life: 5000 });
-            },
-            onError: err => {
-                // toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', life: 4000 });
+                toast.add({ summary: 'User deleted', life: 5000 });
             }
         });
     }
@@ -162,10 +196,7 @@ const save = () => {
         form.put(route('users.update', [form.id]), {
             onSuccess: user => {
                 showModal.value = false;
-                toast.add({ severity: 'success', summary: 'User updated', life: 5000 });
-            },
-            onError: err => {
-                // toast.add({ severity: 'error', summary: 'An Error Occured', detail: 'This request failed to process.', group: 'bl', life: 5000 });
+                toast.add({ summary: 'User updated', life: 5000 });
             }
         });
     }

@@ -48,10 +48,6 @@ const submitForm = () => {
     form.post(route('users.store'),  {
         onSuccess: r => {
             toast.add({ severity: 'success', summary: 'User created', life: 5000 });
-        },
-        onError: err => {
-            // toast.add({ severity: 'success', summary: 'User created', life: 3000 });
-            // toast.add({ severity: 'error', summary: 'An error occured', life: 5000 });
         }
     });
 };
