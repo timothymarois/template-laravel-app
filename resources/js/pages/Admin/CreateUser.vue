@@ -3,7 +3,7 @@
     <LayoutDefault>
         <PageHeader title="New User">
             <template #actions>
-                <Button outlined size="small" label="Back" @click="router.visit($route('users.index'))" />
+                <Button outlined label="Back" @click="router.visit($route('users.index'))" />
             </template>
         </PageHeader>
         <PageMain>
@@ -24,8 +24,6 @@
                     </template>
                     <template #footer>
                         <Button
-                            raised
-                            size="small"
                             :disabled="form.processing"
                             :loading="form.processing"
                             label="Add user"

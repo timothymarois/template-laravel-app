@@ -17,7 +17,6 @@
                             </AtlasFormSlot>
                             <div class="w-full">
                                 <Button
-                                    raised
                                     label="Login"
                                     :disabled="form.processing"
                                     :loading="form.processing"

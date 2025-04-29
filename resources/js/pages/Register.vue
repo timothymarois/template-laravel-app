@@ -23,7 +23,6 @@
                             </AtlasFormSlot>
                             <div class="w-full">
                                 <Button
-                                    raised
                                     label="Create account"
                                     :disabled="form.processing"
                                     :loading="form.processing"

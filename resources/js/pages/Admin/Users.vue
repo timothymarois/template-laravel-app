@@ -3,7 +3,7 @@
     <LayoutDefault>
         <PageHeader :title="`Users (${userTotal})`">
             <template #actions>
-                <Button raised label="Add" size="small" @click="router.visit($route('users.create'))" />
+                <Button raised label="Add" @click="router.visit($route('users.create'))" />
             </template>
         </PageHeader>
         <PageMain>
@@ -61,63 +61,41 @@
         :loading="form.processing"
         @confirm="remove"
     />
-    <Drawer
-        v-model:visible="showModal"
-        header="Edit User"
+    <AtlasDrawer
+        v-model="showModal"
+        title="Edit user"
         position="right"
     >
-        <div class="w-[450px] h-[2000px]">
-            <div class="w-full p-6">
-                <form>
-                    <div class="mb-4">
-                        <label for="name" class="block text-sm font-bold mb-2">Name:</label>
-                        <InputText
-                            v-model="form.name"
-                            fluid
-                            type="text"
-                            placeholder="Name"
-                        />
-                        <div v-if="form.errors.name" class="text-red-600 text-sm">
-                            {{ form.errors.name }}
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label
-                            for="email"
-                            class="block text-sm font-bold mb-2"
-                        >Email Address:</label>
-                        <InputText
-                            v-model="form.email"
-                            fluid
-                            type="text"
-                            placeholder="Email Address"
-                        />
-                        <div v-if="form.errors.email" class="text-red-600 text-sm">
-                            {{ form.errors.email }}
-                        </div>
-                    </div>
+        <Card>
+            <template #header>
+                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Details</div>
+            </template>
+            <template #content>
+                <form class="space-y-4 w-full">
+                    <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                        <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
+                    </AtlasFormSlot>
+                    <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
+                        <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
+                    </AtlasFormSlot>
                 </form>
-            </div>
-        </div>
+            </template>
+        </Card>
         <template #footer>
-            <div class="flex items-center gap-2 py-4 px-6 border-t border-surface-200 dark:border-surface-600">
-                <Button
-                    type="button"
-                    label="Save"
-                    :disabled="form.processing"
-                    :loading="form.processing"
-                    @click="save"
-                />
-                <Button
-                    text
-                    type="button"
-                    label="Cancel"
-                    severity="secondary"
-                    @click="showModal = false;form.reset()"
-                />
-            </div>
+            <Button
+                label="Save"
+                :disabled="form.processing"
+                :loading="form.processing"
+                @click="save"
+            />
+            <Button
+                text
+                type="button"
+                label="Cancel"
+                @click="showModal = false;form.reset()"
+            />
         </template>
-    </Drawer>
+    </AtlasDrawer>
 </template>
 
 <script setup>
