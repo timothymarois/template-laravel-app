@@ -3,7 +3,7 @@
     <LayoutDefault>
         <PageHeader title="Theme" />
         <PageMain>
-            <div class="py-8 px-8">
+            <div class="py-4">
                 <div class="flex flex-col space-y-4">
                     <!-- <div>filter bar</div> -->
                     <div class="grid grid-cols-2 gap-8">
