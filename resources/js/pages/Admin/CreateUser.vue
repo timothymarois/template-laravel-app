@@ -14,12 +14,12 @@
                     </template>
                     <template #content>
                         <form class="space-y-4 w-full">
-                            <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                            <AtlasFormField name="name" label="Name" required :error="form.errors.name">
                                 <InputText v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                            </AtlasFormSlot>
-                            <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
+                            </AtlasFormField>
+                            <AtlasFormField name="email" label="Email" required :error="form.errors.email">
                                 <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                         </form>
                     </template>
                     <template #footer>

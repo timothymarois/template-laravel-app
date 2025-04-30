@@ -16,27 +16,27 @@
                             <template #content>
                                 <div class="space-y-4 w-full">
                                     <div class="w-full flex items-center space-x-4">
-                                        <AtlasFormSlot name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
+                                        <AtlasFormField name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
                                             <InputText id="first_name" v-model="form.first_name" type="text" fluid />
-                                        </AtlasFormSlot>
-                                        <AtlasFormSlot name="last_name" label="Last Name" required >
+                                        </AtlasFormField>
+                                        <AtlasFormField name="last_name" label="Last Name" required >
                                             <InputText id="last_name" v-model="form.last_name" type="text" fluid />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="email" label="Email" required>
+                                        <AtlasFormField name="email" label="Email" required>
                                             <InputText id="email" v-model="form.email" type="text" fluid />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="roles" label="Roles">
+                                        <AtlasFormField name="roles" label="Roles">
                                             <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="roles" label="Roles (chips)">
+                                        <AtlasFormField name="roles" label="Roles (chips)">
                                             <MultiSelect v-model="form.roles" display="chip" :options="roles" option-label="name" option-value="id" fluid filter :maxSelectedLabels="6" />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                 </div>
                             </template>
@@ -50,27 +50,27 @@
                             <template #content>
                                 <div class="space-y-4 w-full">
                                     <div class="w-full flex items-center space-x-4">
-                                        <AtlasFormSlot name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
+                                        <AtlasFormField name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
                                             <InputText id="first_name" v-model="form.first_name" type="text" fluid :disabled="true" />
-                                        </AtlasFormSlot>
-                                        <AtlasFormSlot name="last_name" label="Last Name" required >
+                                        </AtlasFormField>
+                                        <AtlasFormField name="last_name" label="Last Name" required >
                                             <InputText id="last_name" v-model="form.last_name" type="text" fluid :disabled="true"  />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="email" label="Email" required>
+                                        <AtlasFormField name="email" label="Email" required>
                                             <InputText id="email" v-model="form.email" type="text" fluid :disabled="true"  />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="roles" label="Roles">
+                                        <AtlasFormField name="roles" label="Roles">
                                             <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter :disabled="true"  />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="roles" label="Roles (chips)">
+                                        <AtlasFormField name="roles" label="Roles (chips)">
                                             <MultiSelect v-model="form.roles" display="chip" :options="roles" option-label="name" option-value="id" fluid filter :maxSelectedLabels="6" :disabled="true"  />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                 </div>
                             </template>
@@ -85,30 +85,33 @@
                             </template>
                             <template #content>
                                 <div class="space-y-4 w-full">
+                                    <AtlasMessage>
+                                        <div>Your account is in good standing, but just keep in mind that we need to do some checks. Be sure to check out our help docs.</div>
+                                    </AtlasMessage>
                                     <div class="w-full flex items-center space-x-4">
-                                        <AtlasFormSlot name="amount" label="Amount" required>
+                                        <AtlasFormField name="amount" label="Amount" required>
                                             <InputNumber id="amount" v-model="form.amount" mode="currency" currency="USD" locale="en-US" fluid placeholder="$0.00" />
-                                        </AtlasFormSlot>
-                                        <AtlasFormSlot name="roles" label="Roles">
+                                        </AtlasFormField>
+                                        <AtlasFormField name="roles" label="Roles">
                                             <Select v-model="form.type" showClear :options="types" option-label="name" option-value="id" fluid />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="when" label="Charge">
+                                        <AtlasFormField name="when" label="Charge">
                                             <div class="space-y-2 mt-2">
                                                 <AtlasFormRadioButton v-model="form.payment" inputId="payment1" name="payment" value="Now" label="Now" />
                                                 <AtlasFormRadioButton v-model="form.payment" inputId="payment2" name="payment" value="Later" label="Later" />
                                                 <AtlasFormRadioButton v-model="form.payment" inputId="payment3" name="payment" value="disabled" label="Disabled" :disabled="true" />
                                             </div>
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="agree" label="Terms">
+                                        <AtlasFormField name="agree" label="Terms">
                                             <div class="space-y-2 mt-2">
                                                 <AtlasFormCheckbox v-model="form.agree" inputId="agree" binary label="I agree to the terms" />
                                                 <AtlasFormCheckbox v-model="form.agree" inputId="agree" binary label="Terms disabled" :disabled="true" />
                                             </div>
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                 </div>
                             </template>
@@ -124,30 +127,33 @@
                             </template>
                             <template #content>
                                 <div class="space-y-4 w-full">
+                                    <AtlasMessage warning>
+                                        <div>Your account is <span class="font-semibold">negative</span>, but just keep in mind that we need to do some checks. Be sure to check out our help docs.</div>
+                                    </AtlasMessage>
                                     <div class="w-full flex items-center space-x-4">
-                                        <AtlasFormSlot name="amount" label="Amount" required>
+                                        <AtlasFormField name="amount" label="Amount" required>
                                             <InputNumber id="amount" v-model="form.amount" mode="currency" currency="USD" locale="en-US" fluid placeholder="$0.00" :disabled="true"  />
-                                        </AtlasFormSlot>
-                                        <AtlasFormSlot name="roles" label="Roles">
+                                        </AtlasFormField>
+                                        <AtlasFormField name="roles" label="Roles">
                                             <Select v-model="form.type" showClear :options="types" option-label="name" option-value="id" fluid :disabled="true"  />
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="when" label="Charge">
+                                        <AtlasFormField name="when" label="Charge">
                                             <div class="space-y-2 mt-2">
                                                 <AtlasFormRadioButton v-model="form.payment" inputId="payment1" name="payment" value="Now" label="Now" :disabled="true"  />
                                                 <AtlasFormRadioButton v-model="form.payment" inputId="payment2" name="payment" value="Later" label="Later" :disabled="true"  />
                                                 <AtlasFormRadioButton v-model="form.payment" inputId="payment3" name="payment" value="disabled" label="Disabled" :disabled="true" />
                                             </div>
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                     <div class="w-full">
-                                        <AtlasFormSlot name="agree" label="Terms">
+                                        <AtlasFormField name="agree" label="Terms">
                                             <div class="space-y-2 mt-2">
                                                 <AtlasFormCheckbox v-model="form.agree" inputId="agree" binary label="I agree to the terms" :disabled="true"  />
                                                 <AtlasFormCheckbox v-model="form.agree" inputId="agree" binary label="Terms disabled" :disabled="true" />
                                             </div>
-                                        </AtlasFormSlot>
+                                        </AtlasFormField>
                                     </div>
                                 </div>
                             </template>

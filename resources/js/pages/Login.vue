@@ -9,12 +9,12 @@
                     </template>
                     <template #content>
                         <form class="space-y-4 w-full">
-                            <AtlasFormSlot name="email" label="Email address" required :error="form.errors.email">
+                            <AtlasFormField name="email" label="Email address" required :error="form.errors.email">
                                 <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormSlot>
-                            <AtlasFormSlot name="password" label="Password" required :error="form.errors.password">
+                            </AtlasFormField>
+                            <AtlasFormField name="password" label="Password" required :error="form.errors.password">
                                 <InputText v-model="form.password" type="password" fluid :invalid="!!form.errors.password" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                             <div class="w-full">
                                 <Button
                                     label="Login"

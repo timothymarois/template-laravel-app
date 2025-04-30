@@ -17,14 +17,14 @@
                 <form>
                     <div class="space-y-4 w-full">
                         <div class="w-full">
-                            <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                            <AtlasFormField name="name" label="Name" required :error="form.errors.name">
                                 <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                         </div>
                         <div class="w-full">
-                            <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
+                            <AtlasFormField name="email" label="Email" required :error="form.errors.email">
                                 <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                         </div>
                     </div>
                 </form>
@@ -38,12 +38,12 @@
                 <form>
                     <div class="space-y-4 w-full">
                         <div class="grid grid-cols-2 items-center gap-6 w-full">
-                            <AtlasFormSlot name="role" label="Role" :error="form.errors.name">
+                            <AtlasFormField name="role" label="Role" :error="form.errors.name">
                                 <Select v-model="form.role" showClear :options="roles" option-label="name" option-value="id" fluid />
-                            </AtlasFormSlot>
-                            <AtlasFormSlot name="roles" label="Roles" :error="form.errors.name">
+                            </AtlasFormField>
+                            <AtlasFormField name="roles" label="Roles" :error="form.errors.name">
                                 <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                         </div>
                     </div>
                 </form>

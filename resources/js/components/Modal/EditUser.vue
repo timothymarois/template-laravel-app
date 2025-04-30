@@ -16,14 +16,14 @@
                 <form>
                     <div class="space-y-4 w-full">
                         <div class="w-full">
-                            <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                            <AtlasFormField name="name" label="Name" required :error="form.errors.name">
                                 <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                         </div>
                         <div class="w-full">
-                            <AtlasFormSlot name="email" label="Email" required :error="form.errors.email">
+                            <AtlasFormField name="email" label="Email" required :error="form.errors.email">
                                 <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                         </div>
                     </div>
                 </form>

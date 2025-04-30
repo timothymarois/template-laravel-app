@@ -9,18 +9,18 @@
                     </template>
                     <template #content>
                         <form class="space-y-4 w-full">
-                            <AtlasFormSlot name="name" label="Name" required :error="form.errors.name">
+                            <AtlasFormField name="name" label="Name" required :error="form.errors.name">
                                 <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                            </AtlasFormSlot>
-                            <AtlasFormSlot name="email" label="Email address" required :error="form.errors.email">
+                            </AtlasFormField>
+                            <AtlasFormField name="email" label="Email address" required :error="form.errors.email">
                                 <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormSlot>
-                            <AtlasFormSlot name="password" label="Password" required :error="form.errors.password">
+                            </AtlasFormField>
+                            <AtlasFormField name="password" label="Password" required :error="form.errors.password">
                                 <InputText id="password" v-model="form.password" type="password" fluid :invalid="!!form.errors.password" />
-                            </AtlasFormSlot>
-                            <AtlasFormSlot name="password_confirmation" label="Password confirmation" required :error="form.errors.password_confirmation">
+                            </AtlasFormField>
+                            <AtlasFormField name="password_confirmation" label="Password confirmation" required :error="form.errors.password_confirmation">
                                 <InputText id="password_confirmation" v-model="form.password_confirmation" type="password" fluid :invalid="!!form.errors.password_confirmation" />
-                            </AtlasFormSlot>
+                            </AtlasFormField>
                             <div class="w-full">
                                 <Button
                                     label="Create account"
