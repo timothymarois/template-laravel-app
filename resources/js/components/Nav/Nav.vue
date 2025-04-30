@@ -30,13 +30,13 @@
                             >
                                 Users
                             </Link>
-                            <!-- <Link
-                                :class="{'bg-surface-900 text-white' : $page.url.startsWith('/example/store') }"
-                                href="/example/store"
+                            <Link
+                                :class="{'bg-surface-900 text-white' : $page.url.startsWith('/theme') }"
+                                href="/theme"
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
                             >
-                                Store
-                            </Link> -->
+                                Theme
+                            </Link>
                             <div
                                 :class="{'bg-surface-900 text-white' : $page.url.startsWith('/components') }"
                                 class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer"

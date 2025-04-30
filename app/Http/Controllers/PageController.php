@@ -22,6 +22,11 @@ class PageController extends Controller
         return Inertia::render('Example/Store');
     }
 
+    public function pTheme(): Response
+    {
+        return Inertia::render('Example/Theme');
+    }
+
     public function pButtons(): Response
     {
         return Inertia::render('Example/Components/Buttons');

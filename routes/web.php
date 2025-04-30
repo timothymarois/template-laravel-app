@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'index'])->name('index');
 
+Route::get('/theme', [PageController::class, 'pTheme']);
 Route::get('/components/buttons', [PageController::class, 'pButtons']);
 Route::get('/components/forms', [PageController::class, 'pForms']);
 
