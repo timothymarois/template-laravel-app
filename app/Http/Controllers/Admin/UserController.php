@@ -38,7 +38,7 @@ class UserController extends Controller
 
         User::create($data);
 
-        return redirect(route('users.index'));
+        return back();
     }
 
     public function update(Request $request, User $user)
