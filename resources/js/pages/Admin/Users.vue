@@ -57,9 +57,6 @@
             </div>
         </PageMain>
     </LayoutDefault>
-    <ModalEditUser />
-    <ModalDeleteUser />
-    <ModalTest />
 </template>
 
 <script setup>

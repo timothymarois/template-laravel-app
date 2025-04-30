@@ -4,4 +4,7 @@
         <slot />
         <Toast position="bottom-left" />
     </div>
+    <ModalEditUser />
+    <ModalDeleteUser />
+    <ModalTest />
 </template>
