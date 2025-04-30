@@ -129,6 +129,9 @@
                                 <div class="space-y-4 w-full">
                                     <AtlasMessage warning>
                                         <div>Your account is <span class="font-semibold">negative</span>, but just keep in mind that we need to do some checks. Be sure to check out our help docs.</div>
+                                        <template #actions>
+                                            <Button size="small" label="Add funds" @click="open('TEST')" :disabled="true"  />
+                                        </template>
                                     </AtlasMessage>
                                     <div class="w-full flex items-center space-x-4">
                                         <AtlasFormField name="amount" label="Amount" required>
