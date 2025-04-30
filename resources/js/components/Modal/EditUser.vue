@@ -63,6 +63,7 @@ const form = useForm({
 const submit = () => {
     if (form.id) {
         form.put(route('users.update', [form.id]), {
+            preserveScroll: true,
             onSuccess: r => {
                 showModal.value = false;
                 toast.add({ summary: 'User updated', life: 5000 });
@@ -71,6 +72,7 @@ const submit = () => {
     }
     else {
         form.post(route('users.store'),  {
+            preserveScroll: true,
             onSuccess: r => {
                 showModal.value = false;
                 toast.add({ severity: 'success', summary: 'User created', life: 5000 });

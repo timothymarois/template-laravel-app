@@ -165,6 +165,25 @@
                             </template>
                         </Card>
                     </div>
+                    <div>
+                        <Card pt:content:class="p-0">
+                            <template #header>
+                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
+                                    <div>Virtual table</div>
+                                </div>
+                            </template>
+                            <template #content>
+                                <div>
+                                    <DataTable :value="products" tableStyle="min-width: 50rem" paginator :rows="25" scrollable scrollHeight="300px">
+                                        <Column field="code" header="Code" sortable></Column>
+                                        <Column field="name" header="Name" sortable></Column>
+                                        <Column field="category" header="Category"></Column>
+                                        <Column field="quantity" header="Quantity"></Column>
+                                    </DataTable>
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </PageMain>
@@ -172,9 +191,22 @@
 </template>
 
 <script setup>
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';  // optional
+import Row from 'primevue/row';          // optional
+
 import { useModal } from '@atlas/composables';
 
 const { open } = useModal();
+
+const products = ref(
+    Array.from({ length: 100 }, (_, i) => ({
+        code: `P-${String(i + 1).padStart(3, '0')}`,
+        name: `Product ${i + 1}`,
+        category: `Category ${((i % 10) + 1)}`,
+        quantity: Math.floor(Math.random() * 100) + 1,
+    }))
+);
 
 const form = useForm({
     first_name: 'John',
