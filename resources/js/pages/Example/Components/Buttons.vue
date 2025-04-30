@@ -4,8 +4,10 @@
     <PageMain>
         <div class="flex items-start justify-center space-x-4">
             <Card class="grow">
-                <template #title>
-                    Default
+                <template #header>
+                    <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
+                        <div>Default</div>
+                    </div>
                 </template>
                 <template #content>
                     <div class="flex flex-col space-y-4">
@@ -285,8 +287,10 @@
                 </template>
             </Card>
             <Card class="grow">
-                <template #title>
-                    Small
+                <template #header>
+                    <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
+                        <div>Small</div>
+                    </div>
                 </template>
                 <template #content>
                     <div class="flex flex-col space-y-4">
@@ -615,8 +619,10 @@
                 </template>
             </Card>
             <Card class="grow">
-                <template #title>
-                    Large
+                <template #header>
+                    <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
+                        <div>Large</div>
+                    </div>
                 </template>
                 <template #content>
                     <div class="flex flex-col space-y-4">

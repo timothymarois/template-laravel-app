@@ -3,7 +3,7 @@
     <LayoutDefault>
         <PageHeader :title="`Users (${userTotal})`">
             <template #actions>
-                <Button label="Add" @click="router.visit($route('users.create'))" />
+                <Button label="Add" @click="open('ADD_EDIT_USER')" />
             </template>
         </PageHeader>
         <PageMain>
@@ -38,7 +38,12 @@
                                     label="Edit"
                                     icon="pi pi-pencil"
                                     size="small"
-                                    @click.prevent.stop="open('EDIT_USER', user)"
+                                    @click.prevent.stop="open('ADD_EDIT_USER', user)"
+                                />
+                                <Button
+                                    icon="pi pi-pencil"
+                                    size="small"
+                                    @click.prevent.stop="open('TEST')"
                                 />
                                 <Button
                                     icon="pi pi-trash"
@@ -54,6 +59,7 @@
     </LayoutDefault>
     <ModalEditUser />
     <ModalDeleteUser />
+    <ModalTest />
 </template>
 
 <script setup>

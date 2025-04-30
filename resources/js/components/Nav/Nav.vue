@@ -79,7 +79,7 @@
 <script setup>
 const componentMenu = ref();
 const componentItems = [
-{
+    {
         label: 'Buttons',
         href: '/components/buttons'
     },
