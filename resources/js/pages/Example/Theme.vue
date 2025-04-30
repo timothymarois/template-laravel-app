@@ -44,6 +44,42 @@
                         <Card>
                             <template #header>
                                 <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
+                                    <div>Edit (disabled)</div>
+                                </div>
+                            </template>
+                            <template #content>
+                                <div class="space-y-4 w-full">
+                                    <div class="w-full flex items-center space-x-4">
+                                        <AtlasFormSlot name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
+                                            <InputText id="first_name" v-model="form.first_name" type="text" fluid :disabled="true" />
+                                        </AtlasFormSlot>
+                                        <AtlasFormSlot name="last_name" label="Last Name" required >
+                                            <InputText id="last_name" v-model="form.last_name" type="text" fluid :disabled="true"  />
+                                        </AtlasFormSlot>
+                                    </div>
+                                    <div class="w-full">
+                                        <AtlasFormSlot name="email" label="Email" required>
+                                            <InputText id="email" v-model="form.email" type="text" fluid :disabled="true"  />
+                                        </AtlasFormSlot>
+                                    </div>
+                                    <div class="w-full">
+                                        <AtlasFormSlot name="roles" label="Roles">
+                                            <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter :disabled="true"  />
+                                        </AtlasFormSlot>
+                                    </div>
+                                    <div class="w-full">
+                                        <AtlasFormSlot name="roles" label="Roles (chips)">
+                                            <MultiSelect v-model="form.roles" display="chip" :options="roles" option-label="name" option-value="id" fluid filter :maxSelectedLabels="6" :disabled="true"  />
+                                        </AtlasFormSlot>
+                                    </div>
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
+                    <div class="flex space-x-4">
+                        <Card>
+                            <template #header>
+                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
                                     <div>Cash</div>
                                 </div>
                             </template>
@@ -78,43 +114,6 @@
                             </template>
                             <template #footer>
                                 <Button label="Save" @click="open('TEST')" />
-                            </template>
-                        </Card>
-                    </div>
-
-                    <div class="flex space-x-4">
-                        <Card>
-                            <template #header>
-                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
-                                    <div>Edit (disabled)</div>
-                                </div>
-                            </template>
-                            <template #content>
-                                <div class="space-y-4 w-full">
-                                    <div class="w-full flex items-center space-x-4">
-                                        <AtlasFormSlot name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
-                                            <InputText id="first_name" v-model="form.first_name" type="text" fluid :disabled="true" />
-                                        </AtlasFormSlot>
-                                        <AtlasFormSlot name="last_name" label="Last Name" required >
-                                            <InputText id="last_name" v-model="form.last_name" type="text" fluid :disabled="true"  />
-                                        </AtlasFormSlot>
-                                    </div>
-                                    <div class="w-full">
-                                        <AtlasFormSlot name="email" label="Email" required>
-                                            <InputText id="email" v-model="form.email" type="text" fluid :disabled="true"  />
-                                        </AtlasFormSlot>
-                                    </div>
-                                    <div class="w-full">
-                                        <AtlasFormSlot name="roles" label="Roles">
-                                            <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter :disabled="true"  />
-                                        </AtlasFormSlot>
-                                    </div>
-                                    <div class="w-full">
-                                        <AtlasFormSlot name="roles" label="Roles (chips)">
-                                            <MultiSelect v-model="form.roles" display="chip" :options="roles" option-label="name" option-value="id" fluid filter :maxSelectedLabels="6" :disabled="true"  />
-                                        </AtlasFormSlot>
-                                    </div>
-                                </div>
                             </template>
                         </Card>
                         <Card>
