@@ -74,7 +74,7 @@ const submit = () => {
             preserveScroll: true,
             onSuccess: r => {
                 showModal.value = false;
-                toast.add({ summary: 'User updated', life: 5000 });
+                toast.add({ summary: 'User updated successfully', life: 5000 });
             }
         });
     }
@@ -83,7 +83,7 @@ const submit = () => {
             preserveScroll: true,
             onSuccess: r => {
                 showModal.value = false;
-                toast.add({ severity: 'success', summary: 'User created', life: 5000 });
+                toast.add({ severity: 'success', summary: 'User created successfully', life: 5000 });
             }
         });
     }

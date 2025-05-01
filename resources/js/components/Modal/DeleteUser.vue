@@ -25,7 +25,7 @@ const submit = () => {
         form.delete(route('users.destroy', [form.id]), {
             onSuccess: r => {
                 showModal.value = false;
-                toast.add({ summary: 'User deleted', life: 5000 });
+                toast.add({ summary: 'User deleted successfully', life: 5000 });
             }
         });
     }
