@@ -7,13 +7,14 @@
                 <div class="flex flex-col space-y-4">
                     <!-- <div>filter bar</div> -->
                     <div class="flex space-x-4">
-                        <Card pt:header:class="py-2">
+                        <Card>
                             <template #header>
                                 <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center justify-between">
                                     <div>Edit</div>
-                                    <div class="flex items-center space-x-2">
+                                    <ToggleSwitch v-model="form.checked" true-value="on" false-value="off" />
+                                    <!-- <div class="flex items-center space-x-2">
                                         <ManageMenu :items="manageItems" />
-                                    </div>
+                                    </div> -->
                                 </div>
                             </template>
                             <template #content>
@@ -46,8 +47,9 @@
                         </Card>
                         <Card>
                             <template #header>
-                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
+                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center justify-between space-x-2">
                                     <div>Edit (disabled)</div>
+                                    <ToggleSwitch v-model="form.checked" :disabled="true" true-value="on" false-value="off" />
                                 </div>
                             </template>
                             <template #content>
@@ -219,7 +221,8 @@ const form = useForm({
     roles: [],
     type: 'credit',
     payment: 'disabled',
-    agree: false
+    agree: false,
+    checked: 'on'
 });
 
 const roles = ref([
