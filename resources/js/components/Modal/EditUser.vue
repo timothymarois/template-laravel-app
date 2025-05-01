@@ -30,18 +30,26 @@
             </template>
         </Card>
         <template #footer>
-            <Button
-                label="Save"
-                :disabled="form.processing"
-                :loading="form.processing"
-                @click="submit"
-            />
-            <Button
-                text
-                type="button"
-                label="Cancel"
-                @click="showModal = false"
-            />
+            <div class="w-full flex flex-col space-y-4">
+                <AtlasErrors :errors="form.errors" />
+                <!-- <div class="w-full py-4 bg-red-100 rounded-md px-4">
+                    <span class="font-semibold">Internal server error</span> - Something went wrong
+                </div> -->
+                <div class="flex items-center space-x-4">
+                    <Button
+                        label="Save"
+                        :disabled="form.processing"
+                        :loading="form.processing"
+                        @click="submit"
+                    />
+                    <Button
+                        text
+                        type="button"
+                        label="Cancel"
+                        @click="showModal = false"
+                    />
+                </div>
+            </div>
         </template>
     </AtlasDrawer>
 </template>
