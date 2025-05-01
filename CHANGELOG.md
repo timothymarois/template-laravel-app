@@ -4,6 +4,13 @@ Any project using this template should follow the changelog here if its relevant
 
 # Released 
 
+## v2.0.1 - 05/01/2025
+
+Minor update, most of the changes are examples.
+
+- Updated `vite.config.js`
+- Updated `resources/js/setup.js`
+
 ## v2.0.0 - 04/26/2025
 
 This update centralizes the base components into atlas ui repo
