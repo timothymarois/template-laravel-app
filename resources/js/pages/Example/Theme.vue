@@ -7,10 +7,13 @@
                 <div class="flex flex-col space-y-4">
                     <!-- <div>filter bar</div> -->
                     <div class="flex space-x-4">
-                        <Card>
+                        <Card pt:header:class="py-2">
                             <template #header>
-                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
+                                <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center justify-between">
                                     <div>Edit</div>
+                                    <div class="flex items-center space-x-2">
+                                        <ManageMenu :items="manageItems" />
+                                    </div>
                                 </div>
                             </template>
                             <template #content>
@@ -237,4 +240,20 @@ const types = ref([
     { id: 'transfer', name: 'Transfer' },
     { id: 'deposit', name: 'Deposit' },
 ]);
+
+const manageItems = [
+    {
+        label: 'Edit',
+        icon: 'text-sm pi pi-pencil',
+        action: 'edit'
+    },
+    {
+        separator: true
+    },
+    {
+        label: 'Archive',
+        icon: 'text-sm pi pi-trash',
+        action: 'delete'
+    }
+];
 </script>

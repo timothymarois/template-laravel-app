@@ -4,6 +4,12 @@
         title="Edit test"
         position="right"
     >
+        <AtlasMessage>
+            <div>This modal does not do anything, Its only here for testing. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</div>
+        </AtlasMessage>
+        <AtlasMessage hideIcon>
+            <div><span class="font-semibold">No icon</span>. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</div>
+        </AtlasMessage>
         <Card>
             <template #header>
                 <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
