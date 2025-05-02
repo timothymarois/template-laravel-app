@@ -20,6 +20,7 @@ const form = useForm({
 
 const submit = () => {
     submitForm(form, 'delete', route('users.destroy', [form.id]), {
+        only: ['users'],
         toastMessage: 'User deleted successfully',
         onSuccess: () => showModal.value = false
     });

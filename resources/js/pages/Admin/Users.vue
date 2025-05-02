@@ -60,19 +60,20 @@
 </template>
 
 <script setup>
-import { useModal } from '@atlas/composables';
 import { formatToDatetime } from '@atlas/utils/format';
 
-const props = defineProps({
-    users: {
-        type: Object,
-        default: () => {}
-    }
-});
+const users = usePageProp('users', {});
+
+// const props = defineProps({
+//     users: {
+//         type: Object,
+//         default: () => {}
+//     }
+// });
 
 const { open } = useModal();
 
 const userTotal = computed(() => {
-    return props?.users?.total || 0;
+    return users.value?.total || 0;
 });
 </script>
