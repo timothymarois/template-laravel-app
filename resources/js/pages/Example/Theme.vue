@@ -4,9 +4,9 @@
         <PageHeader title="Theme" />
         <PageMain>
             <div>
-                <div class="flex flex-col space-y-4">
+                <div class="flex flex-col space-y-6 py-4">
                     <!-- <div>filter bar</div> -->
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-6">
                         <Card>
                             <template #header>
                                 <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center justify-between">
@@ -81,7 +81,7 @@
                             </template>
                         </Card>
                     </div>
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-6">
                         <Card>
                             <template #header>
                                 <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
