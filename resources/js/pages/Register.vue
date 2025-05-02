@@ -51,6 +51,8 @@
 </template>
 
 <script setup>
+const { submitForm } = useFormSubmit();
+
 const form = useForm({
     name: null,
     email: null,
@@ -59,9 +61,6 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('auth.register'), {
-        preserveScroll: true,
-        onSuccess: () => form.reset('password'),
-    });
+    submitForm(form, 'post', route('auth.register'));
 };
 </script>

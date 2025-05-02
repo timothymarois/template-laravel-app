@@ -45,15 +45,14 @@
 </template>
 
 <script setup>
+const { submitForm } = useFormSubmit();
+
 const form = useForm({
     email: null,
     password: null,
 });
 
 const submit = () => {
-    form.post(route('auth.login'), {
-        preserveScroll: true,
-        onSuccess: () => form.reset('password'),
-    });
+    submitForm(form, 'post', route('auth.login'));
 };
 </script>

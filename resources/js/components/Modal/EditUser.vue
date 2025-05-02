@@ -36,10 +36,8 @@
 </template>
 
 <script setup>
-import { useModal } from '@atlas/composables';
-
-const toast = useToast();
 const { activeState, onOpen, onClose } = useModal();
+const { submitForm } = useFormSubmit();
 
 const showModal = activeState('ADD_EDIT_USER');
 
@@ -50,24 +48,12 @@ const form = useForm({
 });
 
 const submit = () => {
-    if (form.id) {
-        form.put(route('users.update', [form.id]), {
-            preserveScroll: true,
-            onSuccess: r => {
-                showModal.value = false;
-                toast.add({ summary: 'User updated successfully', life: 5000 });
-            }
-        });
-    }
-    else {
-        form.post(route('users.store'),  {
-            preserveScroll: true,
-            onSuccess: r => {
-                showModal.value = false;
-                toast.add({ severity: 'success', summary: 'User created successfully', life: 5000 });
-            }
-        });
-    }
+    const method = form.id ? 'put' : 'post';
+    const routePath = form.id ? route('users.update', form.id) : route('users.store');
+    submitForm(form, method, routePath, {
+        toastMessage: form.id ? 'User updated successfully' : 'User created successfully',
+        onSuccess: () => showModal.value = false,
+    });
 };
 
 onOpen('ADD_EDIT_USER', (data) => {

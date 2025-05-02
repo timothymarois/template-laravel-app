@@ -9,9 +9,7 @@
 </template>
 
 <script setup>
-import { useModal } from '@atlas/composables';
-
-const toast = useToast();
+const { submitForm } = useFormSubmit();
 const { activeState, onOpen, onClose } = useModal();
 
 const showModal = activeState('DELETE_USER');
@@ -21,14 +19,10 @@ const form = useForm({
 });
 
 const submit = () => {
-    if (form.id) {
-        form.delete(route('users.destroy', [form.id]), {
-            onSuccess: r => {
-                showModal.value = false;
-                toast.add({ summary: 'User deleted successfully', life: 5000 });
-            }
-        });
-    }
+    submitForm(form, 'delete', route('users.destroy', [form.id]), {
+        toastMessage: 'User deleted successfully',
+        onSuccess: () => showModal.value = false
+    });
 };
 
 onOpen('DELETE_USER', (data) => {
