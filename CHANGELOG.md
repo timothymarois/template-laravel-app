@@ -8,7 +8,7 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 ## v2.0.2 - 05/04/2025
 
-Around the release for new AtlasFrame and scroll control
+Minor example changes. Around the release for new AtlasFrame and scroll control.
 
 - Replaces the `<PageMain>` component with new `<AtlasFrame page>`
 - Replaces the `usePageTop` with the new atlas `useScroll` composable
