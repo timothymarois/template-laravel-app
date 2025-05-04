@@ -89,9 +89,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-
-const slots = useSlots()
+const slots = useSlots();
 const props = defineProps({
     breadcrumbs: Object,
     tabs: Array,
