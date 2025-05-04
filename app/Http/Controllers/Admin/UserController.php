@@ -21,11 +21,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return Inertia::render('Admin/CreateUser');
-    }
-
     public function store(Request $request)
     {
         $request->validate([

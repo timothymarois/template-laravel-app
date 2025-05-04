@@ -76,10 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    <div
-                        v-if="slots.actions"
-                        class="py-4"
-                    >
+                    <div v-if="slots.actions" class="py-4">
                         <slot name="actions" />
                     </div>
                 </div>

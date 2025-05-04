@@ -6,6 +6,14 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
+## v2.0.2 - 05/04/2025
+
+Around the release for new AtlasFrame and scroll control
+
+- Replaces the `<PageMain>` component with new `<AtlasFrame page>`
+- Replaces the `usePageTop` with the new atlas `useScroll` composable
+- Updated `vite.config.js`
+
 ## v2.0.1 - 05/01/2025
 
 Minor update, most of the changes are examples.
