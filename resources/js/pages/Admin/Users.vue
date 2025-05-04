@@ -6,7 +6,7 @@
                 <Button label="Add" @click="open('ADD_EDIT_USER')" />
             </template>
         </PageHeader>
-        <PageMain>
+        <AtlasFrame page>
             <div class="shadow border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-700 rounded">
                 <ul>
                     <li
@@ -55,7 +55,7 @@
                     </li>
                 </ul>
             </div>
-        </PageMain>
+        </AtlasFrame>
     </LayoutDefault>
 </template>
 

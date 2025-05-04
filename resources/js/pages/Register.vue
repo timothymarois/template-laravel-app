@@ -1,7 +1,7 @@
 <template>
     <Head title="Register" />
     <LayoutDefault>
-        <PageMain>
+        <AtlasFrame page>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <Card>
                     <template #header>
@@ -46,7 +46,7 @@
                     </template>
                 </Card>
             </div>
-        </PageMain>
+        </AtlasFrame>
     </LayoutDefault>
 </template>
 

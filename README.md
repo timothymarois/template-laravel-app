@@ -451,3 +451,20 @@ php artisan horizon
 ```bash
 php artisan inertia:start-ssr
 ```
+
+
+#### Local testing
+
+`npm install git+https://github.com/tmarois/atlas-ui.git#main`
+
+`"atlas-ui": "file:../../Repo/atlas-ui",`
+
+```
+server: {
+    fs: {
+        allow: [
+            '..'
+        ],
+    },
+},
+```

@@ -89,6 +89,8 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+
 const slots = useSlots()
 const props = defineProps({
     breadcrumbs: Object,
@@ -97,7 +99,7 @@ const props = defineProps({
     hideTitle: Boolean
 });
 
-const { isTop } = usePageTop();
+const { isTop } = useScroll('page');
 </script>
 
 

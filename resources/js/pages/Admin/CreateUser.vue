@@ -6,7 +6,7 @@
                 <Button outlined label="Back" @click="router.visit($route('users.index'))" />
             </template>
         </PageHeader>
-        <PageMain>
+        <AtlasFrame page>
             <div class="mx-auto max-w-2xl px-4 py-6 sm:px-6">
                 <Card>
                     <template #title>
@@ -32,7 +32,7 @@
                     </template>
                 </Card>
             </div>
-        </PageMain>
+        </AtlasFrame>
     </LayoutDefault>
 </template>
 

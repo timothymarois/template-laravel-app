@@ -2,10 +2,10 @@
     <Head title="Home" />
     <LayoutDefault>
         <PageHeader title="Home" />
-        <PageMain>
+        <AtlasFrame page>
             <div>
                 This is an example home page.
             </div>
-        </PageMain>
+        </AtlasFrame>
     </LayoutDefault>
 </template>

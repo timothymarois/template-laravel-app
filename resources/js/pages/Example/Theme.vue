@@ -2,7 +2,7 @@
     <Head title="Theme" />
     <LayoutDefault>
         <PageHeader title="Theme" />
-        <PageMain>
+        <AtlasFrame page>
             <div>
                 <div class="flex flex-col space-y-6 py-4">
                     <!-- <div>filter bar</div> -->
@@ -191,7 +191,7 @@
                     </div>
                 </div>
             </div>
-        </PageMain>
+        </AtlasFrame>
     </LayoutDefault>
 </template>
 

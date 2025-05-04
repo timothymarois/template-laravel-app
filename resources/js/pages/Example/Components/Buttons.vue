@@ -1,7 +1,7 @@
 <template>
     <Head title="Buttons - Components" />
     <PageHeader title="Buttons" />
-    <PageMain>
+    <AtlasFrame page>
         <div class="flex items-start justify-center space-x-4">
             <Card class="grow">
                 <template #header>
@@ -953,7 +953,7 @@
                 </template>
             </Card>
         </div>
-    </PageMain>
+    </AtlasFrame>
 </template>
 <script setup>
 const toast = useToast();

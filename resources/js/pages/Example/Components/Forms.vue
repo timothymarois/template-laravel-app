@@ -1,11 +1,11 @@
 <template>
     <Head title="Forms - Components" />
     <PageHeader title="Forms" />
-    <PageMain>
+    <AtlasFrame page>
         <div>
             Example page
         </div>
-    </PageMain>
+    </AtlasFrame>
 </template>
 <script setup>
 

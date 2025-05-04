@@ -48,7 +48,7 @@ export default defineConfig({
                 {
                     '@inertiajs/vue3': ['usePage', 'useForm', 'router'],
                     'primevue': ['useToast'],
-                    '@atlas/composables': ['useModal'],
+                    '@atlas/composables': ['useModal', 'useScroll'],
                     '@atlas/composables/inertia': ['usePageProp', 'useFormSubmit'],
                 },
             ],
