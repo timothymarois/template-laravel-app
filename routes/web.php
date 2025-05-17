@@ -6,9 +6,9 @@ use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PageController::class, 'index'])->name('index');
-
 Route::get('/theme', [PageController::class, 'pTheme']);
+Route::get('/theme/settings', [PageController::class, 'pSettings']);
+
 Route::get('/components/buttons', [PageController::class, 'pButtons']);
 Route::get('/components/forms', [PageController::class, 'pForms']);
 
@@ -20,6 +20,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/', [PageController::class, 'index'])->name('index');
     Route::resource('/admin/users', UserController::class);
     Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
 });
