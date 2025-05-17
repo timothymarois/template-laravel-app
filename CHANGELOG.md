@@ -14,6 +14,7 @@ This update simplifies page components making building faster app-page-level wit
 
 - Updated `eslint.config.js` removing annoying component prop limit
 - Updated `vite.config.js` updating for atlas component auto-loading
+- Updated `tailwind.config.js` with `'./node_modules/atlas-ui/src/**/*.{js,ts,vue}'`
 - Updated example templates to favor new atlas `<LayoutApp>` and replacing example layouts
 - Updates Atlas fields for better auto-loading `<AtlasFormField>` is now `<LabelField>` etc.
 - Atlas adds new Tiptap editor (optional deps), if you want to install them, use:
