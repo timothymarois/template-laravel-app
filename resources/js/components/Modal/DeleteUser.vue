@@ -1,5 +1,5 @@
 <template>
-    <AtlasModalConfirmation
+    <DialogConfirmation
         v-model="showModal"
         title="Delete user"
         message="Are you sure you want to delete this user?"

@@ -2,26 +2,30 @@
     <div class="relative">
         <div
             v-if="user && user?.id"
-            class="flex justify-content-center"
+            class="flex justify-content-center justify-center items-center"
         >
             <button
-                type="button"
-                aria-haspopup="true"
-                aria-controls="overlay_menu"
-                class="h-8 rounded-md inline-flex justify-center items-center bg-surface-100 dark:bg-surface-800 hover:bg-surface-800 dark:hover:bg-surface-700 text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-surface-200 transition-colors duration-200 text-sm px-2 cursor-pointer"
+                class="relative overflow-hidden w-full mr-2 p-link flex items-center p-2 px-3 rounded-md text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround cursor-pointer"
+                :class="{ '!p-1 !py-2 !mr-0' : avatarOnly }"
                 @click="toggle"
             >
-                <div class="pr-1">
-                    {{ user.name }}
-                </div> <span class="pi pi-fw pi-angle-down" />
+                <Avatar
+                    :label="user.name?.charAt(0).toUpperCase()"
+                    class="m-auto border border-surface-200 dark:border-surface-400 bg-surface-100 text-surface-800 dark:bg-surface-700 dark:text-white"
+                    shape="circle"
+                />
+                <div v-if="!avatarOnly" class="ml-2 flex flex-col text-left flex-1 min-w-0">
+                    <span class="font-bold truncate">{{ user.name }}</span>
+                    <span class="text-sm truncate">{{ user.email }}</span>
+                </div>
             </button>
             <Menu
                 ref="menu"
                 :model="items"
-                class="w-[245px]"
+                class="w-[245px] !z-[99999]"
                 popup
             >
-                <template #start>
+                <template v-if="avatarOnly" #start>
                     <button
                         class="relative overflow-hidden w-full p-link flex items-center p-2 pl-3 text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround"
                         @click="userEditModal = true"
@@ -91,6 +95,13 @@
 
 <script setup>
 import { useModal } from '@atlas/composables';
+
+const props = defineProps({
+    avatarOnly: {
+        type: Boolean,
+        default: false
+    }
+});
 
 const { activeState, data } = useModal();
 

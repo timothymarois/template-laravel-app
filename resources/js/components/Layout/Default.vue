@@ -1,8 +1,28 @@
 <template>
-    <div class="min-h-screen w-full bg-surface-100 dark:bg-surface-900">
-        <Nav />
-        <AtlasFrame page>
+    <Head :title="title" />
+    <LayoutApp
+        :isSideNav="false"
+        :pageTitle="pageTitle"
+        :pageUrl="$page.url"
+    >
+        <template #default>
             <slot />
-        </AtlasFrame>
-    </div>
+        </template>
+    </LayoutApp>
 </template>
+
+<script setup>
+import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
+import LayoutApp from '@atlas/components/App/Layout/App.vue';
+
+const props = defineProps({
+    title : {
+        type: String,
+        default: ''
+    },
+    pageTitle : {
+        type: String,
+        default: ''
+    },
+});
+</script>

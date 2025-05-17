@@ -1,36 +1,36 @@
 <template>
-    <AtlasDrawer
+    <DrawerForm
         v-model="showModal"
         title="Edit test"
         position="right"
     >
-        <AtlasMessage>
+        <Alert>
             <div>This modal does not do anything, Its only here for testing. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</div>
-        </AtlasMessage>
-        <AtlasMessage hideIcon>
+        </Alert>
+        <Alert hideIcon>
             <div><span class="font-semibold">No icon</span>. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</div>
-        </AtlasMessage>
+        </Alert>
         <Card>
             <template #header>
                 <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
                     <div>Details</div>
-                    <AtlasHelpInfo>
+                    <TooltipInfo>
                         <div>This is an info bubble tooltip</div>
-                    </AtlasHelpInfo>
+                    </TooltipInfo>
                 </div>
             </template>
             <template #content>
                 <form>
                     <div class="space-y-4 w-full">
                         <div class="w-full">
-                            <AtlasFormField name="name" label="Name" required :error="form.errors.name">
+                            <LabelField name="name" label="Name" required :error="form.errors.name">
                                 <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                            </AtlasFormField>
+                            </LabelField>
                         </div>
                         <div class="w-full">
-                            <AtlasFormField name="email" label="Email" required :error="form.errors.email">
+                            <LabelField name="email" label="Email" required :error="form.errors.email">
                                 <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormField>
+                            </LabelField>
                         </div>
                     </div>
                 </form>
@@ -38,18 +38,18 @@
         </Card>
         <Card>
             <template #header>
-                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Permissions <AtlasHelpTooltip text="User permissions are set on a per role basis. If a user has a role with a permission, they will have that permission." /></div>
+                <div class="font-semibold text-gray-900 dark:text-gray-200 text-md">Permissions <TooltipIcon text="User permissions are set on a per role basis. If a user has a role with a permission, they will have that permission." /></div>
             </template>
             <template #content>
                 <form>
                     <div class="space-y-4 w-full">
                         <div class="grid grid-cols-2 items-center gap-6 w-full">
-                            <AtlasFormField name="role" label="Role" :error="form.errors.name">
+                            <LabelField name="role" label="Role" :error="form.errors.name">
                                 <Select v-model="form.role" showClear :options="roles" option-label="name" option-value="id" fluid />
-                            </AtlasFormField>
-                            <AtlasFormField name="roles" label="Roles" :error="form.errors.name">
+                            </LabelField>
+                            <LabelField name="roles" label="Roles" :error="form.errors.name">
                                 <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter />
-                            </AtlasFormField>
+                            </LabelField>
                         </div>
                     </div>
                 </form>
@@ -73,7 +73,7 @@
         </Card>
         <template #footer>
             <div class="w-full flex flex-col space-y-4">
-                <AtlasErrors :errors="form.errors" :failed="true" />
+                <Errors :errors="form.errors" :failed="true" />
                 <!-- <div class="w-full py-4 bg-red-100 rounded-md px-4">
                     <span class="font-semibold">Internal server error</span> - Something went wrong
                 </div> -->
@@ -93,7 +93,7 @@
                 </div>
             </div>
         </template>
-    </AtlasDrawer>
+    </DrawerForm>
 </template>
 
 <script setup>

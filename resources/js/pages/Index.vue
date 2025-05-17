@@ -1,8 +1,7 @@
 <template>
-    <Head title="Home" />
-    <LayoutDefault title="Home">
+    <LayoutApp title="Home" pageTitle="Home">
         <div>
             This is an example home page.
         </div>
-    </LayoutDefault>
+    </LayoutApp>
 </template>

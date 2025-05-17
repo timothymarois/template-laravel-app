@@ -1,5 +1,5 @@
 <template>
-    <AtlasDrawer
+    <DrawerForm
         v-model="showModal"
         :title="form.id ? 'Edit user' : 'Add user'"
         position="right"
@@ -12,27 +12,27 @@
             <template #header>
                 <div class="font-semibold text-gray-900 dark:text-gray-200 text-md flex items-center space-x-2">
                     <div>Details</div>
-                    <AtlasHelpTooltip text="Edit the user details such as name and email." />
+                    <TooltipIcon text="Edit the user details such as name and email." />
                 </div>
             </template>
             <template #content>
                 <form>
                     <div class="space-y-4 w-full">
                         <div class="w-full">
-                            <AtlasFormField name="name" label="Name" required :error="form.errors.name">
+                            <LabelField name="name" label="Name" required :error="form.errors.name">
                                 <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
-                            </AtlasFormField>
+                            </LabelField>
                         </div>
                         <div class="w-full">
-                            <AtlasFormField name="email" label="Email" required :error="form.errors.email">
+                            <LabelField name="email" label="Email" required :error="form.errors.email">
                                 <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                            </AtlasFormField>
+                            </LabelField>
                         </div>
                     </div>
                 </form>
             </template>
         </Card>
-    </AtlasDrawer>
+    </DrawerForm>
 </template>
 
 <script setup>

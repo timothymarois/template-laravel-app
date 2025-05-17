@@ -1,12 +1,7 @@
 <template>
-    <Head title="Forms - Components" />
-    <PageHeader title="Forms" />
-    <AtlasFrame page>
+    <LayoutApp title="Forms" pageTitle="Forms">
         <div>
             Example page
         </div>
-    </AtlasFrame>
+    </LayoutApp>
 </template>
-<script setup>
-
-</script>
