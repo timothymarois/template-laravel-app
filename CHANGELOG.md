@@ -16,7 +16,18 @@ This update simplifies page components making building faster app-page-level wit
 - Updated `vite.config.js` updating for atlas component auto-loading
 - Updated example templates to favor new atlas `<LayoutApp>` and replacing example layouts
 - Updates Atlas fields for better auto-loading `<AtlasFormField>` is now `<LabelField>` etc.
-- Atlas adds new Tiptap editor (optional deps)
+- Atlas adds new Tiptap editor (optional deps), if you want to install them, use:
+
+```
+"@tiptap/extension-bold": "^2.11.7",
+"@tiptap/extension-bullet-list": "^2.11.7",
+"@tiptap/extension-hard-break": "^2.11.7",
+"@tiptap/extension-link": "^2.11.7",
+"@tiptap/extension-list-item": "^2.11.7",
+"@tiptap/extension-ordered-list": "^2.11.7",
+"@tiptap/starter-kit": "^2.11.7",
+"@tiptap/vue-3": "^2.11.7",
+```
 
 ## v2.0.2 - 05/04/2025
 
