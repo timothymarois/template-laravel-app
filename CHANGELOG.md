@@ -6,6 +6,17 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
+## v2.1.0 - 05/17/2025
+
+Updated atlas for page-level app components.
+
+This update simplifies page components making building faster app-page-level with built-in navs.
+
+- Updated `eslint.config.js` removing annoying component prop limit
+- Updated `vite.config.js` updating for atlas component auto-loading
+- Updated example templates to favor new atlas `<LayoutApp>` and replacing example layouts
+- Updates Atlas fields for better auto-loading `<AtlasFormField>` is now `<LabelField>` etc.
+
 ## v2.0.2 - 05/04/2025
 
 Minor example changes. Around the release for new AtlasFrame and scroll control.
