@@ -4,42 +4,38 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    public function __construct(protected UserService $userService) {}
+
     public function index()
     {
-        $users = User::query()->orderBy('created_at', 'DESC');
-
         return Inertia::render('Admin/Users', [
-            'users' => $users->paginate(),
+            'users' => $this->userService->listPaginated(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
         ]);
 
-        $data = $request->all();
-        $data['password'] = Hash::make(Str::random(24));
-
-        User::create($data);
+        $this->userService->create($validated);
 
         return back();
     }
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
             'email' => [
                 'required',
                 'string',
@@ -50,14 +46,14 @@ class UserController extends Controller
             ],
         ]);
 
-        $user->update($request->all());
+        $this->userService->update($user, $validated);
 
         return back();
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
+        $this->userService->delete($user);
 
         return back();
     }
