@@ -3,6 +3,7 @@ export default [
     ...pluginVue.configs['flat/recommended'],
     {
         rules: {
+            'vue/attribute-hyphenation': 'off',
             'vue/no-unused-vars': 'warn',
             'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: 1 }],
             'vue/multi-word-component-names': "off",

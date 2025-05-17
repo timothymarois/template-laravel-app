@@ -23,7 +23,6 @@ export default defineConfig({
             collapseSamePrefixes: true,
             dirs: [
                 './resources/js/components/',
-                './node_modules/atlas-ui/src/components/Volt',
                 './node_modules/atlas-ui/src/components'
             ],
             imports: [
