@@ -13,10 +13,17 @@ class UserController extends Controller
 {
     public function __construct(protected UserService $userService) {}
 
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+        $perPage = (int) $request->input('perPage', 15);
+
         return Inertia::render('Admin/Users', [
-            'users' => $this->userService->listPaginated(),
+            'users' => $this->userService->listPaginated($perPage, $search),
+            'filters' => [
+                'search' => $search,
+                'perPage' => $perPage,
+            ],
         ]);
     }
 

@@ -9,9 +9,13 @@ use Illuminate\Support\Str;
 
 class UserService
 {
-    public function listPaginated(int $perPage = 15)
+    public function listPaginated(int $perPage = 15, $search = null): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return User::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })
             ->orderByDesc('created_at')
             ->paginate($perPage);
     }
