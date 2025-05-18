@@ -22,7 +22,7 @@
                             <div class="space-y-4 w-full">
                                 <div class="w-full flex items-center space-x-4">
                                     <LabelField name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
-                                        <InputText id="first_name" v-model="form.first_name" type="text" fluid />
+                                        <InputText id="first_name" v-model="form.first_name" type="text" fluid clearable />
                                     </LabelField>
                                     <LabelField name="last_name" label="Last Name" required >
                                         <InputText id="last_name" placeholder="Last Name" v-model="form.last_name" type="text" fluid />
@@ -57,7 +57,7 @@
                             <div class="space-y-4 w-full">
                                 <div class="w-full flex items-center space-x-4">
                                     <LabelField name="first_name" label="First Name" required tooltip="This is a tooltip with some cool information about First Name fields. You can type an entire paragraph here, it is really cool.">
-                                        <InputText id="first_name" v-model="form.first_name" type="text" fluid :disabled="true" />
+                                        <InputText id="first_name" v-model="form.first_name" type="text" fluid :disabled="true" clearable />
                                     </LabelField>
                                     <LabelField name="last_name" label="Last Name" required >
                                         <InputText id="last_name" placeholder="Last Name" v-model="form.last_name" type="text" fluid :disabled="true"  />

@@ -15,14 +15,27 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('search', '');
+        $filters = $request->input('filters', []);
         $perPage = (int) $request->input('perPage', 15);
+        $sortField = $request->input('sortField', 'name');
+        $sortOrder = (int) $request->input('sortOrder', 1);
+
+        $query = $this->userService->listPaginated($perPage, [
+            'search' => $search,
+            'filters' => $filters,
+            'sortField' => $sortField,
+            'sortOrder' => ($sortOrder == -1 ? 'desc' : 'asc'),
+        ]);
 
         return Inertia::render('Admin/Users', [
-            'users' => $this->userService->listPaginated($perPage, $search),
-            'filters' => [
+            'users' => $query,
+            'options' => [
                 'search' => $search,
                 'perPage' => $perPage,
+                'sortField' => $sortField,
+                'sortOrder' => $sortOrder,
+                'filters' => $filters,
             ],
         ]);
     }

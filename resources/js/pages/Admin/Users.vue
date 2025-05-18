@@ -1,46 +1,39 @@
 <template>
     <LayoutApp title="Users" :pageTitle="`Users (${userTotal})`">
-        <template #headerAction>
-            <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
-        </template>
         <template #default>
-            <Card pt:content:class="p-0.5">
+            <Card pt:content:class="p-0.5 pt-0">
                 <template #header>
-                    <div class="flex items-center">
+                    <div class="flex items-center justify-between">
                         <div class="grow flex items-center space-x-2">
                             <InputText
                                 v-model="search"
                                 placeholder="Search user name or email"
                                 size="small"
                                 class="w-[400px]"
+                                clearable
                             />
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
                         </div>
                     </div>
                 </template>
                 <template #content>
-                    <div>
-                        <DataTable
-                            row-hover
-                            :value="users.data"
-                            size="small"
-                            table-style="min-width: 50rem"
-                        >
-                            <Column
-                                field="name"
-                                header="Name"
-                            >
-                                <template #body="slotProps">
-                                    <Link class="hover:underline" :href="`/projects/${slotProps.data.id}/overview`">
-                                        {{ slotProps.data.name }}
-                                    </Link>
-                                </template>
-                            </Column>
-                            <Column
-                                field="email"
-                                header="Email"
-                            />
-                        </DataTable>
-                    </div>
+                    <Table
+                        :items="users.data"
+                        :columns="columns"
+                        :sortField="sortField"
+                        :sortOrder="sortOrder"
+                        :selection="selected"
+                        @update:selection="selected = $event"
+                        @sort="onSort"
+                    >
+                        <template #name="{ data }">
+                            <Link class="hover:underline" :href="`/projects/${data.id}/overview`">
+                                {{ data.name }}
+                            </Link>
+                        </template>
+                    </Table>
                 </template>
             </Card>
         </template>
@@ -54,10 +47,7 @@
         </template>
         <template #footerAction>
             <div class="flex items-center justify-center flex-wrap gap-1">
-                <template
-                    v-for="link in users.links"
-                    :key="link.label"
-                >
+                <template v-for="link in users.links" :key="link.label">
                     <Link
                         preserve-scroll
                         :href="link.url ?? ''"
@@ -75,49 +65,43 @@
 </template>
 
 <script setup>
-import debounce from 'lodash/debounce';
-import Column from 'primevue/column';
+import Table from '@atlas/components/Table/Table.vue';
 
 const props = defineProps({
-    filters: {
+    users: {
         type: Object,
-        default: () => {}
+        default: () => ({}),
+    },
+    options: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
 const { open } = useModal();
-const users = usePageProp('users', {});
-const perPageOptions = [{ label: '15', value: 15 }, { label: '25', value: 25 }, { label: '50', value: 50 }];
 
-const perPage = ref(props.filters.perPage ?? 15);
-const search = ref(props.filters.search);
+const columns = [
+    { field: 'id', header: 'Id', sortable: false },
+    { field: 'name', header: 'Name', sortable: true },
+    { field: 'email', header: 'Email', sortable: true },
+];
 
-watch(props, (p) => {
-    search.value = p.filters.search;
-},{deep: true});
+const perPageOptions = [
+    { label: '15', value: 15 },
+    { label: '25', value: 25 },
+    { label: '50', value: 50 },
+];
 
-watch(search, debounce(function(value) {
-    router.get(route('users.index'), {
-        search: search.value,
-        perPage: perPage.value,
-    }, {
-        preserveState: true,
-        replace:true
-    });
-}, 250));
-
-watch(perPage, (value) => {
-    router.get(route('users.index'), {
-        search: search.value,
-        perPage: value
-    }, {
-        preserveState: true,
-        replace: true
-    });
+const { search, filters, perPage, sortField, sortOrder } = useDataTableOptions('users.index', props.options, {
+    only: ['users'],
 });
 
-const userTotal = computed(() => {
-    return users.value?.total || 0;
-});
+const onSort = ({ field, order }) => {
+    sortField.value = field;
+    sortOrder.value = order;
+};
 
+const selected = ref([]);
+
+const userTotal = computed(() => props.users?.total || 0);
 </script>

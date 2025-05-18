@@ -6,6 +6,12 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
+## v2.1.1 - 05/18/2025
+
+Adds examples of datatables atlas component and composable usage with inertia response.
+
+- Updated `vite.config.js` for auto-loading of `useDataTableOptions` 
+
 ## v2.1.0 - 05/17/2025
 
 Updated atlas for page-level app components.
