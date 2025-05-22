@@ -12,6 +12,8 @@ Adds examples of datatables atlas component and composable usage with inertia re
 
 - Updated `config/session.php` for "172800" (48 hours).
 - Updated examples to use new data table component, button menu and profile menu.
+- Updated examples to use `<LinkPaginator>` for laravel
+- Added new trait for reusable data tables options `HandlesIndexOptions`
 
 ## v2.1.1 - 05/18/2025
 
