@@ -6,6 +6,13 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
+## v2.1.2 - 05/22/2025
+
+Adds examples of datatables atlas component and composable usage with inertia response.
+
+- Updated `config/session.php` for 172800 (48 hours).
+- Updated examples to use new data table component, button menu and profile menu.
+
 ## v2.1.1 - 05/18/2025
 
 Adds examples of datatables atlas component and composable usage with inertia response.
