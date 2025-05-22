@@ -58,20 +58,7 @@
             />
         </template>
         <template #footerAction>
-            <div class="flex items-center justify-center flex-wrap gap-1">
-                <template v-for="link in users.links" :key="link.label">
-                    <Link
-                        preserve-scroll
-                        :href="link.url ?? ''"
-                        class="flex items-center justify-center px-3 py-2 text-sm rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        :class="{
-                            'bg-gray-200 dark:bg-gray-600 dark:text-white text-gray-900 font-semibold': link.active,
-                            '!text-gray-300': !link.url
-                        }"
-                        v-html="link.label"
-                    />
-                </template>
-            </div>
+            <LinkPaginator :links="users.links" :linkComponent="'Link'" />
         </template>
     </LayoutApp>
 </template>
