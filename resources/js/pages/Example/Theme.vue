@@ -34,6 +34,11 @@
                                     </LabelField>
                                 </div>
                                 <div class="w-full">
+                                    <LabelField name="gender" label="Gender">
+                                        <Select v-model="form.gender" showClear :options="genders" option-label="gender" option-value="id" fluid filter />
+                                    </LabelField>
+                                </div>
+                                <div class="w-full">
                                     <LabelField name="roles" label="Roles">
                                         <MultiSelect v-model="form.roles" showClear :options="roles" option-label="name" option-value="id" fluid filter />
                                     </LabelField>
@@ -66,6 +71,11 @@
                                 <div class="w-full">
                                     <LabelField name="email" label="Email" required>
                                         <InputText id="email" v-model="form.email" type="text" fluid :disabled="true"  />
+                                    </LabelField>
+                                </div>
+                                <div class="w-full">
+                                    <LabelField name="gender" label="Gender">
+                                        <Select v-model="form.gender" showClear :options="genders" option-label="gender" option-value="id" fluid filter :disabled="true" />
                                     </LabelField>
                                 </div>
                                 <div class="w-full">
@@ -285,9 +295,6 @@
 
 <script setup>
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';  // optional
-import Row from 'primevue/row';          // optional
-
 import { useModal } from '@atlas/composables';
 
 const { open } = useModal();
@@ -310,8 +317,15 @@ const form = useForm({
     type: 'credit',
     payment: 'disabled',
     agree: false,
-    checked: 'on'
+    checked: 'on',
+    gender: null
 });
+
+const genders = ref([
+    { id: 'male', gender: 'Male' },
+    { id: 'female', gender: 'Female' },
+    { id: 'other', gender: 'Other' },
+]);
 
 const roles = ref([
     { id: 'admin', name: 'Admin' },

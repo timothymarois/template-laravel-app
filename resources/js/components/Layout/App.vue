@@ -10,9 +10,15 @@
         :topBarItems="topBarItems"
         :linkComponent="'Link'"
     >
-        <template #navProfile>
+        <template #navActions>
             <NavOptionDarkToggle />
-            <NavProfileMenu avatar-only />
+            <ProfileMenu
+                :user="user"
+                :items="profileMenuItems"
+                :avatar-only="true"
+                headerLink="/"
+                linkComponent="Link"
+            />
         </template>
         <template #headerAction>
             <slot name="headerAction" />
@@ -38,6 +44,9 @@
 <script setup>
 import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
 import LayoutApp from '@atlas/components/App/Layout/App.vue';
+import ProfileMenu from '@atlas/components/App/Nav/ProfileMenu.vue';
+
+const user = usePage().props.user;
 
 const props = defineProps({
     title : {
@@ -57,6 +66,19 @@ const props = defineProps({
         default: () => [],
     }
 });
+
+const profileMenuItems = computed(() => [
+    { separator: true },
+    { label: 'Company Name', icon: 'pi pi-building-columns', href: '/' },
+    { separator: true },
+    { label: 'Billing & Plan', icon: 'pi pi-credit-card', href: '/' },
+    { label: 'Manage Access', icon: 'pi pi-users', href: '/' },
+    { label: 'Integrations', icon: 'pi pi-objects-column', href: '/' },
+    { label: 'Settings', icon: 'pi pi-cog', href: '/' },
+    { label: 'Status page', icon: 'pi pi-cog', href: 'https://google.com', external: true },
+    { separator: true },
+    { label: 'Logout', icon: 'pi pi-sign-out', href: '/logout' }
+]);
 
 const topBarItems = computed(() => [
     { href: '/', label: 'Home' },

@@ -1,10 +1,13 @@
 <template>
     <LayoutApp title="Users" :pageTitle="`Users (${userTotal})`">
         <template #default>
-            <Card pt:content:class="p-0.5 pt-0">
+            <Card pt:content:class="p-0">
                 <template #header>
                     <div class="flex items-center justify-between">
                         <div class="grow flex items-center space-x-2">
+                            <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
+                        </div>
+                        <div class="flex items-center space-x-2">
                             <InputText
                                 v-model="search"
                                 placeholder="Search user name or email"
@@ -12,9 +15,7 @@
                                 class="w-[400px]"
                                 clearable
                             />
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
+                            <Button outlined size="small" label="Filters" @click="open('ADD_EDIT_USER')" />
                         </div>
                     </div>
                 </template>
@@ -24,10 +25,21 @@
                         :columns="columns"
                         :sortField="sortField"
                         :sortOrder="sortOrder"
-                        :selection="selected"
+                        :selection="null"
                         @update:selection="selected = $event"
                         @sort="onSort"
                     >
+                        <template #edit="{ data }">
+                            <div class="w-full flex items-center justify-center">
+                                <ButtonMenu
+                                    :items="[
+                                        { label: 'Edit', icon: 'pi pi-pencil', click: () => open('ADD_EDIT_USER', data) },
+                                        { separator: true },
+                                        { label: 'Archive', icon: 'pi pi-trash', click: () => open('DELETE_USER', data) },
+                                    ]"
+                                />
+                            </div>
+                        </template>
                         <template #name="{ data }">
                             <Link class="hover:underline" :href="`/projects/${data.id}/overview`">
                                 {{ data.name }}
@@ -66,6 +78,7 @@
 
 <script setup>
 import Table from '@atlas/components/Table/Table.vue';
+import ButtonMenu from '@atlas/components/ButtonMenu.vue';
 
 const props = defineProps({
     users: {
@@ -81,6 +94,7 @@ const props = defineProps({
 const { open } = useModal();
 
 const columns = [
+    { field: 'edit', header: '', class: 'w-[20px]', sortable: false },
     { field: 'id', header: 'Id', sortable: false },
     { field: 'name', header: 'Name', sortable: true },
     { field: 'email', header: 'Email', sortable: true },

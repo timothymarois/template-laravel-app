@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
 import LayoutApp from '@atlas/components/App/Layout/App.vue';
 
 const props = defineProps({
