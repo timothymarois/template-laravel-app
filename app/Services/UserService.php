@@ -27,7 +27,8 @@ class UserService
     {
         return $this->buildQuery($options)
             ->when($options['sortField'] ?? false, function ($q) use ($options) {
-                return $q->orderBy($options['sortField'], $options['sortOrder'] ?? 'asc');
+                $direction = ($options['sortOrder'] ?? 1) === 1 ? 'asc' : 'desc';
+                return $q->orderBy($options['sortField'], $direction);
             })
             ->paginate($perPage)
             ->withQueryString();
