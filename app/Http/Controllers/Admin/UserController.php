@@ -8,35 +8,23 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use App\Http\Traits\HandlesIndexOptions;
 
 class UserController extends Controller
 {
+    use HandlesIndexOptions;
+
     public function __construct(protected UserService $userService) {}
 
     public function index(Request $request)
     {
-        $search = $request->input('search', '');
-        $filters = $request->input('filters', []);
-        $perPage = (int) $request->input('perPage', 15);
-        $sortField = $request->input('sortField', 'name');
-        $sortOrder = (int) $request->input('sortOrder', 1);
+        $options = $this->resolveIndexOptions($request);
 
-        $query = $this->userService->listPaginated($perPage, [
-            'search' => $search,
-            'filters' => $filters,
-            'sortField' => $sortField,
-            'sortOrder' => ($sortOrder == -1 ? 'desc' : 'asc'),
-        ]);
+        $query = $this->userService->listPaginated($options['perPage'], $options);
 
         return Inertia::render('Admin/Users', [
             'users' => $query,
-            'options' => [
-                'search' => $search,
-                'perPage' => $perPage,
-                'sortField' => $sortField,
-                'sortOrder' => $sortOrder,
-                'filters' => $filters,
-            ],
+            'options' => $options,
         ]);
     }
 
