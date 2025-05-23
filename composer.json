@@ -15,6 +15,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.19",
         "laravel/tinker": "^2.9",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "opcodesio/log-viewer": "^3.10",
         "sentry/sentry-laravel": "^4.7",
         "tightenco/ziggy": "^2.3",

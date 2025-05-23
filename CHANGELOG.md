@@ -10,6 +10,7 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 Adds examples of datatables atlas component and composable usage with inertia response.
 
+- Updated composer deps for `league/flysystem-aws-s3-v3`
 - Updated `config/session.php` for "172800" (48 hours).
 - Updated examples to use new data table component, button menu and profile menu.
 - Updated examples to use `<LinkPaginator>` for laravel
