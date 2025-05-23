@@ -8,14 +8,25 @@
                             <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
                         </div>
                         <div class="flex items-center space-x-2">
+                            <div class="w-[250px]">
+                                <Select
+                                    v-model="filters.user_id"
+                                    :options="[{ id: null, name: 'All users' }, ...users.data]"
+                                    option-label="name"
+                                    option-value="id"
+                                    placeholder="Filter user (testing only)"
+                                    fluid
+                                    filter
+                                    showClear
+                                />
+                            </div>
                             <InputText
                                 v-model="search"
                                 placeholder="Search user name or email"
-                                size="small"
                                 class="w-[400px]"
                                 clearable
                             />
-                            <Button outlined size="small" label="Filters" @click="open('ADD_EDIT_USER')" />
+                            <Button outlined label="Filters" @click="open('ADD_EDIT_USER')" />
                         </div>
                     </div>
                 </template>

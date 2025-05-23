@@ -16,10 +16,13 @@ class UserService
     {
         return User::query()
             ->when($options['search'] ?? false, function ($q) use ($options) {
-                return $q->where(function ($q) use ($options) {
+                $q->where(function ($q) use ($options) {
                     $q->where('name', 'like', "%{$options['search']}%")
                         ->orWhere('email', 'like', "%{$options['search']}%");
                 });
+            })
+            ->when($options['filters']['user_id'] ?? null, function ($q, $userId) {
+                $q->where('id', $userId);
             });
     }
 

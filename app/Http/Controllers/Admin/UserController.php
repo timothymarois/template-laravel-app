@@ -14,6 +14,10 @@ class UserController extends Controller
 {
     use HandlesIndexOptions;
 
+    protected array $filterCasts = [
+        'user_id' => 'int',
+    ];
+
     public function __construct(protected UserService $userService) {}
 
     public function index(Request $request)
