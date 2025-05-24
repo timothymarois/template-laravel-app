@@ -48,6 +48,11 @@
                                         <MultiSelect v-model="form.roles" display="chip" :options="roles" option-label="name" option-value="id" fluid filter :maxSelectedLabels="6" />
                                     </LabelField>
                                 </div>
+                                <div class="w-full">
+                                    <LabelField name="roles" label="Roles (autocomplete)">
+                                        <AutoComplete v-model="form.autorole" :suggestions="filteredRoles" @complete="search" optionLabel="label" optionValue="id" fluid dropdown showClear forceSelection />
+                                    </LabelField>
+                                </div>
                             </div>
                         </template>
                     </Card>
@@ -88,6 +93,11 @@
                                         <MultiSelect v-model="form.roles" display="chip" :options="roles" option-label="name" option-value="id" fluid filter :maxSelectedLabels="6" :disabled="true"  />
                                     </LabelField>
                                 </div>
+                                <div class="w-full">
+                                    <LabelField name="roles" label="Roles (autocomplete)">
+                                        <AutoComplete v-model="form.autorole" :suggestions="filteredRoles" @complete="search" option-label="label" option-value="id" fluid :disabled="true" dropdown showClear forceSelection />
+                                    </LabelField>
+                                </div>
                             </div>
                         </template>
                     </Card>
@@ -117,7 +127,7 @@
                                         <div class="space-y-2 mt-2">
                                             <LabelRadioButton v-model="form.payment" inputId="payment1" name="payment" value="Now" label="Now" />
                                             <LabelRadioButton v-model="form.payment" inputId="payment2" name="payment" value="Later" label="Later" />
-                                            <LabelRadioButton v-model="form.payment" inputId="payment3" name="payment" value="disabled" label="Disabled" :disabled="true" />
+                                            <LabelRadioButton v-model="form.payment" inputId="payment3" name="payment" value="disabled" label="Disabled" :disabled="true"  />
                                         </div>
                                     </LabelField>
                                 </div>
@@ -318,14 +328,9 @@ const form = useForm({
     payment: 'disabled',
     agree: false,
     checked: 'on',
-    gender: null
+    gender: null,
+    autorole: null,
 });
-
-const genders = ref([
-    { id: 'male', gender: 'Male' },
-    { id: 'female', gender: 'Female' },
-    { id: 'other', gender: 'Other' },
-]);
 
 const roles = ref([
     { id: 'admin', name: 'Admin' },
@@ -337,6 +342,24 @@ const roles = ref([
     { id: 'deleted', name: 'Deleted' },
     { id: 'blacklisted', name: 'Blacklisted' },
     { id: 'archived', name: 'Archived' },
+]);
+
+const genders = ref([
+    { id: 'male', gender: 'Male' },
+    { id: 'female', gender: 'Female' },
+    { id: 'other', gender: 'Other' },
+]);
+
+const autoRoles = ref([
+    { id: 'admin', label: 'Admin' },
+    { id: 'user', label: 'User' },
+    { id: 'guest', label: 'Guest' },
+    { id: 'banned', label: 'Banned' },
+    { id: 'pending', label: 'Pending' },
+    { id: 'suspended', label: 'Suspended' },
+    { id: 'deleted', label: 'Deleted' },
+    { id: 'blacklisted', label: 'Blacklisted' },
+    { id: 'archived', label: 'Archived' },
 ]);
 
 const types = ref([
@@ -381,4 +404,18 @@ const pageNavItems = [
     { label: 'Security', href: '/settings/security' },
     { label: 'Notifications', href: '/settings/notifications' },
 ];
+
+const filteredRoles = ref([...autoRoles.value]);
+
+const search = (event) => {
+    setTimeout(() => {
+        if (!event.query.trim().length) {
+            filteredRoles.value = [...autoRoles.value];
+        } else {
+            filteredRoles.value = autoRoles.value.filter((country) => {
+                return country.label.toLowerCase().startsWith(event.query.toLowerCase());
+            });
+        }
+    }, 250);
+};
 </script>
