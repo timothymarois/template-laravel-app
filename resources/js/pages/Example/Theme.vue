@@ -12,10 +12,10 @@
                         <template #header>
                             <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center justify-between">
                                 <div>Edit</div>
-                                <ToggleSwitch v-model="form.checked" true-value="on" false-value="off" />
-                                <!-- <div class="flex items-center space-x-2">
-                                    <ManageMenu :items="manageItems" />
-                                </div> -->
+                                <div class="flex items-center space-x-2">
+                                    <ToggleSwitch v-model="form.checked" true-value="on" false-value="off" />
+                                    <ButtonMenu :items="manageItems" />
+                                </div>
                             </div>
                         </template>
                         <template #content>
@@ -351,6 +351,12 @@ const manageItems = [
         label: 'Edit',
         icon: 'text-sm pi pi-pencil',
         action: 'edit'
+    },
+    {
+        label: 'Download',
+        icon: 'text-sm pi pi-download',
+        action: 'download',
+        disabled: true
     },
     {
         separator: true
