@@ -2,6 +2,7 @@
     <DrawerForm
         v-model="showModal"
         :title="form.id ? 'Edit user' : 'Add user'"
+        :tabs="[{title: 'Details'}, {title: 'Line items'}, {title: 'Roles', disabled: true}]"
         position="right"
         width="600px"
         :loading="form.processing"
@@ -32,6 +33,13 @@
                 </form>
             </template>
         </Card>
+        <template #tab-1>
+            <Card>
+                <template #content>
+                    <div>This is line items</div>
+                </template>
+            </Card>
+        </template>
     </DrawerForm>
 </template>
 

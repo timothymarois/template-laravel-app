@@ -82,7 +82,7 @@ const profileMenuItems = computed(() => [
 
 const topBarItems = computed(() => [
     { href: '/', label: 'Home' },
-    { href: '/admin/users', label: 'Users' },
+    { href: '/admin/users', label: 'Users', parent: '/admin' },
     {
         href: '/theme', label: 'Overview',
         children: [
