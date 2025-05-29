@@ -21,6 +21,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [PageController::class, 'index'])->name('index');
+    Route::get('admin/users/table', [UserController::class, 'table'])->name('users.table');
     Route::resource('/admin/users', UserController::class);
     Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
 });

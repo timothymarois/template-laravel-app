@@ -32,6 +32,19 @@ class UserController extends Controller
         ]);
     }
 
+    public function table(Request $request)
+    {
+        $options = $this->resolveIndexOptions($request);
+
+        $query = $this->userService->listPaginated($options['perPage'], $options);
+
+        return Inertia::render('Admin/UsersTable', [
+            'users' => $query,
+            'options' => $options,
+        ]);
+    }
+
+
     public function show(User $user)
     {
         return Inertia::render('Admin/User', [

@@ -9,6 +9,8 @@
         :sideBarItems="sideBarItems"
         :topBarItems="topBarItems"
         :linkComponent="'Link'"
+        :noScroll="noScroll"
+        :containerClass="containerClass"
         widthClass="w-full"
     >
         <template #navActions>
@@ -87,6 +89,14 @@ const props = defineProps({
     pageNavItems: {
         type: Array,
         default: () => [],
+    },
+    containerClass: {
+        type: String,
+        default: 'm-auto p-4'
+    },
+    noScroll: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -105,7 +115,8 @@ const profileMenuItems = computed(() => [
 
 const topBarItems = computed(() => [
     { href: '/', label: 'Home' },
-    { href: '/admin/users', label: 'Users', parent: '/admin' },
+    { href: '/admin/users', label: 'Users', parent: null },
+    { href: '/admin/users/table', label: 'Users table', parent: null },
     {
         href: '/theme', label: 'Overview',
         children: [
@@ -127,6 +138,7 @@ const sideBarItems = computed(() => [
     {
         children: [
             { label: 'Users', href: '/admin/users', parent: null, icon: IconUser, activeIcon: IconUser },
+            { label: 'Users table', href: '/admin/users/table', parent: null, icon: IconUser, activeIcon: IconUser },
             { label: 'Theme', href: '/theme', parent: '/theme', icon: IconColorFilter, activeIcon: IconColorFilter }
         ],
     },
