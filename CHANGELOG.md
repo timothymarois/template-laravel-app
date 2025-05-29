@@ -11,6 +11,7 @@ Note: once you update a project on that uses this template, be sure to copy this
 Improves the overall layout app functionality.
 
 - Updated layoutApp with more example options with title and custom width.
+- Updated page content for new side content examples
 
 ## v2.1.2 - 05/22/2025
 
