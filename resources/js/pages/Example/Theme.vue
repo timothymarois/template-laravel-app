@@ -295,10 +295,7 @@
             </div>
         </div>
         <template #footer>
-            This is a page footer
-        </template>
-        <template #footerAction>
-            [actions]
+            <div class="w-full text-center text-xs">This page is copyrighted 2026 (footer example)</div>
         </template>
     </LayoutApp>
 </template>

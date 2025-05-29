@@ -64,6 +64,7 @@
             <Select
                 v-model="perPage"
                 :options="perPageOptions"
+                size="small"
                 option-label="label"
                 option-value="value"
             />
