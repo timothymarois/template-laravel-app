@@ -21,6 +21,9 @@
                 linkComponent="Link"
             />
         </template>
+        <template #pageSideContent>
+            <slot name="pageSideContent" />
+        </template>
         <template #headerTitle>
             <slot name="headerTitle" />
         </template>
