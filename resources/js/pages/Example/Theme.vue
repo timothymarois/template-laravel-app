@@ -400,11 +400,15 @@ const pageTabs = [
 const pageNavItems = [
     { label: 'Overview', href: '/theme' },
     { label: 'Settings', href: '/theme/settings' },
-    { label: 'Account', href: '/settings/account' },
-    { label: 'Security', href: '/settings/security' },
-    { label: 'Notifications', href: '/settings/notifications' },
+    { label: 'My Account', children: [
+        { label: 'Account', href: '/settings/account' },
+        { label: 'Security', href: '/settings/security' },
+    ] },
+    { label: 'Notifications', children: [
+        { label: 'Email', href: '/settings/notifications/email' },
+        { label: 'Push', href: '/settings/notifications/push' },
+    ] },
 ];
-
 const filteredRoles = ref([...autoRoles.value]);
 
 const search = (event) => {
