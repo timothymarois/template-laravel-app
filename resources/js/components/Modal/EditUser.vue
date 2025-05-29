@@ -59,7 +59,7 @@ const submit = () => {
     const method = form.id ? 'put' : 'post';
     const routePath = form.id ? route('users.update', form.id) : route('users.store');
     submitForm(form, method, routePath, {
-        only: ['users'],
+        only: ['users', 'user', 'item'],
         toastMessage: form.id ? 'User updated successfully' : 'User created successfully',
         onSuccess: () => showModal.value = false,
     });
