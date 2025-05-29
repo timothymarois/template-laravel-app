@@ -21,6 +21,22 @@
                 linkComponent="Link"
             />
         </template>
+        <template #appTopBar>
+            <div class="px-4 w-full flex items-center justify-between">
+                <div class="w-[400px]">
+                    <InputText placeholder="Search for contacts" size="small" fluid />
+                </div>
+                <div>
+                    <ProfileMenu
+                        :user="user"
+                        :items="profileMenuItems"
+                        :avatar-only="true"
+                        headerLink="/"
+                        linkComponent="Link"
+                    />
+                </div>
+            </div>
+        </template>
         <template #pageSideContent>
             <slot name="pageSideContent" />
         </template>
