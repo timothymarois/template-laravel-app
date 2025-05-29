@@ -52,7 +52,7 @@
                             </div>
                         </template>
                         <template #name="{ data }">
-                            <Link class="hover:underline" :href="`/projects/${data.id}/overview`">
+                            <Link class="hover:underline" :href="`/admin/users/${data.id}`">
                                 {{ data.name }}
                             </Link>
                         </template>

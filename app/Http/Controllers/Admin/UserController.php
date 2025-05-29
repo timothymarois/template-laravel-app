@@ -32,6 +32,13 @@ class UserController extends Controller
         ]);
     }
 
+    public function show(User $user)
+    {
+        return Inertia::render('Admin/User', [
+            'item' => $user,
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

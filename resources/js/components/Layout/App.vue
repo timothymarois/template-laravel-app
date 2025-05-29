@@ -1,7 +1,7 @@
 <template>
     <Head :title="title" />
     <LayoutApp
-        :isSideNav="false"
+        :isSideNav="true"
         :pageTitle="pageTitle"
         :pageTabs="pageTabs"
         :pageNavItems="pageNavItems"
@@ -9,6 +9,7 @@
         :sideBarItems="sideBarItems"
         :topBarItems="topBarItems"
         :linkComponent="'Link'"
+        widthClass="w-full"
     >
         <template #navActions>
             <NavOptionDarkToggle />
@@ -19,6 +20,9 @@
                 headerLink="/"
                 linkComponent="Link"
             />
+        </template>
+        <template #headerTitle>
+            <slot name="headerTitle" />
         </template>
         <template #headerAction>
             <slot name="headerAction" />
