@@ -67,10 +67,28 @@ const props = defineProps({
 const { open } = useModal();
 
 const columns = [
-    { field: 'edit', header: '', class: 'w-[20px]', sortable: false },
-    { field: 'id', header: 'Id', sortable: false },
-    { field: 'name', header: 'Name', sortable: true },
-    { field: 'email', header: 'Email', sortable: true },
+    { field: 'edit', header: '', class: 'w-[20px]', sortable: false, frozen: true, style: 'min-width: 40px' },
+    { field: 'id', header: 'Id', sortable: false, frozen: true, style: 'min-width: 60px' },
+    { field: 'name', header: 'Name', sortable: true, frozen: true, style: 'width: 200px' },
+    { field: 'email', header: 'Email', sortable: true, style: 'min-width: 200px' },
+    { field: 'email', header: 'Email 2', sortable: true, style: 'min-width: 200px' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 400px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
 ];
 
 const perPageOptions = [
