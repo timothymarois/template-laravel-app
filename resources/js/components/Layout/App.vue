@@ -23,7 +23,7 @@
                 linkComponent="Link"
             />
         </template>
-        <template #appTopBar>
+        <!-- <template #appTopBar>
             <div class="px-4 w-full flex items-center justify-between">
                 <div class="w-[400px]">
                     <InputText placeholder="Search for contacts" size="small" fluid />
@@ -38,7 +38,7 @@
                     />
                 </div>
             </div>
-        </template>
+        </template> -->
         <template #pageSideContent>
             <slot name="pageSideContent" />
         </template>
@@ -115,17 +115,15 @@ const profileMenuItems = computed(() => [
 
 const topBarItems = computed(() => [
     { href: '/', label: 'Home' },
-    { href: '/admin/users', label: 'Users', parent: null },
-    { href: '/admin/users/table', label: 'Users table', parent: null },
+    { href: '/users', label: 'Users', parent: null },
     {
-        href: '/theme', label: 'Overview',
+        label: 'Overview',
         children: [
             { href: '/theme', label: 'Theme' },
             { href: '/theme/settings', label: 'Settings' }
         ]
     },
     {
-        href: '/components',
         label: 'Components',
         children: [
             { href: '/components/buttons', label: 'Buttons' },
@@ -137,9 +135,8 @@ const topBarItems = computed(() => [
 const sideBarItems = computed(() => [
     {
         children: [
-            { label: 'Users', href: '/admin/users', parent: null, icon: IconUser, activeIcon: IconUser },
-            { label: 'Users table', href: '/admin/users/table', parent: null, icon: IconUser, activeIcon: IconUser },
-            { label: 'Theme', href: '/theme', parent: '/theme', icon: IconColorFilter, activeIcon: IconColorFilter }
+            { label: 'Users', href: '/users', parent: null, icon: IconUser, activeIcon: IconUser },
+            { label: 'Components', href: '/components/editor', parent: '/components', icon: IconColorFilter, activeIcon: IconColorFilter }
         ],
     },
     {

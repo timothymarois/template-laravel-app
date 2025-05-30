@@ -6,12 +6,13 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
-## v2.1.3 - 05/29/2025
+## v2.1.3 - 05/30/2025
 
 Improves the overall layout app functionality.
 
 - Updated layoutApp with more example options with title and custom width.
 - Updated page content for new side content examples
+- Updated the atlas deps for `"@tiptap/extension-placeholder": "^2.12.0",`
 
 ## v2.1.2 - 05/22/2025
 

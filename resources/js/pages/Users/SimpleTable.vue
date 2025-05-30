@@ -105,7 +105,7 @@ const perPageOptions = [
     { label: '50', value: 50 },
 ];
 
-const { search, filters, perPage, sortField, sortOrder } = useDataTableOptions('users.index', props.options, {
+const { search, filters, perPage, sortField, sortOrder } = useDataTableOptions('users.table', props.options, {
     only: ['users'],
 });
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -18,34 +18,41 @@ class UserController extends Controller
         'user_id' => 'int',
     ];
 
+    protected array $indexDefaults = [
+        'perPage' => 50,
+        'sortField' => 'name',
+        'sortOrder' => 1,
+    ];
+
     public function __construct(protected UserService $userService) {}
 
     public function index(Request $request)
     {
         $options = $this->resolveIndexOptions($request);
 
+        $options['perPage'] = 50;
+
         $query = $this->userService->listPaginated($options['perPage'], $options);
 
-        return Inertia::render('Admin/Users', [
+        return Inertia::render('Users/Index', [
             'users' => $query,
             'options' => $options,
         ]);
     }
 
-    public function table(Request $request)
+    public function simpleTable(Request $request)
     {
         $options = $this->resolveIndexOptions($request);
 
-        $options['perPage'] = 100;
+        $options['perPage'] = 50;
 
         $query = $this->userService->listPaginated($options['perPage'], $options);
 
-        return Inertia::render('Admin/UsersTable', [
+        return Inertia::render('Users/SimpleTable', [
             'users' => $query,
             'options' => $options,
         ]);
     }
-
 
     public function show(User $user)
     {
@@ -61,9 +68,10 @@ class UserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
         ]);
 
-        $this->userService->create($validated);
+        $user = $this->userService->create($validated);
 
-        return back();
+        return redirect()->route('users.show', $user);
+        // return back();
     }
 
     public function update(Request $request, User $user)

@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ComponentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/theme', [PageController::class, 'pTheme']);
-Route::get('/theme/settings', [PageController::class, 'pSettings']);
+// Route::get('/theme', [PageController::class, 'pTheme']);
+// Route::get('/theme/settings', [PageController::class, 'pSettings']);
 
-Route::get('/components/buttons', [PageController::class, 'pButtons']);
-Route::get('/components/forms', [PageController::class, 'pForms']);
+// Route::get('/components/buttons', [PageController::class, 'pButtons']);
+// Route::get('/components/forms', [PageController::class, 'pForms']);
 
 Route::middleware(['guest'])->group(function () {
     Route::get('register', [RegisterController::class, 'registerView'])->name('register');
@@ -21,7 +22,11 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [PageController::class, 'index'])->name('index');
-    Route::get('admin/users/table', [UserController::class, 'table'])->name('users.table');
-    Route::resource('/admin/users', UserController::class);
+    Route::get('users/table', [UserController::class, 'simpleTable'])->name('users.table');
+    Route::resource('users', UserController::class);
     Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
+
+    Route::get('/components/forms', [ComponentController::class, 'forms'])->name('components.forms');
+    Route::get('/components/editor', [ComponentController::class, 'editor'])->name('components.editor');
+    Route::get('/components/editor/variant', [ComponentController::class, 'editorVariant'])->name('components.editor.variant');
 });
