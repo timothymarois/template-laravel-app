@@ -8,7 +8,7 @@
                         :columns="columns"
                         :sortField="sortField"
                         :sortOrder="sortOrder"
-                        :selection="null"
+                        :selection="selected"
                         :scrollable="true"
                         :scrollHeight="'flex'"
                         @update:selection="selected = $event"

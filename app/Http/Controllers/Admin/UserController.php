@@ -36,6 +36,8 @@ class UserController extends Controller
     {
         $options = $this->resolveIndexOptions($request);
 
+        $options['perPage'] = 100;
+
         $query = $this->userService->listPaginated($options['perPage'], $options);
 
         return Inertia::render('Admin/UsersTable', [
