@@ -13,6 +13,7 @@ Improves the overall layout app functionality.
 - Updated layoutApp with more example options with title and custom width.
 - Updated page content for new side content examples
 - Updated the atlas deps for `"@tiptap/extension-placeholder": "^2.12.0",`
+- Updated `base.css` with scrollbar styling
 
 ## v2.1.2 - 05/22/2025
 
