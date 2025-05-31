@@ -59,7 +59,7 @@ const editContent = ref('');
 
 const pageTabs = [
     { title: 'Overview', href: '/components/editor' },
-    { title: 'Variant', href: '/components/editor/variant' },
+    { title: 'Variants', href: '/components/editor/variant' },
     { title: 'Text', href: '/components/editor/text' },
 ];
 
