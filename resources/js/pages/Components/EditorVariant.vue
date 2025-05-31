@@ -8,11 +8,6 @@
             </Card>
             <Card pt:content:class="p-0">
                 <template #content>
-                    <Editor v-model="editContent" :toolbar="false" placeholder="No toolbar editor" />
-                </template>
-            </Card>
-            <Card pt:content:class="p-0">
-                <template #content>
                     <div class="bg-yellow-100/60 w-full flex flex-col">
                         <div>
                             <Editor v-model="editContent" toolbarClass="" />
@@ -22,6 +17,16 @@
                             <Button text label="Cancel" size="small" @click="editContent = ''" />
                         </div>
                     </div>
+                </template>
+            </Card>
+            <Card pt:content:class="p-0">
+                <template #content>
+                    <Editor v-model="editContent" :toolbarOptions="['bold', 'italic', 'strike']" placeholder="Limited options" />
+                </template>
+            </Card>
+            <Card pt:content:class="p-0">
+                <template #content>
+                    <Editor v-model="editContent" :toolbar="false" placeholder="No toolbar editor" />
                 </template>
             </Card>
             <Card v-if="editContent">
