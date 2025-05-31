@@ -9,7 +9,12 @@
                 </template>
                 <template #content>
                     <div class="border border-surface-300 dark:border-surface-700 rounded-md">
-                        <Editor ref="editor" v-model="editContent" />
+                        <Editor ref="editor" v-model="editContent">
+                            <template #toolbar>
+                                <Button text label="Custom 1" size="small" class="!px-2" @click="addText" />
+                                <Button text label="Custom 2" size="small" class="!px-2" @click="addText" />
+                            </template>
+                        </Editor>
                     </div>
                 </template>
             </Card>
