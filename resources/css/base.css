@@ -132,6 +132,7 @@
     --p-content-border-color: var(--p-surface-200);
     --p-content-hover-background: var(--p-surface-100);
     --p-content-hover-color: var(--p-surface-800);
+    --p-scrollbar-thumb: var(--p-surface-100);
     --p-highlight-background: var(--p-primary-50);
     --p-highlight-color: var(--p-primary-700);
     --p-highlight-focus-background: var(--p-primary-100);
@@ -159,6 +160,7 @@
         --p-content-border-color: var(--p-surface-700);
         --p-content-hover-background: var(--p-surface-800);
         --p-content-hover-color: var(--p-surface-0);
+        --p-scrollbar-thumb: var(--p-surface-600);
         --p-highlight-background: color-mix(in srgb, var(--p-primary-400), transparent 84%);
         --p-highlight-color: rgba(255, 255, 255, 0.87);
         --p-highlight-focus-background: color-mix(in srgb, var(--p-primary-400), transparent 76%);
@@ -168,4 +170,34 @@
         --p-text-muted-color: var(--p-surface-400);
         --p-text-hover-muted-color: var(--p-surface-300);
     }
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--p-surface-100);
+    border: 0px solid var(--p-surface-300);
+    cursor: pointer;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--p-surface-400);
+    border-radius: 6px;
+    border: 2px solid var(--p-surface-100);
+    box-sizing: border-box;
+    cursor: pointer;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--p-surface-500);
+}
+.dark ::-webkit-scrollbar-track {
+    background: var(--p-surface-800);
+}
+.dark ::-webkit-scrollbar-thumb {
+    background-color: var(--p-surface-500);
+    border: 2px solid var(--p-surface-800);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--p-surface-400);
 }
