@@ -29,4 +29,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/components/forms', [ComponentController::class, 'forms'])->name('components.forms');
     Route::get('/components/editor', [ComponentController::class, 'editor'])->name('components.editor');
     Route::get('/components/editor/variant', [ComponentController::class, 'editorVariant'])->name('components.editor.variant');
+    Route::get('/components/editor/text', [ComponentController::class, 'editorText'])->name('components.editor.text');
 });

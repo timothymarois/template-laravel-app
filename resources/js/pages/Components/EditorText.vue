@@ -3,12 +3,7 @@
         <div class="space-y-4">
             <Card pt:content:class="p-0">
                 <template #content>
-                    <Editor v-model="editContent" placeholder="Start typing..." />
-                </template>
-            </Card>
-            <Card pt:content:class="p-0">
-                <template #content>
-                    <Editor v-model="editContent" :toolbar="false" placeholder="No toolbar editor" />
+                    <Editor v-model="editContent" textOnly placeholder="Start typing for text output..." />
                 </template>
             </Card>
             <Card v-if="editContent">

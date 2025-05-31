@@ -21,4 +21,9 @@ class ComponentController extends Controller
     {
         return Inertia::render('Components/EditorVariant');
     }
+
+    public function editorText(): Response
+    {
+        return Inertia::render('Components/EditorText');
+    }
 }

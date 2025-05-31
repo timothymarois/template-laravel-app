@@ -9,7 +9,7 @@
                 </template>
                 <template #content>
                     <div class="border border-surface-300 dark:border-surface-700 rounded-md">
-                        <Editor ref="editor" :content="editContent" @save="editContent = $event" />
+                        <Editor ref="editor" v-model="editContent" />
                     </div>
                 </template>
             </Card>
@@ -55,6 +55,7 @@ const editContent = ref('');
 const pageTabs = [
     { title: 'Overview', href: '/components/editor' },
     { title: 'Variant', href: '/components/editor/variant' },
+    { title: 'Text', href: '/components/editor/text' },
 ];
 
 const addText = () => {
