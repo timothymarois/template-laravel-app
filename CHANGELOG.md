@@ -14,6 +14,7 @@ Improves the overall layout app functionality.
 - Updated page content for new side content examples
 - Updated the atlas deps for `"@tiptap/extension-placeholder": "^2.12.0",`
 - Updated `base.css` with scrollbar styling
+- Updated atlas to `v1.1.16`
 
 ## v2.1.2 - 05/22/2025
 

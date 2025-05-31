@@ -457,7 +457,13 @@ php artisan inertia:start-ssr
 
 `npm install git+https://github.com/tmarois/atlas-ui.git#main`
 
+testing locally: 
+
 `"atlas-ui": "file:../../Repo/atlas-ui",`
+
+testing before version release
+
+`"atlas-ui": "github:tmarois/atlas-ui#main",`
 
 ```
 server: {
