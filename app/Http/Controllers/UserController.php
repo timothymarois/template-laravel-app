@@ -56,7 +56,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        return Inertia::render('Admin/User', [
+        return Inertia::render('Users/Show', [
             'item' => $user,
         ]);
     }
