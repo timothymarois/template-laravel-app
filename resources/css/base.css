@@ -181,6 +181,9 @@
     border: 0px solid var(--p-surface-300);
     cursor: pointer;
 }
+::-webkit-scrollbar-track:hover {
+    background: var(--p-surface-200);
+}
 ::-webkit-scrollbar-thumb {
     background-color: var(--p-surface-400);
     border-radius: 6px;
