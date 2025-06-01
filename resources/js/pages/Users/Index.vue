@@ -1,5 +1,12 @@
 <template>
     <LayoutApp title="Users" :pageTitle="`Users (${userTotal})`" containerClass="p-0" :noScroll="true">
+        <template v-if="selected.length" #headerTitle>
+            <TableActions
+                :selectCount="selected.length"
+                :menuItems="tableActionMenuItems"
+                @action="handleTableAction"
+            />
+        </template>
         <template #headerAction>
             <div class="flex items-center justify-between">
                 <!-- <div class="grow flex items-center space-x-2">
@@ -83,6 +90,7 @@
 <script setup>
 import Table from '@atlas/components/Table/Table.vue';
 import ButtonMenu from '@atlas/components/ButtonMenu.vue';
+import TableActions from '@atlas/components/Table/Actions.vue';
 
 const props = defineProps({
     users: {
@@ -96,6 +104,24 @@ const props = defineProps({
 });
 
 const { open } = useModal();
+
+const tableActionMenuItems = ref([
+    { label: 'Edit', action: 'edit' },
+    { label: 'Delete', action: 'delete', disabled: true, tooltip: 'This action is disabled.'},
+    { label: 'More',
+        children:
+        [
+            { label: 'Export', action: 'export' },
+            { separator: true },
+            { label: 'Duplicate', action: 'dup', disabled: true, },
+            { label: 'Email', action: 'email', disabled: true },
+        ]
+    }
+]);
+
+const handleTableAction = (action) => {
+    console.log([action, selected.value]);
+};
 
 const columns = [
     { field: 'edit', header: '', class: 'w-[20px]', sortable: false, frozen: true, style: 'min-width: 40px' },
