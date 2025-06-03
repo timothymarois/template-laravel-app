@@ -15,6 +15,11 @@ Improves the overall layout app functionality.
 - Updated examples with routes/index for filtering on POST tables
 - Updated atlas for `useDataTableOptions` improvements
 
+Add new dep: 
+```
+"vuedraggable": "^2.24.3"
+```
+
 ## v2.1.3 - 05/30/2025
 
 Improves the overall layout app functionality.
