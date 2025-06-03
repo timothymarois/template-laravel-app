@@ -118,7 +118,7 @@ const roles = ref([
     { id: 'disabled', name: 'Disabled' },
     { id: 'banned', name: 'Banned' },
     { id: 'pending', name: 'Pending' },
-    { id: 'suspended', name: 'Suspended' },,
+    { id: 'suspended', name: 'Suspended' },
     { id: 'deleted', name: 'Deleted' },
     { id: 'blacklisted', name: 'Blacklisted' },
     { id: 'archived', name: 'Archived' },
