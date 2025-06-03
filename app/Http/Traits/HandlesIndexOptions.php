@@ -6,33 +6,84 @@ use Illuminate\Http\Request;
 
 trait HandlesIndexOptions
 {
-    // apply on controller where needed
+    // override in controller
     // protected array $filterCasts = [
     //     'user_id' => 'int',
     // ];
 
-    public function resolveIndexOptions(Request $request): array
+    // override in controller
+    // protected array $indexDefaults = [
+    //     'perPage' => 50,
+    //     'sortField' => 'name',
+    //     'sortOrder' => 1,
+    // ];
+
+    // override in controller
+    // protected array $sessionStoreKeys = [
+    //     'search',
+    //     'filters',
+    //     'perPage',
+    //     'sortField',
+    //     'sortOrder',
+    //     'filter_id',
+    //     'viewMode',
+    // ];
+
+    public function resolveIndexOptions(Request $request, bool $withSession = false, ?string $sessionKey = null): array
     {
-        $filters = $request->input('filters', $this->indexDefaults['filters'] ?? []);
+        $sessKey = $sessionKey ?? $request->route()?->getName();
+
+        $defaults = [
+            'search' => $this->indexDefaults['search'] ?? '',
+            'filters' => $this->indexDefaults['filters'] ?? [],
+            'perPage' => $this->indexDefaults['perPage'] ?? 15,
+            'sortField' => $this->indexDefaults['sortField'] ?? 'id',
+            'sortOrder' => $this->indexDefaults['sortOrder'] ?? 1,
+        ];
+
+        if ($request->isMethod('POST') && $withSession && $sessKey) {
+            $payload = $request->only($this->getSessionStoreKeys());
+            $this->storeSessionData($request, $sessKey, $payload);
+            return $payload;
+        }
+
+        $sessionData = $withSession && $sessKey
+            ? $this->resolveSessionData($request, $defaults, $sessKey)
+            : [];
+
+        $input = $request->only($this->getSessionStoreKeys());
+
+        $merged = array_merge($defaults, $sessionData, $input);
 
         if (property_exists($this, 'filterCasts') && is_array($this->filterCasts)) {
             foreach ($this->filterCasts as $key => $type) {
-                if (isset($filters[$key])) {
-                    $filters[$key] = match ($type) {
-                        'int' => (int) $filters[$key],
-                        'bool' => filter_var($filters[$key], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
-                        default => $filters[$key],
+                if (isset($merged['filters'][$key])) {
+                    $merged['filters'][$key] = match ($type) {
+                        'int' => (int) $merged['filters'][$key],
+                        'bool' => filter_var($merged['filters'][$key], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE),
+                        default => $merged['filters'][$key],
                     };
                 }
             }
         }
 
-        return [
-            'search' => $request->input('search', $this->indexDefaults['search'] ?? ''),
-            'filters' => $filters,
-            'perPage' => (int) $request->input('perPage', $this->indexDefaults['perPage'] ?? 15),
-            'sortField' => $request->input('sortField', $this->indexDefaults['sortField'] ?? 'id'),
-            'sortOrder' => (int) $request->input('sortOrder', $this->indexDefaults['sortOrder'] ?? 1),
-        ];
+        return $merged;
+    }
+
+    protected function getSessionStoreKeys(): array
+    {
+        return property_exists($this, 'sessionStoreKeys')
+            ? $this->sessionStoreKeys
+            : ['search', 'filters', 'perPage', 'sortField', 'sortOrder'];
+    }
+
+    protected function resolveSessionData(Request $request, array $defaults, string $sessionKey): ?array
+    {
+        return session("options.{$sessionKey}", []);
+    }
+
+    protected function storeSessionData(Request $request, string $sessionKey, array $payload): void
+    {
+        session()->put("options.{$sessionKey}", $payload);
     }
 }

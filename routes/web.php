@@ -23,9 +23,11 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [PageController::class, 'index'])->name('index');
     Route::get('users/table', [UserController::class, 'simpleTable'])->name('users.table');
-    Route::resource('users', UserController::class);
-    Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
 
+    Route::resource('users', UserController::class);
+    Route::post('/users/filters', [UserController::class, 'prepareIndexFilters'])->name('users.index.filters');
+
+    Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
     Route::get('/components/forms', [ComponentController::class, 'forms'])->name('components.forms');
     Route::get('/components/editor', [ComponentController::class, 'editor'])->name('components.editor');
     Route::get('/components/editor/variant', [ComponentController::class, 'editorVariant'])->name('components.editor.variant');

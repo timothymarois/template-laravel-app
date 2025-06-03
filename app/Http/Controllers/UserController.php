@@ -28,23 +28,23 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $options = $this->resolveIndexOptions($request);
-
-        $options['perPage'] = 50;
-
-        $query = $this->userService->listPaginated($options['perPage'], $options);
+        $options = $this->resolveIndexOptions($request, true, 'users.index');
 
         return Inertia::render('Users/Index', [
-            'users' => $query,
+            'users' => $this->userService->listPaginated($options['perPage'], $options),
             'options' => $options,
         ]);
+    }
+
+    public function prepareIndexFilters(Request $request)
+    {
+        $this->resolveIndexOptions($request, true, 'users.index');
+        return redirect()->route('users.index');
     }
 
     public function simpleTable(Request $request)
     {
         $options = $this->resolveIndexOptions($request);
-
-        $options['perPage'] = 50;
 
         $query = $this->userService->listPaginated($options['perPage'], $options);
 

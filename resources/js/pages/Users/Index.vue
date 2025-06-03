@@ -1,8 +1,8 @@
 <template>
     <LayoutApp title="Users" :pageTitle="`Users (${userTotal})`" containerClass="p-0" :noScroll="true">
-        <template v-if="selected.length" #headerTitle>
+        <template v-if="(selectAll ? userTotal : selected?.length) > 0" #headerTitle>
             <TableActions
-                :selectCount="selected.length"
+                :selectedCount="selectAll ? userTotal : selected?.length"
                 :menuItems="tableActionMenuItems"
                 @action="handleTableAction"
             />
@@ -43,13 +43,17 @@
                 <ScrollFrame rootClass="overflow-hidden" :addOffset="53">
                     <Table
                         :items="users.data"
+                        :itemTotal="userTotal"
                         :columns="columns"
                         :sortField="sortField"
                         :sortOrder="sortOrder"
-                        :selection="selected"
+                        :selected="selected"
+                        :selectAll="selectAll"
                         :scrollable="true"
                         :scrollHeight="'flex'"
-                        @update:selection="selected = $event"
+                        hasSelection
+                        @update:selected="selected = $event"
+                        @update:selectAll="selectAll = $event"
                         @sort="onSort"
                     >
                         <template #edit="{ data }">
@@ -91,6 +95,7 @@
 import Table from '@atlas/components/Table/Table.vue';
 import ButtonMenu from '@atlas/components/ButtonMenu.vue';
 import TableActions from '@atlas/components/Table/Actions.vue';
+import { onMounted } from 'vue';
 
 const props = defineProps({
     users: {
@@ -120,7 +125,9 @@ const tableActionMenuItems = ref([
 ]);
 
 const handleTableAction = (action) => {
-    console.log([action, selected.value]);
+    if (action === 'clear') {
+        resetSelection();
+    }
 };
 
 const columns = [
@@ -155,7 +162,8 @@ const perPageOptions = [
     { label: '100', value: 100 },
 ];
 
-const { search, filters, perPage, sortField, sortOrder } = useDataTableOptions('users.index', props.options, {
+const { search, filters, perPage, sortField, sortOrder, selectAll, selected, resetSelection } = useDataTableOptions('users.index.filters', props.options, {
+    method: 'post',
     only: ['users'],
 });
 
@@ -163,8 +171,6 @@ const onSort = ({ field, order }) => {
     sortField.value = field;
     sortOrder.value = order;
 };
-
-const selected = ref([]);
 
 const userTotal = computed(() => props.users?.total || 0);
 </script>

@@ -11,6 +11,9 @@ Note: once you update a project on that uses this template, be sure to copy this
 Improves the overall layout app functionality.
 
 - Added examples with new `<TableActions>`
+- Updated `HandlesIndexOptions` to allow for session management and filters
+- Updated examples with routes/index for filtering on POST tables
+- Updated atlas for `useDataTableOptions` improvements
 
 ## v2.1.3 - 05/30/2025
 
