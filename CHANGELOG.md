@@ -14,10 +14,14 @@ Improves the overall layout app functionality.
 - Updated `HandlesIndexOptions` to allow for session management and filters
 - Updated examples with routes/index for filtering on POST tables
 - Updated atlas for `useDataTableOptions` improvements
+- For `<Table>` usage, use:
+1. `activeColumnList` prop array of view columns
+2. `itemTotal` prop for total users
+3. Update the columns from `field` to `key`
 
 Add new dep: 
 ```
-"vuedraggable": "^2.24.3"
+"vuedraggable": "^4.1.0"
 ```
 
 ## v2.1.3 - 05/30/2025

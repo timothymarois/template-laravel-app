@@ -26,7 +26,7 @@ trait HandlesIndexOptions
     //     'sortField',
     //     'sortOrder',
     //     'filter_id',
-    //     'viewMode',
+    //     'viewFields',
     // ];
 
     public function resolveIndexOptions(Request $request, bool $withSession = false, ?string $sessionKey = null): array
@@ -36,9 +36,10 @@ trait HandlesIndexOptions
         $defaults = [
             'search' => $this->indexDefaults['search'] ?? '',
             'filters' => $this->indexDefaults['filters'] ?? [],
+            'viewFields' => $this->indexDefaults['viewFields'] ?? [],
             'perPage' => $this->indexDefaults['perPage'] ?? 15,
             'sortField' => $this->indexDefaults['sortField'] ?? 'id',
-            'sortOrder' => $this->indexDefaults['sortOrder'] ?? 1,
+            'sortOrder' => (int) $this->indexDefaults['sortOrder'] ?? 1,
         ];
 
         if ($request->isMethod('POST') && $withSession && $sessKey) {
@@ -54,6 +55,9 @@ trait HandlesIndexOptions
         $input = $request->only($this->getSessionStoreKeys());
 
         $merged = array_merge($defaults, $sessionData, $input);
+
+        $merged['sortOrder'] = (int) $merged['sortOrder'] ?? $defaults['sortOrder'];
+        $merged['perPage'] = (int) $merged['perPage'] ?? $defaults['perPage'];
 
         if (property_exists($this, 'filterCasts') && is_array($this->filterCasts)) {
             foreach ($this->filterCasts as $key => $type) {
@@ -74,7 +78,7 @@ trait HandlesIndexOptions
     {
         return property_exists($this, 'sessionStoreKeys')
             ? $this->sessionStoreKeys
-            : ['search', 'filters', 'perPage', 'sortField', 'sortOrder'];
+            : ['search', 'filters', 'viewFields', 'perPage', 'sortField', 'sortOrder'];
     }
 
     protected function resolveSessionData(Request $request, array $defaults, string $sessionKey): ?array

@@ -46,6 +46,10 @@ class UserController extends Controller
     {
         $options = $this->resolveIndexOptions($request);
 
+        if (!isset($options['filters']['user_id'])) {
+            $options['filters']['user_id'] = null;
+        }
+
         $query = $this->userService->listPaginated($options['perPage'], $options);
 
         return Inertia::render('Users/SimpleTable', [

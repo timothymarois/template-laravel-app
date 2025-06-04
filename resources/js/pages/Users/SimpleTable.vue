@@ -33,11 +33,11 @@
                 <template #content>
                     <Table
                         :items="users.data"
+                        :itemTotal="userTotal"
                         :columns="columns"
+                        :activeColumnList="['edit', 'name', 'email']"
                         :sortField="sortField"
                         :sortOrder="sortOrder"
-                        :selection="null"
-                        @update:selection="selected = $event"
                         @sort="onSort"
                     >
                         <template #edit="{ data }">
@@ -93,10 +93,10 @@ const props = defineProps({
 const { open } = useModal();
 
 const columns = [
-    { field: 'edit', header: '', class: 'w-[20px]', sortable: false },
-    { field: 'id', header: 'Id', sortable: false },
-    { field: 'name', header: 'Name', sortable: true },
-    { field: 'email', header: 'Email', sortable: true },
+    { key: 'edit', header: '', class: 'w-[20px]', sortable: false },
+    { key: 'id', header: 'Id', sortable: false },
+    { key: 'name', header: 'Name', sortable: true },
+    { key: 'email', header: 'Email', sortable: true },
 ];
 
 const perPageOptions = [

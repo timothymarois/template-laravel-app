@@ -9,23 +9,7 @@
         </template>
         <template #headerAction>
             <div class="flex items-center justify-between">
-                <!-- <div class="grow flex items-center space-x-2">
-                    <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
-                </div> -->
                 <div class="flex items-center space-x-2">
-                    <!-- <div class="w-[250px]">
-                        <Select
-                            v-model="filters.user_id"
-                            :options="[{ id: null, name: 'All users' }, ...users.data]"
-                            option-label="name"
-                            option-value="id"
-                            size="small"
-                            placeholder="Filter user (testing only)"
-                            fluid
-                            filter
-                            showClear
-                        />
-                    </div> -->
                     <InputText
                         v-model="search"
                         placeholder="Search user name or email"
@@ -34,46 +18,47 @@
                         clearable
                     />
                     <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
-                    <!-- <Button outlined label="Filters" @click="open('ADD_EDIT_USER')" /> -->
                 </div>
             </div>
         </template>
         <template #default>
             <div class="bg-white dark:bg-surface-800">
-                <ScrollFrame rootClass="overflow-hidden" :addOffset="53">
-                    <Table
-                        :items="users.data"
-                        :itemTotal="userTotal"
-                        :columns="columns"
-                        :sortField="sortField"
-                        :sortOrder="sortOrder"
-                        :selected="selected"
-                        :selectAll="selectAll"
-                        :scrollable="true"
-                        :scrollHeight="'flex'"
-                        hasSelection
-                        @update:selected="selected = $event"
-                        @update:selectAll="selectAll = $event"
-                        @sort="onSort"
-                    >
-                        <template #edit="{ data }">
-                            <div class="w-full flex items-center justify-center">
-                                <ButtonMenu
-                                    :items="[
-                                        { label: 'Edit', icon: 'pi pi-pencil', click: () => open('ADD_EDIT_USER', data) },
-                                        { separator: true },
-                                        { label: 'Archive', icon: 'pi pi-trash', click: () => open('DELETE_USER', data) },
-                                    ]"
-                                />
-                            </div>
-                        </template>
-                        <template #name="{ data }">
-                            <Link class="hover:underline text-black font-medium" :href="$route('users.show', data.id)">
-                                {{ data.name }}
-                            </Link>
-                        </template>
-                    </Table>
-                </ScrollFrame>
+                <Table
+                    :items="users.data"
+                    :itemTotal="userTotal"
+                    :columns="columns"
+                    :sortField="sortField"
+                    :sortOrder="sortOrder"
+                    :selected="selected"
+                    :selectAll="selectAll"
+                    :defaultColumnList="defaultColumnList"
+                    :activeColumnList="viewFields"
+                    hasSelection
+                    hasCustomizeColumns
+                    :scrollOffset="53"
+                    scrollable
+                    @update:selected="selected = $event"
+                    @update:selectAll="selectAll = $event"
+                    @update:activeColumnList="viewFields = $event"
+                    @sort="onSort"
+                >
+                    <template #edit="{ data }">
+                        <div class="w-full flex items-center justify-center">
+                            <ButtonMenu
+                                :items="[
+                                    { label: 'Edit', icon: 'pi pi-pencil', click: () => open('ADD_EDIT_USER', data) },
+                                    { separator: true },
+                                    { label: 'Archive', icon: 'pi pi-trash', click: () => open('DELETE_USER', data) },
+                                ]"
+                            />
+                        </div>
+                    </template>
+                    <template #name="{ data }">
+                        <Link class="hover:underline text-black font-medium" :href="$route('users.show', data.id)">
+                            {{ data.name }}
+                        </Link>
+                    </template>
+                </Table>
             </div>
         </template>
         <template #footer>
@@ -95,7 +80,6 @@
 import Table from '@atlas/components/Table/Table.vue';
 import ButtonMenu from '@atlas/components/ButtonMenu.vue';
 import TableActions from '@atlas/components/Table/Actions.vue';
-import { onMounted } from 'vue';
 
 const props = defineProps({
     users: {
@@ -131,28 +115,19 @@ const handleTableAction = (action) => {
 };
 
 const columns = [
-    { field: 'edit', header: '', class: 'w-[20px]', sortable: false, frozen: true, style: 'min-width: 40px' },
+    { key: 'edit', header: '', class: 'w-[20px]', sortable: false, frozen: true, style: 'min-width: 40px', locked: true, hidden: true },
     // { field: 'id', header: 'Id', sortable: false, frozen: true, style: 'min-width: 60px' },
-    { field: 'name', header: 'Name', sortable: true, frozen: true, style: 'min-width: 200px' },
-    { field: 'email', header: 'Email', sortable: true, style: 'min-width: 200px' },
-    { field: 'email', header: 'Email 2', sortable: true, style: 'min-width: 200px' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 400px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
-    { field: 'email', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { key: 'name', header: 'Name', sortable: true, frozen: true, style: 'min-width: 200px', locked: true },
+    { key: 'email', header: 'Email', sortable: true, style: 'min-width: 200px' },
+    { key: 'email2', header: 'Email 2', sortable: true, style: 'min-width: 200px' },
+    { key: 'email3', header: 'Email 3', sortable: true, style: 'min-width: 400px;' },
+    { key: 'email4', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { key: 'email5', header: 'Email 3', sortable: true, style: 'min-width: 200px;' },
+    { key: 'email6', header: 'Email 3', sortable: true, style: 'min-width: 200px;', group: 'Email fields' },
+    { key: 'email7', header: 'Email 3', sortable: true, style: 'min-width: 200px;', group: 'Email fields' },
+    { key: 'email8', header: 'Email 3', sortable: true, style: 'min-width: 200px;', group: 'Email fields' },
+    { key: 'email9', header: 'Email 3', sortable: true, style: 'min-width: 200px;', group: 'Email fields' },
+    { key: 'email0', header: 'Email 3', sortable: true, style: 'min-width: 200px;', group: 'Email fields' },
 ];
 
 const perPageOptions = [
@@ -162,10 +137,12 @@ const perPageOptions = [
     { label: '100', value: 100 },
 ];
 
-const { search, filters, perPage, sortField, sortOrder, selectAll, selected, resetSelection } = useDataTableOptions('users.index.filters', props.options, {
+const { search, filters, perPage, sortField, sortOrder, viewFields, selectAll, selected, resetSelection } = useDataTableOptions('users.index.filters', props.options, {
     method: 'post',
     only: ['users'],
 });
+
+const defaultColumnList = ['edit', 'name', 'email'];
 
 const onSort = ({ field, order }) => {
     sortField.value = field;
