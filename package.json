@@ -44,7 +44,7 @@
         "@tiptap/extension-placeholder": "^2.12.0",
         "@tiptap/starter-kit": "^2.11.7",
         "@tiptap/vue-3": "^2.11.7",
-        "atlas-ui": "github:tmarois/atlas-ui#v1.1.16",
+        "atlas-ui": "github:tmarois/atlas-ui#v1.2.0",
         "tailwind-merge": "^3.1.0",
         "tailwindcss": "^4.1.4",
         "tailwindcss-primeui": "^0.6.1"
