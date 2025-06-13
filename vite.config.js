@@ -61,6 +61,7 @@ export default defineConfig({
         sourcemap: true,
     },
     resolve: {
+        dedupe: ['vue'],
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
             '@components': path.resolve(__dirname, 'resources/js/components'),
@@ -68,5 +69,13 @@ export default defineConfig({
             'primevue': path.resolve(__dirname, 'node_modules/primevue'),
             'ziggy': path.resolve(__dirname, 'vendor/tightenco/ziggy/src/js'),
         },
+    },
+    optimizeDeps: {
+        include: ['vuedraggable'],
+        exclude: ['vue'],
+    },
+    ssr: {
+        external: ['vuedraggable'],
+        noExternal: ['atlas-ui'],
     },
 });

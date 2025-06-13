@@ -10,10 +10,12 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 Improves the overall layout app functionality.
 
+- Added `optimizeDeps` and `ssr` in `vite.config.js
 - Added examples with new `<TableActions>`
 - Updated `HandlesIndexOptions` to allow for session management and filters
 - Updated examples with routes/index for filtering on POST tables
 - Updated atlas for `useDataTableOptions` improvements
+- Moved `ziggy` plugin into the atlas package
 - For `<Table>` usage, use:
 1. `activeColumnList` prop array of view columns
 2. `itemTotal` prop for total users
