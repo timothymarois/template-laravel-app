@@ -6,7 +6,7 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
-## v2.1.4 - 
+## v2.2.0 - 06/13/2025
 
 Improves the overall layout app functionality.
 
