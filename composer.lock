@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a061fce5e630a35fb2b668bea27de86b",
+    "content-hash": "15be5ee37052cacf02562639dcf33a5b",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -7540,6 +7540,49 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.3.0"
             },
             "time": "2024-12-21T16:25:41+00:00"
+        },
+        {
+            "name": "tmarois/atlas-laravel",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tmarois/atlas-laravel.git",
+                "reference": "a12c4ba9c6ac2c10ab09f40f53cbd7e1fda3a003"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tmarois/atlas-laravel/zipball/a12c4ba9c6ac2c10ab09f40f53cbd7e1fda3a003",
+                "reference": "a12c4ba9c6ac2c10ab09f40f53cbd7e1fda3a003",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "laravel/framework": "^11.0",
+                "orchestra/testbench": "^9.0",
+                "phpunit/phpunit": "^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Atlas\\Laravel\\AtlasServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Atlas\\Laravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Reusable Laravel package for Inertia.",
+            "support": {
+                "issues": "https://github.com/tmarois/atlas-laravel/issues",
+                "source": "https://github.com/tmarois/atlas-laravel/tree/v1.0.0"
+            },
+            "time": "2025-08-24T22:46:06+00:00"
         },
         {
             "name": "tmarois/laravel-code-truncator",

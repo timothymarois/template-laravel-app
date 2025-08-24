@@ -19,6 +19,7 @@
         "opcodesio/log-viewer": "^3.10",
         "sentry/sentry-laravel": "^4.7",
         "tightenco/ziggy": "^2.3",
+        "tmarois/atlas-laravel": "^1.0",
         "tmarois/laravel-code-truncator": "^1.0"
     },
     "require-dev": {
