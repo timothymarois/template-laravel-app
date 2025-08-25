@@ -6,7 +6,7 @@ See the [App Layout](ui/application.md) for a ready-to-use application wrapper.
 
 ## Table of Contents
 - [Setup](#setup)
-- [Theme Options](#theme-options)
+- [Theming](theming.md)
 - [Override Themes with Passthrough](#override-themes-with-passthrough)
 - [Components](#components)
   - [Application](ui/application.md)
@@ -92,25 +92,9 @@ export default defineConfig({
 
 If you're using another bundler, configure an equivalent alias so `@atlas/ui` points to the package.
 
-## Theme Options
+## Theming
 
-### Rounding
-
-Atlas exposes rounding tokens for consistent border radius:
-
-| Token | Value |
-| ----- | ----- |
-| `--p-rounded-0` | `0rem` |
-| `--p-rounded-1` | `0.25rem` |
-| `--p-rounded-2` | `0.5rem` |
-| `--p-rounded-3` | `0.75rem` |
-| `--p-rounded-4` | `1rem` |
-
-Use them with Tailwind's arbitrary values, for example:
-
-```html
-<div class="rounded-[var(--p-rounded-2)]"></div>
-```
+Atlas UI uses CSS variables for colors, rounding, and dark mode. See [Theming](theming.md) for available tokens and how to configure a default theme.
 
 ## Override Themes with Passthrough
 
