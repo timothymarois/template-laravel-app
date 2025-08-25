@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Traits\HandlesIndexOptions;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
@@ -25,7 +27,7 @@ class UserController extends Controller
 
     public function __construct(protected UserService $userService) {}
 
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $options = $this->resolveIndexOptions($request, true, 'users.index');
 
@@ -35,14 +37,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function prepareIndexFilters(Request $request)
+    public function prepareIndexFilters(Request $request): RedirectResponse
     {
         $this->resolveIndexOptions($request, true, 'users.index');
 
         return redirect()->route('users.index');
     }
 
-    public function simpleTable(Request $request)
+    public function simpleTable(Request $request): Response
     {
         $options = $this->resolveIndexOptions($request);
 
@@ -58,14 +60,14 @@ class UserController extends Controller
         ]);
     }
 
-    public function show(User $user)
+    public function show(User $user): Response
     {
         return Inertia::render('Users/Show', [
             'item' => $user,
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -78,7 +80,7 @@ class UserController extends Controller
         // return back();
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -97,7 +99,7 @@ class UserController extends Controller
         return back();
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user): RedirectResponse
     {
         $this->userService->delete($user);
 
