@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Atlas\Laravel\Services\ModelService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -10,11 +11,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 
-class UserService
+class UserService extends ModelService
 {
+    protected string $model = User::class;
+
     public function buildQuery(array $options = []): Builder
     {
-        return User::query()
+        return parent::buildQuery($options)
             ->when($options['search'] ?? false, function ($q) use ($options) {
                 $q->where(function ($q) use ($options) {
                     $q->where('name', 'like', "%{$options['search']}%")
@@ -26,37 +29,17 @@ class UserService
             });
     }
 
-    public function listPaginated(int $perPage = 15, array $options = []): LengthAwarePaginator
-    {
-        return $this->buildQuery($options)
-            ->when($options['sortField'] ?? false, function ($q) use ($options) {
-                $direction = ($options['sortOrder'] ?? 1) === 1 ? 'asc' : 'desc';
-                return $q->orderBy($options['sortField'], $direction);
-            })
-            ->paginate($perPage)
-            ->withQueryString();
-    }
-
     public function create(array $data): User
     {
-        return DB::transaction(function () use ($data) {
-            $data['password'] = Hash::make(Str::random(24));
+        $data['password'] = Hash::make(Str::random(24));
 
-            return User::create($data);
-        });
+        return parent::create($data);
     }
 
-    public function update(User $user, array $data): User
+    public function update(User|\Illuminate\Database\Eloquent\Model $model, array $data): User
     {
-        return DB::transaction(function () use ($user, $data) {
-            $user->update($data);
+        $model->update($data);
 
-            return $user;
-        });
-    }
-
-    public function delete(User $user): void
-    {
-        $user->delete();
+        return $model;
     }
 }
