@@ -9,6 +9,9 @@ This repository uses Laravel for the PHP backend and Vue 3 with Inertia for the 
 
 ## Required Checks
 Run these commands before committing changes:
-- Run `./vendor/bin/pint`
 - Run `npm run eslint`
+
+Run these if you've modified any php code, you will need to run `composer install` first.
+
+- Run `./vendor/bin/pint`
 - Run `php artisan test`
