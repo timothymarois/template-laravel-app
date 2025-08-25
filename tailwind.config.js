@@ -1,7 +1,7 @@
 export default {
     content: [
         './resources/js/**/*.{js,ts,vue}',
-        './node_modules/atlas-ui/src/**/*.{js,ts,vue}',
+        './node_modules/@tmarois/atlas-ui/src/**/*.{js,ts,vue}',
     ],
     plugins: [
         require('@tailwindcss/forms'),

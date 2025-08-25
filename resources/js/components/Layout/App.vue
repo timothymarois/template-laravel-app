@@ -66,7 +66,7 @@
 
 <script setup>
 import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
-import LayoutApp from '@atlas/ui/components/App/Layout/App.vue';
+import LayoutApp from '@atlas/ui/components/App/Index.vue';
 import ProfileMenu from '@atlas/ui/components/App/Nav/ProfileMenu.vue';
 import NavOptionDarkToggle from '@components/Nav/Option/DarkToggle.vue';
 import ModalEditUser from '@components/Modal/EditUser.vue';

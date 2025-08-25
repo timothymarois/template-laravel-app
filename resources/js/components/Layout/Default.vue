@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import LayoutApp from '@atlas/ui/components/App/Layout/App.vue';
+import LayoutApp from '@atlas/ui/components/App/Index.vue';
 
 const props = defineProps({
     title : {

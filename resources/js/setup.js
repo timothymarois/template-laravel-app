@@ -4,7 +4,7 @@ import PrimeVue from 'primevue/config';
 import StyleClass from 'primevue/styleclass';
 import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
-import ZiggyPlugin from '@atlas/ui/plugins/inertia/ziggy';
+import ZiggyPlugin from './plugins/inertia/ziggy';
 
 export async function setupApp({ App, props, plugin, isServer = false }) {
     const app = isServer
