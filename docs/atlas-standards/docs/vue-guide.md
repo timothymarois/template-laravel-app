@@ -1,6 +1,4 @@
-# Frontend Guide
-
-This guide is written for developers consuming Atlas in their own Laravel applications. It outlines how to set up and structure an Inertia.js + Vue 3 frontend in a Laravel project and is not specific to this repository.
+# Vue Guide
 
 This document defines the structure and rules for building Vue 3 components using Inertia.js and TailwindCSS. It mirrors the backend architecture and ensures clean separation of concerns, modular design, and long-term maintainability.
 
@@ -27,6 +25,7 @@ This document defines the structure and rules for building Vue 3 components usin
     │   └── components/
     │   └── composables/
     │   └── services/
+    │   └── enums/
     │   └── utils/
     ├── tests/
     │   └── components/
@@ -62,6 +61,11 @@ Organized into subfolders:
 - Optional layer for wrapping Inertia visits, API helpers, or uploaders.
 - Encapsulates external data interactions.
 
+### Enums
+
+- Provide a single source of truth for shared constants (e.g., statuses, roles) so the front-end matches Laravel's enums without magic values.
+- Auto-generated from the backend using `php artisan atlas:export-enums`. See the [Enum Exporter docs](https://github.com/tmarois/atlas-laravel/blob/main/docs/features/enum-exporter.md).
+
 ### Utils
 
 - Stateless helpers (`formatDate`, `slugify`).
@@ -83,27 +87,9 @@ Organized into subfolders:
 
 ## Best Practices
 
-- Keep components under 100 lines when possible.
+- Keep components under 300 lines when possible.
 - All state-related logic must go into composables.
 - Avoid deeply nested components — flatten where possible.
 - Use Tailwind for styling; never write custom CSS unless scoped.
-- Never access browser APIs directly in components — use composables.
 - Register layouts only at the page level.
 - Forms should always try use `useForm` when possible.
-
----
-
-## Backend Integration
-
-- Laravel handles validation and business logic.
-- Vue displays errors using Inertia’s error bags.
-- Pages map 1:1 to Laravel routes and controller methods.
-
----
-
-This architecture is mandatory for all frontend development. Consistency is critical for maintainability, readability, and performance as the app scales.
-
-## UI Documentation
-
-- [Composables](ui/composables.md)
-- [Utils](ui/utils.md)
