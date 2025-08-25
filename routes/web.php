@@ -7,12 +7,6 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ComponentController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/theme', [PageController::class, 'pTheme']);
-// Route::get('/theme/settings', [PageController::class, 'pSettings']);
-
-// Route::get('/components/buttons', [PageController::class, 'pButtons']);
-// Route::get('/components/forms', [PageController::class, 'pForms']);
-
 Route::middleware(['guest'])->group(function () {
     Route::get('register', [RegisterController::class, 'registerView'])->name('register');
     Route::get('login', [SessionController::class, 'loginView'])->name('login');
@@ -28,8 +22,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/users/filters', [UserController::class, 'prepareIndexFilters'])->name('users.index.filters');
 
     Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
-    Route::get('/components/forms', [ComponentController::class, 'forms'])->name('components.forms');
-    Route::get('/components/editor', [ComponentController::class, 'editor'])->name('components.editor');
-    Route::get('/components/editor/variant', [ComponentController::class, 'editorVariant'])->name('components.editor.variant');
-    Route::get('/components/editor/text', [ComponentController::class, 'editorText'])->name('components.editor.text');
 });
