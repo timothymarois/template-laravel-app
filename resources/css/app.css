@@ -1,11 +1,11 @@
-@source "../../node_modules/@tmarois/atlas-ui/src";
-
 @import "./base.css";
 
 @import "tailwindcss";
 
-@plugin "@tailwindcss/typography";
-
 @import "tailwindcss-primeui";
+
+@source "../../node_modules/@tmarois/atlas-ui/src";
+
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
