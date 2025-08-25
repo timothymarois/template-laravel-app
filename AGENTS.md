@@ -11,3 +11,4 @@ This repository uses Laravel for the PHP backend and Vue 3 with Inertia for the 
 Run these commands before committing changes:
 - Run `./vendor/bin/pint`
 - Run `npm run eslint`
+- Run `php artisan test`
