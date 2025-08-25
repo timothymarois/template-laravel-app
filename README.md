@@ -21,7 +21,8 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 For the design side, we want to focus on customization, theming, and utility components. PrimeVue offers the most comprehensive set of utility components that are fully customizable without bloating. Tree-shaking makes sure you only import the components you actually use keeping your overall project light-weight. 
 
 - ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
-- ✅ PrimeVue v4 – [Documentation](https://primevue.org/) | [Unstyled using Volt](https://volt.primevue.org/) - via [Atlas UI](https://github.com/tmarois/atlas-ui)
+- ✅ PrimeVue v4 (unstyled) – [Documentation](https://primevue.org/)
+- ✅ Atlas UI (Component Library, using PrimeVue) – [Repo](https://github.com/tmarois/atlas-ui)
 
 ---
 
@@ -44,14 +45,10 @@ Pre-installed monitoring packages allow you to view logs, worker jobs, and debug
 
 - ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) - `/log-viewer`
 - ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) - `/horizon`
-- ❌ [Laravel Telescope](https://laravel.com/docs/11.x/horizon) - `/telescope` works on local with `TELESCOPE_ENABLED=true` in `.env`
-- ❌ [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar) - `APP_DEBUG=true`
-- ✅ [Vue Devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) - With Google Chrome Extension
 
 **External Services:**
 
 - ✅ [Sentry.io](https://sentry.io/) | [Docs](https://docs.sentry.io/platforms/php/guides/laravel/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
-- ❌ [Codecov.io](https://codecov.io/) - It's recommended to use a code coverage service to monitor your automate test coverage across your application's business logic. 
 
 ---
 
@@ -163,70 +160,11 @@ php artisan queue:restart
 
 ## Features: 
 
-<!-- ### Authentication
-
-For user authentication with Laravel and Vuejs we will use Laravel Sanctum. 
-
-This list is to keep track of the examples that are pre-installed and ready out of the box.
-
-- ✅ [Laravel Sanctum](https://laravel.com/docs/11.x/sanctum) *(local session auth)*
-- ❌ [Laravel Passport](https://laravel.com/docs/11.x/passport) *(oauth and third parties)*
-- ❌ OAUTH: Google SSO
-- ✅ Security: CSRF-token protected (XSRF)
-- ✅ Security: Rate-limit login protected
-- ✅ Example: Register form and controller
-- ✅ Example: Login form and controller
-- ✅ Example: Logout
-- ✅ Example: Middleware auth route and auth-only page
-- ✅ Example: Redirect back to page after login
-- ❌ Example: Email verification
-- ❌ Example: Forgot/reset password form and controller
-
---- -->
-
-<!-- ### Page props (by Inertia)
-
-Page level props are passed by controller data. You can also pass shared props here since Inertia will merge them into one. Keep in mind that page data and shared data will need to have unique key names to avoid being replaced.
-
-*Note: The layout and all components on the page can access these props.*
-
-- ✅ Return Inertia view or JSON response based Content-Type
-- ✅ Example: [Page props](https://inertiajs.com/pages) (page-level props from controllers) 
-- ✅ Example: [Shared props](https://inertiajs.com/shared-data) (across all pages)
-
-<details>
-<summary>Show example</summary><br>
-
-*In controller, return only inertia view* 
-```php
-return Inertia::render('Example/Index', ['posts' => $posts->paginate()]);
-```
-
-*In page component for Inertia views*
-
-```js
-const props = defineProps({
-    'posts': Object
-});
-```
-
-*In non-page components*
-
-```js
-const page = usePage()
-const posts = computed(() => page.props?.posts)
-```
-
-</details> -->
-
----
-
 ### Routes (by Ziggy)
 
 The ability to grab the routes in Vue based on the laravel route names. You can control what routes are visible to end-users by modifying `/config/ziggy.php`.
 
 - ✅ [Named routes](https://github.com/tighten/ziggy)
-- ✅ Example: Route name to path
 
 Note: If you are trying to use `route()` inside your vue `<template>` use `$route()`
 
@@ -263,49 +201,6 @@ route('accounts.posts.show', [1, 123]);
 ```
 
 </details>
-
-<!-- ---
-
-### Form requests (by Inertia)
-
-You should use the built-in `useForm` method, it will handle all the states of submission.
-
-- ✅ [Form helper](https://inertiajs.com/forms#form-helper)
-- ✅ Example: page forms and submissions
-- ✅ Example: modal forms and submissions
-
-<details>
-<summary>Show example</summary><br>
-
-Define the form:
-
-```js
-const form = useForm({
-    email: null,
-    password: null
-})
-```
-
-To submit the form and with the named routes:
-
-```js
-form.post(route('post.store'))
-```
-
-Additional reactive form attributes:
-
-```js
-// identify if the form values have changed
-form.isDirty
-
-// get the reported errors from the submission (based on field name)
-form.errors.email
-
-// if the form is currenting being processed
-form.processing
-```
-
-</details> -->
 
 ---
 
@@ -373,7 +268,7 @@ axios.get(url)
 
 You can dispatch global toast notifications on the platform using the PrimeVue [Toast Service](https://primevue.org/toast/).
 
-- ✅ Example: Success Toast Notification
+- ✅ Toast Notifications
 
 <details>
 <summary>Show example</summary>
@@ -392,12 +287,10 @@ toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Conten
 
 ### Icons
 
-Easily add svg icons that can change size and color.
+Easily add svg/imported icons that can change size and color.
 
 - ✅ [Tabler Icons](https://tabler.io/icons) *(recommended)*
 - ✅ [PrimeVue Icons](https://primevue.org/icons/)
-- ❌ [Heroicons](https://heroicons.com/)
-- ✅ Search thousands of icons at [Iconify](https://icon-sets.iconify.design/)
 
 <details>
 <summary>Show example</summary>
@@ -424,53 +317,3 @@ import { IconHome } from '@tabler/icons-vue';
 </details>
 
 ---
-
-### Auto-imports
-
-Saves you time by simplifying the import of reusable stores, components and functionality by auto-importing. You can modify the import settings inside your `vite.config.js`.
-
-*Note: Auto-import components supports directory name prefix for same name components.*
-
-- ✅ [Auto-imports](https://github.com/unplugin/unplugin-auto-import)
-- ✅ [Auto-import Vue Components](https://github.com/unplugin/unplugin-vue-components)
-- ✅ Includes the auto-import of Vue & Inertia methods.
-- ✅ Includes the auto-import of Utils and Composables.
-- ✅ Includes the auto-import of [PrimeVue Volt components](https://volt.primevue.org/accordion/)
-
----
-
-### Supervisor workers
-
-#### Horizon
-```bash
-php artisan horizon
-```
-
-#### SSR-only
-
-```bash
-php artisan inertia:start-ssr
-```
-
-
-#### Local testing
-
-`npm install git+https://github.com/tmarois/atlas-ui.git#main`
-
-testing locally: 
-
-`"atlas-ui": "file:../../Repo/atlas-ui",`
-
-testing before version release
-
-`"atlas-ui": "github:tmarois/atlas-ui#main",`
-
-```
-server: {
-    fs: {
-        allow: [
-            '..'
-        ],
-    },
-},
-```
