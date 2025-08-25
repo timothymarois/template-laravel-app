@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Traits\HandlesIndexOptions;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use App\Http\Traits\HandlesIndexOptions;
 
 class UserController extends Controller
 {
@@ -39,6 +38,7 @@ class UserController extends Controller
     public function prepareIndexFilters(Request $request)
     {
         $this->resolveIndexOptions($request, true, 'users.index');
+
         return redirect()->route('users.index');
     }
 
@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         $options = $this->resolveIndexOptions($request);
 
-        if (!isset($options['filters']['user_id'])) {
+        if (! isset($options['filters']['user_id'])) {
             $options['filters']['user_id'] = null;
         }
 

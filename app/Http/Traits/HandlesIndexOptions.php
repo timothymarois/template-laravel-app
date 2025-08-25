@@ -45,6 +45,7 @@ trait HandlesIndexOptions
         if ($request->isMethod('POST') && $withSession && $sessKey) {
             $payload = $request->only($this->getSessionStoreKeys());
             $this->storeSessionData($request, $sessKey, $payload);
+
             return $payload;
         }
 

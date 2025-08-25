@@ -4,12 +4,9 @@ namespace App\Services;
 
 use App\Models\User;
 use Atlas\Laravel\Services\ModelService;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-
 
 class UserService extends ModelService
 {
