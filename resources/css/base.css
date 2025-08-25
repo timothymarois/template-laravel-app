@@ -1,5 +1,4 @@
 /* Primary Palettes */
-:root,
 .theme-primary-blue {
     --p-primary-50: #dbeafe;
     --p-primary-100: #bfdbfe;
@@ -69,7 +68,7 @@
     --p-primary-900: #831843;
     --p-primary-950: #500724;
 }
-
+:root,
 .theme-primary-gray {
     --p-primary-50: #fafafa;
     --p-primary-100: #f4f4f5;
