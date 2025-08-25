@@ -7784,16 +7784,16 @@
         },
         {
             "name": "tmarois/atlas-laravel",
-            "version": "1.0.9",
+            "version": "1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tmarois/atlas-laravel.git",
-                "reference": "d2d859fc3a8937f02637567aadabff16ab71936e"
+                "reference": "323a235be1e22bf63d95c5c6819580c206834456"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tmarois/atlas-laravel/zipball/d2d859fc3a8937f02637567aadabff16ab71936e",
-                "reference": "d2d859fc3a8937f02637567aadabff16ab71936e",
+                "url": "https://api.github.com/repos/tmarois/atlas-laravel/zipball/323a235be1e22bf63d95c5c6819580c206834456",
+                "reference": "323a235be1e22bf63d95c5c6819580c206834456",
                 "shasum": ""
             },
             "require": {
@@ -7822,9 +7822,9 @@
             "description": "Reusable Laravel package for Inertia.",
             "support": {
                 "issues": "https://github.com/tmarois/atlas-laravel/issues",
-                "source": "https://github.com/tmarois/atlas-laravel/tree/v1.0.9"
+                "source": "https://github.com/tmarois/atlas-laravel/tree/v1.0.10"
             },
-            "time": "2025-08-25T20:31:10+00:00"
+            "time": "2025-08-25T20:59:54+00:00"
         },
         {
             "name": "tmarois/laravel-code-truncator",
