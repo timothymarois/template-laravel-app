@@ -60,16 +60,17 @@
         <template #modals>
             <ModalEditUser />
             <ModalDeleteUser />
-            <ModalTest />
-            <ModalBlank />
         </template>
     </LayoutApp>
 </template>
 
 <script setup>
 import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
-import LayoutApp from '@atlas/components/App/Layout/App.vue';
-import ProfileMenu from '@atlas/components/App/Nav/ProfileMenu.vue';
+import LayoutApp from '@atlas/ui/components/App/Layout/App.vue';
+import ProfileMenu from '@atlas/ui/components/App/Nav/ProfileMenu.vue';
+import NavOptionDarkToggle from '@components/Nav/Option/DarkToggle.vue';
+import ModalEditUser from '@components/Modal/EditUser.vue';
+import ModalDeleteUser from '@components/Modal/DeleteUser.vue';
 
 const user = usePage().props.user;
 

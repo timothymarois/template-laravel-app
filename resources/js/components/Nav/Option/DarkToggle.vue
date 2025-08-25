@@ -15,7 +15,7 @@
     </button>
 </template>
 <script setup>
-import { useTheme } from '@atlas/composables';
+import { useTheme } from '@atlas/ui/composables';
 
 const { initTheme, toggleDark, isDark } = useTheme();
 

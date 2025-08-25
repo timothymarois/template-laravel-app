@@ -77,9 +77,14 @@
 </template>
 
 <script setup>
-import Table from '@atlas/components/Table/Table.vue';
-import ButtonMenu from '@atlas/components/ButtonMenu.vue';
-import TableActions from '@atlas/components/Table/Actions.vue';
+import LayoutApp from '@components/Layout/App.vue';
+import InputText from '@atlas/ui/components/InputText.vue';
+import Button from '@atlas/ui/components/Button.vue';
+import Select from '@atlas/ui/components/Select.vue';
+import LinkPaginator from '@atlas/ui/components/Paginator.vue';
+import Table from '@atlas/ui/components/App/Table/Table.vue';
+import ButtonMenu from '@atlas/ui/components/ButtonMenu.vue';
+import TableActions from '@atlas/ui/components/App/Table/Actions.vue';
 
 const props = defineProps({
     users: {

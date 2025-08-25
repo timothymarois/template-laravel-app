@@ -43,6 +43,8 @@
 </template>
 
 <script setup>
+import LayoutApp from '@components/Layout/App.vue';
+import Button from '@atlas/ui/components/Button.vue';
 const props = defineProps({
     item: {
         type: Object,

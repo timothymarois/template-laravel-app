@@ -4,7 +4,7 @@ import PrimeVue from 'primevue/config';
 import StyleClass from 'primevue/styleclass';
 import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
-import ZiggyPlugin from '@atlas/plugins/inertia/ziggy';
+import ZiggyPlugin from '@atlas/ui/plugins/inertia/ziggy';
 
 export async function setupApp({ App, props, plugin, isServer = false }) {
     const app = isServer
@@ -15,7 +15,9 @@ export async function setupApp({ App, props, plugin, isServer = false }) {
     app.use(ToastService);
     app.use(PrimeVue, { unstyled: true });
 
+    // eslint-disable-next-line vue/no-reserved-component-names
     app.component('Link', Link);
+    // eslint-disable-next-line vue/no-reserved-component-names
     app.component('Head', Head);
 
     app.directive('tooltip', Tooltip);

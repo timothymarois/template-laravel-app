@@ -44,6 +44,11 @@
 </template>
 
 <script setup>
+import DrawerForm from '@atlas/ui/components/DrawerForm.vue';
+import Card from '@atlas/ui/components/Card.vue';
+import TooltipIcon from '@atlas/ui/components/TooltipIcon.vue';
+import LabelField from '@atlas/ui/components/LabelField.vue';
+import InputText from '@atlas/ui/components/InputText.vue';
 const { activeState, onOpen, onClose } = useModal();
 const { submitForm } = useFormSubmit();
 

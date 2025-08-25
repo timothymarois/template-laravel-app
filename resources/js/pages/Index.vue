@@ -5,3 +5,7 @@
         </div>
     </LayoutApp>
 </template>
+
+<script setup>
+import LayoutApp from '@components/Layout/App.vue';
+</script>

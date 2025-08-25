@@ -9,6 +9,7 @@
 </template>
 
 <script setup>
+import DialogConfirmation from '@atlas/ui/components/DialogConfirmation.vue';
 const { submitForm } = useFormSubmit();
 const { activeState, onOpen, onClose } = useModal();
 
