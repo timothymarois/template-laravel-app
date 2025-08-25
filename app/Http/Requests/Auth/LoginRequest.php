@@ -41,9 +41,9 @@ class LoginRequest extends FormRequest
             'password' => $this->password,
         ];
 
-        $attempLogin = Auth::attempt($credential, $this->boolean('remember'));
+        $attemptLogin = Auth::attempt($credential, $this->boolean('remember'));
 
-        if (! $attempLogin) {
+        if (! $attemptLogin) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
