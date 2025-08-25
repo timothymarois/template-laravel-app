@@ -204,3 +204,4 @@ These naming and structural conventions keep the codebase readable and predictab
 - Use consistent domain language.
 - Prefer real-world nouns and verbs over technical names (e.g. `lead`, `contact`, `campaign` instead of `userTag`, `dataBlob`).
 
+<!-- end of Laravel Guide -->

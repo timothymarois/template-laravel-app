@@ -93,3 +93,5 @@ Organized into subfolders:
 - Use Tailwind for styling; never write custom CSS unless scoped.
 - Register layouts only at the page level.
 - Forms should always try use `useForm` when possible.
+
+<!-- end of Vue Guide -->
