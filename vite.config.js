@@ -5,8 +5,6 @@ import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 
-import AutoImport from 'unplugin-auto-import/vite';
-
 export default defineConfig({
     plugins: [
         vue(),
@@ -15,29 +13,6 @@ export default defineConfig({
             input: 'resources/js/app.js',
             ssr: 'resources/js/ssr.js',
             refresh: true,
-        }),
-        AutoImport({
-            vueTemplate: true,
-            defaultExportByFilename: true,
-            dts: true,
-            include: [
-                /\.vue$/,
-                /\.vue\?vue/,
-                /\.js$/
-            ],
-            imports: [
-                'vue',
-                {
-                    '@inertiajs/vue3': ['usePage', 'useForm', 'router'],
-                    'primevue': ['useToast'],
-                    '@atlas/ui/composables': ['useModal', 'useScroll'],
-                    '@atlas/ui/composables/inertia': ['useDataTableOptions'],
-                },
-            ],
-            dirs: [
-                './resources/js/composables/',
-                './resources/js/utils/'
-            ],
         }),
     ],
     build: {
