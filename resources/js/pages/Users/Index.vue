@@ -77,6 +77,9 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
+import { Link } from '@inertiajs/vue3';
+import { useModal, useDataTableOptions } from '@atlas/ui';
 import LayoutApp from '@components/Layout/App.vue';
 import InputText from '@atlas/ui/components/InputText.vue';
 import Button from '@atlas/ui/components/Button.vue';

@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import { useModal } from '@atlas/ui';
 import LayoutApp from '@components/Layout/App.vue';
 import Button from '@atlas/ui/components/Button.vue';
 const props = defineProps({

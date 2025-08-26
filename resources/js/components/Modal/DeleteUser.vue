@@ -10,6 +10,9 @@
 
 <script setup>
 import DialogConfirmation from '@atlas/ui/components/DialogConfirmation.vue';
+import { useModal } from '@atlas/ui';
+import { useForm } from '@inertiajs/vue3';
+import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();
 const { activeState, onOpen, onClose } = useModal();
 

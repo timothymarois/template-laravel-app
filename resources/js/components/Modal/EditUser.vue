@@ -49,6 +49,9 @@ import Card from '@atlas/ui/components/Card.vue';
 import TooltipIcon from '@atlas/ui/components/TooltipIcon.vue';
 import LabelField from '@atlas/ui/components/LabelField.vue';
 import InputText from '@atlas/ui/components/InputText.vue';
+import { useModal } from '@atlas/ui';
+import { useForm } from '@inertiajs/vue3';
+import { useFormSubmit } from '@/composables/useFormSubmit';
 const { activeState, onOpen, onClose } = useModal();
 const { submitForm } = useFormSubmit();
 

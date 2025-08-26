@@ -64,6 +64,8 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { Head, usePage } from '@inertiajs/vue3';
 import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
 import LayoutApp from '@atlas/ui/components/App/Index.vue';
 import ProfileMenu from '@atlas/ui/components/App/Nav/ProfileMenu.vue';
