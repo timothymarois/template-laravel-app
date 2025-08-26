@@ -1,11 +1,12 @@
 # Vue Composables
 
-This documentation covers the usage of three Vue composables: `useDataTableOptions`, `useModal`, and `useScroll`.
+This documentation covers the usage of four Vue composables: `useDataTableOptions`, `useModal`, `usePrimeBindings`, and `useScroll`.
 
 ## Table of Contents
 
 - [useDataTableOptions](#usedatatableoptions) - Datatable state management with Inertia
 - [useModal](#usemodal) - Modal management system
+- [usePrimeBindings](#useprimebindings) - PrimeVue prop merging and attribute bindings
 - [useScroll](#usescroll) - Scroll utilities and detection
 
 ## useDataTableOptions
@@ -106,6 +107,38 @@ modal.onClose('userForm', (data) => {
 });
 </script>
 ```
+
+## usePrimeBindings
+
+The `usePrimeBindings` composable helps PrimeVue components merge props and attributes while applying PassThrough (PT) theming options.
+
+### Basic Usage
+
+```js
+<template>
+    <InputText v-bind="bindProps" :pt="mergedPt" />
+</template>
+
+<script setup>
+import { usePrimeBindings } from '@atlas/ui';
+import { useAttrs } from 'vue';
+
+const props = defineProps({
+    pt: Object,
+    modelValue: String
+});
+
+const attrs = useAttrs();
+const theme = { root: { class: 'p-2' } };
+
+const { bindProps, mergedPt } = usePrimeBindings(props, attrs, theme, ['modelValue']);
+</script>
+```
+
+### API Reference
+
+- `bindProps` – Computed object combining component attributes with props, excluding the `pt` prop and any keys provided in `excludeKeys`.
+- `mergedPt` – Computed PT object produced by merging the provided `theme` with the component's `pt` prop using `ptMerge`.
 
 ## useScroll
 

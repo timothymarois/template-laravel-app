@@ -2,7 +2,6 @@
 
 User avatar dropdown menu for account actions.
 
-## Example
 ```ts
 import { computed } from 'vue';
 import { ProfileMenu } from '@atlas/ui';
@@ -21,6 +20,8 @@ const profileMenuItems = computed(() => [
 ]);
 ```
 
+## Usage
+
 ```vue
 <ProfileMenu
   :user="user"
@@ -31,16 +32,20 @@ const profileMenuItems = computed(() => [
 />
 ```
 
-## Props
-- `avatarOnly: boolean` – render only the avatar as trigger. Default `false`.
-- `user: object` – user data containing `id`, `name`, and `email`.
-- `items: any[]` – menu item definitions.
-- `headerLink: string | null` – link for the header when `avatarOnly` is true. Default `null`.
-- `linkComponent: string | object` – component used for internal links. Default `'a'`.
+## API
 
-## Slots
+### Props
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `avatarOnly` | `boolean` | `false` | Render only the avatar as trigger. |
+| `user` | `object` | `null` | User data containing `id`, `name`, and `email`. |
+| `items` | `any[]` | `[]` | Menu item definitions. |
+| `headerLink` | `string \| null` | `null` | Link for the header when `avatarOnly` is true. |
+| `linkComponent` | `string \| object` | `'a'` | Component used for internal links. |
+
+### Slots
 - `trigger` – custom trigger element. Slot props: `{ user, toggle }`.
 - `avatarMenuHeader` – content above menu items when `avatarOnly` is true.
 
-## Events
-- None
+### Events
+- None.

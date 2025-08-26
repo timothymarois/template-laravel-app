@@ -1,17 +1,17 @@
-# AppTopbar
+# Topbar
 
 Simple bar displayed above page content.
 
 ```ts
-import { Topbar as AppTopbar } from '@atlas/ui';
+import { Topbar } from '@atlas/ui';
 ```
 
 ## Usage
 
 ```vue
-<AppTopbar>
+<Topbar>
   <span>Announcements</span>
-</AppTopbar>
+</Topbar>
 ```
 
 ## API
@@ -19,10 +19,11 @@ import { Topbar as AppTopbar } from '@atlas/ui';
 ### Props
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `pt` | `object` | `undefined` | Passthrough options for internal elements. |
+| `pt` | `TopbarPassThroughOptions` | `undefined` | Passthrough options for internal elements. |
 
 ### Slots
 - `default` – bar content.
 
 ### Events
-- None.
+
+None.

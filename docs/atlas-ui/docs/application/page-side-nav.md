@@ -2,9 +2,9 @@
 
 Secondary navigation within a page.
 
-## Example
 ```ts
 import { PageSideNav } from '@atlas/ui';
+
 const sideItems = [
   {
     label: 'Group',
@@ -17,16 +17,22 @@ const sideItems = [
 ];
 ```
 
+## Usage
+
 ```vue
 <PageSideNav :items="sideItems" :linkComponent="Link" />
 ```
 
-## Props
-- `items: NavItem[]` – navigation links. Default `[]`.
-- `linkComponent: string | object` – component used for links. Default `'a'`.
+## API
 
-## Slots
+### Props
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `items` | `NavItem[]` | `[]` | Navigation links. |
+| `linkComponent` | `string \| object` | `'a'` | Component used for links. |
+
+### Slots
 - None.
 
-## Events
-- None
+### Events
+- None.

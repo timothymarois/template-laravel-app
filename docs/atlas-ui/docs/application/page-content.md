@@ -2,10 +2,11 @@
 
 Scrollable main content area.
 
-## Example
 ```ts
 import { PageContent } from '@atlas/ui';
 ```
+
+## Usage
 
 ```vue
 <PageContent :offset="64" :footerHeight="48">
@@ -13,14 +14,18 @@ import { PageContent } from '@atlas/ui';
 </PageContent>
 ```
 
-## Props
-- `offset: number | null` – top offset for fixed headers. Default `null`.
-- `footerHeight: number` – height of a sticky footer to offset. Default `0`.
-- `widthClass: string` – max width container class. Default `'max-w-screen-2xl'`.
-- `containerClass: string` – additional container classes. Default `'mx-auto p-4'`.
+## API
 
-## Slots
+### Props
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `offset` | `number \| null` | `null` | Top offset for fixed headers. |
+| `footerHeight` | `number` | `0` | Height of a sticky footer to offset. |
+| `widthClass` | `string` | `'max-w-screen-2xl'` | Max width container class. |
+| `containerClass` | `string` | `'mx-auto p-4'` | Additional container classes. |
+
+### Slots
 - `default` – page body.
 
-## Events
-- None
+### Events
+- None.

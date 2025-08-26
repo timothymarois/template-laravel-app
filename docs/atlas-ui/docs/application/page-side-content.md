@@ -2,10 +2,11 @@
 
 Scrolling region next to the main page body.
 
-## Example
 ```ts
 import { PageSideContent } from '@atlas/ui';
 ```
+
+## Usage
 
 ```vue
 <PageSideContent>
@@ -13,11 +14,13 @@ import { PageSideContent } from '@atlas/ui';
 </PageSideContent>
 ```
 
-## Props
+## API
+
+### Props
 - None.
 
-## Slots
+### Slots
 - `default` – side content.
 
-## Events
-- None
+### Events
+- None.

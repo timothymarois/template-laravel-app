@@ -2,10 +2,11 @@
 
 Page-level header with optional breadcrumbs and tabs.
 
-## Example
 ```ts
 import { PageHeader } from '@atlas/ui';
 ```
+
+## Usage
 
 ```vue
 <PageHeader
@@ -22,18 +23,22 @@ import { PageHeader } from '@atlas/ui';
 </PageHeader>
 ```
 
-## Props
-- `breadcrumbs: Breadcrumb[]` – items for the breadcrumb trail. Default `[]`.
-- `tabs: Tab[]` – optional tab navigation. Default `[]`.
-- `title: string` – page title text. Default `''`.
-- `linkComponent: string | object` – component used for links. Default `'a'`.
-- `widthClass: string` – max width container class. Default `'max-w-screen-2xl'`.
-- `hideTitle: boolean` – hide the title section. Default `false`.
+## API
 
-## Slots
+### Props
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `breadcrumbs` | `Breadcrumb[]` | `[]` | Items for the breadcrumb trail. |
+| `tabs` | `Tab[]` | `[]` | Optional tab navigation. |
+| `title` | `string` | `''` | Page title text. |
+| `linkComponent` | `string \| object` | `'a'` | Component used for links. |
+| `widthClass` | `string` | `'max-w-screen-2xl'` | Max width container class. |
+| `hideTitle` | `boolean` | `false` | Hide the title section. |
+
+### Slots
 - `title` – replace the entire title area.
 - `badge` – optional badge next to the title.
 - `action` – action area in the header.
 
-## Events
-- None
+### Events
+- None.

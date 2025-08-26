@@ -2,10 +2,11 @@
 
 Sticky footer with optional action slot.
 
-## Example
 ```ts
 import { PageFooter } from '@atlas/ui';
 ```
+
+## Usage
 
 ```vue
 <PageFooter :leftOffset="64">
@@ -16,13 +17,17 @@ import { PageFooter } from '@atlas/ui';
 </PageFooter>
 ```
 
-## Props
-- `leftOffset: number` – offset to account for sidebars. Default `0`.
-- `widthClass: string` – max width container class. Default `'max-w-screen-2xl'`.
+## API
 
-## Slots
+### Props
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `leftOffset` | `number` | `0` | Offset to account for sidebars. |
+| `widthClass` | `string` | `'max-w-screen-2xl'` | Max width container class. |
+
+### Slots
 - `default` – footer content.
 - `action` – action area beside footer content.
 
-## Events
-- None
+### Events
+- None.
