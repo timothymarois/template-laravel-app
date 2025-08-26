@@ -6,9 +6,11 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
-## v2.2.1 -
+## v3.0.0 -
 
-- Added `jsconfig.json` for IDE alias on @atlas/ui
+- Added @atlas/ui.
+- Added Atlas Laravel.
+- Laravel Standards and docs.
 
 ## v2.2.0 - 06/13/2025
 
