@@ -133,7 +133,15 @@ npm run build
 npm run build-ssr
 ```
 
-**(5) Restart SSR server:**
+**(5) Run (with SSR):**
+
+[Learn more about SSR](https://inertiajs.com/server-side-rendering)
+
+```bash
+php artisan inertia:start-ssr
+```
+
+**(6) Restart SSR server:**
 
 You only need to do this if you are running SSR.
 
