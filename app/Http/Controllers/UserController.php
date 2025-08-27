@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\HandlesIndexOptions;
+use Atlas\Laravel\Http\Concerns\InertiaDataTableOptions;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +13,7 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
-    use HandlesIndexOptions;
+    use InertiaDataTableOptions;
 
     protected array $filterCasts = [
         'user_id' => 'int',
