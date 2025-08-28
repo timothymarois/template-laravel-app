@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Atlas\Laravel\Http\Concerns\InertiaDataTableOptions;
 use App\Models\User;
 use App\Services\UserService;
+use Atlas\Laravel\Http\Concerns\InertiaDataTableOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

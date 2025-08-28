@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\User;
 use Atlas\Laravel\Services\ModelService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserService extends ModelService
@@ -28,7 +27,10 @@ class UserService extends ModelService
 
     public function create(array $data): User
     {
-        $data['password'] = Hash::make(Str::random(24));
+        // Use provided password when available; otherwise assign a random one.
+        if (empty($data['password'])) {
+            $data['password'] = Str::random(24);
+        }
 
         return parent::create($data);
     }
