@@ -24,9 +24,5 @@ export async function setupApp({ App, props, plugin, isServer = false }) {
     app.directive('styleclass', StyleClass);
     app.use(ZiggyPlugin);
 
-    if (!isServer) {
-        app.config.globalProperties.$route = window.route = route;
-    }
-
     return app;
 }
