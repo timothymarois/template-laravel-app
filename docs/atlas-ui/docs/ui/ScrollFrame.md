@@ -1,6 +1,6 @@
 # ScrollFrame
 
-Provides a scrollable container sized to the viewport. When `page` is set it locks body scrolling and uses `scroll-key` to preserve position.
+Provides a scrollable container sized to the viewport. When `page` is set it locks body scrolling and uses `scroll-key` to preserve position. Scrolling can be disabled with the `scrollable` prop to avoid setting a fixed height.
 
 ```ts
 import { ScrollFrame } from '@atlas/ui';
@@ -17,6 +17,12 @@ import { ScrollFrame } from '@atlas/ui';
 >
   <!-- scrollable content -->
 </ScrollFrame>
+
+<!-- Disable fixed height/scroll behavior -->
+<ScrollFrame :scrollable="false" class="p-4">
+  <!-- content grows naturally without constrained height -->
+  ...
+  </ScrollFrame>
 ```
 
 ## API
@@ -30,6 +36,7 @@ import { ScrollFrame } from '@atlas/ui';
 | `offset` | `number \| null` | `null` | Explicit pixel offset for height calculation. |
 | `addOffset` | `number` | `0` | Extra pixels subtracted from height. |
 | `rootClass` | `string` | `overflow-y-auto` | Additional classes for the frame element. |
+| `scrollable` | `boolean` | `true` | Enables height calculation and scroll behavior. When `false`, no height is set.
 
 ### Slots
 - `default` – scrollable content.

@@ -352,7 +352,7 @@ roundTo(123.456, 1); // 123.5
 
 ### isPageActive
 
-Determines whether the current Inertia page URL matches a given path.
+Determines whether the current Inertia page URL matches a given path. This utility returns `false` during server-side rendering to avoid accessing browser-only globals.
 
 **Parameters:**
 - `itemPath` (string): The path to compare against the current page URL.
