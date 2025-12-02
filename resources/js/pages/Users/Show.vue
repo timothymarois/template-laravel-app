@@ -43,9 +43,9 @@
 </template>
 
 <script setup>
-import { useModal } from '@atlas/ui';
 import LayoutApp from '@components/Layout/App.vue';
-import Button from '@atlas/ui/components/Button.vue';
+import { useModal } from '@/composables';
+import Button from '@components/Button.vue';
 const props = defineProps({
     item: {
         type: Object,

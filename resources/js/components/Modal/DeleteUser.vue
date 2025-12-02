@@ -9,8 +9,8 @@
 </template>
 
 <script setup>
-import DialogConfirmation from '@atlas/ui/components/DialogConfirmation.vue';
-import { useModal } from '@atlas/ui';
+import DialogConfirmation from '@components/DialogConfirmation.vue';
+import { useModal } from '@/composables';
 import { useForm } from '@inertiajs/vue3';
 import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();

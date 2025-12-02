@@ -4,7 +4,7 @@
 
 @import "tailwindcss-primeui";
 
-@source "../../node_modules/@tmarois/atlas-ui/src";
+@source "../js";
 
 @plugin "@tailwindcss/typography";
 

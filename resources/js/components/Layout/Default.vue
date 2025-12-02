@@ -13,7 +13,7 @@
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import LayoutApp from '@atlas/ui/components/App/Index.vue';
+import LayoutApp from '@components/App/Index.vue';
 
 const props = defineProps({
     title : {

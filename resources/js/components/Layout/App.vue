@@ -67,8 +67,8 @@
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
-import LayoutApp from '@atlas/ui/components/App/Index.vue';
-import ProfileMenu from '@atlas/ui/components/App/Nav/ProfileMenu.vue';
+import LayoutApp from '@components/App/Index.vue';
+import ProfileMenu from '@components/App/Nav/ProfileMenu.vue';
 import ModalEditUser from '@components/Modal/EditUser.vue';
 import ModalDeleteUser from '@components/Modal/DeleteUser.vue';
 
