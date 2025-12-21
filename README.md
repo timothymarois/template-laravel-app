@@ -1,6 +1,6 @@
 # Laravel Vue Inertia Template
 
-This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web based applications; **allowing you to focus solely on your application requirements**.
+This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web-based applications; **allowing you to focus solely on your application requirements**.
 
 ---
 
@@ -22,7 +22,6 @@ For the design side, we want to focus on customization, theming, and utility com
 
 - ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
 - ✅ PrimeVue v4 (unstyled) – [Documentation](https://primevue.org/)
-- ✅ Atlas UI (Component Library, using PrimeVue) – [Repo](https://github.com/tmarois/atlas-ui)
 
 ---
 
@@ -295,33 +294,6 @@ toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Conten
 
 ### Icons
 
-Easily add svg/imported icons that can change size and color.
+Add svg/imported icons that can change size and color.
 
 - ✅ [Tabler Icons](https://tabler.io/icons) *(recommended)*
-- ✅ [PrimeVue Icons](https://primevue.org/icons/)
-
-<details>
-<summary>Show example</summary>
-
-
-**From Tabler**
-
-```vue
-<template>
-    <IconHome class="text-gray-800 size-6" /> 
-</template>
-
-<script setup>
-import { IconHome } from '@tabler/icons-vue';
-</script>
-
-```
-**From PrimeVue icons**
-
-```html
-<i class="pi pi-check"></i>
-```
-
-</details>
-
----
