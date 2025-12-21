@@ -184,9 +184,15 @@ let resizeObserver: ResizeObserver | null = null;
 
 const footerHeight = ref(0);
 const footerLeftOffset = ref(0);
+const isScrolledToBottom = ref(false);
 
 // Provide footer height for child components (e.g., tables that need to account for fixed footer)
 provide('layoutFooterHeight', footerHeight);
+// Provide scroll state and setter for child components to update
+provide('isScrolledToBottom', isScrolledToBottom);
+provide('setScrolledToBottom', (value: boolean) => {
+    isScrolledToBottom.value = value;
+});
 
 const calculateFooterMetrics = () => {
     const sideNavWidth = (sideNavRef.value as any)?.$el?.offsetWidth || 0;

@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, inject, type Ref } from 'vue';
+import { ref, computed, onMounted, nextTick, inject, type Ref } from 'vue';
 import {
     Table,
     TableBody,
@@ -146,13 +146,22 @@ const props = defineProps<{
 // Inject layout footer height for dynamic scroll calculation
 const layoutFooterHeight = inject<Ref<number>>('layoutFooterHeight', null);
 
-// Track scroll state for header shadow
+// Track scroll state for header shadow and footer shadow
 const scrollFrameRef = ref<any>(null);
 const isScrolled = ref(false);
 
-const onScroll = (e: Event) => {
-    const target = e.target as HTMLElement;
+// Inject setter from layout to update scroll-to-bottom state
+const setScrolledToBottom = inject<(value: boolean) => void>('setScrolledToBottom', null);
+
+const checkScrollPosition = (target: HTMLElement) => {
     isScrolled.value = target.scrollTop > 0;
+    // Check if scrolled to bottom (within 1px tolerance)
+    const atBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 1;
+    setScrolledToBottom?.(atBottom);
+};
+
+const onScroll = (e: Event) => {
+    checkScrollPosition(e.target as HTMLElement);
 };
 
 // Compute total scroll offset (prop offset + footer height)
@@ -247,5 +256,12 @@ onMounted(() => {
     if (props.activeColumnList.length === 0) {
         emit('update:activeColumnList', getVal(props.defaultColumnList, defaultProps.defaultColumnList));
     }
+    // Check initial scroll position after render
+    nextTick(() => {
+        const frame = scrollFrameRef.value?.$el || scrollFrameRef.value;
+        if (frame) {
+            checkScrollPosition(frame);
+        }
+    });
 });
 </script>
