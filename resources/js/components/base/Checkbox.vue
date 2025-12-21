@@ -1,9 +1,9 @@
 <template>
     <Checkbox
-        :checked="modelValue"
+        :modelValue="modelValue"
         :disabled="disabled"
         :class="[computedSizeClass, className]"
-        @update:checked="$emit('update:modelValue', $event)"
+        @update:modelValue="$emit('update:modelValue', $event)"
     />
 </template>
 

@@ -12,7 +12,7 @@
                         <div v-if="hasTitle" class="flex items-center">
                             <slot name="title">
                                 <div class="mr-auto text-xl m-0 p-0 flex items-center">
-                                    <ul class="flex items-center py-4">
+                                    <ul class="flex items-center pt-4" :class="tabs && tabs.length > 0 ? 'pb-1' : 'pb-4'">
                                         <li v-for="nav in breadcrumbs" :key="nav.href">
                                             <div class="flex items-center text-slate-700">
                                                 <component

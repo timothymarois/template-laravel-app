@@ -18,7 +18,7 @@
         <button
             v-if="clearable && modelValue"
             type="button"
-            class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
             @click="$emit('update:modelValue', '')"
         >
             <X class="h-4 w-4" />

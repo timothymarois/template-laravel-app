@@ -6,13 +6,8 @@
                     <TableHead v-if="hasSelection" class="w-12 text-center">
                         <DropdownMenu v-if="hasSelectAll">
                             <DropdownMenuTrigger as-child>
-                                <button class="inline-flex items-center justify-center cursor-pointer">
-                                    <Checkbox
-                                        :checked="isAllSelected"
-                                        :indeterminate="isSomeSelected"
-                                        class="pointer-events-none"
-                                    />
-                                    <ChevronDown class="h-3 w-3 ml-1 text-muted-foreground" />
+                                <button class="inline-flex items-center justify-center cursor-pointer rounded-md p-1.5 hover:bg-foreground/10 transition-colors">
+                                    <ChevronDown class="h-4 w-4 text-muted-foreground" />
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start">
@@ -20,7 +15,7 @@
                                     Select All ({{ formatNumber(props.itemTotal ?? 0) }})
                                 </DropdownMenuItem>
                                 <DropdownMenuItem @click="selectVisibleItems">
-                                    Select Visible
+                                    Select Visible ({{ props.items.length }})
                                 </DropdownMenuItem>
                                 <DropdownMenuItem @click="selectNone">
                                     Select None
@@ -29,9 +24,8 @@
                         </DropdownMenu>
                         <Checkbox
                             v-else
-                            :checked="isAllSelected"
-                            :indeterminate="isSomeSelected"
-                            @update:checked="toggleSelectAll"
+                            :modelValue="isSomeSelected ? 'indeterminate' : isAllSelected"
+                            @update:modelValue="toggleSelectAll"
                         />
                     </TableHead>
                     <TableHead
@@ -68,13 +62,15 @@
                     <TableRow
                         v-for="(item, index) in items"
                         :key="item[dataKey] || index"
-                        :class="{ 'bg-muted/50': isRowSelected(item) }"
+                        :class="isRowSelected(item) ? 'bg-yellow-50 dark:bg-yellow-950/30 hover:bg-yellow-100 dark:hover:bg-yellow-900/40' : 'hover:bg-muted/50'"
                     >
-                        <TableCell v-if="hasSelection" class="text-center">
-                            <Checkbox
-                                :checked="isRowSelected(item)"
-                                @update:checked="toggleRowSelection(item)"
-                            />
+                        <TableCell v-if="hasSelection" class="w-12">
+                            <div class="flex items-center justify-center">
+                                <Checkbox
+                                    :modelValue="isRowSelected(item)"
+                                    @update:modelValue="toggleRowSelection(item)"
+                                />
+                            </div>
                         </TableCell>
                         <TableCell
                             v-for="column in tableColumns"
@@ -126,7 +122,7 @@ interface Column {
 
 const emit = defineEmits(['sort', 'update:selected', 'update:selectAll', 'update:activeColumnList']);
 
-const props = defineProps<{
+interface Props {
     items: any[];
     itemTotal?: number;
     selected?: any[];
@@ -145,7 +141,21 @@ const props = defineProps<{
     hasCustomizeColumns?: boolean;
     scrollOffset?: number;
     scrollable?: boolean;
-}>();
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    itemTotal: 0,
+    selected: () => [],
+    selectAll: false,
+    defaultColumnList: () => [],
+    dataKey: 'id',
+    emptyLabel: 'No results',
+    hasSelectAll: true,
+    hasSelection: false,
+    hasCustomizeColumns: false,
+    scrollOffset: 0,
+    scrollable: false,
+});
 
 // Inject layout footer height for dynamic scroll calculation
 const layoutFooterHeight = inject<Ref<number>>('layoutFooterHeight', null);
@@ -175,22 +185,6 @@ const computedScrollOffset = computed(() => {
     return baseOffset + footerOffset;
 });
 
-const defaultProps = {
-    itemTotal: 0,
-    selected: [],
-    selectAll: false,
-    defaultColumnList: [],
-    dataKey: 'id',
-    emptyLabel: 'No results',
-    hasSelectAll: true,
-    hasSelection: false,
-    hasCustomizeColumns: false,
-    scrollOffset: 0,
-    scrollable: false,
-};
-
-const getVal = <T>(val: T | undefined, defaultVal: T): T => val ?? defaultVal;
-
 const tableColumns = computed(() =>
     props.activeColumnList
         .map(key => props.columns.find(col => col.key === key))
@@ -208,14 +202,15 @@ const isSomeSelected = computed(() => {
     return props.selected.length > 0 && props.selected.length < props.items.length;
 });
 
-const isRowSelected = (item: any) => {
+const isRowSelected = (item: any): boolean => {
     if (props.selectAll) return true;
-    const key = getVal(props.dataKey, defaultProps.dataKey);
-    return props.selected?.some(s => s[key] === item[key]) ?? false;
+    if (!props.selected || !Array.isArray(props.selected) || props.selected.length === 0) return false;
+    const key = props.dataKey!;
+    return props.selected.some(s => s[key] === item[key]);
 };
 
-const toggleSelectAll = (checked: boolean) => {
-    if (checked) {
+const toggleSelectAll = (value: boolean | 'indeterminate') => {
+    if (value === true) {
         emit('update:selected', [...props.items]);
     } else {
         emit('update:selected', []);
@@ -239,15 +234,17 @@ const selectNone = () => {
 };
 
 const toggleRowSelection = (item: any) => {
-    const key = getVal(props.dataKey, defaultProps.dataKey);
-    const currentSelected = props.selected || [];
+    const key = props.dataKey!;
+    const currentSelected = Array.isArray(props.selected) ? props.selected : [];
     const isSelected = currentSelected.some(s => s[key] === item[key]);
 
     if (isSelected) {
-        emit('update:selected', currentSelected.filter(s => s[key] !== item[key]));
+        const newSelected = currentSelected.filter(s => s[key] !== item[key]);
+        emit('update:selected', newSelected);
         emit('update:selectAll', false);
     } else {
-        emit('update:selected', [...currentSelected, item]);
+        const newSelected = [...currentSelected, item];
+        emit('update:selected', newSelected);
     }
 };
 
@@ -258,7 +255,7 @@ const handleSort = (field: string) => {
 
 onMounted(() => {
     if (props.activeColumnList.length === 0) {
-        emit('update:activeColumnList', getVal(props.defaultColumnList, defaultProps.defaultColumnList));
+        emit('update:activeColumnList', props.defaultColumnList);
     }
     // Check initial scroll position after render
     nextTick(() => {

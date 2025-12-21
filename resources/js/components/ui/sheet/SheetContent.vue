@@ -41,7 +41,7 @@ const sheetAnimationClass = computed(() => {
 <template>
   <DialogPortal>
     <DialogOverlay
-      class="sheet-overlay fixed inset-0 z-50 bg-black/80"
+      class="sheet-overlay fixed inset-0 z-50 bg-black/50"
     />
     <DialogContent
       :class="cn(sheetVariants({ side }), sheetAnimationClass, props.class)"

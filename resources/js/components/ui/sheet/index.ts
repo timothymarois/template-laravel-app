@@ -11,14 +11,14 @@ export { default as SheetTitle } from "./SheetTitle.vue"
 export { default as SheetTrigger } from "./SheetTrigger.vue"
 
 export const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background p-6 shadow-lg",
+  "fixed z-50 gap-4 bg-background p-6",
   {
     variants: {
       side: {
-        top: "inset-x-0 top-0 border-b",
-        bottom: "inset-x-0 bottom-0 border-t",
-        left: "inset-y-0 left-0 h-full w-full border-r sm:max-w-lg",
-        right: "inset-y-0 right-0 h-full w-full border-l sm:max-w-lg",
+        top: "inset-x-0 top-0 border-b shadow-lg",
+        bottom: "inset-x-0 bottom-0 border-t shadow-lg",
+        left: "inset-y-0 left-0 h-full w-full border-r shadow-lg sm:max-w-lg",
+        right: "inset-y-0 right-0 h-full w-full border-l shadow-[-4px_0_16px_rgba(0,0,0,0.15)] sm:max-w-lg",
       },
     },
     defaultVariants: {

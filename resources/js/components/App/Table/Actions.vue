@@ -9,7 +9,7 @@
                 <Tooltip v-if="menuItem?.tooltip">
                     <TooltipTrigger as-child>
                         <div class="pl-3">
-                            <ActionItem :menuItem="menuItem" @action="actionClick" @toggle="toggle" />
+                            <ActionItem :menuItem="menuItem" @action="actionClick" />
                         </div>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -17,7 +17,7 @@
                     </TooltipContent>
                 </Tooltip>
                 <div v-else class="pl-3">
-                    <ActionItem :menuItem="menuItem" @action="actionClick" @toggle="toggle" />
+                    <ActionItem :menuItem="menuItem" @action="actionClick" />
                 </div>
             </template>
             <div>
@@ -28,7 +28,7 @@
                             class="flex items-center justify-center hover:bg-primary-foreground/10 transition px-3 py-2 cursor-pointer opacity-80 hover:opacity-100"
                             @click="$emit('action', 'clear')"
                         >
-                            <IconX class="size-4" />
+                            <X class="size-4" />
                         </button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -41,10 +41,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineComponent, h } from 'vue';
+import { defineComponent, h } from 'vue';
 import { formatNumber } from '../../../utils';
-import { IconX } from '@tabler/icons-vue';
-import Menu from '../../base/Menu.vue';
+import { X, ChevronDown } from 'lucide-vue-next';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
     Tooltip,
     TooltipContent,
@@ -64,17 +70,9 @@ const { selectedCount, menuItems } = defineProps({
     },
 });
 
-const menu = ref<any>(null);
-
 const actionClick = (item: any) => {
     if (!item?.disabled) {
         emit('action', item?.action);
-    }
-};
-
-const toggle = (event: any) => {
-    if (menu.value) {
-        (menu.value as any)[0].toggle(event);
     }
 };
 
@@ -82,50 +80,42 @@ const ActionItem = defineComponent({
     props: {
         menuItem: Object
     },
-    emits: ['action', 'toggle'],
+    emits: ['action'],
     setup(props, { emit }) {
         return () => {
             if (props.menuItem?.children && props.menuItem.children.length) {
-                return h('div', { class: 'relative' }, [
-                    h('div', {
-                        class: 'flex items-center space-x-0.5 font-semibold cursor-pointer hover:text-primary-foreground text-sm hover:bg-primary-foreground/10 px-3 py-2',
-                        onClick: (e: any) => { e.stopPropagation(); emit('toggle', e); }
-                    }, [
-                        h('div', { class: 'flex items-center space-x-0.5 font-semibold hover:cursor-pointer' }, [
-                            h('div', props.menuItem.label),
-                            h('svg', { xmlns: 'http://www.w3.org/2000/svg', class: 'size-4', viewBox: '0 0 24 24' }, [
-                                h('path', {
-                                    fill: 'currentColor',
-                                    'fill-rule': 'evenodd',
-                                    d: 'M7 9a1 1 0 0 0-.707 1.707l5 5a1 1 0 0 0 1.414 0l5-5A1 1 0 0 0 17 9z',
-                                    'clip-rule': 'evenodd'
-                                })
+                // Render dropdown menu for items with children
+                return h(DropdownMenu, {}, {
+                    default: () => [
+                        h(DropdownMenuTrigger, { asChild: true }, {
+                            default: () => h('button', {
+                                class: 'flex items-center space-x-0.5 font-semibold cursor-pointer hover:text-primary-foreground text-sm hover:bg-primary-foreground/10 px-3 py-2'
+                            }, [
+                                h('span', props.menuItem.label),
+                                h(ChevronDown, { class: 'size-4 ml-1' })
                             ])
-                        ])
-                    ]),
-                    h(Menu, {
-                        ref: menu,
-                        model: props.menuItem.children,
-                        size: 'small',
-                        popup: true
-                    }, {
-                        item: ({ item, props: itemProps }: any) => h('div', {
-                            class: 'flex align-items-center',
-                            ...itemProps.action,
-                            onClick: () => emit('action', item)
-                        }, [
-                            item?.icon ? h('span', { class: item.icon }) : null,
-                            h('span', {
-                                class: ['text-sm', {
-                                    'text-muted-foreground': item?.disabled,
-                                    'ml-4': item?.icon
-                                }]
-                            }, item.label)
-                        ])
-                    })
-                ]);
+                        }),
+                        h(DropdownMenuContent, { align: 'start' }, {
+                            default: () => props.menuItem.children.map((child: any, idx: number) => {
+                                if (child.separator) {
+                                    return h(DropdownMenuSeparator, { key: `sep-${idx}` });
+                                }
+                                return h(DropdownMenuItem, {
+                                    key: idx,
+                                    disabled: child.disabled,
+                                    onClick: () => emit('action', child)
+                                }, {
+                                    default: () => h('span', {
+                                        class: child.disabled ? 'text-muted-foreground' : ''
+                                    }, child.label)
+                                });
+                            })
+                        })
+                    ]
+                });
             }
-            return h('div', {
+            // Render simple button for items without children
+            return h('button', {
                 class: ['flex items-center space-x-0.5 font-semibold cursor-pointer hover:text-primary-foreground text-sm hover:bg-primary-foreground/10 px-3 py-2', {
                     'opacity-50 pointer-events-none': props.menuItem?.disabled
                 }],
