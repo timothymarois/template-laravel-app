@@ -1,7 +1,7 @@
 <template>
-    <ScrollFrame rootClass="overflow-y-auto overflow-x-auto relative" :addOffset="computedScrollOffset" :scrollable="scrollable">
+    <ScrollFrame ref="scrollFrameRef" rootClass="overflow-y-auto overflow-x-auto relative" :addOffset="computedScrollOffset" :scrollable="scrollable" @scroll="onScroll">
         <Table>
-            <TableHeader>
+            <TableHeader :class="{ 'shadow-[0_1px_3px_rgba(0,0,0,0.1)]': isScrolled }">
                 <TableRow>
                     <TableHead v-if="hasSelection" class="w-12 text-center">
                         <DropdownMenu v-if="hasSelectAll">
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, inject, type Ref } from 'vue';
+import { ref, computed, onMounted, inject, type Ref } from 'vue';
 import {
     Table,
     TableBody,
@@ -145,6 +145,15 @@ const props = defineProps<{
 
 // Inject layout footer height for dynamic scroll calculation
 const layoutFooterHeight = inject<Ref<number>>('layoutFooterHeight', null);
+
+// Track scroll state for header shadow
+const scrollFrameRef = ref<any>(null);
+const isScrolled = ref(false);
+
+const onScroll = (e: Event) => {
+    const target = e.target as HTMLElement;
+    isScrolled.value = target.scrollTop > 0;
+};
 
 // Compute total scroll offset (prop offset + footer height)
 const computedScrollOffset = computed(() => {

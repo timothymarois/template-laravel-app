@@ -4,6 +4,7 @@
         class="frame-scroll"
         :class="rootClass"
         :style="scrollable ? { height: `calc(100vh - ${dynamicHeight} - ${addOffset}px)` } : undefined"
+        @scroll="$emit('scroll', $event)"
     >
         <slot />
     </div>
