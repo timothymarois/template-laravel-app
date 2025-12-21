@@ -38,7 +38,11 @@
                         v-for="column in tableColumns"
                         :key="column.key"
                         :style="column.style"
-                        :class="[column.class, column.sortable ? 'cursor-pointer select-none' : '']"
+                        :class="[
+                            column.class,
+                            column.sortable ? 'cursor-pointer select-none hover:bg-foreground/5' : '',
+                            sortField === column.key ? 'bg-foreground/5' : ''
+                        ]"
                         @click="column.sortable ? handleSort(column.key) : null"
                     >
                         <div class="flex items-center gap-2">
