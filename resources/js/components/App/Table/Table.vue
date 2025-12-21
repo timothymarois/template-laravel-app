@@ -1,231 +1,232 @@
 <template>
-    <ScrollFrame rootClass="overflow-hidden relative" :addOffset="scrollOffset" :scrollable="scrollable">
-        <div v-if="hasCustomizeColumns" class="flex items-center absolute -top-1 z-[99] right-[10px]">
-            <CustomizeColumns
-                :columns="columns"
-                :activeColumnList="activeColumnList"
-                :defaultColumnList="defaultColumnList"
-                @update="$emit('update:activeColumnList', $event)"
-            >
-                <template #trigger="{ toggle }">
-                    <div
-                        v-tooltip.left="{
-                            value: 'Customize columns',
-                            pt: {
-                                root: 'absolute shadow-md py-0 px-0 max-w-[260px]',
-                                text: 'text-sm p-2 border border-surface-700 bg-surface-900 text-white dark:bg-surface-0 dark:border-surface-300 dark:text-black rounded-[var(--p-content-border-radius)] whitespace-pre-line'
-                            }
-                        }"
-                        class="bg-surface-0 dark:bg-surface-900 border border-surface-300 dark:border-surface-700 cursor-pointer text-surface-600 dark:text-surface-300 hover:text-surface-800 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-700 hover:border-surface-400 dark:hover:border-surface-600 transition-colors duration-200 h-[38px] w-[38px] flex items-center justify-center rounded-bl-lg rounded-br-lg"
-                        @click="toggle"
-                    >
-                        <IconSettings class="size-5" />
-                    </div>
-                </template>
-            </CustomizeColumns>
-        </div>
-        <DataTable
-            lazy
-            v-bind="{
-                value: items,
-                selection: selectedItems,
-                dataKey: hasSelection ? dataKey : undefined,
-                rowHover: true,
-                showGridlines: true,
-                scrollHeight: scrollable ? 'flex' : undefined,
-                scrollable: scrollable,
-                size,
-                tableStyle,
-                ...$attrs
-            }"
-            @sort="handleSort"
-            @update:selection="emit('update:selected', $event)"
-            @row-select-all="emit('update:selectAll', false)"
-            @row-unselect-all="emit('update:selectAll', false)"
-            @row-select="emit('update:selectAll', false)"
-            @row-unselect="selectAll ? resetSelection() : () => {}"
-        >
-            <Column
-                v-if="hasSelection"
-                selectionMode="multiple"
-                class="text-center"
-                header-style="width: 2rem;text-align:center;"
-                :class="{ 'hide-select': hasSelectAll }"
-                frozen
-            >
-                <template v-if="hasSelectAll" #header>
-                    <ButtonMenu :items="selectOptions" :onHover="true" />
-                </template>
-            </Column>
-            <template v-for="column in tableColumns" :key="column.key">
-                <Column
-                    :field="column.key"
-                    :header="column.header"
-                    :style="column.style"
-                    :class="column.class"
-                    :body-class="column.bodyClass"
-                    :sortable="column.sortable ?? false"
-                    :frozen="column.frozen ?? false"
-                    v-bind="column.props"
-                >
-                    <template v-if="$slots[column.key]" #body="slotProps">
-                        <slot :name="column.key" v-bind="slotProps" />
-                    </template>
-                    <template #sorticon="{ sorted, sortOrder }">
-                        <span
-                            class="inline-block transition-transform"
-                            :class="{
-                                'pi pi-sort': !sorted,
-                                'pi pi-sort-up': sortOrder === 1,
-                                'pi pi-sort-down': sortOrder === -1
-                            }"
+    <ScrollFrame rootClass="overflow-y-auto overflow-x-auto relative" :addOffset="scrollOffset" :scrollable="scrollable">
+        <Table>
+            <TableHeader>
+                <TableRow>
+                    <TableHead v-if="hasSelection" class="w-12 text-center">
+                        <DropdownMenu v-if="hasSelectAll">
+                            <DropdownMenuTrigger as-child>
+                                <button class="inline-flex items-center justify-center cursor-pointer">
+                                    <Checkbox
+                                        :checked="isAllSelected"
+                                        :indeterminate="isSomeSelected"
+                                        class="pointer-events-none"
+                                    />
+                                    <ChevronDown class="h-3 w-3 ml-1 text-muted-foreground" />
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start">
+                                <DropdownMenuItem @click="selectAllItems">
+                                    Select All ({{ formatNumber(props.itemTotal ?? 0) }})
+                                </DropdownMenuItem>
+                                <DropdownMenuItem @click="selectVisibleItems">
+                                    Select Visible
+                                </DropdownMenuItem>
+                                <DropdownMenuItem @click="selectNone">
+                                    Select None
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        <Checkbox
+                            v-else
+                            :checked="isAllSelected"
+                            :indeterminate="isSomeSelected"
+                            @update:checked="toggleSelectAll"
                         />
-                    </template>
-                </Column>
-            </template>
-            <template #empty>
-                <slot name="empty">
-                    <div class="text-center p-4">{{  emptyLabel  }}</div>
-                </slot>
-            </template>
-        </DataTable>
+                    </TableHead>
+                    <TableHead
+                        v-for="column in tableColumns"
+                        :key="column.key"
+                        :style="column.style"
+                        :class="[column.class, column.sortable ? 'cursor-pointer select-none' : '']"
+                        @click="column.sortable ? handleSort(column.key) : null"
+                    >
+                        <div class="flex items-center gap-2">
+                            {{ column.header }}
+                            <template v-if="column.sortable">
+                                <ArrowUpDown v-if="sortField !== column.key" class="h-4 w-4 text-muted-foreground" />
+                                <ArrowUp v-else-if="sortOrder === 1" class="h-4 w-4" />
+                                <ArrowDown v-else class="h-4 w-4" />
+                            </template>
+                        </div>
+                    </TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                <template v-if="items.length === 0">
+                    <TableRow>
+                        <TableCell :colspan="tableColumns.length + (hasSelection ? 1 : 0)" class="text-center py-8">
+                            <slot name="empty">{{ emptyLabel }}</slot>
+                        </TableCell>
+                    </TableRow>
+                </template>
+                <template v-else>
+                    <TableRow
+                        v-for="(item, index) in items"
+                        :key="item[dataKey] || index"
+                        :class="{ 'bg-muted/50': isRowSelected(item) }"
+                    >
+                        <TableCell v-if="hasSelection" class="text-center">
+                            <Checkbox
+                                :checked="isRowSelected(item)"
+                                @update:checked="toggleRowSelection(item)"
+                            />
+                        </TableCell>
+                        <TableCell
+                            v-for="column in tableColumns"
+                            :key="column.key"
+                            :class="column.bodyClass"
+                        >
+                            <slot :name="column.key" :data="item">
+                                {{ item[column.key] }}
+                            </slot>
+                        </TableCell>
+                    </TableRow>
+                </template>
+            </TableBody>
+        </Table>
     </ScrollFrame>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, useAttrs } from 'vue';
-import Column from 'primevue/column';
-import DataTable from '../../DataTable.vue';
-import ButtonMenu from '../../ButtonMenu.vue';
-import CustomizeColumns from './CustomizeColumns.vue';
-import ScrollFrame from '../../ScrollFrame.vue';
-import { IconSettings } from '@tabler/icons-vue';
-import { formatNumber } from '../../../utils';
+import { computed, onMounted } from 'vue';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import ScrollFrame from '../ScrollFrame.vue';
+import { ArrowUpDown, ArrowUp, ArrowDown, ChevronDown } from 'lucide-vue-next';
+import { formatNumber } from '@/utils';
+
+interface Column {
+    key: string;
+    header: string;
+    style?: string;
+    class?: string;
+    bodyClass?: string;
+    sortable?: boolean;
+    frozen?: boolean;
+    props?: Record<string, any>;
+}
 
 const emit = defineEmits(['sort', 'update:selected', 'update:selectAll', 'update:activeColumnList']);
 
-const props = defineProps({
-    items: {
-        type: Array,
-        required: true,
-    },
-    itemTotal: {
-        type: Number,
-        default: 0
-    },
-    selected: {
-        type: Array,
-        default: undefined,
-    },
-    selectAll: {
-        type: Boolean,
-        default: false,
-    },
-    columns: {
-        type: Array,
-        required: true,
-    },
-    activeColumnList: {
-        type: Array,
-        required: true,
-    },
-    defaultColumnList: {
-        type: Array,
-        default: () => []
-    },
-    size: {
-        type: String,
-        default: 'small',
-    },
-    tableStyle: {
-        type: String,
-        default: 'min-width: 50rem',
-    },
-    dataKey: {
-        type: String,
-        default: 'id',
-    },
-    emptyLabel : {
-        type: String,
-        default: 'No results'
-    },
-    hasSelectAll: {
-        type: Boolean,
-        default: true
-    },
-    hasSelection: {
-        type: Boolean,
-        default: false
-    },
-    hasCustomizeColumns: {
-        type: Boolean,
-        default: false
-    },
-    scrollOffset: {
-        type: Number,
-        default: 0
-    },
-    scrollable: {
-        type: Boolean,
-        default: false
-    }
-});
+const props = defineProps<{
+    items: any[];
+    itemTotal?: number;
+    selected?: any[];
+    selectAll?: boolean;
+    columns: Column[];
+    activeColumnList: string[];
+    defaultColumnList?: string[];
+    sortField?: string;
+    sortOrder?: number;
+    size?: string;
+    tableStyle?: string;
+    dataKey?: string;
+    emptyLabel?: string;
+    hasSelectAll?: boolean;
+    hasSelection?: boolean;
+    hasCustomizeColumns?: boolean;
+    scrollOffset?: number;
+    scrollable?: boolean;
+}>();
 
-const $attrs = useAttrs();
-
-const selectedItems = computed(() => props.selectAll ? props.items : props.selected);
-
-const handleSort = (event: any) => {
-    emit('sort', {
-        field: event.sortField,
-        order: event.sortOrder,
-    });
+const defaultProps = {
+    itemTotal: 0,
+    selected: [],
+    selectAll: false,
+    defaultColumnList: [],
+    dataKey: 'id',
+    emptyLabel: 'No results',
+    hasSelectAll: true,
+    hasSelection: false,
+    hasCustomizeColumns: false,
+    scrollOffset: 0,
+    scrollable: false,
 };
 
-const resetSelection = () => {
+const getVal = <T>(val: T | undefined, defaultVal: T): T => val ?? defaultVal;
+
+const tableColumns = computed(() =>
+    props.activeColumnList
+        .map(key => props.columns.find(col => col.key === key))
+        .filter(Boolean) as Column[]
+);
+
+const isAllSelected = computed(() => {
+    if (props.selectAll) return true;
+    if (!props.selected?.length) return false;
+    return props.selected.length === props.items.length;
+});
+
+const isSomeSelected = computed(() => {
+    if (!props.selected?.length) return false;
+    return props.selected.length > 0 && props.selected.length < props.items.length;
+});
+
+const isRowSelected = (item: any) => {
+    if (props.selectAll) return true;
+    const key = getVal(props.dataKey, defaultProps.dataKey);
+    return props.selected?.some(s => s[key] === item[key]) ?? false;
+};
+
+const toggleSelectAll = (checked: boolean) => {
+    if (checked) {
+        emit('update:selected', [...props.items]);
+    } else {
+        emit('update:selected', []);
+        emit('update:selectAll', false);
+    }
+};
+
+const selectAllItems = () => {
+    emit('update:selectAll', true);
+    emit('update:selected', []);
+};
+
+const selectVisibleItems = () => {
+    emit('update:selectAll', false);
+    emit('update:selected', [...props.items]);
+};
+
+const selectNone = () => {
     emit('update:selectAll', false);
     emit('update:selected', []);
 };
 
-const selectOptions = computed(() => [
-    {
-        label: `Select All (${formatNumber(props.itemTotal)})`,
-        click: () => {
-            emit('update:selectAll', true);
-            emit('update:selected', []);
-        }
-    },
-    {
-        label: 'Select Visible',
-        click: () => {
-            emit('update:selectAll', false);
-            emit('update:selected', props.items);
-        }
-    },
-    {
-        label: 'Select None',
-        click: () => {
-            resetSelection();
-        }
-    },
-]);
+const toggleRowSelection = (item: any) => {
+    const key = getVal(props.dataKey, defaultProps.dataKey);
+    const currentSelected = props.selected || [];
+    const isSelected = currentSelected.some(s => s[key] === item[key]);
 
-const tableColumns = computed(() =>
-    (props.activeColumnList as any[])
-        .map(key => (props.columns as any[]).find(col => col.key === key))
-        .filter(Boolean)
-);
+    if (isSelected) {
+        emit('update:selected', currentSelected.filter(s => s[key] !== item[key]));
+        emit('update:selectAll', false);
+    } else {
+        emit('update:selected', [...currentSelected, item]);
+    }
+};
+
+const handleSort = (field: string) => {
+    const newOrder = props.sortField === field ? (props.sortOrder === 1 ? -1 : 1) : 1;
+    emit('sort', { field, order: newOrder });
+};
 
 onMounted(() => {
     if (props.activeColumnList.length === 0) {
-        emit('update:activeColumnList', props.defaultColumnList);
+        emit('update:activeColumnList', getVal(props.defaultColumnList, defaultProps.defaultColumnList));
     }
 });
-
 </script>
-
-<style>
-.hide-select [data-pc-name="pcheadercheckbox"] {
-    display: none ! important;
-}
-</style>

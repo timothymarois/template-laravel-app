@@ -1,15 +1,17 @@
 <template>
     <DialogConfirmation
         v-model="showModal"
-        title="Delete user"
-        message="Are you sure you want to delete this user?"
+        title="Archive user"
+        message="Are you sure you want to archive this user? This action can be undone."
+        confirmLabel="Archive"
+        destructive
         :loading="form.processing"
         @confirm="submit"
     />
 </template>
 
 <script setup>
-import DialogConfirmation from '@components/DialogConfirmation.vue';
+import DialogConfirmation from '@components/app/DialogConfirmation.vue';
 import { useModal } from '@/composables';
 import { useForm } from '@inertiajs/vue3';
 import { useFormSubmit } from '@/composables/useFormSubmit';
@@ -25,7 +27,7 @@ const form = useForm({
 const submit = () => {
     submitForm(form, 'delete', route('users.destroy', [form.id]), {
         only: ['users'],
-        toastMessage: 'User deleted successfully',
+        toastMessage: 'User archived successfully',
         onSuccess: () => showModal.value = false
     });
 };

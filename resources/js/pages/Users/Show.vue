@@ -2,13 +2,11 @@
     <LayoutApp title="User">
         <template #headerTitle>
             <div class="pr-2">
-                <Button
-                    as="Link"
-                    text
-                    icon="pi pi-arrow-left"
-                    size="small"
-                    :href="$route('users.index')"
-                />
+                <Link :href="$route('users.index')">
+                    <Button text size="small">
+                        <ArrowLeft class="size-4" />
+                    </Button>
+                </Link>
             </div>
             <div class="flex flex-col space-y-0 py-3">
                 <div class="text-md font-medium">{{ item.name }}</div>
@@ -43,9 +41,11 @@
 </template>
 
 <script setup>
-import LayoutApp from '@components/Layout/App.vue';
+import { Link } from '@inertiajs/vue3';
+import LayoutApp from '@components/layout/App.vue';
 import { useModal } from '@/composables';
-import Button from '@components/Button.vue';
+import Button from '@components/base/Button.vue';
+import { ArrowLeft } from 'lucide-vue-next';
 const props = defineProps({
     item: {
         type: Object,

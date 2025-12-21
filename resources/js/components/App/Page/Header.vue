@@ -1,6 +1,6 @@
 <template>
     <div
-        class="w-full bg-white dark:bg-surface-900 border-b border-surface-300 dark:border-surface-700 z-20 sticky top-0"
+        class="w-full bg-background border-b border-border z-20 sticky top-0"
         :class="{
             'shadow-[2px_0px_6px_-2px_rgba(0,0,0,0.5)] dark:shadow-[2px_0px_6px_-2px_rgba(0,0,0,0.5)]': !isTop
         }"
@@ -67,9 +67,9 @@
                                                 tab?.disabled
                                                     ? 'text-gray-400 cursor-not-allowed pointer-events-none select-none border-transparent'
                                                     : [
-                                                        'text-gray-500 hover:text-black hover:border-surface-300 dark:hover:border-surface-400 dark:hover:text-gray-300 dark:text-gray-300',
+                                                        'text-muted-foreground hover:text-foreground hover:border-border',
                                                         isActiveTab(tab)
-                                                            ? '!text-black !border-surface-600 dark:!border-surface-300 dark:!text-gray-100'
+                                                            ? '!text-foreground !border-primary'
                                                             : 'border-transparent'
                                                     ]
                                             ]"

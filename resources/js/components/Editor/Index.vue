@@ -59,7 +59,7 @@ const props = defineProps({
     },
     toolbarClass: {
         type: String,
-        default: 'border-b border-surface-300 dark:border-surface-700',
+        default: 'border-b border-border',
     }
 });
 

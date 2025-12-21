@@ -1,9 +1,8 @@
 // https://inertiajs.com/manual-visits
 
-import { useToast } from 'primevue/usetoast';
+import { toast } from 'vue-sonner';
 
 export const useFormSubmit = () => {
-    const toast = useToast();
     const submitForm = async (
         form,
         method = 'post',
@@ -35,7 +34,7 @@ export const useFormSubmit = () => {
                 // ideally, this should be a failed response :(
                 if (response?.url !== '/login') {
                     if (toastMessage) {
-                        toast.add({ severity: 'success', summary: toastMessage, life: 6000 });
+                        toast.success(toastMessage);
                     }
                 }
 

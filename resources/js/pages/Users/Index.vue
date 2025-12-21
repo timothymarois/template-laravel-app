@@ -14,15 +14,26 @@
                         v-model="search"
                         placeholder="Search user name or email"
                         class="w-[400px]"
-                        size="small"
                         clearable
                     />
-                    <Button size="small" label="Add user" @click="open('ADD_EDIT_USER')" />
+                    <Button label="Add user" @click="open('ADD_EDIT_USER')" />
+                    <CustomizeColumns
+                        :columns="columns"
+                        :activeColumnList="viewFields"
+                        :defaultColumnList="defaultColumnList"
+                        @update="viewFields = $event"
+                    >
+                        <template #trigger>
+                            <Button variant="outline">
+                                <Settings class="size-4" />
+                            </Button>
+                        </template>
+                    </CustomizeColumns>
                 </div>
             </div>
         </template>
         <template #default>
-            <div class="bg-white dark:bg-surface-800">
+            <div class="bg-card">
                 <Table
                     :items="users.data"
                     :itemTotal="userTotal"
@@ -34,7 +45,6 @@
                     :defaultColumnList="defaultColumnList"
                     :activeColumnList="viewFields"
                     hasSelection
-                    hasCustomizeColumns
                     :scrollOffset="53"
                     scrollable
                     @update:selected="selected = $event"
@@ -46,9 +56,9 @@
                         <div class="w-full flex items-center justify-center">
                             <ButtonMenu
                                 :items="[
-                                    { label: 'Edit', icon: 'pi pi-pencil', click: () => open('ADD_EDIT_USER', data) },
+                                    { label: 'Edit', icon: Pencil, click: () => open('ADD_EDIT_USER', data) },
                                     { separator: true },
-                                    { label: 'Archive', icon: 'pi pi-trash', click: () => open('DELETE_USER', data) },
+                                    { label: 'Archive', icon: Trash2, click: () => open('DELETE_USER', data) },
                                 ]"
                             />
                         </div>
@@ -65,7 +75,6 @@
             <Select
                 v-model="perPage"
                 :options="perPageOptions"
-                size="small"
                 option-label="label"
                 option-value="value"
             />
@@ -79,16 +88,18 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import LayoutApp from '@components/Layout/App.vue';
-import InputText from '@components/InputText.vue';
-import Button from '@components/Button.vue';
-import Select from '@components/Select.vue';
-import LinkPaginator from '@components/Paginator.vue';
-import Table from '@components/App/Table/Table.vue';
-import ButtonMenu from '@components/ButtonMenu.vue';
-import TableActions from '@components/App/Table/Actions.vue';
+import LayoutApp from '@components/layout/App.vue';
+import InputText from '@components/base/InputText.vue';
+import Button from '@components/base/Button.vue';
+import Select from '@components/base/Select.vue';
+import LinkPaginator from '@components/base/Paginator.vue';
+import Table from '@components/app/Table/Table.vue';
+import ButtonMenu from '@components/app/ButtonMenu.vue';
+import TableActions from '@components/app/Table/Actions.vue';
+import CustomizeColumns from '@components/app/Table/CustomizeColumns.vue';
 import { useModal } from '@/composables';
 import { useDataTableOptions } from '@/composables/inertia';
+import { Pencil, Trash2, Settings } from 'lucide-vue-next';
 
 const props = defineProps({
     users: {

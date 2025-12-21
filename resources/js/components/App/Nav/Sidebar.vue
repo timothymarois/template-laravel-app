@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative flex flex-col items-center w-16 h-full overflow-hidden border-r z-[99]"
+        class="relative flex flex-col items-center w-16 h-full overflow-hidden border-r z-40"
         :class="containerClass"
     >
         <component :is="linkComponent" class="flex items-center justify-center h-14" :href="logoLinkPath">
@@ -22,35 +22,31 @@
                 <template v-for="(item, itemIndex) in items" :key="itemIndex">
                     <div
                         class="flex flex-col items-center justify-start w-full"
-                        :class="{ 'border-t border-surface-600 mt-2': itemIndex !== 0 }"
+                        :class="{ 'border-t border-border mt-2': itemIndex !== 0 }"
                     >
                         <template v-for="(child, index) in item.children" :key="index">
-                            <component
-                                v-if="child.href"
-                                :is="linkComponent"
-                                v-tooltip.right="{
-                                    value: child.label,
-                                        pt: {
-                                            root: 'absolute shadow-md py-0 px-0 max-w-[260px] ml-3',
-                                            text: autoDark
-                                                ? 'text-sm p-2 border border-surface-700 bg-surface-900 text-white dark:bg-surface-0 dark:border-surface-300 dark:text-black rounded-[var(--p-content-border-radius)] whitespace-pre-line'
-                                                : 'text-sm p-2 border border-surface-700 bg-surface-900 text-white dark:bg-surface-0 dark:border-surface-300 dark:text-black rounded-[var(--p-content-border-radius)] whitespace-pre-line'
-                                        }
-                                }"
-                                class="relative flex items-center justify-center w-full h-12 mt-2 rounded-[var(--p-content-border-radius)]"
-                                :href="child.href"
-                                :class="linkClass(child)"
-                            >
-                                <component :is="getIcon(child)" />
-                                <div
-                                    v-if="child?.count > 0"
-                                    class="absolute top-2 right-2 flex items-center justify-center text-xs font-semibold text-white bg-red-500 rounded-full transform translate-x-1/4 -translate-y-1/2 min-w-[26px] px-1 h-[20px] border-2 z-[99]"
-                                    :class="autoDark ? 'border-surface-100 dark:border-surface-800' : 'border-surface-800'"
-                                >
-                                    <span v-if="child.count > 99">99+</span>
-                                    <span v-else>{{ child.count }}</span>
-                                </div>
-                            </component>
+                            <Tooltip v-if="child.href">
+                                <TooltipTrigger as-child>
+                                    <component
+                                        :is="linkComponent"
+                                        class="relative flex items-center justify-center w-full h-12 mt-2 rounded-md"
+                                        :href="child.href"
+                                        :class="linkClass(child)"
+                                    >
+                                        <component :is="getIcon(child)" />
+                                        <div
+                                            v-if="child?.count > 0"
+                                            class="absolute top-2 right-2 flex items-center justify-center text-xs font-semibold text-white bg-red-500 rounded-full transform translate-x-1/4 -translate-y-1/2 min-w-[26px] px-1 h-[20px] border-2 z-[99] border-background"
+                                        >
+                                            <span v-if="child.count > 99">99+</span>
+                                            <span v-else>{{ child.count }}</span>
+                                        </div>
+                                    </component>
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    {{ child.label }}
+                                </TooltipContent>
+                            </Tooltip>
                         </template>
                     </div>
                 </template>
@@ -66,6 +62,11 @@
 import { computed, useSlots } from 'vue';
 import { hasSlotContent } from '../../../utils';
 import { isPageActive } from '../../../utils/vue/inertia';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const slots = useSlots();
 
@@ -114,22 +115,21 @@ const hasActions = computed(() => hasSlotContent(slots.actions));
 
 const containerClass = computed(() => {
     const base = props.autoDark
-        ? 'text-surface-700 dark:text-white/80'
-        : 'dark text-white/80';
+        ? 'text-foreground'
+        : 'dark text-foreground';
     const bg = props.backgroundClass || (props.autoDark
-        ? 'bg-surface-100 dark:bg-primary-950 border-surface-200 dark:border-surface-600'
-        : 'bg-surface-950 border-surface-700');
+        ? 'bg-muted border-border'
+        : 'bg-primary-foreground border-border');
     return `${base} ${bg}`;
 });
 
 const linkClass = (item) => {
-    const activeCls = props.activeClass || 'bg-white text-black';
+    const activeCls = props.activeClass || 'bg-background text-foreground';
     if (props.autoDark) {
-        const baseCls =
-            'text-surface-600 dark:text-surface-300 hover:bg-surface-800 dark:hover:bg-surface-800';
+        const baseCls = 'text-muted-foreground hover:bg-accent';
         return isActive(item) ? activeCls : baseCls;
     }
-    const baseCls = 'text-white hover:bg-surface-600/50';
+    const baseCls = 'text-muted-foreground hover:bg-accent/50';
     return isActive(item) ? activeCls : baseCls;
 };
 </script>

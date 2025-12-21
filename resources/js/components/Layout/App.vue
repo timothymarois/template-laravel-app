@@ -14,6 +14,7 @@
         widthClass="w-full"
     >
         <template #navActions>
+            <ModeToggle />
             <ProfileMenu
                 :user="user"
                 :items="profileMenuItems"
@@ -67,10 +68,12 @@
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
-import LayoutApp from '@components/App/Index.vue';
-import ProfileMenu from '@components/App/Nav/ProfileMenu.vue';
-import ModalEditUser from '@components/Modal/EditUser.vue';
-import ModalDeleteUser from '@components/Modal/DeleteUser.vue';
+import { Building2, CreditCard, Users, LayoutGrid, Settings, Activity, LogOut } from 'lucide-vue-next';
+import LayoutApp from '@components/app/Index.vue';
+import ProfileMenu from '@components/app/Nav/ProfileMenu.vue';
+import { ModeToggle } from '@/components/ui/mode-toggle';
+import ModalEditUser from '@components/modal/EditUser.vue';
+import ModalDeleteUser from '@components/modal/DeleteUser.vue';
 
 const user = usePage().props.user;
 
@@ -103,15 +106,15 @@ const props = defineProps({
 
 const profileMenuItems = computed(() => [
     { separator: true },
-    { label: 'Company Name', icon: 'pi pi-building-columns', href: '/' },
+    { label: 'Company Name', icon: Building2, href: '/' },
     { separator: true },
-    { label: 'Billing & Plan', icon: 'pi pi-credit-card', href: '/' },
-    { label: 'Manage Access', icon: 'pi pi-users', href: '/' },
-    { label: 'Integrations', icon: 'pi pi-objects-column', href: '/' },
-    { label: 'Settings', icon: 'pi pi-cog', href: '/' },
-    { label: 'Status page', icon: 'pi pi-cog', href: 'https://google.com', external: true },
+    { label: 'Billing & Plan', icon: CreditCard, href: '/' },
+    { label: 'Manage Access', icon: Users, href: '/' },
+    { label: 'Integrations', icon: LayoutGrid, href: '/' },
+    { label: 'Settings', icon: Settings, href: '/' },
+    { label: 'Status page', icon: Activity, href: 'https://google.com', external: true },
     { separator: true },
-    { label: 'Logout', icon: 'pi pi-sign-out', href: '/logout' }
+    { label: 'Logout', icon: LogOut, href: '/logout' }
 ]);
 
 const topBarItems = computed(() => [

@@ -1,17 +1,21 @@
 <template>
     <div class="relative">
-        <Button
-            v-tooltip.top="tooltip"
-            icon
-            text
-            size="small"
-            class="!px-2 hover:!bg-surface-200/50"
-            @click="toggleLinkPopover"
-        >
-            <div class="flex items-center text-black dark:text-white">
-                <IconLink class="size-5" />
-            </div>
-        </Button>
+        <Tooltip>
+            <TooltipTrigger as-child>
+                <Button
+                    icon
+                    text
+                    size="small"
+                    class="!px-2 hover:!bg-accent/50"
+                    @click="toggleLinkPopover"
+                >
+                    <div class="flex items-center text-foreground">
+                        <IconLink class="size-5" />
+                    </div>
+                </Button>
+            </TooltipTrigger>
+            <TooltipContent>Add link</TooltipContent>
+        </Tooltip>
         <Popover ref="linkPopover">
             <div class="flex items-center space-x-2 w-[320px]">
                 <div class="flex-1">
@@ -26,10 +30,11 @@
                 <div>
                     <Button
                         size="small"
-                        icon="pi pi-check"
                         :disabled="!isValidUrl"
                         @click="toggleLink"
-                    />
+                    >
+                        <Check class="size-4" />
+                    </Button>
                 </div>
             </div>
         </Popover>
@@ -39,9 +44,15 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { IconLink } from '@tabler/icons-vue';
+import { Check } from 'lucide-vue-next';
 import Button from '../../Button.vue';
 import Popover from '../../Popover.vue';
 import InputText from '../../InputText.vue';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 const props = defineProps({
     editor: Object
@@ -72,14 +83,6 @@ const toggleLinkPopover = (event) => {
         props.editor.chain().focus().extendMarkRange('link').unsetLink().run();
     } else {
         linkPopover.value.toggle(event);
-    }
-};
-
-const tooltip = {
-    value: 'Add link',
-    pt: {
-        root: 'absolute shadow-md py-0 px-0 max-w-[260px]',
-        text: 'text-sm p-2 border border-surface-700 bg-surface-900 text-white dark:bg-surface-0 dark:border-surface-300 dark:text-black rounded-[var(--p-content-border-radius)] whitespace-pre-line'
     }
 };
 </script>

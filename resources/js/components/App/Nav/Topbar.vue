@@ -26,19 +26,19 @@
                                 v-if="!item.children"
                                 :is="linkComponent"
                                 :href="item.href"
-                                class="rounded-[var(--p-content-border-radius)] px-3 py-2 text-sm font-medium"
+                                class="rounded-md px-3 py-2 text-sm font-medium"
                                 :class="linkClass(item)"
                             >
                                 {{ item.label }}
                             </component>
                             <div
                                 v-else
-                                class="rounded-[var(--p-content-border-radius)] px-3 py-2 text-sm font-medium cursor-pointer"
+                                class="rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
                                 :class="linkClass(item)"
                                 @click="toggleMenu(item.href, $event)"
                             >
                                 {{ item.label }}
-                                <span class="pi pi-fw pi-angle-down ml-2" />
+                                <ChevronDown class="inline-block w-4 h-4 ml-1" />
                                 <Menu
                                     :ref="setMenuRef(item.href)"
                                     :model="item.children"
@@ -49,7 +49,7 @@
                                             :is="linkComponent"
                                             v-bind="props.action"
                                             :href="item.href"
-                                            class="flex items-center w-full px-2 py-1 text-sm rounded-[var(--p-content-border-radius)]"
+                                            class="flex items-center w-full px-2 py-1 text-sm rounded-md"
                                             :class="isActive(item) ? menuActiveClass : ''"
                                         >
                                             <span :class="item.icon" />
@@ -71,9 +71,10 @@
 
 <script setup>
 import { reactive, useSlots, computed } from 'vue';
+import { ChevronDown } from 'lucide-vue-next';
 import { hasSlotContent } from '../../../utils';
 import { isPageActive } from '../../../utils/vue/inertia';
-import Menu from '../../Menu.vue';
+import Menu from '../../base/Menu.vue';
 
 const slots = useSlots();
 
@@ -133,22 +134,22 @@ const hasActions = computed(() => hasSlotContent(slots.actions));
 
 const containerClass = computed(() => {
     const bg = props.backgroundClass || (props.autoDark
-        ? 'bg-surface-100 dark:bg-surface-900 border-surface-200 dark:border-surface-700'
-        : 'dark bg-surface-900 border-surface-700');
+        ? 'bg-muted border-border'
+        : 'dark bg-background border-border');
     return bg;
 });
 
 const menuActiveClass = computed(() => {
-    return props.activeClass || 'bg-white text-primary-900';
+    return props.activeClass || 'bg-background text-primary';
 });
 
 const linkClass = (item) => {
-    const activeCls = props.activeClass || 'bg-white text-black';
+    const activeCls = props.activeClass || 'bg-background text-foreground';
     if (props.autoDark) {
-        const baseCls = 'text-surface-700 dark:text-surface-300 hover:bg-surface-200 dark:hover:bg-primary-800 hover:text-surface-900 dark:hover:text-white';
+        const baseCls = 'text-muted-foreground hover:bg-accent hover:text-foreground';
         return isActive(item) ? activeCls : baseCls;
     }
-    const baseCls = 'text-gray-300 hover:bg-surface-600/50 hover:text-white';
+    const baseCls = 'text-muted-foreground hover:bg-accent/50 hover:text-foreground';
     return isActive(item) ? activeCls : baseCls;
 };
 </script>

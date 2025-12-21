@@ -44,11 +44,11 @@
 </template>
 
 <script setup>
-import DrawerForm from '@components/DrawerForm.vue';
-import Card from '@components/Card.vue';
-import TooltipIcon from '@components/TooltipIcon.vue';
-import LabelField from '@components/LabelField.vue';
-import InputText from '@components/InputText.vue';
+import DrawerForm from '@components/app/DrawerForm.vue';
+import Card from '@components/base/Card.vue';
+import TooltipIcon from '@components/base/TooltipIcon.vue';
+import LabelField from '@components/app/LabelField.vue';
+import InputText from '@components/base/InputText.vue';
 import { useModal } from '@/composables';
 import { useForm } from '@inertiajs/vue3';
 import { useFormSubmit } from '@/composables/useFormSubmit';

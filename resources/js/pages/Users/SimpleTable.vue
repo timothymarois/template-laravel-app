@@ -78,14 +78,14 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import LayoutApp from '@components/Layout/App.vue';
-import Card from '@components/Card.vue';
-import Button from '@components/Button.vue';
-import Select from '@components/Select.vue';
-import InputText from '@components/InputText.vue';
-import LinkPaginator from '@components/Paginator.vue';
-import Table from '@components/App/Table/Table.vue';
-import ButtonMenu from '@components/ButtonMenu.vue';
+import LayoutApp from '@components/layout/App.vue';
+import Card from '@components/base/Card.vue';
+import Button from '@components/base/Button.vue';
+import Select from '@components/base/Select.vue';
+import InputText from '@components/base/InputText.vue';
+import LinkPaginator from '@components/base/Paginator.vue';
+import Table from '@components/app/Table/Table.vue';
+import ButtonMenu from '@components/app/ButtonMenu.vue';
 import { useModal } from '@/composables';
 import { useDataTableOptions } from '@/composables/inertia';
 

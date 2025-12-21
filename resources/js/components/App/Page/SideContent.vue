@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-import ScrollFrame from '../../ScrollFrame.vue';
+import ScrollFrame from '../ScrollFrame.vue';
 </script>

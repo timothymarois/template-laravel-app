@@ -1,84 +1,88 @@
 <template>
     <div class="relative">
         <div v-if="user?.id" class="flex justify-center items-center">
-            <slot name="trigger" :user="user" :toggle="toggle">
-                <button
-                    class="relative overflow-hidden w-full mr-2 p-link flex items-center p-2 px-3 rounded-md text-surface-800 dark:text-white hover:bg-surface-200 dark:hover:bg-surface-600 border-noround cursor-pointer"
-                    :class="{ '!p-1 !py-2 !mr-0': avatarOnly }"
-                    @click="toggle"
-                >
-                    <Avatar
-                        :label="user.name?.charAt(0).toUpperCase()"
-                        class="m-auto border border-surface-200 dark:border-surface-400 bg-surface-100 text-surface-800 dark:bg-surface-700 dark:text-white"
-                        shape="circle"
-                    />
-                    <div v-if="!avatarOnly" class="ml-2 flex flex-col text-left flex-1 min-w-0">
-                        <span class="font-bold truncate">{{ user.name }}</span>
-                        <span class="text-sm truncate">{{ user.email }}</span>
-                    </div>
-                </button>
-            </slot>
-            <Menu ref="menu" :model="menuItems" class="w-[245px] !z-[99999]" popup>
-                <template v-if="avatarOnly" #start>
-                    <slot name="avatarMenuHeader">
-                        <div class="p-1 pb-0">
-                            <component
-                                :is="headerLink ? linkComponent : 'div'"
-                                :href="headerLink"
-                                class="relative overflow-hidden w-full p-link flex items-center p-2 rounded"
-                                :class="headerLink
-                                    ? 'text-surface-800 dark:text-white hover:bg-surface-100 dark:hover:bg-surface-600 cursor-pointer'
-                                    : 'text-surface-800 dark:text-white cursor-default'"
-                            >
-                                <Avatar
-                                    :label="user?.name?.charAt(0).toUpperCase()"
-                                    class="mr-2 border border-surface-200 dark:border-surface-400"
-                                    shape="circle"
-                                />
-                                <div class="flex flex-col text-left flex-1 min-w-0">
-                                    <span class="font-bold truncate">{{ user?.name }}</span>
-                                    <span class="text-sm truncate">{{ user?.email }}</span>
-                                </div>
-                            </component>
-                        </div>
-                    </slot>
-                </template>
-                <template #item="{ item, props }">
-                    <component
-                        :is="item.external ? 'a' : linkComponent"
-                        :href="item.href"
-                        v-bind="props.action"
-                        class="flex items-center justify-between text-surface-800 dark:text-white hover:bg-surface-100 dark:hover:bg-surface-700 p-2 px-3 w-full rounded"
+            <DropdownMenu>
+                <DropdownMenuTrigger as-child>
+                    <button
+                        class="relative overflow-hidden w-full mr-2 flex items-center p-2 px-3 rounded-md text-foreground hover:bg-accent cursor-pointer"
+                        :class="{ '!p-1 !py-2 !mr-0': avatarOnly }"
                     >
-                        <div class="flex align-items-center items-center">
-                            <span :class="item.icon" />
-                            <span class="ml-2 text-sm">{{ item.label }}</span>
-                            <Badge
-                                v-if="item.badge"
-                                class="ml-auto"
-                                :value="item.badge"
-                            />
-                            <span v-if="item.shortcut" class="ml-auto border border-surface-300 rounded bg-surface-100 text-xs p-1">
-                                {{ item.shortcut }}
-                            </span>
-                        </div>
-                        <IconArrowUpRight
-                            v-if="item.external"
-                            class="ml-2 w-4 h-4 opacity-50"
+                        <Avatar
+                            :label="user.name?.charAt(0).toUpperCase()"
+                            class="m-auto border border-border bg-muted text-foreground"
+                            shape="circle"
                         />
-                    </component>
-                </template>
-            </Menu>
+                        <div v-if="!avatarOnly" class="ml-2 flex flex-col text-left flex-1 min-w-0">
+                            <span class="font-bold truncate">{{ user.name }}</span>
+                            <span class="text-sm truncate">{{ user.email }}</span>
+                        </div>
+                    </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" class="w-[245px]">
+                    <!-- Avatar header for avatar-only mode -->
+                    <div v-if="avatarOnly" class="p-1 pb-0">
+                        <component
+                            :is="headerLink ? linkComponent : 'div'"
+                            :href="headerLink"
+                            class="relative overflow-hidden w-full flex items-center p-2 rounded"
+                            :class="headerLink
+                                ? 'text-foreground hover:bg-accent cursor-pointer'
+                                : 'text-foreground cursor-default'"
+                        >
+                            <Avatar
+                                :label="user?.name?.charAt(0).toUpperCase()"
+                                class="mr-2 border border-border"
+                                shape="circle"
+                            />
+                            <div class="flex flex-col text-left flex-1 min-w-0">
+                                <span class="font-bold truncate">{{ user?.name }}</span>
+                                <span class="text-sm truncate">{{ user?.email }}</span>
+                            </div>
+                        </component>
+                    </div>
+
+                    <!-- Menu items -->
+                    <template v-for="(item, index) in items" :key="index">
+                        <DropdownMenuSeparator v-if="item.separator" />
+                        <DropdownMenuItem v-else as-child>
+                            <component
+                                :is="item.external ? 'a' : linkComponent"
+                                :href="item.href"
+                                :target="item.external ? '_blank' : undefined"
+                                class="flex items-center justify-between w-full cursor-pointer"
+                            >
+                                <div class="flex items-center">
+                                    <component
+                                        :is="item.icon"
+                                        v-if="item.icon && typeof item.icon !== 'string'"
+                                        class="h-4 w-4 mr-2"
+                                    />
+                                    <span v-else-if="item.icon" :class="item.icon" class="mr-2" />
+                                    <span>{{ item.label }}</span>
+                                </div>
+                                <IconArrowUpRight
+                                    v-if="item.external"
+                                    class="ml-2 w-4 h-4 opacity-50"
+                                />
+                            </component>
+                        </DropdownMenuItem>
+                    </template>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
 import { IconArrowUpRight } from '@tabler/icons-vue';
-import Avatar from '../../Avatar.vue';
-import Badge from '../../Badge.vue';
-import Menu from '../../Menu.vue';
+import Avatar from '../../base/Avatar.vue';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const props = defineProps({
     avatarOnly: {
@@ -102,12 +106,4 @@ const props = defineProps({
         default: 'a'
     }
 });
-
-const menu = ref();
-const menuItems = computed(() => props.items);
-
-const toggle = (event) => {
-    menu.value.toggle(event);
-};
 </script>
-

@@ -1,6 +1,6 @@
 <template>
     <div
-        class="fixed bottom-0 z-10 border-t border-surface-300 dark:border-surface-700 bg-white dark:bg-surface-900 shadow-[0_-2px_4px_1px_rgba(0,0,0,0.05)] dark:shadow-[0_-2px_6px_rgba(0,0,0,0.3)]"
+        class="fixed bottom-0 z-10 border-t border-border bg-background shadow-[0_-2px_4px_1px_rgba(0,0,0,0.05)] dark:shadow-[0_-2px_6px_rgba(0,0,0,0.3)]"
         :style="{
             left: `${leftOffset}px`,
             width: `calc(100% - ${leftOffset}px)`

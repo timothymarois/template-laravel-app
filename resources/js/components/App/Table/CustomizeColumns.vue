@@ -1,15 +1,17 @@
 <template>
-    <div class="relative inline-block">
-        <slot name="trigger" :toggle="togglePopover" />
-        <Popover ref="popover" pt:content="p-0" @hide="applyInitColumns()" @show="onPopoverShow()">
-            <div class="flex flex-col w-[360px]">
+    <Popover v-model:open="isOpen">
+        <PopoverTrigger as-child>
+            <slot name="trigger" />
+        </PopoverTrigger>
+        <PopoverContent class="w-[360px] p-0" @open-auto-focus.prevent>
+            <div class="flex flex-col">
                 <div class="p-4 py-3">
-                    <div class="text-lg font-semibold flex items-center gap-x-1 text-surface-900 dark:text-surface-100">
+                    <div class="text-lg font-semibold flex items-center gap-x-1 text-foreground">
                         Customize columns
                     </div>
                 </div>
                 <div
-                    class="p-4 pt-0 border-b border-surface-200 dark:border-surface-700 text-sm font-normal"
+                    class="p-4 pt-0 border-b border-border text-sm font-normal"
                     :class="{ 'shadow-sm': !isTop }"
                 >
                     <InputText
@@ -20,7 +22,7 @@
                     />
                 </div>
                 <div ref="frame" class="h-[300px] overflow-hidden overflow-y-auto">
-                    <div class="text-xs py-1 px-3 border-b border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-100 font-semibold uppercase">
+                    <div class="text-xs py-1 px-3 border-b border-border text-foreground font-semibold uppercase">
                         Visible
                     </div>
                     <draggable
@@ -35,13 +37,13 @@
                         <template #item="{ element: column }">
                             <div
                                 v-if="!column?.hidden && column.header.toLowerCase().includes(searchColumns.toLowerCase())"
-                                class="flex items-center w-full hover:bg-surface-100 dark:hover:bg-surface-700 rounded p-1 cursor-pointer text-sm"
+                                class="flex items-center w-full hover:bg-accent rounded p-1 cursor-pointer text-sm"
                                 :class="{ 'cursor-not-allowed opacity-50': column.locked }"
                                 @click="!column.locked && toggleColumn(column.key)"
                             >
                                 <div class="grow flex items-center space-x-2">
                                     <IconGripVertical
-                                        class="cursor-grab text-surface-400 dark:text-surface-500 size-4"
+                                        class="cursor-grab text-muted-foreground size-4"
                                         :class="{ 'cursor-not-allowed opacity-50': column.locked }"
                                     />
                                     <Checkbox
@@ -61,7 +63,7 @@
                                 </div>
                                 <div
                                     v-if="column.group"
-                                    class="text-surface-400 dark:text-surface-500 text-xs"
+                                    class="text-muted-foreground text-xs"
                                 >
                                     {{ column.group }}
                                 </div>
@@ -70,7 +72,7 @@
                     </draggable>
                     <template v-if="Object.keys(filteredUnselectedColumnGroups).length > 0">
                         <div
-                            class="text-xs py-1 px-3 border-y border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-100 font-semibold uppercase"
+                            class="text-xs py-1 px-3 border-y border-border text-foreground font-semibold uppercase"
                         >
                             Not visible
                         </div>
@@ -81,16 +83,16 @@
                             >
                                 <div
                                     v-if="groupName"
-                                    class="flex items-center gap-2 text-xs py-1 pb-0 px-0 text-surface-400 dark:text-surface-500 font-semibold"
+                                    class="flex items-center gap-2 text-xs py-1 pb-0 px-0 text-muted-foreground font-semibold"
                                 >
                                     <span>{{ groupName }}</span>
-                                    <div class="h-px bg-surface-200 dark:bg-surface-700 flex-1" />
+                                    <div class="h-px bg-border flex-1" />
                                 </div>
                                 <div class="flex flex-col w-full">
                                     <div
                                         v-for="column in group"
                                         :key="column.key"
-                                        class="flex items-center w-full hover:bg-surface-100 dark:hover:bg-surface-700 p-1 cursor-pointer text-sm rounded"
+                                        class="flex items-center w-full hover:bg-accent p-1 cursor-pointer text-sm rounded"
                                         :class="{ 'cursor-not-allowed opacity-50': column.locked }"
                                         @click="!column.locked && toggleColumn(column.key)"
                                     >
@@ -111,7 +113,7 @@
                         </div>
                     </template>
                 </div>
-                <div class="flex items-center justify-start border-t border-surface-200 dark:border-surface-700 p-3 shadow">
+                <div class="flex items-center justify-start border-t border-border p-3 shadow">
                     <div class="grow flex items-center space-x-2">
                         <Button label="Save" size="small" raised @click="submitColumns" />
                         <Button text type="button" label="Cancel" size="small" @click="close" />
@@ -127,18 +129,22 @@
                     </div>
                 </div>
             </div>
-        </Popover>
-    </div>
+        </PopoverContent>
+    </Popover>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { IconGripVertical } from '@tabler/icons-vue';
 import draggable from 'vuedraggable';
-import Popover from '../../Popover.vue';
-import Button from '../../Button.vue';
-import InputText from '../../InputText.vue';
-import Checkbox from '../../Checkbox.vue';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import Button from '../../base/Button.vue';
+import InputText from '../../base/InputText.vue';
+import Checkbox from '../../base/Checkbox.vue';
 import { useScroll } from '../../../composables/useScroll';
 
 const props = defineProps({
@@ -152,14 +158,10 @@ const emit = defineEmits(['update']);
 const { bindScrollHandler, isTop } = useScroll('customize-columns');
 
 const frame = ref<any>(null);
-const popover = ref<any>(null);
+const isOpen = ref(false);
 const searchColumns = ref('');
 const activeColumns = ref<Record<string, boolean>>({});
 const selectedColumns = ref<any[]>([]);
-
-const togglePopover = (event: any) => {
-    popover.value.toggle(event);
-};
 
 const applyColumns = (columnsList: any[]) => {
     const map: Record<string, boolean> = {};
@@ -224,14 +226,17 @@ const checkLocked = ({ draggedContext, relatedContext }: any) => {
     return !draggedContext.element?.locked && !relatedContext.element?.locked;
 };
 
-const close = () => popover.value.hide();
+const close = () => { isOpen.value = false; };
 
-const onPopoverShow = () => {
-    applyInitColumns();
-    nextTick(() => {
-        bindScrollHandler(frame).add();
-    });
-};
+// Watch for open state changes
+watch(isOpen, (newValue) => {
+    if (newValue) {
+        applyInitColumns();
+        nextTick(() => {
+            bindScrollHandler(frame).add();
+        });
+    }
+});
 </script>
 
 <style scoped>

@@ -1,6 +1,7 @@
 <template>
+    <TooltipProvider :delay-duration="0">
     <div
-        class="min-h-screen w-full bg-surface-100 dark:bg-surface-900"
+        class="min-h-screen w-full bg-muted"
         :class="{
             'relative h-screen flex w-full overflow-hidden': isSideNav === true
         }"
@@ -71,7 +72,7 @@
                         <div
                             v-if="hasPageSideContent"
                             ref="sideContentRef"
-                            class="flex-none border-r border-gray-300 h-full bg-white dark:bg-surface-800 dark:border-surface-700 min-w-64 shadow-sm z-[99]"
+                            class="flex-none border-r h-full bg-card min-w-64 shadow-sm"
                         >
                             <PageSideContent>
                                 <template #default>
@@ -85,6 +86,7 @@
                                 :containerClass="containerClass"
                                 :widthClass="widthClass"
                                 :rootClass="noScroll ? 'overflow-hidden' : 'overflow-y-auto'"
+                                :scrollable="!noScroll"
                             >
                                 <template #side>
                                     <slot name="pageSideContent" />
@@ -111,9 +113,10 @@
                 </div>
             </div>
         </div>
-        <Toast v-if="hasToast" position="bottom-left" />
+        <Toaster v-if="hasToast" position="bottom-left" />
     </div>
     <slot name="modals" />
+    </TooltipProvider>
 </template>
 
 <script setup lang="ts">
@@ -127,7 +130,8 @@ import PageSideContent from './Page/SideContent.vue';
 import NavSidebar from './Nav/Sidebar.vue';
 import NavTopbar from './Nav/Topbar.vue';
 import AppTopbar from './Topbar.vue';
-import Toast from '../Toast.vue';
+import { Toaster } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 interface Props {
     pageUrl?: string;
