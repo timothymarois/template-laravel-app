@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, useSlots, watch } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, useSlots, watch, provide } from 'vue';
 import { hasSlotContent } from '../../utils';
 import PageHeader from './Page/Header.vue';
 import PageFooter from './Page/Footer.vue';
@@ -184,6 +184,9 @@ let resizeObserver: ResizeObserver | null = null;
 
 const footerHeight = ref(0);
 const footerLeftOffset = ref(0);
+
+// Provide footer height for child components (e.g., tables that need to account for fixed footer)
+provide('layoutFooterHeight', footerHeight);
 
 const calculateFooterMetrics = () => {
     const sideNavWidth = (sideNavRef.value as any)?.$el?.offsetWidth || 0;

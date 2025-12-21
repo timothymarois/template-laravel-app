@@ -45,7 +45,6 @@
                     :defaultColumnList="defaultColumnList"
                     :activeColumnList="viewFields"
                     hasSelection
-                    :scrollOffset="49"
                     scrollable
                     @update:selected="selected = $event"
                     @update:selectAll="selectAll = $event"

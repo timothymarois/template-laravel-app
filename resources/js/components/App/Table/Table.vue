@@ -1,5 +1,5 @@
 <template>
-    <ScrollFrame rootClass="overflow-y-auto overflow-x-auto relative" :addOffset="scrollOffset" :scrollable="scrollable">
+    <ScrollFrame rootClass="overflow-y-auto overflow-x-auto relative" :addOffset="computedScrollOffset" :scrollable="scrollable">
         <Table>
             <TableHeader>
                 <TableRow>
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, inject, type Ref } from 'vue';
 import {
     Table,
     TableBody,
@@ -142,6 +142,16 @@ const props = defineProps<{
     scrollOffset?: number;
     scrollable?: boolean;
 }>();
+
+// Inject layout footer height for dynamic scroll calculation
+const layoutFooterHeight = inject<Ref<number>>('layoutFooterHeight', null);
+
+// Compute total scroll offset (prop offset + footer height)
+const computedScrollOffset = computed(() => {
+    const baseOffset = props.scrollOffset ?? 0;
+    const footerOffset = layoutFooterHeight?.value ?? 0;
+    return baseOffset + footerOffset;
+});
 
 const defaultProps = {
     itemTotal: 0,
