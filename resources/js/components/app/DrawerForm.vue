@@ -42,18 +42,18 @@
                 <template v-else>
                     <slot />
                 </template>
-
-                <!-- Errors -->
-                <div v-if="hasErrors" class="text-destructive text-sm mt-4">
-                    <ul class="list-disc list-inside">
-                        <li v-for="(error, key) in errors" :key="key">{{ error }}</li>
-                    </ul>
-                </div>
             </div>
 
             <!-- Footer -->
-            <div class="px-6 py-4 border-t border-border bg-muted/30">
-                <div class="flex items-center gap-2">
+            <div class="bg-muted/30">
+                <!-- Errors -->
+                <Errors
+                    v-if="hasErrors"
+                    :errors="errors"
+                    :expandDefault="true"
+                    class="rounded-none border-0"
+                />
+                <div class="px-6 py-4 flex items-center gap-2 border-t border-border">
                     <Button @click="$emit('submit')" :disabled="loading">
                         <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
                         Save
@@ -76,6 +76,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-vue-next';
+import Errors from './Errors.vue';
 
 interface Tab {
     title: string;
