@@ -78,7 +78,9 @@
                         <h4 class="text-sm font-medium mb-3">Tooltip Icon Helper</h4>
                         <div class="flex items-center gap-2">
                             <span class="text-sm">Important setting</span>
-                            <TooltipIcon>This setting affects how data is processed</TooltipIcon>
+                            <TooltipProvider :delay-duration="0">
+                                <TooltipIcon>This setting affects how data is processed</TooltipIcon>
+                            </TooltipProvider>
                         </div>
                     </div>
                 </CardContent>
