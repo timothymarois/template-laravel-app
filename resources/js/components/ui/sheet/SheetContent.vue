@@ -6,22 +6,22 @@ import { computed } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { X } from "lucide-vue-next";
 import {
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  useForwardPropsEmits,
+    DialogClose,
+    DialogContent,
+    DialogOverlay,
+    DialogPortal,
+    useForwardPropsEmits,
 } from "reka-ui";
 import { cn } from "@/utils";
 import { sheetVariants } from ".";
 
 interface SheetContentProps extends DialogContentProps {
-  class?: HTMLAttributes["class"]
-  side?: SheetVariants["side"]
+    class?: HTMLAttributes["class"]
+    side?: SheetVariants["side"]
 }
 
 defineOptions({
-  inheritAttrs: false,
+    inheritAttrs: false,
 });
 
 const props = defineProps<SheetContentProps>();
@@ -33,27 +33,27 @@ const delegatedProps = reactiveOmit(props, "class", "side");
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 const sheetAnimationClass = computed(() => {
-  const sideValue = props.side || "right";
-  return `sheet-content-${sideValue}`;
+    const sideValue = props.side || "right";
+    return `sheet-content-${sideValue}`;
 });
 </script>
 
 <template>
-  <DialogPortal>
-    <DialogOverlay
-      class="sheet-overlay fixed inset-0 z-50 bg-black/50"
-    />
-    <DialogContent
-      :class="cn(sheetVariants({ side }), sheetAnimationClass, props.class)"
-      v-bind="{ ...forwarded, ...$attrs }"
-    >
-      <slot />
+    <DialogPortal>
+        <DialogOverlay
+            class="sheet-overlay fixed inset-0 z-50 bg-black/50"
+        />
+        <DialogContent
+            :class="cn(sheetVariants({ side }), sheetAnimationClass, props.class)"
+            v-bind="{ ...forwarded, ...$attrs }"
+        >
+            <slot />
 
-      <DialogClose
-        class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none cursor-pointer"
-      >
-        <X class="w-4 h-4 text-muted-foreground" />
-      </DialogClose>
-    </DialogContent>
-  </DialogPortal>
+            <DialogClose
+                class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none cursor-pointer"
+            >
+                <X class="w-4 h-4 text-muted-foreground" />
+            </DialogClose>
+        </DialogContent>
+    </DialogPortal>
 </template>

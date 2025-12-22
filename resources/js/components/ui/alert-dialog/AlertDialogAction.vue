@@ -8,8 +8,8 @@ import { cn } from "@/utils";
 import { buttonVariants } from '@/components/ui/button';
 
 interface Props extends AlertDialogActionProps {
-  class?: HTMLAttributes["class"]
-  variant?: ButtonVariants["variant"]
+    class?: HTMLAttributes["class"]
+    variant?: ButtonVariants["variant"]
 }
 
 const props = defineProps<Props>();
@@ -18,7 +18,7 @@ const delegatedProps = reactiveOmit(props, "class", "variant");
 </script>
 
 <template>
-  <AlertDialogAction v-bind="delegatedProps" :class="cn(buttonVariants({ variant: props.variant }), props.class)">
-    <slot />
-  </AlertDialogAction>
+    <AlertDialogAction v-bind="delegatedProps" :class="cn(buttonVariants({ variant: props.variant }), props.class)">
+        <slot />
+    </AlertDialogAction>
 </template>

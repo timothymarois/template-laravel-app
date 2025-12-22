@@ -14,10 +14,10 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>
 
 <template>
-  <RadioGroupRoot
-    :class="cn('grid gap-2', props.class)"
-    v-bind="forwarded"
-  >
-    <slot />
-  </RadioGroupRoot>
+    <RadioGroupRoot
+        :class="cn('grid gap-2', props.class)"
+        v-bind="forwarded"
+    >
+        <slot />
+    </RadioGroupRoot>
 </template>

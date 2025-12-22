@@ -9,10 +9,10 @@ import { cn } from "@/utils";
 import { buttonVariants } from '@/components/ui/button';
 
 const props = withDefaults(defineProps<PaginationLastProps & {
-  size?: ButtonVariants["size"]
-  class?: HTMLAttributes["class"]
+    size?: ButtonVariants["size"]
+    class?: HTMLAttributes["class"]
 }>(), {
-  size: "default",
+    size: "default",
 });
 
 const delegatedProps = reactiveOmit(props, "class", "size");
@@ -20,14 +20,14 @@ const forwarded = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <PaginationLast
-    data-slot="pagination-last"
-    :class="cn(buttonVariants({ variant: 'ghost', size }), 'gap-1 px-2.5 sm:pr-2.5', props.class)"
-    v-bind="forwarded"
-  >
-    <slot>
-      <span class="hidden sm:block">Last</span>
-      <ChevronRightIcon />
-    </slot>
-  </PaginationLast>
+    <PaginationLast
+        data-slot="pagination-last"
+        :class="cn(buttonVariants({ variant: 'ghost', size }), 'gap-1 px-2.5 sm:pr-2.5', props.class)"
+        v-bind="forwarded"
+    >
+        <slot>
+            <span class="hidden sm:block">Last</span>
+            <ChevronRightIcon />
+        </slot>
+    </PaginationLast>
 </template>

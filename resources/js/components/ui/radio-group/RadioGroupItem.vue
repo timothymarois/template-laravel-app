@@ -4,9 +4,9 @@ import type { HTMLAttributes } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { Circle } from "lucide-vue-next";
 import {
-  RadioGroupIndicator,
-  RadioGroupItem,
-  useForwardProps,
+    RadioGroupIndicator,
+    RadioGroupItem,
+    useForwardProps,
 } from "reka-ui";
 import { cn } from "@/utils";
 
@@ -18,19 +18,19 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <RadioGroupItem
-    v-bind="forwardedProps"
-    :class="
-      cn(
-        'peer aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-        props.class,
-      )
-    "
-  >
-    <RadioGroupIndicator
-      class="flex items-center justify-center"
+    <RadioGroupItem
+        v-bind="forwardedProps"
+        :class="
+            cn(
+                'peer aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                props.class,
+            )
+        "
     >
-      <Circle class="h-2.5 w-2.5 fill-current text-current" />
-    </RadioGroupIndicator>
-  </RadioGroupItem>
+        <RadioGroupIndicator
+            class="flex items-center justify-center"
+        >
+            <Circle class="h-2.5 w-2.5 fill-current text-current" />
+        </RadioGroupIndicator>
+    </RadioGroupItem>
 </template>
