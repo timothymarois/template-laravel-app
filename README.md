@@ -400,5 +400,3 @@ import { IconHome } from '@tabler/icons-vue';
 ```
 
 </details>
-
----

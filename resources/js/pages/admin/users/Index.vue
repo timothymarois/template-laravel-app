@@ -22,13 +22,7 @@
                         :activeColumnList="viewFields"
                         :defaultColumnList="defaultColumnList"
                         @update="viewFields = $event"
-                    >
-                        <template #trigger>
-                            <Button variant="outline">
-                                <Settings class="size-4" />
-                            </Button>
-                        </template>
-                    </CustomizeColumns>
+                    />
                 </div>
             </div>
         </template>
@@ -94,7 +88,7 @@ import { AdminLayout as LayoutApp } from '@/components/app';
 import { Input as InputText, Button, Select, Paginator as LinkPaginator, DataTable as Table, ButtonMenu, TableActions, CustomizeColumns } from '@/components/ui';
 import { useModal } from '@/composables';
 import { useDataTableOptions } from '@/composables/inertia';
-import { Pencil, Trash2, Settings } from 'lucide-vue-next';
+import { Pencil, Trash2 } from 'lucide-vue-next';
 
 const props = defineProps({
     users: {

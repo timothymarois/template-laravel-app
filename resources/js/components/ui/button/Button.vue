@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import type { ButtonVariants } from '.';
 import ButtonBase from './ButtonBase.vue';
 import { Loader2 } from 'lucide-vue-next';
 
@@ -37,8 +38,11 @@ interface Props {
     loading?: boolean;
     disabled?: boolean;
     fluid?: boolean;
-    size?: 'small' | 'large' | 'default';
+    // Support both legacy ('small' | 'large' | 'default') and shadcn-style sizes
+    size?: 'small' | 'large' | 'default' | ButtonVariants['size'];
     severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'help' | 'contrast';
+    // Support both legacy (outlined/text) and shadcn-style variant
+    variant?: ButtonVariants['variant'];
     outlined?: boolean;
     text?: boolean;
     raised?: boolean;
@@ -57,6 +61,9 @@ const props = withDefaults(defineProps<Props>(), {
 const className = computed(() => props.class || '');
 
 const computedVariant = computed(() => {
+    // If variant is explicitly passed, use it
+    if (props.variant) return props.variant;
+    // Otherwise compute from legacy props
     if (props.text) return 'ghost';
     if (props.outlined) return 'outline';
     if (props.severity === 'secondary') return 'secondary';
@@ -65,6 +72,11 @@ const computedVariant = computed(() => {
 });
 
 const computedSize = computed(() => {
+    // Handle shadcn-style sizes directly
+    if (props.size === 'icon' || props.size === 'icon-sm' || props.size === 'icon-lg' || props.size === 'sm' || props.size === 'lg') {
+        return props.size;
+    }
+    // Handle legacy sizes
     if (props.size === 'small') return 'sm';
     if (props.size === 'large') return 'lg';
     return 'default';

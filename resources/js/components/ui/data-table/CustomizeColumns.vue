@@ -1,7 +1,9 @@
 <template>
     <Popover v-model:open="isOpen">
-        <PopoverTrigger as-child>
-            <slot name="trigger" />
+        <PopoverTrigger>
+            <Button variant="outline" size="icon">
+                <IconSettings class="size-4" />
+            </Button>
         </PopoverTrigger>
         <PopoverContent class="w-[360px] p-0" @open-auto-focus.prevent>
             <div class="flex flex-col">
@@ -135,10 +137,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue';
-import { IconGripVertical } from '@tabler/icons-vue';
+import { IconGripVertical, IconSettings } from '@tabler/icons-vue';
 import draggable from 'vuedraggable';
 import {
-    Popover,
+    PopoverBase as Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';

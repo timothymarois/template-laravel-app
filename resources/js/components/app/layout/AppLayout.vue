@@ -130,8 +130,11 @@ const topBarItems = computed(() => [
     {
         label: 'Components',
         children: [
-            { href: '/admin/components/buttons', label: 'Buttons' },
-            { href: '/admin/components/forms', label: 'Forms' }
+            { href: '/admin/components', label: 'Overview' },
+            { href: '/admin/components/forms', label: 'Forms' },
+            { href: '/admin/components/actions', label: 'Actions' },
+            { href: '/admin/components/display', label: 'Display' },
+            { href: '/admin/components/data', label: 'Data' }
         ]
     }
 ]);
@@ -140,7 +143,7 @@ const sideBarItems = computed(() => [
     {
         children: [
             { label: 'Users', href: '/admin/users', parent: null, icon: IconUser, activeIcon: IconUser },
-            { label: 'Components', href: '/admin/components/editor', parent: '/admin/components', icon: IconColorFilter, activeIcon: IconColorFilter }
+            { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: IconColorFilter, activeIcon: IconColorFilter }
         ],
     },
     {
