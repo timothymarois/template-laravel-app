@@ -35,7 +35,50 @@ Components are installed to `resources/js/components/ui/`.
 
 **Theming:**
 
-Theme variables are defined in `resources/css/base.css` using CSS custom properties. Modify the `:root` and `.dark` selectors to customize colors.
+Theme variables are defined in `resources/css/theme.css` using CSS custom properties. Modify the `:root` and `.dark` selectors to customize colors. The `base.css` file contains framework utilities and rarely needs modification.
+
+---
+
+## Component Architecture
+
+Components are organized in a simple 2-layer architecture:
+
+```
+components/
+├── ui/              # Base components (shadcn + custom enhanced)
+├── app/             # Application components (authenticated app)
+└── site/            # Website components (public marketing pages)
+```
+
+**Base Components (`ui/`):**
+- All base UI components live here
+- shadcn primitives (`ButtonBase`, `CardBase`) + enhanced versions (`Button`, `Card`)
+- Stateless and reusable across contexts
+
+**App Components (`app/`):**
+- Layouts, navigation, modals for your application
+- May use Inertia, routes, and authentication
+- For authenticated application functionality
+
+**Site Components (`site/`):**
+- Layouts and components for public-facing website pages
+- May use Inertia and routes
+- For marketing pages, landing pages, unauthenticated flows
+
+**Import examples:**
+
+```typescript
+// Base components
+import { Button, Card, DataTable } from '@/components/ui';
+
+// Application-specific
+import { AppLayout, Sidebar } from '@/components/app';
+
+// Website-specific
+import { SiteLayout } from '@/components/site';
+```
+
+See `AGENTS.md` for detailed component guidelines and decision trees.
 
 ---
 

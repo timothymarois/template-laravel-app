@@ -1,74 +1,79 @@
 // Re-export all component layers
 export * from './ui';
-export * from './composed';
-export * from './admin';
-export * from './web';
+export * from './app';
+export * from './site';
 
-// Legacy aliases for backwards compatibility during migration
+// Legacy aliases for backwards compatibility
 // These map old names to new locations - remove once all imports are updated
 
-// From composed/button
-export { Button } from './composed/button';
-export { ButtonMenu } from './composed/button';
+// From ui/button
+export { Button } from './ui/button';
+export { ButtonMenu } from './ui/button';
 
-// From composed/dialog
-export { Dialog } from './composed/dialog';
-export { DialogConfirmation } from './composed/dialog';
+// From ui/dialog
+export { Dialog } from './ui/dialog';
+export { DialogConfirmation } from './ui/dialog';
 
-// From composed/drawer
-export { Drawer } from './composed/drawer';
-export { DrawerForm } from './composed/drawer';
+// From ui/drawer
+export { Drawer } from './ui/drawer';
+export { DrawerForm } from './ui/drawer';
 
-// From composed/card
-export { Card } from './composed/card';
+// From ui/card
+export { Card } from './ui/card';
 
-// From composed/form
-export { Input as InputText } from './composed/form';
-export { Select } from './composed/form';
-export { Checkbox } from './composed/form';
-export { LabelField } from './composed/form';
-export { Errors } from './composed/form';
+// From ui/form
+export { Input as InputText } from './ui/form';
+export { Select } from './ui/form';
+export { Checkbox } from './ui/form';
+export { LabelField } from './ui/form';
+export { Errors } from './ui/form';
 
-// From composed/display
-export { Avatar } from './composed/display';
-export { Badge } from './composed/display';
-export { TooltipIcon } from './composed/display';
+// From ui/avatar
+export { Avatar } from './ui/avatar';
 
-// From composed/overlay
-export { Menu } from './composed/overlay';
-export { Popover } from './composed/overlay';
+// From ui/badge
+export { Badge } from './ui/badge';
 
-// From composed/data
-export { DataTable } from './composed/data';
-export { DataTable as Table } from './composed/data';
-export { TableActions } from './composed/data';
-export { CustomizeColumns as TableCustomizeColumns } from './composed/data';
-export { Paginator } from './composed/data';
+// From ui/tooltip
+export { TooltipIcon } from './ui/tooltip';
 
-// From composed/layout
-export { ScrollFrame } from './composed/layout';
+// From ui/dropdown-menu
+export { Menu } from './ui/dropdown-menu';
+
+// From ui/popover
+export { Popover } from './ui/popover';
+
+// From ui/data-table
+export { DataTable } from './ui/data-table';
+export { DataTable as Table } from './ui/data-table';
+export { TableActions } from './ui/data-table';
+export { CustomizeColumns as TableCustomizeColumns } from './ui/data-table';
+export { Paginator } from './ui/data-table';
+
+// From ui/scroll-frame
+export { ScrollFrame } from './ui/scroll-frame';
 
 // Editor requires optional dependencies (@tiptap/vue-3, etc.)
-// Import directly from '@/components/composed/editor' when needed
-// export { Editor } from './composed/editor';
+// Import directly from '@/components/ui/editor' when needed
+// export { Editor } from './ui/editor';
 
-// From admin/layout
-export { AppShell as App } from './admin/layout';
+// From app/layout
+export { AppShell as App } from './app/layout';
 
-// From admin/navigation
-export { Sidebar as NavSidebar } from './admin/navigation';
-export { Topbar as NavTopbar } from './admin/navigation';
-export { ProfileMenu } from './admin/navigation';
+// From app/navigation
+export { Sidebar as NavSidebar } from './app/navigation';
+export { Topbar as NavTopbar } from './app/navigation';
+export { ProfileMenu } from './app/navigation';
 
-// From admin/page
-export { Header as PageHeader } from './admin/page';
-export { Footer as PageFooter } from './admin/page';
-export { Content as PageContent } from './admin/page';
-export { SideNav as PageSideNav } from './admin/page';
-export { SideContent as PageSideContent } from './admin/page';
+// From app/page
+export { Header as PageHeader } from './app/page';
+export { Footer as PageFooter } from './app/page';
+export { Content as PageContent } from './app/page';
+export { SideNav as PageSideNav } from './app/page';
+export { SideContent as PageSideContent } from './app/page';
 
-// From admin/layout (Topbar moved to admin)
-export { AppTopbar as Topbar } from './admin/layout';
+// From app/layout (Topbar moved to app)
+export { AppTopbar as Topbar } from './app/layout';
 
 // Toast from ui
 export { Toaster as Toast } from './ui/sonner';

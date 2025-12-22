@@ -42,8 +42,8 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { AdminLayout as LayoutApp } from '@/components/admin';
-import { Button } from '@/components/composed';
+import { AdminLayout as LayoutApp } from '@/components/app';
+import { Button } from '@/components/ui';
 import { useModal } from '@/composables';
 import { ArrowLeft } from 'lucide-vue-next';
 const props = defineProps({

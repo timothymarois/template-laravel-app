@@ -1,6 +1,20 @@
+/*
+ * Application Stylesheet
+ *
+ * This is the main CSS entry point for the application. It imports all
+ * required stylesheets in the correct order.
+ *
+ * CSS Structure:
+ * - theme.css      : Theme colors and customization (edit this for branding)
+ * - base.css       : Tailwind config and base styles (rarely needs changes)
+ * - animations.css : Animation keyframes and utilities (rarely needs changes)
+ */
+
 @import "tailwindcss";
 
+@import "./theme.css";
 @import "./base.css";
+@import "./animations.css";
 
 @source "../js";
 

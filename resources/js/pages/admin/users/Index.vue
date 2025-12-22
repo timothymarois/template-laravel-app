@@ -90,8 +90,8 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { AdminLayout as LayoutApp } from '@/components/admin';
-import { Input as InputText, Button, Select, Paginator as LinkPaginator, DataTable as Table, ButtonMenu, TableActions, CustomizeColumns } from '@/components/composed';
+import { AdminLayout as LayoutApp } from '@/components/app';
+import { Input as InputText, Button, Select, Paginator as LinkPaginator, DataTable as Table, ButtonMenu, TableActions, CustomizeColumns } from '@/components/ui';
 import { useModal } from '@/composables';
 import { useDataTableOptions } from '@/composables/inertia';
 import { Pencil, Trash2, Settings } from 'lucide-vue-next';

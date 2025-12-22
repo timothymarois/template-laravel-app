@@ -152,13 +152,14 @@ app/
 ```
 resources/js/
 ├── components/         # Reusable components (see Component Architecture below)
-│   ├── ui/             # Layer 1: Primitives (shadcn-vue)
-│   ├── composed/       # Layer 2: Composed components
-│   ├── admin/          # Layer 3a: Admin application components
-│   └── web/            # Layer 3b: Public website components
+│   ├── ui/             # Base components (shadcn + custom enhanced)
+│   ├── app/            # Application components (authenticated app)
+│   │   └── ui/         # App-specific design wrappers
+│   └── site/           # Website components (public marketing pages)
+│       └── ui/         # Site-specific design wrappers
 ├── pages/              # Inertia pages (organized by route)
 │   ├── Index.vue       # Home page
-│   └── Users/          # /users/* routes
+│   └── admin/          # /admin/* routes
 ├── composables/        # Vue composables
 ├── tests/              # Vitest unit tests
 └── utils/              # Utilities
@@ -168,67 +169,38 @@ resources/js/
 
 ## Component Architecture
 
-The UI components follow a 3-layer architecture for clear separation of concerns:
+The UI components follow a simple 2-layer architecture:
 
 ### Layer Overview
 
 | Layer | Location | Purpose | Rules |
 |-------|----------|---------|-------|
-| **ui/** | `components/ui/` | Primitives (shadcn-vue) | CLI-managed, do NOT modify directly |
-| **composed/** | `components/composed/` | Composed components | Combines ui/ primitives, stateless |
-| **admin/** | `components/admin/` | Admin app components | Uses Inertia, routes, auth |
-| **web/** | `components/web/` | Public web components | Uses Inertia, routes |
+| **ui/** | `components/ui/` | Base components (shadcn + enhanced) | Single source of truth for all UI |
+| **app/** | `components/app/` | Application components | Uses Inertia, routes, auth |
+| **site/** | `components/site/` | Website components | Uses Inertia, routes, public-facing |
 
-### Decision Guide
+### ui/ - Base Components
 
-Use this simple test to determine where a component belongs:
+All base-level UI components live here. This is the single source of truth for all UI primitives.
 
-1. **Is it a single-purpose primitive?** → `ui/` (but usually already exists via shadcn)
-2. **Does it combine 2+ ui/ components?** → `composed/`
-3. **Does it use `usePage()`, `router.visit()`, or auth?** → `admin/` or `web/`
-
-### Layer 1: `ui/` - Primitives
-
-shadcn-vue generated components. **Never modify these directly.**
-
-```bash
-# Add new primitives via CLI:
-pnpm dlx shadcn-vue@latest add <component>
-```
-
-Examples: `Button`, `Input`, `Dialog`, `Sheet`, `Table`, `Card`, etc.
-
-### Layer 2: `composed/` - Composed Components
-
-Components that combine multiple ui/ primitives into reusable patterns.
-
-```
-composed/
-├── button/         # Button, ButtonMenu
-├── dialog/         # Dialog, DialogConfirmation
-├── drawer/         # Drawer, DrawerForm
-├── card/           # Card
-├── form/           # Input, Select, Checkbox, LabelField, Errors
-├── display/        # Avatar, Badge, TooltipIcon
-├── overlay/        # Menu, Popover
-├── data/           # DataTable, TableActions, CustomizeColumns, Paginator
-├── layout/         # ScrollFrame
-├── editor/         # TipTap editor (requires optional deps)
-└── index.ts
-```
+**Before creating a new component:**
+1. Check if shadcn-vue has the component: https://www.shadcn-vue.com/docs/components
+2. If available, install it: `pnpm dlx shadcn-vue@latest add <component>`
+3. Only create a custom component if shadcn doesn't have what you need
 
 **Rules:**
-- Combine ui/ primitives with enhanced APIs (severity, loading states, etc.)
-- Must remain **stateless** - no Inertia, no routes, no auth
-- No API calls or data fetching
+- Contains ALL base-level components (shadcn + custom)
+- Components are **stateless** - no Inertia, routes, or auth
+- shadcn primitives use `*Base` suffix (ButtonBase, CardBase)
+- Enhanced versions wrap `*Base` components with added features (loading states, icons, etc.)
 
-### Layer 3a: `admin/` - Admin Application Components
+### app/ - Application Components
 
-Components specific to admin/dashboard functionality.
+Components for the main application (authenticated dashboard, management interfaces).
 
 ```
-admin/
-├── layout/         # AdminLayout, AppShell, AppTopbar
+app/
+├── layout/         # AppLayout, AppShell, AppTopbar
 ├── navigation/     # Sidebar, Topbar, ProfileMenu
 ├── page/           # Header, Footer, Content, SideNav, SideContent
 ├── modals/         # EditUserModal, DeleteUserModal
@@ -239,62 +211,111 @@ admin/
 - May use Inertia (`usePage()`, `router.visit()`, `Link`)
 - May use authentication state
 - May define route-specific behavior
+- For authenticated application functionality
 
-### Layer 3b: `web/` - Public Website Components
+### site/ - Website Components
 
-Components for public-facing pages.
+Components for the public website (marketing pages, landing pages, unauthenticated flows).
 
 ```
-web/
-├── layout/         # DefaultLayout
-├── modals/         # (add public website modals here)
+site/
+├── layout/         # SiteLayout
 └── index.ts
 ```
+
+**Rules:**
+- May use Inertia and routes
+- Public-facing, no authentication required
+- For marketing and public website pages
+
+### Design Wrappers (when needed)
+
+When app or site needs different styling for a component, create a wrapper in `app/ui/` or `site/ui/`:
+
+```vue
+<!-- app/ui/button/Button.vue -->
+<script setup lang="ts">
+import { Button as BaseButton, type ButtonProps } from '@/components/ui/button';
+const props = defineProps<ButtonProps>();
+</script>
+
+<template>
+    <BaseButton v-bind="props" class="rounded-md">
+        <slot />
+    </BaseButton>
+</template>
+```
+
+**Wrapper Rules:**
+- Design ONLY - same API as base, different appearance
+- No behavior changes, no new props for logic
 
 ### Import Patterns
 
 ```typescript
-// Recommended: Import from layer barrels
-import { Button, Dialog, DataTable } from '@/components/composed';
-import { AdminLayout, Sidebar } from '@/components/admin';
-import { DefaultLayout } from '@/components/web';
+// Base components (recommended)
+import { Button, Card, DataTable } from '@/components/ui';
 
-// Direct ui/ import (rare - prefer composed wrappers)
-import { Button } from '@/components/ui/button';
+// Application-specific
+import { AppLayout, Sidebar } from '@/components/app';
 
-// Category-specific import
-import { DataTable, TableActions } from '@/components/composed/data';
+// Website-specific
+import { SiteLayout } from '@/components/site';
+
+// If design wrappers exist:
+import { Button } from '@/components/app/ui';
+import { Button } from '@/components/site/ui';
+```
+
+### Decision Tree: Where Does My Component Go?
+
+```
+Adding a new component?
+│
+├─ Is it a UI primitive (button, input, card)?
+│  ├─ Available in shadcn? → pnpm dlx shadcn-vue@latest add <name>
+│  └─ Custom enhanced? → Add to ui/<component>/
+│
+├─ Need different STYLING for app vs site?
+│  └─ Create wrapper in app/ui/ or site/ui/
+│
+├─ Uses Inertia/routes/auth?
+│  ├─ Authenticated app → Add to app/<category>/
+│  └─ Public website → Add to site/<category>/
+│
+└─ Application-specific (modals, page sections)?
+   ├─ App → app/modals/ or app/page/
+   └─ Site → site/page/
 ```
 
 ### Pages Organization
 
-Pages follow the route structure with clear separation between public and admin:
+Pages follow the route structure with clear separation between site and app:
 
 ```
 pages/
-├── Index.vue           # / (public home)
-├── Login.vue           # /login (guest)
-├── Register.vue        # /register (guest)
-└── admin/              # /admin/* (authenticated)
+├── Index.vue           # / (public home) - uses SiteLayout
+├── Login.vue           # /login (guest) - uses SiteLayout
+├── Register.vue        # /register (guest) - uses SiteLayout
+└── admin/              # /admin/* (authenticated) - uses AppLayout
     ├── Index.vue       # /admin (dashboard)
     └── users/          # /admin/users/*
         ├── Index.vue   # /admin/users
         ├── Show.vue    # /admin/users/:id
-        └── SimpleTable.vue # /admin/users/table
+        └── SimpleTable.vue
 ```
 
 ### Route Naming Convention
 
 Routes use prefixed names for clarity:
 
-| Route | Name | Page |
-|-------|------|------|
-| `/` | `home` | `pages/Index.vue` |
-| `/login` | `login` | `pages/Login.vue` |
-| `/register` | `register` | `pages/Register.vue` |
-| `/admin` | `admin.index` | `pages/admin/Index.vue` |
-| `/admin/users` | `admin.users.index` | `pages/admin/users/Index.vue` |
-| `/admin/users/:id` | `admin.users.show` | `pages/admin/users/Show.vue` |
+| Route | Name | Layout |
+|-------|------|--------|
+| `/` | `home` | SiteLayout |
+| `/login` | `login` | SiteLayout |
+| `/register` | `register` | SiteLayout |
+| `/admin` | `admin.index` | AppLayout |
+| `/admin/users` | `admin.users.index` | AppLayout |
 
 Use `$route('admin.users.index')` in templates, `route('admin.users.index')` in scripts.
 

@@ -1,25 +1,42 @@
-# UI Primitives (Layer 1)
+# UI Components
 
-shadcn-vue generated components. **Do NOT modify directly.**
+Base-level UI components for the application. This is the single source of truth for all UI primitives.
 
-## Adding Components
+## Before Creating New Components
+
+1. **Check shadcn-vue first**: https://www.shadcn-vue.com/docs/components
+2. If available, install it: `pnpm dlx shadcn-vue@latest add <component>`
+3. Only create custom components if shadcn doesn't have what you need
+
+## Adding shadcn Components
 
 ```bash
 pnpm dlx shadcn-vue@latest add <component>
 ```
 
+New primitives are renamed to `*Base.vue` and enhanced wrappers are created as the main export.
+
+## Component Naming
+
+- **shadcn primitives**: `ButtonBase.vue`, `CardBase.vue`, `SelectBase.vue`
+- **Enhanced wrappers**: `Button.vue`, `Card.vue`, `Select.vue` (main exports)
+
 ## Usage
 
-Prefer importing composed wrappers from `@/components/composed` instead of directly from `ui/`.
-
 ```typescript
-// Prefer this:
-import { Button, Dialog } from '@/components/composed';
+// Import enhanced components (recommended)
+import { Button, Card, DataTable } from '@/components/ui';
 
-// Over this:
-import { Button } from '@/components/ui/button';
+// Or from specific folder
+import { Button, ButtonMenu } from '@/components/ui/button';
 ```
 
-## Why?
+## Rules
 
-The `composed/` layer provides enhanced APIs (loading states, severity props, etc.) while `ui/` contains raw primitives meant to be extended, not used directly.
+- Components must be **stateless** - no Inertia, routes, or auth
+- Enhanced versions wrap `*Base` components with added features
+- Add new custom components following the same pattern:
+  1. Create folder: `ui/<component>/`
+  2. Create component: `<ComponentName>.vue`
+  3. Create barrel: `index.ts`
+  4. Export from `ui/index.ts`

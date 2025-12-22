@@ -1,6 +1,5 @@
 import './bootstrap';
 import '../css/app.css';
-import '../css/atlas-ui.css';
 import 'vue-sonner/style.css';
 
 import { createInertiaApp } from '@inertiajs/vue3';

@@ -43,8 +43,8 @@
 
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
-import { DefaultLayout as LayoutDefault } from '@/components/web';
-import { Card, LabelField, Input as InputText, Errors, Button } from '@/components/composed';
+import { DefaultLayout as LayoutDefault } from '@/components/site';
+import { Card, LabelField, Input as InputText, Errors, Button } from '@/components/ui';
 import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();
 

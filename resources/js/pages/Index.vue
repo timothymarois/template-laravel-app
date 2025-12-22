@@ -27,6 +27,6 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { DefaultLayout } from '@/components/web';
+import { DefaultLayout } from '@/components/site';
 import { Button } from '@/components/ui/button';
 </script>

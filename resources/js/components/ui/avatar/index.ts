@@ -2,6 +2,7 @@ import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
 
 export { default as Avatar } from "./Avatar.vue"
+export { default as AvatarBase } from "./AvatarBase.vue"
 export { default as AvatarFallback } from "./AvatarFallback.vue"
 export { default as AvatarImage } from "./AvatarImage.vue"
 
