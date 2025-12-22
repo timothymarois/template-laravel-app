@@ -45,7 +45,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-vue';
 import { isEmpty } from '../../utils';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 
 interface Props {
     errors?: Record<string, any> | any[];

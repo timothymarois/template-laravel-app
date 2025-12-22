@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import TooltipIcon from '../base/TooltipIcon.vue';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 
 interface Props {
     label?: string;

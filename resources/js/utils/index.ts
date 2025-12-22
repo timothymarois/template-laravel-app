@@ -4,3 +4,4 @@ export * from './vue';
 export * from './browser';
 export * from './array';
 export * from './math';
+export * from './cn';

@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils';
 
 interface Props {
     class?: string;
