@@ -9,8 +9,8 @@ use Illuminate\Support\Carbon;
 class Caster
 {
     /**
-        * Cast the given data based on the provided cast definitions.
-        */
+     * Cast the given data based on the provided cast definitions.
+     */
     public static function cast(array $data, array $casts): array
     {
         foreach ($casts as $key => $type) {

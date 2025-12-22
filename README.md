@@ -1,6 +1,6 @@
 # Laravel Vue Inertia Template
 
-This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web based applications; **allowing you to focus solely on your application requirements**.
+This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web-based applications; **allowing you to focus solely on your application requirements**.
 
 ---
 
@@ -45,10 +45,24 @@ Pre-installed code-linting and automated test services to help keep your CI pipe
 
 Linting is used on both PHP and JS side to keep all collaborators using the same format.
 
-- ✅ PHPUnit - `php artisan test`
+**Main Commands:**
+
+| Command             | Description                                    |
+|---------------------|------------------------------------------------|
+| `npm run lint`      | Run ESLint on JS/Vue files                     |
+| `npm run lint:fix`  | Run ESLint and auto-fix issues                 |
+| `npm run test`      | Run JS unit tests (Vitest)                     |
+| `npm run check:php` | Run PHP checks (Pint, Larastan, Pest)          |
+| `npm run check:js`  | Run JS checks (ESLint, Vitest, Build)          |
+| `npm run check`     | Run all checks (PHP + JS)                      |
+
+**Individual Tools:**
+
+- ✅ [Pest](https://pestphp.com/) - `composer test` or `./vendor/bin/pest`
+- ✅ [Vitest](https://vitest.dev/) - `npm run test` or `npm run test:watch`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
-- ✅ [Laravel Pint](https://laravel.com/docs/11.x/pint) - `./vendor/bin/pint`
-- ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npm run eslint -- --fix` (or with `--quiet`)
+- ✅ [Laravel Pint](https://laravel.com/docs/12.x/pint) - `./vendor/bin/pint`
+- ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npm run lint` or `npm run lint:fix`
 
 ---
 

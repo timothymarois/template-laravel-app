@@ -4,7 +4,21 @@ Any project using this template should follow the changelog here if its relevant
 
 Note: once you update a project on that uses this template, be sure to copy this changelog so that project can also understand which version its currently using.
 
-# Released 
+# Released
+
+## v4.0.0 - 12/22/2025
+
+Major UI overhaul replacing PrimeVue with shadcn-vue and adding comprehensive testing setup.
+
+- Replaced PrimeVue components with shadcn-vue (Radix Vue primitives)
+- Updated to Tailwind CSS v4
+- Complete design system refresh with new CSS theme variables
+- Added Pest PHP testing framework (`composer test`)
+- Added Vitest for JS/Vue unit testing (`npm run test`)
+- New npm scripts: `check`, `check:php`, `check:js`, `lint`, `lint:fix`
+- Converted all existing PHP tests to Pest syntax
+- Updated AGENTS.md and README.md with new commands
+- Removed atlas-ui dependency
 
 ## v3.1.0 - 08/11/2025
 

@@ -33,4 +33,9 @@ export default defineConfig({
     ssr: {
         external: ['vuedraggable'],
     },
+    test: {
+        globals: true,
+        environment: 'happy-dom',
+        include: ['resources/js/tests/**/*.{test,spec}.{js,ts}'],
+    },
 });

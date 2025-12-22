@@ -6,10 +6,10 @@
         <DropdownMenuContent>
             <template v-for="(item, index) in model" :key="index">
                 <DropdownMenuSeparator v-if="item.separator" />
-                <DropdownMenuLabel v-else-if="item.items" class="font-semibold text-muted-foreground">
-                    {{ item.label }}
-                </DropdownMenuLabel>
                 <template v-else-if="item.items">
+                    <DropdownMenuLabel class="font-semibold text-muted-foreground">
+                        {{ item.label }}
+                    </DropdownMenuLabel>
                     <DropdownMenuItem
                         v-for="(subItem, subIndex) in item.items"
                         :key="subIndex"

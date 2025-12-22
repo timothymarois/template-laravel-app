@@ -10,7 +10,7 @@ The application is a unified system composed of **Laravel**, **Vue 3 + Inertia**
 
 **Agents must follow these rules:**
 
-* PRDs override all assumptions. All PRDs live in `/docs/PRD/`.
+* PRDs override all assumptions. All PRDs live in `/docs/prd/`.
 * No contributor may implement behavior not defined in PRDs or unless explicitly asked by the user.
 * If clarity is missing, request clarification before committing code.
 * Review existing documentation before making changes.
@@ -43,16 +43,6 @@ The application is a unified system composed of **Laravel**, **Vue 3 + Inertia**
 4. Every file must have a clear, single purpose.
 5. Use deterministic logic with no hidden side effects.
 6. Follow the conventions below to ensure maintainability.
-
----
-
-## Documentation
-
-Before contributing, review the relevant guides:
-
-* [Laravel Guide](./docs/laravel-standards/docs/laravel-guide.md) – PHP and Laravel conventions
-* [Vue Guide](./docs/laravel-standards/docs/vue-guide.md) – Vue components and frontend standards
-* [Agents Guide](./docs/laravel-standards/docs/agents-guide.md) – Additional agent-specific details
 
 ---
 
@@ -123,7 +113,7 @@ Before contributing, review the relevant guides:
 
 ### UI Consistency
 
-* All buttons, links, and interactive elements must use `cursor-pointer`.
+* All buttons, links, and interactive elements **must have** `cursor-pointer`.
 * All interactive elements must have proper hover/focus states.
 * Follow existing component patterns for consistency.
 
@@ -145,8 +135,9 @@ Before contributing, review the relevant guides:
 ```
 app/
 ├── Console/Commands/   # Artisan commands
-├── Enums/              # PHP backed-Enums
+├── Enums/              # PHP backed enums
 ├── Http/
+│   ├── Concerns/       # Reusable controller traits
 │   ├── Controllers/    # Thin controllers
 │   └── Requests/       # Form Request validation
 ├── Models/             # Eloquent models
@@ -164,6 +155,7 @@ resources/js/
 │   └── ui/             # shadcn-vue components
 ├── pages/              # Inertia pages
 ├── composables/        # Vue composables
+├── tests/              # Vitest unit tests
 └── utils/              # Utilities
 ```
 
@@ -173,21 +165,26 @@ resources/js/
 
 Run these commands before committing changes:
 
-### Frontend
+### Quick Commands
 ```bash
-npm run eslint
+npm run check        # Run ALL checks (PHP + JS)
+npm run check:php    # Run PHP checks only (Pint, Larastan, Pest)
+npm run check:js     # Run JS checks only (ESLint, Vitest, Build)
 ```
 
-### Backend (requires `composer install` first)
+### Linting & Testing
 ```bash
-./vendor/bin/pint
-./vendor/bin/phpstan analyse
-php artisan test
+npm run lint         # Check ESLint issues
+npm run lint:fix     # Auto-fix ESLint issues
+npm run test         # Run JS unit tests (Vitest)
 ```
 
-### Full Check (if available)
+### Individual Tools (if needed)
 ```bash
-npm run check
+./vendor/bin/pint            # PHP code style
+./vendor/bin/phpstan analyse # Static analysis
+./vendor/bin/pest            # PHP tests (or: composer test)
+npm run test                 # JS tests (Vitest)
 ```
 
 All checks must pass before committing.
@@ -196,13 +193,14 @@ All checks must pass before committing.
 
 ## Code Quality Standards
 
-| Layer | Tool | Requirement |
-|-------|------|-------------|
-| PHP | Laravel Pint | Must pass |
-| PHP | Larastan | Level 5 minimum |
-| PHP | PHPUnit | Tests required for new features |
-| JS/Vue | ESLint | Must pass |
-| TypeScript | tsc | Must compile without errors |
+| Layer      | Tool         | Requirement                     |
+|------------|--------------|---------------------------------|
+| PHP        | Laravel Pint | Must pass                       |
+| PHP        | Larastan     | Level 5 minimum                 |
+| PHP        | Pest         | Tests required for new features |
+| JS/Vue     | ESLint       | Must pass                       |
+| JS/Vue     | Vitest       | Tests required for new features |
+| TypeScript | tsc          | Must compile without errors     |
 
 ---
 

@@ -1,19 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+declare(strict_types=1);
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use App\Models\User;
 
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        // $response = $this->get('/');
+it('returns a successful response for authenticated users', function () {
+    $user = User::factory()->create();
 
-        // $response->assertStatus(200);
-    }
-}
+    $this->withoutVite();
+
+    $response = $this->actingAs($user)->get('/');
+
+    $response->assertStatus(200);
+});

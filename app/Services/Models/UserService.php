@@ -1,15 +1,25 @@
 <?php
 
-namespace App\Services;
+declare(strict_types=1);
+
+namespace App\Services\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+/**
+ * @extends ModelService<User>
+ */
 class UserService extends ModelService
 {
     protected string $model = User::class;
 
+    /**
+     * @param  array<string, mixed>  $options
+     * @return Builder<User>
+     */
     public function buildQuery(array $options = []): Builder
     {
         return parent::buildQuery($options)
@@ -24,20 +34,28 @@ class UserService extends ModelService
             });
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
     public function create(array $data): User
     {
-        // Use provided password when available; otherwise assign a random one.
         if (empty($data['password'])) {
             $data['password'] = Str::random(24);
         }
 
+        /** @var User */
         return parent::create($data);
     }
 
-    public function update(User|\Illuminate\Database\Eloquent\Model $model, array $data): User
+    /**
+     * @param  User  $model
+     * @param  array<string, mixed>  $data
+     */
+    public function update(Model $model, array $data): User
     {
         $model->update($data);
 
+        /** @var User */
         return $model;
     }
 }
