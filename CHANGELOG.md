@@ -6,6 +6,10 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released 
 
+## v3.1.0 - 08/11/2025
+
+- Added SSR support.
+
 ## v3.0.0 -
 
 - Added @atlas/ui.
