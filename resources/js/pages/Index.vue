@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import LayoutApp from '@components/Layout/App.vue';
+import LayoutApp from '@components/layout/App.vue';
 </script>

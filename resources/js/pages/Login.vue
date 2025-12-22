@@ -43,12 +43,12 @@
 
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
-import LayoutDefault from '@components/Layout/Default.vue';
-import Card from '@atlas/ui/components/Card.vue';
-import LabelField from '@atlas/ui/components/LabelField.vue';
-import InputText from '@atlas/ui/components/InputText.vue';
-import Errors from '@atlas/ui/components/Errors.vue';
-import Button from '@atlas/ui/components/Button.vue';
+import LayoutDefault from '@components/layout/Default.vue';
+import Card from '@components/base/Card.vue';
+import LabelField from '@components/app/LabelField.vue';
+import InputText from '@components/base/InputText.vue';
+import Errors from '@components/app/Errors.vue';
+import Button from '@components/base/Button.vue';
 import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();
 

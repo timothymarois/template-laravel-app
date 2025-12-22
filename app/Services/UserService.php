@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use Atlas\Laravel\Services\ModelService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 

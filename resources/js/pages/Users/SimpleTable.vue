@@ -78,16 +78,16 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { useModal } from '@atlas/ui/composables';
-import { useDataTableOptions } from '@atlas/ui/composables/inertia';
-import LayoutApp from '@components/Layout/App.vue';
-import Card from '@atlas/ui/components/Card.vue';
-import Button from '@atlas/ui/components/Button.vue';
-import Select from '@atlas/ui/components/Select.vue';
-import InputText from '@atlas/ui/components/InputText.vue';
-import LinkPaginator from '@atlas/ui/components/Paginator.vue';
-import Table from '@atlas/ui/components/App/Table/Table.vue';
-import ButtonMenu from '@atlas/ui/components/ButtonMenu.vue';
+import LayoutApp from '@components/layout/App.vue';
+import Card from '@components/base/Card.vue';
+import Button from '@components/base/Button.vue';
+import Select from '@components/base/Select.vue';
+import InputText from '@components/base/InputText.vue';
+import LinkPaginator from '@components/base/Paginator.vue';
+import Table from '@components/app/Table/Table.vue';
+import ButtonMenu from '@components/app/ButtonMenu.vue';
+import { useModal } from '@/composables';
+import { useDataTableOptions } from '@/composables/inertia';
 
 const props = defineProps({
     users: {

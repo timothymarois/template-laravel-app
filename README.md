@@ -18,11 +18,24 @@ This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) 
 
 #### Design
 
-For the design side, we want to focus on customization, theming, and utility components. PrimeVue offers the most comprehensive set of utility components that are fully customizable without bloating. Tree-shaking makes sure you only import the components you actually use keeping your overall project light-weight. 
+For the design side, we want to focus on customization, theming, and utility components. shadcn-vue provides beautifully designed, accessible components built on Radix Vue primitives. Components are copied into your project, giving you full control over styling and behavior.
 
 - ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
-- ✅ PrimeVue v4 (unstyled) – [Documentation](https://primevue.org/)
-- ✅ Atlas UI (Component Library, using PrimeVue) – [Repo](https://github.com/tmarois/atlas-ui)
+- ✅ shadcn-vue – [Documentation](https://www.shadcn-vue.com/)
+- ✅ Lucide Icons – [Documentation](https://lucide.dev/)
+
+**Adding new shadcn components:**
+
+```bash
+pnpm dlx shadcn-vue@latest add button
+pnpm dlx shadcn-vue@latest add dialog
+```
+
+Components are installed to `resources/js/components/ui/`.
+
+**Theming:**
+
+Theme variables are defined in `resources/css/base.css` using CSS custom properties. Modify the `:root` and `.dark` selectors to customize colors.
 
 ---
 
@@ -92,7 +105,7 @@ npm run dev
 
 ---
 
-## Deployment: 
+## Deployment:
 
 For deployment you will need to run a series of commands before and after new code release.
 
@@ -166,7 +179,7 @@ php artisan queue:restart
 
 ---
 
-## Features: 
+## Features:
 
 ### Routes (by Ziggy)
 
@@ -197,14 +210,14 @@ $inertia.visit(route('posts.create'))
 Using model id in routes ([learn more](https://github.com/tighten/ziggy?tab=readme-ov-file#parameters))
 
 ```js
-route('posts.show', 123); 
+route('posts.show', 123);
 // http://localhost/posts/123'
 ```
 
 Using multiple models in routes ([learn more](https://github.com/tighten/ziggy?tab=readme-ov-file#parameters))
 
 ```js
-route('accounts.posts.show', [1, 123]); 
+route('accounts.posts.show', [1, 123]);
 // http://localhost/accounts/1/posts/123'
 ```
 
@@ -238,7 +251,7 @@ router.patch(url, data, options)
 router.delete(url, options)
 router.reload(options)
 
-// events 
+// events
 router.get(url, data, {
   onBefore: (visit) => {},
   onStart: (visit) => {},
@@ -250,7 +263,7 @@ router.get(url, data, {
 })
 ```
 
-Using the Axois for background fetching of data without modifying routes. 
+Using the Axois for background fetching of data without modifying routes.
 
 These are useful if you want to maintain current page state and load external data in components.
 
@@ -272,9 +285,9 @@ axios.get(url)
 
 ---
 
-### Toast Notifications (by PrimeVue)
+### Toast Notifications (by Sonner)
 
-You can dispatch global toast notifications on the platform using the PrimeVue [Toast Service](https://primevue.org/toast/).
+You can dispatch global toast notifications using Sonner.
 
 - ✅ Toast Notifications
 
@@ -282,12 +295,13 @@ You can dispatch global toast notifications on the platform using the PrimeVue [
 <summary>Show example</summary>
 
 ```js
-import { useToast } from "primevue/usetoast";
-const toast = useToast();
-// succes 
-toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
+import { toast } from 'vue-sonner'
+
+// success
+toast.success('User saved successfully')
+
 // error
-toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Content', life: 3000 });
+toast.error('Something went wrong')
 ```
 </details>
 
@@ -297,29 +311,35 @@ toast.add({ severity: 'error', summary: 'Error Message', detail: 'Message Conten
 
 Easily add svg/imported icons that can change size and color.
 
-- ✅ [Tabler Icons](https://tabler.io/icons) *(recommended)*
-- ✅ [PrimeVue Icons](https://primevue.org/icons/)
+- ✅ [Lucide Icons](https://lucide.dev/) *(recommended)*
+- ✅ [Tabler Icons](https://tabler.io/icons)
 
 <details>
 <summary>Show example</summary>
 
 
+**From Lucide**
+
+```vue
+<template>
+    <Settings class="text-gray-800 size-6" />
+</template>
+
+<script setup>
+import { Settings, Trash2, Plus } from 'lucide-vue-next';
+</script>
+```
+
 **From Tabler**
 
 ```vue
 <template>
-    <IconHome class="text-gray-800 size-6" /> 
+    <IconHome class="text-gray-800 size-6" />
 </template>
 
 <script setup>
 import { IconHome } from '@tabler/icons-vue';
 </script>
-
-```
-**From PrimeVue icons**
-
-```html
-<i class="pi pi-check"></i>
 ```
 
 </details>

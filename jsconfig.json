@@ -1,8 +1,9 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
+        "baseUrl": ".",
         "paths": {
-            "@atlas/ui/*": ["./*"]
+            "@/*": ["resources/js/*"],
+            "@components/*": ["resources/js/components/*"]
         }
     }
 }

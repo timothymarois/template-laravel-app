@@ -23,8 +23,6 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
             '@components': path.resolve(__dirname, 'resources/js/components'),
-            '@atlas/ui': path.resolve(__dirname, 'node_modules/@tmarois/atlas-ui/src'),
-            'primevue': path.resolve(__dirname, 'node_modules/primevue'),
             'ziggy': path.resolve(__dirname, 'vendor/tightenco/ziggy/src/js'),
         },
     },
@@ -34,6 +32,5 @@ export default defineConfig({
     },
     ssr: {
         external: ['vuedraggable'],
-        noExternal: ['@tmarois/atlas-ui'],
     },
 });
