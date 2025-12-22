@@ -29,9 +29,9 @@ class UserController extends Controller
 
     public function index(Request $request): Response
     {
-        $options = $this->resolveIndexOptions($request, true, 'users.index');
+        $options = $this->resolveIndexOptions($request, true, 'admin.users.index');
 
-        return Inertia::render('Users/Index', [
+        return Inertia::render('admin/users/Index', [
             'users' => $this->userService->listPaginated($options['perPage'], $options),
             'options' => $options,
         ]);
@@ -39,9 +39,9 @@ class UserController extends Controller
 
     public function prepareIndexFilters(Request $request): RedirectResponse
     {
-        $this->resolveIndexOptions($request, true, 'users.index');
+        $this->resolveIndexOptions($request, true, 'admin.users.index');
 
-        return redirect()->route('users.index');
+        return redirect()->route('admin.users.index');
     }
 
     public function simpleTable(Request $request): Response
@@ -54,7 +54,7 @@ class UserController extends Controller
 
         $query = $this->userService->listPaginated($options['perPage'], $options);
 
-        return Inertia::render('Users/SimpleTable', [
+        return Inertia::render('admin/users/SimpleTable', [
             'users' => $query,
             'options' => $options,
         ]);
@@ -62,7 +62,7 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
-        return Inertia::render('Users/Show', [
+        return Inertia::render('admin/users/Show', [
             'item' => $user,
         ]);
     }
@@ -76,7 +76,7 @@ class UserController extends Controller
 
         $user = $this->userService->create($validated);
 
-        return redirect()->route('users.show', $user);
+        return redirect()->route('admin.users.show', $user);
         // return back();
     }
 

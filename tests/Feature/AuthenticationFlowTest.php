@@ -4,6 +4,49 @@ declare(strict_types=1);
 
 use App\Models\User;
 
+it('shows public home page', function () {
+    $this->withoutVite();
+
+    $response = $this->get('/');
+
+    $response->assertOk();
+    $response->assertInertia(fn ($page) => $page->component('Index'));
+});
+
+it('shows login page to guests', function () {
+    $this->withoutVite();
+
+    $response = $this->get('/login');
+
+    $response->assertOk();
+    $response->assertInertia(fn ($page) => $page->component('Login'));
+});
+
+it('shows register page to guests', function () {
+    $this->withoutVite();
+
+    $response = $this->get('/register');
+
+    $response->assertOk();
+    $response->assertInertia(fn ($page) => $page->component('Register'));
+});
+
+it('redirects authenticated users from login page', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get('/login');
+
+    $response->assertRedirect('/');
+});
+
+it('redirects authenticated users from register page', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->get('/register');
+
+    $response->assertRedirect('/');
+});
+
 it('allows user to register', function () {
     $response = $this->post('/auth/register', [
         'name' => 'Test User',

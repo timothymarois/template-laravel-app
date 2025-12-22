@@ -1,36 +1,77 @@
-export { default as Button } from './Button.vue';
-export { default as Card } from './Card.vue';
-export { default as Checkbox } from './Checkbox.vue';
-export { default as InputText } from './InputText.vue';
-export { default as Errors } from './Errors.vue';
-export { default as Select } from './Select.vue';
-export { default as Avatar } from './Avatar.vue';
-export { default as Badge } from './Badge.vue';
-export { default as DataTable } from './DataTable.vue';
-export { default as Dialog } from './Dialog.vue';
-export { default as Drawer } from './Drawer.vue';
-export { default as DrawerForm } from './DrawerForm.vue';
-export { default as DialogConfirmation } from './DialogConfirmation.vue';
-export { default as ScrollFrame } from './ScrollFrame.vue';
-export { default as Menu } from './Menu.vue';
-export { default as LabelField } from './LabelField.vue';
-export { default as Popover } from './Popover.vue';
-export { default as RadioButton } from './RadioButton.vue';
-export { default as TooltipIcon } from './TooltipIcon.vue';
-export { default as Toast } from './Toast.vue';
-export { default as Paginator } from './Paginator.vue';
-export { default as ButtonMenu } from './ButtonMenu.vue';
-export { default as Editor } from './editor/Index.vue';
-export { default as PageContent } from './app/page/Content.vue';
-export { default as PageFooter } from './app/page/Footer.vue';
-export { default as PageHeader } from './app/page/Header.vue';
-export { default as PageSideContent } from './app/page/SideContent.vue';
-export { default as PageSideNav } from './app/page/SideNav.vue';
-export { default as NavSidebar } from './app/nav/Sidebar.vue';
-export { default as NavTopbar } from './app/nav/Topbar.vue';
-export { default as ProfileMenu } from './app/nav/ProfileMenu.vue';
-export { default as Table } from './app/table/Table.vue';
-export { default as TableActions } from './app/table/Actions.vue';
-export { default as TableCustomizeColumns } from './app/table/CustomizeColumns.vue';
-export { default as Topbar } from './app/Topbar.vue';
-export { default as App } from './app/Index.vue';
+// Re-export all component layers
+export * from './ui';
+export * from './composed';
+export * from './admin';
+export * from './web';
+
+// Legacy aliases for backwards compatibility during migration
+// These map old names to new locations - remove once all imports are updated
+
+// From composed/button
+export { Button } from './composed/button';
+export { ButtonMenu } from './composed/button';
+
+// From composed/dialog
+export { Dialog } from './composed/dialog';
+export { DialogConfirmation } from './composed/dialog';
+
+// From composed/drawer
+export { Drawer } from './composed/drawer';
+export { DrawerForm } from './composed/drawer';
+
+// From composed/card
+export { Card } from './composed/card';
+
+// From composed/form
+export { Input as InputText } from './composed/form';
+export { Select } from './composed/form';
+export { Checkbox } from './composed/form';
+export { LabelField } from './composed/form';
+export { Errors } from './composed/form';
+
+// From composed/display
+export { Avatar } from './composed/display';
+export { Badge } from './composed/display';
+export { TooltipIcon } from './composed/display';
+
+// From composed/overlay
+export { Menu } from './composed/overlay';
+export { Popover } from './composed/overlay';
+
+// From composed/data
+export { DataTable } from './composed/data';
+export { DataTable as Table } from './composed/data';
+export { TableActions } from './composed/data';
+export { CustomizeColumns as TableCustomizeColumns } from './composed/data';
+export { Paginator } from './composed/data';
+
+// From composed/layout
+export { ScrollFrame } from './composed/layout';
+
+// Editor requires optional dependencies (@tiptap/vue-3, etc.)
+// Import directly from '@/components/composed/editor' when needed
+// export { Editor } from './composed/editor';
+
+// From admin/layout
+export { AppShell as App } from './admin/layout';
+
+// From admin/navigation
+export { Sidebar as NavSidebar } from './admin/navigation';
+export { Topbar as NavTopbar } from './admin/navigation';
+export { ProfileMenu } from './admin/navigation';
+
+// From admin/page
+export { Header as PageHeader } from './admin/page';
+export { Footer as PageFooter } from './admin/page';
+export { Content as PageContent } from './admin/page';
+export { SideNav as PageSideNav } from './admin/page';
+export { SideContent as PageSideContent } from './admin/page';
+
+// From admin/layout (Topbar moved to admin)
+export { AppTopbar as Topbar } from './admin/layout';
+
+// Toast from ui
+export { Toaster as Toast } from './ui/sonner';
+
+// RadioButton from ui
+export { RadioGroupItem as RadioButton } from './ui/radio-group';

@@ -7,14 +7,14 @@ use App\Models\User;
 it('allows user to be created', function () {
     $authUser = User::factory()->create();
 
-    $response = $this->actingAs($authUser)->post('/users', [
+    $response = $this->actingAs($authUser)->post('/admin/users', [
         'name' => 'New User',
         'email' => 'new@example.com',
     ]);
 
     $createdUser = User::where('email', 'new@example.com')->first();
 
-    $response->assertRedirect(route('users.show', $createdUser));
+    $response->assertRedirect(route('admin.users.show', $createdUser));
     $this->assertDatabaseHas('users', [
         'name' => 'New User',
         'email' => 'new@example.com',
@@ -27,7 +27,7 @@ it('allows user to be shown', function () {
 
     $this->withoutVite();
 
-    $response = $this->actingAs($authUser)->get("/users/{$targetUser->id}");
+    $response = $this->actingAs($authUser)->get("/admin/users/{$targetUser->id}");
 
     $response->assertOk();
 });
@@ -37,13 +37,13 @@ it('allows user to be updated', function () {
     $targetUser = User::factory()->create();
 
     $response = $this->actingAs($authUser)
-        ->from("/users/{$targetUser->id}")
-        ->put("/users/{$targetUser->id}", [
+        ->from("/admin/users/{$targetUser->id}")
+        ->put("/admin/users/{$targetUser->id}", [
             'name' => 'Updated User',
             'email' => 'updated@example.com',
         ]);
 
-    $response->assertRedirect("/users/{$targetUser->id}");
+    $response->assertRedirect("/admin/users/{$targetUser->id}");
     $this->assertDatabaseHas('users', [
         'id' => $targetUser->id,
         'name' => 'Updated User',
@@ -56,10 +56,10 @@ it('allows user to be deleted', function () {
     $targetUser = User::factory()->create();
 
     $response = $this->actingAs($authUser)
-        ->from('/users')
-        ->delete("/users/{$targetUser->id}");
+        ->from('/admin/users')
+        ->delete("/admin/users/{$targetUser->id}");
 
-    $response->assertRedirect('/users');
+    $response->assertRedirect('/admin/users');
     $this->assertDatabaseMissing('users', [
         'id' => $targetUser->id,
     ]);

@@ -7,8 +7,13 @@ use Inertia\Response;
 
 class PageController extends Controller
 {
-    public function index(): Response
+    public function home(): Response
     {
         return Inertia::render('Index');
+    }
+
+    public function index(): Response
+    {
+        return Inertia::render('admin/Index');
     }
 }

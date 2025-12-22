@@ -151,13 +151,152 @@ app/
 ### Vue
 ```
 resources/js/
-├── components/         # Reusable components
-│   └── ui/             # shadcn-vue components
-├── pages/              # Inertia pages
+├── components/         # Reusable components (see Component Architecture below)
+│   ├── ui/             # Layer 1: Primitives (shadcn-vue)
+│   ├── composed/       # Layer 2: Composed components
+│   ├── admin/          # Layer 3a: Admin application components
+│   └── web/            # Layer 3b: Public website components
+├── pages/              # Inertia pages (organized by route)
+│   ├── Index.vue       # Home page
+│   └── Users/          # /users/* routes
 ├── composables/        # Vue composables
 ├── tests/              # Vitest unit tests
 └── utils/              # Utilities
 ```
+
+---
+
+## Component Architecture
+
+The UI components follow a 3-layer architecture for clear separation of concerns:
+
+### Layer Overview
+
+| Layer | Location | Purpose | Rules |
+|-------|----------|---------|-------|
+| **ui/** | `components/ui/` | Primitives (shadcn-vue) | CLI-managed, do NOT modify directly |
+| **composed/** | `components/composed/` | Composed components | Combines ui/ primitives, stateless |
+| **admin/** | `components/admin/` | Admin app components | Uses Inertia, routes, auth |
+| **web/** | `components/web/` | Public web components | Uses Inertia, routes |
+
+### Decision Guide
+
+Use this simple test to determine where a component belongs:
+
+1. **Is it a single-purpose primitive?** → `ui/` (but usually already exists via shadcn)
+2. **Does it combine 2+ ui/ components?** → `composed/`
+3. **Does it use `usePage()`, `router.visit()`, or auth?** → `admin/` or `web/`
+
+### Layer 1: `ui/` - Primitives
+
+shadcn-vue generated components. **Never modify these directly.**
+
+```bash
+# Add new primitives via CLI:
+pnpm dlx shadcn-vue@latest add <component>
+```
+
+Examples: `Button`, `Input`, `Dialog`, `Sheet`, `Table`, `Card`, etc.
+
+### Layer 2: `composed/` - Composed Components
+
+Components that combine multiple ui/ primitives into reusable patterns.
+
+```
+composed/
+├── button/         # Button, ButtonMenu
+├── dialog/         # Dialog, DialogConfirmation
+├── drawer/         # Drawer, DrawerForm
+├── card/           # Card
+├── form/           # Input, Select, Checkbox, LabelField, Errors
+├── display/        # Avatar, Badge, TooltipIcon
+├── overlay/        # Menu, Popover
+├── data/           # DataTable, TableActions, CustomizeColumns, Paginator
+├── layout/         # ScrollFrame
+├── editor/         # TipTap editor (requires optional deps)
+└── index.ts
+```
+
+**Rules:**
+- Combine ui/ primitives with enhanced APIs (severity, loading states, etc.)
+- Must remain **stateless** - no Inertia, no routes, no auth
+- No API calls or data fetching
+
+### Layer 3a: `admin/` - Admin Application Components
+
+Components specific to admin/dashboard functionality.
+
+```
+admin/
+├── layout/         # AdminLayout, AppShell, AppTopbar
+├── navigation/     # Sidebar, Topbar, ProfileMenu
+├── page/           # Header, Footer, Content, SideNav, SideContent
+├── modals/         # EditUserModal, DeleteUserModal
+└── index.ts
+```
+
+**Rules:**
+- May use Inertia (`usePage()`, `router.visit()`, `Link`)
+- May use authentication state
+- May define route-specific behavior
+
+### Layer 3b: `web/` - Public Website Components
+
+Components for public-facing pages.
+
+```
+web/
+├── layout/         # DefaultLayout
+├── modals/         # (add public website modals here)
+└── index.ts
+```
+
+### Import Patterns
+
+```typescript
+// Recommended: Import from layer barrels
+import { Button, Dialog, DataTable } from '@/components/composed';
+import { AdminLayout, Sidebar } from '@/components/admin';
+import { DefaultLayout } from '@/components/web';
+
+// Direct ui/ import (rare - prefer composed wrappers)
+import { Button } from '@/components/ui/button';
+
+// Category-specific import
+import { DataTable, TableActions } from '@/components/composed/data';
+```
+
+### Pages Organization
+
+Pages follow the route structure with clear separation between public and admin:
+
+```
+pages/
+├── Index.vue           # / (public home)
+├── Login.vue           # /login (guest)
+├── Register.vue        # /register (guest)
+└── admin/              # /admin/* (authenticated)
+    ├── Index.vue       # /admin (dashboard)
+    └── users/          # /admin/users/*
+        ├── Index.vue   # /admin/users
+        ├── Show.vue    # /admin/users/:id
+        └── SimpleTable.vue # /admin/users/table
+```
+
+### Route Naming Convention
+
+Routes use prefixed names for clarity:
+
+| Route | Name | Page |
+|-------|------|------|
+| `/` | `home` | `pages/Index.vue` |
+| `/login` | `login` | `pages/Login.vue` |
+| `/register` | `register` | `pages/Register.vue` |
+| `/admin` | `admin.index` | `pages/admin/Index.vue` |
+| `/admin/users` | `admin.users.index` | `pages/admin/users/Index.vue` |
+| `/admin/users/:id` | `admin.users.show` | `pages/admin/users/Show.vue` |
+
+Use `$route('admin.users.index')` in templates, `route('admin.users.index')` in scripts.
 
 ---
 
