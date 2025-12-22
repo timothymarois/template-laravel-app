@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative flex flex-col items-center w-16 h-full overflow-hidden border-r z-40"
+        class="relative flex flex-col items-center w-16 h-full border-r z-40"
         :class="containerClass"
     >
         <component :is="linkComponent" class="flex items-center justify-center h-14" :href="logoLinkPath">
@@ -18,7 +18,7 @@
             </div>
         </component>
         <div class="flex flex-col flex-1 items-center justify-between w-full px-2">
-            <div class="flex-1 flex flex-col items-center w-full overflow-y-auto">
+            <div class="flex-1 flex flex-col items-center w-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <template v-for="(item, itemIndex) in items" :key="itemIndex">
                     <div
                         class="flex flex-col items-center justify-start w-full"
@@ -29,21 +29,14 @@
                                 <TooltipTrigger as-child>
                                     <component
                                         :is="linkComponent"
-                                        class="relative flex items-center justify-center w-full h-12 mt-2 rounded-md"
+                                        class="relative flex items-center justify-center w-12 h-12 mt-2 rounded-md"
                                         :href="child.href"
                                         :class="linkClass(child)"
                                     >
                                         <component :is="getIcon(child)" />
-                                        <div
-                                            v-if="child?.count > 0"
-                                            class="absolute top-2 right-2 flex items-center justify-center text-xs font-semibold text-white bg-red-500 rounded-full transform translate-x-1/4 -translate-y-1/2 min-w-[26px] px-1 h-[20px] shadow-sm border-1 border-red-700 z-[99]"
-                                        >
-                                            <span v-if="child.count > 99">99+</span>
-                                            <span v-else>{{ child.count }}</span>
-                                        </div>
                                     </component>
                                 </TooltipTrigger>
-                                <TooltipContent side="right" :side-offset="10">
+                                <TooltipContent side="right" :side-offset="12">
                                     {{ child.label }}
                                 </TooltipContent>
                             </Tooltip>
@@ -129,7 +122,7 @@ const linkClass = (item) => {
         const baseCls = 'text-muted-foreground hover:bg-accent';
         return isActive(item) ? activeCls : baseCls;
     }
-    const baseCls = 'text-muted-foreground hover:bg-accent/50';
+    const baseCls = 'text-muted-foreground hover:bg-accent';
     return isActive(item) ? activeCls : baseCls;
 };
 </script>

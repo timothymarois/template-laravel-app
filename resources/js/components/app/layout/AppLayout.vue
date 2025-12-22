@@ -72,7 +72,7 @@ import { IconUser, IconColorFilter, IconHome } from '@tabler/icons-vue';
 import { Building2, CreditCard, Users, LayoutGrid, Settings, Activity, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
-import { ModeToggle } from '@/components/ui/mode-toggle';
+import ModeToggle from '../navigation/ModeToggle.vue';
 import EditUserModal from '../modals/EditUserModal.vue';
 import DeleteUserModal from '../modals/DeleteUserModal.vue';
 

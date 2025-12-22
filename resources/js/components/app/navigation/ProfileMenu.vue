@@ -4,8 +4,8 @@
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
                     <button
-                        class="relative overflow-hidden w-full mr-2 flex items-center p-2 px-3 rounded-md text-foreground hover:bg-accent cursor-pointer"
-                        :class="{ '!p-1 !py-2 !mr-0': avatarOnly }"
+                        class="relative overflow-hidden flex items-center justify-center rounded-md text-foreground hover:bg-accent cursor-pointer"
+                        :class="avatarOnly ? 'w-12 h-12' : 'w-full mr-2 p-2 px-3'"
                     >
                         <Avatar
                             :label="user.name?.charAt(0).toUpperCase()"

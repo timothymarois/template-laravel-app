@@ -1,9 +1,9 @@
 <template>
     <Checkbox
-        :modelValue="modelValue"
+        :modelValue="isChecked"
         :disabled="disabled"
         :class="[computedSizeClass, className]"
-        @update:modelValue="$emit('update:modelValue', $event)"
+        @update:modelValue="handleChange"
     />
 </template>
 
@@ -12,7 +12,8 @@ import { computed } from 'vue';
 import { Checkbox } from '@/components/ui/checkbox';
 
 interface Props {
-    modelValue?: boolean;
+    modelValue?: boolean | string[];
+    value?: string;
     disabled?: boolean;
     invalid?: boolean;
     size?: 'small' | 'large' | 'default';
@@ -23,8 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
     size: 'default',
 });
 
-defineEmits<{
-    'update:modelValue': [value: boolean];
+const emit = defineEmits<{
+    'update:modelValue': [value: boolean | string[]];
 }>();
 
 const className = computed(() => props.class || '');
@@ -34,4 +35,29 @@ const computedSizeClass = computed(() => {
     if (props.size === 'large') return 'w-6 h-6';
     return '';
 });
+
+// Check if we're in array mode (checkbox group)
+const isArrayMode = computed(() => Array.isArray(props.modelValue));
+
+// Determine if checkbox is checked
+const isChecked = computed(() => {
+    if (isArrayMode.value && props.value !== undefined) {
+        return (props.modelValue as string[]).includes(props.value);
+    }
+    return props.modelValue as boolean;
+});
+
+// Handle checkbox change
+const handleChange = (checked: boolean) => {
+    if (isArrayMode.value && props.value !== undefined) {
+        const currentArray = props.modelValue as string[];
+        if (checked) {
+            emit('update:modelValue', [...currentArray, props.value]);
+        } else {
+            emit('update:modelValue', currentArray.filter(v => v !== props.value));
+        }
+    } else {
+        emit('update:modelValue', checked);
+    }
+};
 </script>

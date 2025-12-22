@@ -5,8 +5,8 @@
                 <IconInfoSquareRoundedFilled :class="iconClass" />
             </span>
         </TooltipTrigger>
-        <TooltipContent v-if="text" :class="cn('max-w-[260px] whitespace-pre-line', contentClass)">
-            {{ text }}
+        <TooltipContent v-if="text || $slots.default" :class="cn('max-w-[260px] whitespace-pre-line', contentClass)">
+            <slot>{{ text }}</slot>
         </TooltipContent>
     </Tooltip>
 </template>

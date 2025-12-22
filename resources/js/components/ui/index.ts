@@ -44,9 +44,6 @@ export * from './input';
 // Label
 export * from './label';
 
-// Mode Toggle
-export * from './mode-toggle';
-
 // Pagination
 export * from './pagination';
 

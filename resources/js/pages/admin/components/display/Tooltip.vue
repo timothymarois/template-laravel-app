@@ -15,7 +15,7 @@
                     <div>
                         <h4 class="text-sm font-medium mb-3">Basic Tooltip</h4>
                         <div class="flex gap-4">
-                            <TooltipProvider>
+                            <TooltipProvider :delay-duration="0">
                                 <Tooltip>
                                     <TooltipTrigger as-child>
                                         <Button variant="outline">Hover me</Button>
@@ -31,7 +31,7 @@
                     <div>
                         <h4 class="text-sm font-medium mb-3">Tooltip Positions</h4>
                         <div class="flex gap-4">
-                            <TooltipProvider>
+                            <TooltipProvider :delay-duration="0">
                                 <Tooltip>
                                     <TooltipTrigger as-child>
                                         <Button variant="outline" size="sm">Top</Button>
@@ -41,7 +41,7 @@
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
-                            <TooltipProvider>
+                            <TooltipProvider :delay-duration="0">
                                 <Tooltip>
                                     <TooltipTrigger as-child>
                                         <Button variant="outline" size="sm">Bottom</Button>
@@ -51,7 +51,7 @@
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
-                            <TooltipProvider>
+                            <TooltipProvider :delay-duration="0">
                                 <Tooltip>
                                     <TooltipTrigger as-child>
                                         <Button variant="outline" size="sm">Left</Button>
@@ -61,7 +61,7 @@
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
-                            <TooltipProvider>
+                            <TooltipProvider :delay-duration="0">
                                 <Tooltip>
                                     <TooltipTrigger as-child>
                                         <Button variant="outline" size="sm">Right</Button>
@@ -153,7 +153,7 @@ import {
     TooltipIcon,
 } from '@/components/ui/tooltip';
 import {
-    Popover,
+    PopoverBase as Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
