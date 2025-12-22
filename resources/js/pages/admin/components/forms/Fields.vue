@@ -12,7 +12,7 @@
                     <CardDescription>Form field wrapper with label, error, and tooltip support</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-6">
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-2 gap-4">
                         <LabelField label="Basic Label" name="basic">
                             <Input placeholder="Enter value" fluid />
                         </LabelField>

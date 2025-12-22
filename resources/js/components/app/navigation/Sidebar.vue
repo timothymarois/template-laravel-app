@@ -36,14 +36,14 @@
                                         <component :is="getIcon(child)" />
                                         <div
                                             v-if="child?.count > 0"
-                                            class="absolute top-2 right-2 flex items-center justify-center text-xs font-semibold text-white bg-red-500 rounded-full transform translate-x-1/4 -translate-y-1/2 min-w-[26px] px-1 h-[20px] border-2 z-[99] border-background"
+                                            class="absolute top-2 right-2 flex items-center justify-center text-xs font-semibold text-white bg-red-500 rounded-full transform translate-x-1/4 -translate-y-1/2 min-w-[26px] px-1 h-[20px] shadow-sm border-1 border-red-700 z-[99]"
                                         >
                                             <span v-if="child.count > 99">99+</span>
                                             <span v-else>{{ child.count }}</span>
                                         </div>
                                     </component>
                                 </TooltipTrigger>
-                                <TooltipContent side="right">
+                                <TooltipContent side="right" :side-offset="10">
                                     {{ child.label }}
                                 </TooltipContent>
                             </Tooltip>
@@ -101,7 +101,7 @@ const isActive = (item) => {
     if (item.parent) {
         return isPageActive(item.parent);
     }
-    if (item.href === '/') {
+    if (item.href === '/' || item.exact) {
         return isPageActive(item.href, undefined, true);
     }
     return isPageActive(item.href);

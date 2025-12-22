@@ -5,7 +5,7 @@
         :pageNavItems="sideNavItems"
         :pageTabs="displayTabs"
     >
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid grid-cols-2 gap-4">
                 <Link :href="$route('admin.components.display.card')">
                     <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                         <CardHeader>

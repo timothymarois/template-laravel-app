@@ -9,6 +9,7 @@
         :sideBarItems="sideBarItems"
         :topBarItems="topBarItems"
         :linkComponent="'Link'"
+        sideBarActiveClass="!bg-white !text-black"
         :noScroll="noScroll"
         :containerClass="containerClass"
         widthClass="w-full"
@@ -67,7 +68,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import { IconBook, IconUser, IconColorFilter } from '@tabler/icons-vue';
+import { IconUser, IconColorFilter, IconHome } from '@tabler/icons-vue';
 import { Building2, CreditCard, Users, LayoutGrid, Settings, Activity, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
@@ -142,22 +143,9 @@ const topBarItems = computed(() => [
 const sideBarItems = computed(() => [
     {
         children: [
+            { label: 'Home', href: '/admin', exact: true, icon: IconHome, activeIcon: IconHome },
             { label: 'Users', href: '/admin/users', parent: null, icon: IconUser, activeIcon: IconUser },
-            { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: IconColorFilter, activeIcon: IconColorFilter }
-        ],
-    },
-    {
-        children: [
-            { label: 'Inbox', href: '/lb', parent: '/test', icon: IconBook, activeIcon: IconBook, count: 5},
-            { label: 'Contacts', href: '/lb', parent: '/test', icon: IconBook, activeIcon: IconBook },
-        ],
-    },
-    {
-        children: [
-            { label: 'Campaigns', href: '/ff', parent: null, icon: IconBook, activeIcon: IconBook },
-            { label: 'Workflows', href: '/ff', parent: null, icon: IconBook, activeIcon: IconBook },
-            { label: 'Analytics', href: '/ff', parent: null, icon: IconBook, activeIcon: IconBook },
-            { label: 'More', href: null, icon: IconBook, activeIcon: IconBook },
+            { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: IconColorFilter, activeIcon: IconColorFilter, count: 24 }
         ],
     },
 ]);

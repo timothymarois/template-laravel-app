@@ -10,11 +10,10 @@
                 </CardDescription>
             </slot>
         </CardHeader>
-        <CardContent :class="{ 'p-0': noPadding }">
-            <slot name="content">
-                <slot />
-            </slot>
+        <CardContent v-if="$slots.content" :class="{ 'p-0': noPadding }">
+            <slot name="content" />
         </CardContent>
+        <slot />
         <CardFooter v-if="$slots.footer">
             <slot name="footer" />
         </CardFooter>
