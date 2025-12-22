@@ -9,6 +9,7 @@ export default [
                 parser: tsParser,
                 ecmaVersion: 'latest',
                 sourceType: 'module',
+                extraFileExtensions: ['.vue'],
             },
         },
         rules: {
