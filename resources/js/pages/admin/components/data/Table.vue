@@ -84,34 +84,25 @@
 
             <!-- Table with Tabs Filter -->
             <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b pb-0">
-                    <div class="flex items-center gap-4">
-                        <button
-                            v-for="tab in statusTabs"
-                            :key="tab.value"
-                            @click="activeTab = tab.value"
-                            :class="[
-                                'px-1 py-3 text-sm font-medium border-b-2 -mb-px transition-colors',
-                                activeTab === tab.value
-                                    ? 'border-primary text-foreground'
-                                    : 'border-transparent text-muted-foreground hover:text-foreground'
-                            ]"
-                        >
-                            {{ tab.label }}
-                            <Badge variant="secondary" class="ml-2 text-xs">{{ tab.count }}</Badge>
-                        </button>
+                <Tabs v-model="activeTab" variant="underline">
+                    <div class="flex items-center justify-between border-b px-6">
+                        <TabsList class="border-b-0">
+                            <TabsTrigger v-for="tab in statusTabs" :key="tab.value" :value="tab.value">
+                                {{ tab.label }}
+                                <Badge variant="secondary" class="ml-2 text-xs">{{ tab.count }}</Badge>
+                            </TabsTrigger>
+                        </TabsList>
+                        <div class="flex items-center gap-2 py-3">
+                            <Input placeholder="Search..." clearable class="w-64" />
+                            <CustomizeColumns
+                                :columns="orderColumnDefs"
+                                :activeColumnList="activeOrderColumns"
+                                :defaultColumnList="defaultOrderColumns"
+                                @update="activeOrderColumns = $event"
+                            />
+                            <Button variant="outline">Export</Button>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 pb-3">
-                        <Input placeholder="Search..." clearable class="w-64" />
-                        <CustomizeColumns
-                            :columns="orderColumnDefs"
-                            :activeColumnList="activeOrderColumns"
-                            :defaultColumnList="defaultOrderColumns"
-                            @update="activeOrderColumns = $event"
-                        />
-                        <Button variant="outline">Export</Button>
-                    </div>
-                </CardHeader>
                 <CardContent class="p-0">
                     <Table>
                         <TableHeader>
@@ -159,6 +150,7 @@
                         </PaginationContent>
                     </Pagination>
                 </CardFooter>
+                </Tabs>
             </Card>
 
             <!-- Compact Table -->
@@ -213,6 +205,7 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import { CustomizeColumns } from '@/components/ui/data-table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Filter, Plus } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 

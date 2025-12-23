@@ -297,6 +297,96 @@
                 </CardContent>
             </Card>
 
+            <!-- Card Header with Pills Tabs -->
+            <Card>
+                <Tabs default-value="overview" variant="pills">
+                    <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b">
+                        <TabsList>
+                            <TabsTrigger value="overview">Overview</TabsTrigger>
+                            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                            <TabsTrigger value="reports">Reports</TabsTrigger>
+                            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                        </TabsList>
+                        <div class="flex items-center gap-2">
+                            <Button variant="outline" size="sm">Export</Button>
+                            <Button size="sm">
+                                <Settings class="size-4 mr-2" />
+                                Settings
+                            </Button>
+                        </div>
+                    </CardHeader>
+                    <CardContent class="pt-6">
+                        <TabsContent value="overview" class="mt-0">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-lg">Project Dashboard</h4>
+                                        <p class="text-sm text-muted-foreground">Monitor your project metrics and team activity</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="rounded-lg border p-4">
+                                        <p class="text-sm text-muted-foreground">Total Tasks</p>
+                                        <p class="text-2xl font-bold">248</p>
+                                        <p class="text-xs text-green-600">+12% from last week</p>
+                                    </div>
+                                    <div class="rounded-lg border p-4">
+                                        <p class="text-sm text-muted-foreground">Completed</p>
+                                        <p class="text-2xl font-bold">186</p>
+                                        <p class="text-xs text-green-600">75% completion rate</p>
+                                    </div>
+                                    <div class="rounded-lg border p-4">
+                                        <p class="text-sm text-muted-foreground">In Progress</p>
+                                        <p class="text-2xl font-bold">42</p>
+                                        <p class="text-xs text-muted-foreground">8 due this week</p>
+                                    </div>
+                                    <div class="rounded-lg border p-4">
+                                        <p class="text-sm text-muted-foreground">Team Members</p>
+                                        <p class="text-2xl font-bold">12</p>
+                                        <p class="text-xs text-muted-foreground">3 online now</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="analytics" class="mt-0">
+                            <div class="flex items-center justify-center h-48 border rounded-lg bg-muted/30">
+                                <div class="text-center">
+                                    <BarChart3 class="size-12 mx-auto text-muted-foreground mb-2" />
+                                    <p class="text-muted-foreground">Analytics charts would appear here</p>
+                                </div>
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="reports" class="mt-0">
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 border rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <FileText class="size-5 text-muted-foreground" />
+                                        <div>
+                                            <p class="font-medium">Weekly Summary Report</p>
+                                            <p class="text-sm text-muted-foreground">Generated Dec 20, 2024</p>
+                                        </div>
+                                    </div>
+                                    <Button variant="ghost" size="sm">Download</Button>
+                                </div>
+                                <div class="flex items-center justify-between p-3 border rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        <FileText class="size-5 text-muted-foreground" />
+                                        <div>
+                                            <p class="font-medium">Monthly Performance Report</p>
+                                            <p class="text-sm text-muted-foreground">Generated Dec 1, 2024</p>
+                                        </div>
+                                    </div>
+                                    <Button variant="ghost" size="sm">Download</Button>
+                                </div>
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="notifications" class="mt-0">
+                            <p class="text-sm text-muted-foreground">Configure notification preferences for this project.</p>
+                        </TabsContent>
+                    </CardContent>
+                </Tabs>
+            </Card>
+
             <!-- Full Width Header Tabs -->
             <Card class="overflow-hidden">
                 <Tabs default-value="overview" variant="underline">
