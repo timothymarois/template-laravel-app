@@ -19,8 +19,6 @@ const delegatedProps = reactiveOmit(props, "toastOptions");
                     'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
                 cancelButton:
                     'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
-                closeButton:
-                    '!absolute !left-[unset] !right-1.5 !top-1.5 !translate-x-0 !translate-y-0 !border-0 !bg-transparent hover:!bg-muted !rounded-md !text-muted-foreground hover:!text-foreground',
             },
         }"
         v-bind="delegatedProps"

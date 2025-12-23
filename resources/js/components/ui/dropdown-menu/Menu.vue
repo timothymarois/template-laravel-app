@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -55,12 +55,10 @@ interface MenuItem {
 
 interface Props {
     model?: MenuItem[];
-    popup?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     model: () => [],
-    popup: false,
 });
 
 const isOpen = ref(false);
