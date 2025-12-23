@@ -1,5 +1,11 @@
 <template>
     <div class="relative" :class="{ 'w-full': fluid }">
+        <span
+            v-if="$slots.icon"
+            class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+        >
+            <slot name="icon" />
+        </span>
         <Input
             :type="type"
             :modelValue="modelValue"
@@ -8,6 +14,7 @@
             :class="[
                 fluid ? 'w-full' : '',
                 invalid ? 'border-destructive focus-visible:ring-destructive' : '',
+                $slots.icon ? 'pl-9' : '',
                 clearable && modelValue ? 'pr-8' : '',
                 computedSizeClass,
                 className
