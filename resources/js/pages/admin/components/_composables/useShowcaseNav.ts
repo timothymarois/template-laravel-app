@@ -26,6 +26,7 @@ export const useShowcaseNav = () => {
 
     const displayTabs = [
         { title: 'Overview', href: '/admin/components/display' },
+        { title: 'Alert', href: '/admin/components/display/alert' },
         { title: 'Card', href: '/admin/components/display/card' },
         { title: 'Badge', href: '/admin/components/display/badge' },
         { title: 'Tooltip', href: '/admin/components/display/tooltip' },

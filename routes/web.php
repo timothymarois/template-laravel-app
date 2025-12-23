@@ -48,6 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
             // Display
             Route::get('/display', [ComponentShowcaseController::class, 'displayIndex'])->name('display');
+            Route::get('/display/alert', [ComponentShowcaseController::class, 'displayAlert'])->name('display.alert');
             Route::get('/display/card', [ComponentShowcaseController::class, 'displayCard'])->name('display.card');
             Route::get('/display/badge', [ComponentShowcaseController::class, 'displayBadge'])->name('display.badge');
             Route::get('/display/tooltip', [ComponentShowcaseController::class, 'displayTooltip'])->name('display.tooltip');

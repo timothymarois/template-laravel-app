@@ -6,6 +6,20 @@
         :pageTabs="displayTabs"
     >
         <div class="grid grid-cols-2 gap-4">
+                <Link :href="$route('admin.components.display.alert')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <AlertCircle class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Alert</CardTitle>
+                            </div>
+                            <CardDescription>Feedback messages for user actions and system status</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
                 <Link :href="$route('admin.components.display.card')">
                     <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                         <CardHeader>
@@ -55,7 +69,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { LayoutGrid, Tag, MessageSquare } from 'lucide-vue-next';
+import { AlertCircle, LayoutGrid, Tag, MessageSquare } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sideNavItems, displayTabs } = useShowcaseNav();

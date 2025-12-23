@@ -65,6 +65,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/display/Index');
     }
 
+    public function displayAlert(): Response
+    {
+        return Inertia::render('admin/components/display/Alert');
+    }
+
     public function displayCard(): Response
     {
         return Inertia::render('admin/components/display/Card');
