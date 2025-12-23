@@ -38,6 +38,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/forms/Fields');
     }
 
+    public function formsCalendar(): Response
+    {
+        return Inertia::render('admin/components/forms/Calendar');
+    }
+
     // Actions
     public function actionsIndex(): Response
     {

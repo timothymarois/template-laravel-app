@@ -48,6 +48,20 @@
                     </Card>
                 </Link>
 
+                <Link :href="$route('admin.components.forms.calendar')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <CalendarDays class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Calendar</CardTitle>
+                            </div>
+                            <CardDescription>Date pickers and calendar components</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
                 <Link :href="$route('admin.components.forms.fields')">
                     <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                         <CardHeader>
@@ -69,7 +83,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { TextCursorInput, ChevronDown, CheckSquare, FormInput } from 'lucide-vue-next';
+import { TextCursorInput, ChevronDown, CheckSquare, CalendarDays, FormInput } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sideNavItems, formsTabs } = useShowcaseNav();

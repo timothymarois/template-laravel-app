@@ -14,6 +14,7 @@ export const useShowcaseNav = () => {
         { title: 'Input', href: '/admin/components/forms/input' },
         { title: 'Select', href: '/admin/components/forms/select' },
         { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
+        { title: 'Calendar', href: '/admin/components/forms/calendar' },
         { title: 'Fields', href: '/admin/components/forms/fields' },
     ];
 

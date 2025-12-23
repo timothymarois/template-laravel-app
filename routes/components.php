@@ -11,6 +11,7 @@ Route::get('/forms/input', [ComponentShowcaseController::class, 'formsInput'])->
 Route::get('/forms/select', [ComponentShowcaseController::class, 'formsSelect'])->name('forms.select');
 Route::get('/forms/checkbox', [ComponentShowcaseController::class, 'formsCheckbox'])->name('forms.checkbox');
 Route::get('/forms/fields', [ComponentShowcaseController::class, 'formsFields'])->name('forms.fields');
+Route::get('/forms/calendar', [ComponentShowcaseController::class, 'formsCalendar'])->name('forms.calendar');
 
 // Actions
 Route::get('/actions', [ComponentShowcaseController::class, 'actionsIndex'])->name('actions');

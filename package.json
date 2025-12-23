@@ -39,6 +39,7 @@
         "vue": "latest"
     },
     "dependencies": {
+        "@internationalized/date": "^3.10.1",
         "@sentry/vue": "^7.40.0",
         "@tabler/icons-vue": "^3.31.0",
         "@tailwindcss/vite": "^4.1.3",
