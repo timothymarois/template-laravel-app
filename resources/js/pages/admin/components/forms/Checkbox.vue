@@ -5,14 +5,14 @@
         :pageNavItems="sideNavItems"
         :pageTabs="formsTabs"
     >
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid grid-cols-2 gap-4">
             <!-- Checkbox Card -->
             <Card class="flex flex-col">
                 <CardHeader>
                     <CardTitle>Checkbox</CardTitle>
                     <CardDescription>Boolean selection controls for multiple choices</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6 flex-1">
+                <CardContent class="space-y-4 flex-1">
                     <div>
                         <h4 class="text-sm font-medium mb-3">States</h4>
                         <div class="grid grid-cols-2 gap-3">
@@ -53,7 +53,7 @@
                     <CardTitle>Radio Group</CardTitle>
                     <CardDescription>Single selection from multiple options</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6 flex-1">
+                <CardContent class="space-y-4 flex-1">
                     <div>
                         <h4 class="text-sm font-medium mb-3">States</h4>
                         <div class="grid grid-cols-2 gap-3">

@@ -5,7 +5,7 @@
         :pageNavItems="sideNavItems"
         :pageTabs="displayTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Badge Variants -->
             <Card>
                 <CardHeader>
@@ -200,7 +200,7 @@
                     <CardDescription>Small, base, and large avatar sizes</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="flex items-end gap-6">
+                    <div class="flex items-end gap-4">
                         <div class="text-center">
                             <Avatar size="sm" shape="circle">
                                 <AvatarImage src="https://github.com/taylorotwell.png" alt="User" />
@@ -233,7 +233,7 @@
                     <CardDescription>Circle and square avatar shapes</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-4">
                         <div class="text-center">
                             <Avatar size="base" shape="circle">
                                 <AvatarImage src="https://github.com/huntabyte.png" alt="User" />
@@ -289,7 +289,7 @@
                     <CardDescription>Online/offline status indicators</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-4">
                         <div class="relative">
                             <Avatar size="sm" shape="circle">
                                 <AvatarImage src="https://github.com/sindresorhus.png" alt="Online User" />
@@ -419,7 +419,7 @@
                     <CardDescription>Notification badges on avatars</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-4">
                         <div class="relative">
                             <Avatar size="sm" shape="circle">
                                 <AvatarImage src="https://github.com/shadcn.png" alt="User" />

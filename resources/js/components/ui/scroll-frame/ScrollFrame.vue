@@ -14,6 +14,10 @@
 import { ref, watch, nextTick, onMounted, onBeforeUnmount, onUpdated } from 'vue';
 import { useScroll } from '@/composables/useScroll';
 
+defineEmits<{
+    scroll: [event: Event]
+}>();
+
 interface Props {
     scrollKey?: string | null;
     page?: boolean;

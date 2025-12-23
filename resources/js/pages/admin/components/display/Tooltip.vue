@@ -5,7 +5,7 @@
         :pageNavItems="sideNavItems"
         :pageTabs="displayTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Tooltip Positions -->
             <Card>
                 <CardHeader>
@@ -117,7 +117,7 @@
                     <CardDescription>Different elements can trigger tooltips</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-4">
                         <TooltipProvider :delay-duration="0">
                             <Tooltip>
                                 <TooltipTrigger as-child>

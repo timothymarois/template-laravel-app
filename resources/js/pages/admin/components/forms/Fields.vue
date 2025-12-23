@@ -5,7 +5,7 @@
         :pageNavItems="sideNavItems"
         :pageTabs="formsTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Label Field Examples -->
             <Card>
                 <CardHeader>
@@ -34,7 +34,7 @@
             </Card>
 
             <!-- Realistic Form Examples -->
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-4">
                 <!-- User Registration Form -->
                 <Card class="flex flex-col">
                     <CardHeader>

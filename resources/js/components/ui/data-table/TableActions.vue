@@ -5,19 +5,19 @@
                 Selected: <span class="font-bold">{{ formatNumber(selectedCount) }}</span>
             </div>
             <div v-if="menuItems?.length" class="flex relative justify-center items-center mx-2 py-3 min-h-full before:block before:absolute before:left-1/2 before:top-0 before:transform before:-translate-x-1/2 before:min-h-full before:border-solid before:border-l before:border-primary-foreground/30" />
-            <template v-for="(menuItem, index) in menuItems" :key="index">
-                <Tooltip v-if="menuItem?.tooltip">
+            <template v-for="(actionItem, index) in menuItems" :key="index">
+                <Tooltip v-if="actionItem?.tooltip">
                     <TooltipTrigger as-child>
                         <div class="pl-3">
-                            <ActionItem :menuItem="menuItem" @action="actionClick" />
+                            <ActionItem :menuItem="actionItem" @action="actionClick" />
                         </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                        {{ menuItem.tooltip }}
+                        {{ actionItem.tooltip }}
                     </TooltipContent>
                 </Tooltip>
                 <div v-else class="pl-3">
-                    <ActionItem :menuItem="menuItem" @action="actionClick" />
+                    <ActionItem :menuItem="actionItem" @action="actionClick" />
                 </div>
             </template>
             <div>

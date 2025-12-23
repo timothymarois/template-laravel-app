@@ -5,13 +5,13 @@
         :pageNavItems="sideNavItems"
         :pageTabs="dataTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Table Actions</CardTitle>
                     <CardDescription>Bulk action bar that appears when items are selected</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">Basic Actions</h4>
                         <div class="flex items-center gap-4">

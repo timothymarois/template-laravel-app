@@ -5,13 +5,13 @@
         :pageNavItems="sideNavItems"
         :pageTabs="dataTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Pagination</CardTitle>
                     <CardDescription>Page navigation controls</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">Paginator (Laravel-style links)</h4>
                         <Paginator :links="paginationLinks" />

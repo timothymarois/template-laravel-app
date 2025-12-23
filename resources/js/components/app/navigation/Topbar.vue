@@ -44,16 +44,16 @@
                                     :model="item.children"
                                     popup
                                 >
-                                    <template #item="{ item, props }">
+                                    <template #item="{ item: menuItem, props: menuProps }">
                                         <component
                                             :is="linkComponent"
-                                            v-bind="props.action"
-                                            :href="item.href"
+                                            v-bind="menuProps.action"
+                                            :href="menuItem.href"
                                             class="flex items-center w-full px-2 py-1 text-sm rounded-md"
-                                            :class="isActive(item) ? menuActiveClass : ''"
+                                            :class="isActive(menuItem) ? menuActiveClass : ''"
                                         >
-                                            <span :class="item.icon" />
-                                            <span class="ml-2">{{ item.label }}</span>
+                                            <span :class="menuItem.icon" />
+                                            <span class="ml-2">{{ menuItem.label }}</span>
                                         </component>
                                     </template>
                                 </Menu>

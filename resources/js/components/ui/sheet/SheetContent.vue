@@ -50,9 +50,9 @@ const sheetAnimationClass = computed(() => {
             <slot />
 
             <DialogClose
-                class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none cursor-pointer"
+                class="absolute right-4 top-4 size-8 rounded-md flex items-center justify-center bg-muted/50 hover:bg-muted transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
             >
-                <X class="w-4 h-4 text-muted-foreground" />
+                <X class="size-4" />
             </DialogClose>
         </DialogContent>
     </DialogPortal>

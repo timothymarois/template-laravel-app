@@ -5,7 +5,7 @@
         :pageNavItems="sideNavItems"
         :pageTabs="dataTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Basic Table in Card -->
             <Card>
                 <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b">

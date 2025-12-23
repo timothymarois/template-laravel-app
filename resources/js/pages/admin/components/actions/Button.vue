@@ -5,13 +5,13 @@
         :pageNavItems="sideNavItems"
         :pageTabs="actionsTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Button</CardTitle>
                     <CardDescription>Clickable elements for user actions</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">Variants</h4>
                         <div class="flex flex-wrap gap-2">
@@ -61,7 +61,7 @@
                     <CardTitle>Button States</CardTitle>
                     <CardDescription>Interactive states - hover and click to see changes</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">States Across Variants</h4>
                         <div class="grid grid-cols-6 gap-4 text-center text-xs text-muted-foreground mb-2">
@@ -128,7 +128,7 @@
                     <CardTitle>Button Groups</CardTitle>
                     <CardDescription>Patterns for grouping related actions</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">Connected Button Group</h4>
                         <div class="inline-flex rounded-md shadow-sm">

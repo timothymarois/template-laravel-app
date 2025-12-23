@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { AvatarImageEmits, AvatarImageProps } from "reka-ui"
-import { AvatarImage, useForwardPropsEmits } from "reka-ui"
+import type { AvatarImageEmits, AvatarImageProps } from "reka-ui";
+import { AvatarImage, useForwardPropsEmits } from "reka-ui";
 
-const props = defineProps<AvatarImageProps>()
-const emits = defineEmits<AvatarImageEmits>()
+const props = defineProps<AvatarImageProps>();
+const emits = defineEmits<AvatarImageEmits>();
 
-const forwarded = useForwardPropsEmits(props, emits)
+const forwarded = useForwardPropsEmits(props, emits);
 </script>
 
 <template>

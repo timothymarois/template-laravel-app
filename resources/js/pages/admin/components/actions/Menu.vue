@@ -5,13 +5,13 @@
         :pageNavItems="sideNavItems"
         :pageTabs="actionsTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Button Menu</CardTitle>
                     <CardDescription>Dropdown menus with actions</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">Default (Vertical Dots)</h4>
                         <div class="flex gap-4">
@@ -59,7 +59,7 @@
                     <CardTitle>Dropdown Menu</CardTitle>
                     <CardDescription>Advanced menus with checkboxes, radios, and submenus</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-4">
                     <div>
                         <h4 class="text-sm font-medium mb-3">With Checkbox Items</h4>
                         <DropdownMenu>

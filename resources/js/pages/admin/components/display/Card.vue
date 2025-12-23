@@ -5,7 +5,7 @@
         :pageNavItems="sideNavItems"
         :pageTabs="displayTabs"
     >
-        <div class="space-y-6">
+        <div class="space-y-4">
             <!-- Basic Cards -->
             <div class="grid grid-cols-4 gap-4">
                 <Card class="flex flex-col">
@@ -142,7 +142,7 @@
             </div>
 
             <!-- Cards with Actions -->
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-4">
                 <Card class="flex flex-col">
                     <CardHeader class="flex flex-row items-center justify-between space-y-0">
                         <div class="space-y-1">
@@ -223,7 +223,7 @@
             </div>
 
             <!-- Edge to Edge Table -->
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-4">
                 <Card class="flex flex-col">
                     <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b">
                         <div class="space-y-1">
