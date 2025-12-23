@@ -181,6 +181,71 @@
                             <Button>Publish</Button>
                         </div>
                     </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Icon-Only Toolbar (Text Editor)</h4>
+                        <div class="inline-flex rounded-md border bg-background p-1 gap-0.5">
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatBold }" @click="formatBold = !formatBold">
+                                <Bold class="size-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatItalic }" @click="formatItalic = !formatItalic">
+                                <Italic class="size-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatUnderline }" @click="formatUnderline = !formatUnderline">
+                                <Underline class="size-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatStrike }" @click="formatStrike = !formatStrike">
+                                <Strikethrough class="size-4" />
+                            </Button>
+                            <div class="w-px bg-border mx-1" />
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignLeft }" @click="setAlign('left')">
+                                <AlignLeft class="size-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignCenter }" @click="setAlign('center')">
+                                <AlignCenter class="size-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignRight }" @click="setAlign('right')">
+                                <AlignRight class="size-4" />
+                            </Button>
+                            <div class="w-px bg-border mx-1" />
+                            <Button variant="ghost" size="icon-sm">
+                                <Link2 class="size-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon-sm">
+                                <Image class="size-4" />
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Connected Icon Group</h4>
+                        <div class="inline-flex rounded-md shadow-sm">
+                            <Button variant="outline" size="icon" class="rounded-r-none">
+                                <ZoomOut class="size-4" />
+                            </Button>
+                            <Button variant="outline" size="icon" class="rounded-none border-l-0">
+                                <RotateCcw class="size-4" />
+                            </Button>
+                            <Button variant="outline" size="icon" class="rounded-l-none border-l-0">
+                                <ZoomIn class="size-4" />
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Icon Toggle Group</h4>
+                        <div class="inline-flex rounded-md bg-muted p-1">
+                            <Button
+                                v-for="option in viewModeOptions"
+                                :key="option.value"
+                                :variant="viewMode === option.value ? 'default' : 'ghost'"
+                                size="icon-sm"
+                                @click="viewMode = option.value"
+                            >
+                                <component :is="option.icon" class="size-4" />
+                            </Button>
+                        </div>
+                    </div>
                 </CardContent>
             </Card>
         </div>
@@ -207,6 +272,21 @@ import {
     LayoutGrid,
     List,
     Table2,
+    Bold,
+    Italic,
+    Underline,
+    Strikethrough,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+    Link2,
+    Image,
+    ZoomIn,
+    ZoomOut,
+    RotateCcw,
+    Columns,
+    Rows,
+    Grid,
 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
@@ -225,5 +305,30 @@ const viewOptions = [
     { label: 'Grid', value: 'grid', icon: LayoutGrid },
     { label: 'List', value: 'list', icon: List },
     { label: 'Table', value: 'table', icon: Table2 },
+];
+
+// Text editor toolbar state
+const formatBold = ref(false);
+const formatItalic = ref(false);
+const formatUnderline = ref(false);
+const formatStrike = ref(false);
+const textAlign = ref('left');
+
+const alignLeft = ref(true);
+const alignCenter = ref(false);
+const alignRight = ref(false);
+
+const setAlign = (align: string) => {
+    alignLeft.value = align === 'left';
+    alignCenter.value = align === 'center';
+    alignRight.value = align === 'right';
+};
+
+// Icon toggle group
+const viewMode = ref('grid');
+const viewModeOptions = [
+    { value: 'grid', icon: Grid },
+    { value: 'columns', icon: Columns },
+    { value: 'rows', icon: Rows },
 ];
 </script>

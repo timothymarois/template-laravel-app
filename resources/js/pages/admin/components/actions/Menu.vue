@@ -51,6 +51,18 @@
                             </template>
                         </ButtonMenu>
                     </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">With Disabled Items</h4>
+                        <ButtonMenu :items="menuWithDisabled">
+                            <template #trigger>
+                                <Button variant="outline">
+                                    File Actions
+                                    <ChevronDown class="size-4" />
+                                </Button>
+                            </template>
+                        </ButtonMenu>
+                    </div>
                 </CardContent>
             </Card>
 
@@ -136,6 +148,43 @@
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">With Disabled Items</h4>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger as-child>
+                                <Button variant="outline">
+                                    Account
+                                    <ChevronDown class="size-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent class="w-48">
+                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>
+                                    <User class="size-4 mr-2" />
+                                    Profile
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Settings class="size-4 mr-2" />
+                                    Settings
+                                </DropdownMenuItem>
+                                <DropdownMenuItem disabled>
+                                    <CreditCard class="size-4 mr-2" />
+                                    Billing (Unavailable)
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem disabled>
+                                    <Download class="size-4 mr-2" />
+                                    Export Data (Premium)
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <LogOut class="size-4 mr-2" />
+                                    Log out
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </CardContent>
             </Card>
         </div>
@@ -169,6 +218,13 @@ import {
     Pencil,
     Share,
     Trash2,
+    User,
+    CreditCard,
+    Download,
+    LogOut,
+    Save,
+    FileText,
+    Printer,
 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
@@ -193,5 +249,15 @@ const fullMenuItems = [
     { label: 'Share', icon: Share, click: () => {} },
     { separator: true },
     { label: 'Delete', icon: Trash2, click: () => {} },
+];
+
+const menuWithDisabled = [
+    { label: 'Save', icon: Save, click: () => {} },
+    { label: 'Save As...', icon: FileText, click: () => {} },
+    { separator: true },
+    { label: 'Print', icon: Printer, click: () => {}, disabled: true },
+    { label: 'Export PDF', icon: Download, click: () => {}, disabled: true },
+    { separator: true },
+    { label: 'Delete', icon: Trash2, click: () => {}, class: 'text-destructive' },
 ];
 </script>
