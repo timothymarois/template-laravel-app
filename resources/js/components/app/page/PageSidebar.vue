@@ -32,6 +32,7 @@
                                                     <component
                                                         :is="linkComponent"
                                                         :href="child.href"
+                                                        :preserve-state="true"
                                                         draggable="false"
                                                     >
                                                         <component v-if="child.icon" :is="child.icon" class="size-4" />
@@ -53,6 +54,7 @@
                                     <component
                                         :is="linkComponent"
                                         :href="item.href"
+                                        :preserve-state="true"
                                         draggable="false"
                                     >
                                         <component v-if="item.icon" :is="item.icon" class="size-4" />
