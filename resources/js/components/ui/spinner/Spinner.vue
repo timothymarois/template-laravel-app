@@ -16,20 +16,20 @@ const props = withDefaults(defineProps<Props>(), {
 
 const sizeClasses = computed(() => {
     switch (props.size) {
-        case 'xs': return 'size-3';
-        case 'sm': return 'size-4';
-        case 'lg': return 'size-8';
-        case 'xl': return 'size-12';
-        default: return 'size-6';
+    case 'xs': return 'size-3';
+    case 'sm': return 'size-4';
+    case 'lg': return 'size-8';
+    case 'xl': return 'size-12';
+    default: return 'size-6';
     }
 });
 
 const variantClasses = computed(() => {
     switch (props.variant) {
-        case 'primary': return 'text-primary';
-        case 'secondary': return 'text-secondary-foreground';
-        case 'muted': return 'text-muted-foreground';
-        default: return 'text-foreground';
+    case 'primary': return 'text-primary';
+    case 'secondary': return 'text-secondary-foreground';
+    case 'muted': return 'text-muted-foreground';
+    default: return 'text-foreground';
     }
 });
 </script>

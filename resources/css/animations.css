@@ -11,144 +11,144 @@
 
 /* Animation keyframes for shadcn */
 @keyframes accordion-down {
-  from { height: 0; }
-  to { height: var(--reka-accordion-content-height); }
+    from { height: 0; }
+    to { height: var(--reka-accordion-content-height); }
 }
 
 @keyframes accordion-up {
-  from { height: var(--reka-accordion-content-height); }
-  to { height: 0; }
+    from { height: var(--reka-accordion-content-height); }
+    to { height: 0; }
 }
 
 @keyframes collapsible-down {
-  from { height: 0; }
-  to { height: var(--reka-collapsible-content-height); }
+    from { height: 0; }
+    to { height: var(--reka-collapsible-content-height); }
 }
 
 @keyframes collapsible-up {
-  from { height: var(--reka-collapsible-content-height); }
-  to { height: 0; }
+    from { height: var(--reka-collapsible-content-height); }
+    to { height: 0; }
 }
 
 @keyframes enter-from-right {
-  from { opacity: 0; transform: translateX(200px); }
-  to { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateX(200px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes enter-from-left {
-  from { opacity: 0; transform: translateX(-200px); }
-  to { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateX(-200px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes exit-to-right {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(200px); }
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(200px); }
 }
 
 @keyframes exit-to-left {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(-200px); }
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-200px); }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes scale-out {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.95); }
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
 }
 
 @keyframes slide-in-from-top {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
 }
 
 @keyframes slide-in-from-bottom {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
 }
 
 @keyframes slide-in-from-left {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
 }
 
 @keyframes slide-in-from-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
 
 @keyframes slide-out-to-top {
-  from { transform: translateY(0); }
-  to { transform: translateY(-100%); }
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
 }
 
 @keyframes slide-out-to-bottom {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
 }
 
 @keyframes slide-out-to-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
 }
 
 @keyframes slide-out-to-right {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
 }
 
 /* Animation utility classes for shadcn */
 .animate-in {
-  animation-name: enter;
-  animation-duration: 150ms;
-  --tw-enter-opacity: initial;
-  --tw-enter-scale: initial;
-  --tw-enter-rotate: initial;
-  --tw-enter-translate-x: initial;
-  --tw-enter-translate-y: initial;
+    animation-name: enter;
+    animation-duration: 150ms;
+    --tw-enter-opacity: initial;
+    --tw-enter-scale: initial;
+    --tw-enter-rotate: initial;
+    --tw-enter-translate-x: initial;
+    --tw-enter-translate-y: initial;
 }
 
 .animate-out {
-  animation-name: exit;
-  animation-duration: 150ms;
-  --tw-exit-opacity: initial;
-  --tw-exit-scale: initial;
-  --tw-exit-rotate: initial;
-  --tw-exit-translate-x: initial;
-  --tw-exit-translate-y: initial;
+    animation-name: exit;
+    animation-duration: 150ms;
+    --tw-exit-opacity: initial;
+    --tw-exit-scale: initial;
+    --tw-exit-rotate: initial;
+    --tw-exit-translate-x: initial;
+    --tw-exit-translate-y: initial;
 }
 
 @keyframes enter {
-  from {
-    opacity: var(--tw-enter-opacity, 1);
-    transform:
-      translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
-      scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
-      rotate(var(--tw-enter-rotate, 0));
-  }
+    from {
+        opacity: var(--tw-enter-opacity, 1);
+        transform:
+            translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0)
+            scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1))
+            rotate(var(--tw-enter-rotate, 0));
+    }
 }
 
 @keyframes exit {
-  to {
-    opacity: var(--tw-exit-opacity, 1);
-    transform:
-      translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0)
-      scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1))
-      rotate(var(--tw-exit-rotate, 0));
-  }
+    to {
+        opacity: var(--tw-exit-opacity, 1);
+        transform:
+            translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0)
+            scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1))
+            rotate(var(--tw-exit-rotate, 0));
+    }
 }
 
 /* Fade utilities */
@@ -325,173 +325,173 @@
 
 /* Data-state based sheet animations */
 @keyframes sheet-slide-in-from-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
 
 @keyframes sheet-slide-out-to-right {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
 }
 
 @keyframes sheet-slide-in-from-left {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
 }
 
 @keyframes sheet-slide-out-to-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
 }
 
 @keyframes sheet-slide-in-from-top {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
 }
 
 @keyframes sheet-slide-out-to-top {
-  from { transform: translateY(0); }
-  to { transform: translateY(-100%); }
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
 }
 
 @keyframes sheet-slide-in-from-bottom {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
 }
 
 @keyframes sheet-slide-out-to-bottom {
-  from { transform: translateY(0); }
-  to { transform: translateY(100%); }
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
 }
 
 @keyframes overlay-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes overlay-fade-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 /* Sheet overlay animations */
 [data-state="open"].sheet-overlay {
-  animation: overlay-fade-in 200ms ease-out;
+    animation: overlay-fade-in 200ms ease-out;
 }
 
 [data-state="closed"].sheet-overlay {
-  animation: overlay-fade-out 200ms ease-in;
+    animation: overlay-fade-out 200ms ease-in;
 }
 
 /* Sheet content animations by side */
 [data-state="open"].sheet-content-right {
-  animation: sheet-slide-in-from-right 300ms ease-out;
+    animation: sheet-slide-in-from-right 300ms ease-out;
 }
 
 [data-state="closed"].sheet-content-right {
-  animation: sheet-slide-out-to-right 200ms ease-in;
+    animation: sheet-slide-out-to-right 200ms ease-in;
 }
 
 [data-state="open"].sheet-content-left {
-  animation: sheet-slide-in-from-left 300ms ease-out;
+    animation: sheet-slide-in-from-left 300ms ease-out;
 }
 
 [data-state="closed"].sheet-content-left {
-  animation: sheet-slide-out-to-left 200ms ease-in;
+    animation: sheet-slide-out-to-left 200ms ease-in;
 }
 
 [data-state="open"].sheet-content-top {
-  animation: sheet-slide-in-from-top 300ms ease-out;
+    animation: sheet-slide-in-from-top 300ms ease-out;
 }
 
 [data-state="closed"].sheet-content-top {
-  animation: sheet-slide-out-to-top 200ms ease-in;
+    animation: sheet-slide-out-to-top 200ms ease-in;
 }
 
 [data-state="open"].sheet-content-bottom {
-  animation: sheet-slide-in-from-bottom 300ms ease-out;
+    animation: sheet-slide-in-from-bottom 300ms ease-out;
 }
 
 [data-state="closed"].sheet-content-bottom {
-  animation: sheet-slide-out-to-bottom 200ms ease-in;
+    animation: sheet-slide-out-to-bottom 200ms ease-in;
 }
 
 /* Popover and dropdown animations */
 @keyframes popover-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes popover-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
 }
 
 [data-state="open"][data-side] {
-  animation: popover-in 150ms ease-out;
+    animation: popover-in 150ms ease-out;
 }
 
 [data-state="closed"][data-side] {
-  animation: popover-out 100ms ease-in;
+    animation: popover-out 100ms ease-in;
 }
 
 /* Dialog animations */
 @keyframes dialog-overlay-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes dialog-overlay-out {
-  from { opacity: 1; }
-  to { opacity: 0; }
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 @keyframes dialog-content-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes dialog-content-out {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
 }
 
 .dialog-overlay[data-state="open"] {
-  animation: dialog-overlay-in 150ms ease-out;
+    animation: dialog-overlay-in 150ms ease-out;
 }
 
 .dialog-overlay[data-state="closed"] {
-  animation: dialog-overlay-out 100ms ease-in;
+    animation: dialog-overlay-out 100ms ease-in;
 }
 
 .dialog-content[data-state="open"] {
-  animation: dialog-content-in 150ms ease-out;
+    animation: dialog-content-in 150ms ease-out;
 }
 
 .dialog-content[data-state="closed"] {
-  animation: dialog-content-out 100ms ease-in;
+    animation: dialog-content-out 100ms ease-in;
 }

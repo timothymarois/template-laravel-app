@@ -5,13 +5,13 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { SIDEBAR_WIDTH_MOBILE, useSidebar } from "./utils";
 
 defineOptions({
-  inheritAttrs: false,
+    inheritAttrs: false,
 });
 
 const props = withDefaults(defineProps<SidebarProps>(), {
-  side: "left",
-  variant: "sidebar",
-  collapsible: "offcanvas",
+    side: "left",
+    variant: "sidebar",
+    collapsible: "offcanvas",
 });
 
 const { isMobile, state, openMobile, setOpenMobile } = useSidebar();

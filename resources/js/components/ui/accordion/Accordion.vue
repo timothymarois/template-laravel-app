@@ -21,8 +21,8 @@ const internalValue = ref<string[]>(
     Array.isArray(props.defaultValue)
         ? props.defaultValue
         : props.defaultValue
-          ? [props.defaultValue]
-          : []
+            ? [props.defaultValue]
+            : []
 );
 
 const openItems = computed({

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useSidebar } from "./utils";
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
+    class?: HTMLAttributes["class"]
 }>();
 
 const { toggleSidebar } = useSidebar();

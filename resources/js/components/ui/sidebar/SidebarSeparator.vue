@@ -4,7 +4,7 @@ import { cn } from '@/utils';
 import { Separator } from '@/components/ui/separator';
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
+    class?: HTMLAttributes["class"]
 }>();
 </script>
 

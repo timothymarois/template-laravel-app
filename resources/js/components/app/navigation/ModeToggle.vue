@@ -28,10 +28,10 @@
 import { useColorMode } from '@vueuse/core';
 import { Button } from '@/components/ui/button';
 import {
-        DropdownMenu,
-        DropdownMenuContent,
-        DropdownMenuItem,
-        DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Moon, Sun, Monitor } from 'lucide-vue-next';
 

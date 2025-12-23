@@ -265,23 +265,23 @@ const clearAll = () => {
 // Keyboard navigation
 const handleListKeydown = (e: KeyboardEvent) => {
     switch (e.key) {
-        case 'ArrowDown':
-            e.preventDefault();
-            highlightedIndex.value = Math.min(highlightedIndex.value + 1, filteredOptions.value.length - 1);
-            break;
-        case 'ArrowUp':
-            e.preventDefault();
-            highlightedIndex.value = Math.max(highlightedIndex.value - 1, 0);
-            break;
-        case 'Enter':
-            e.preventDefault();
-            if (filteredOptions.value[highlightedIndex.value]) {
-                selectOption(filteredOptions.value[highlightedIndex.value]);
-            }
-            break;
-        case 'Escape':
-            isOpen.value = false;
-            break;
+    case 'ArrowDown':
+        e.preventDefault();
+        highlightedIndex.value = Math.min(highlightedIndex.value + 1, filteredOptions.value.length - 1);
+        break;
+    case 'ArrowUp':
+        e.preventDefault();
+        highlightedIndex.value = Math.max(highlightedIndex.value - 1, 0);
+        break;
+    case 'Enter':
+        e.preventDefault();
+        if (filteredOptions.value[highlightedIndex.value]) {
+            selectOption(filteredOptions.value[highlightedIndex.value]);
+        }
+        break;
+    case 'Escape':
+        isOpen.value = false;
+        break;
     }
 };
 

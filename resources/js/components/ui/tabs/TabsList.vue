@@ -17,13 +17,13 @@ const context = inject<TabsContext>('tabsContext')!;
 
 const listClasses = computed(() => {
     switch (context.variant.value) {
-        case 'pills':
-            return 'inline-flex gap-1';
-        case 'boxed':
-            return 'inline-flex p-1 bg-muted rounded-lg';
-        case 'underline':
-        default:
-            return 'inline-flex gap-1 border-b border-border';
+    case 'pills':
+        return 'inline-flex gap-1';
+    case 'boxed':
+        return 'inline-flex p-1 bg-muted rounded-lg';
+    case 'underline':
+    default:
+        return 'inline-flex gap-1 border-b border-border';
     }
 });
 </script>

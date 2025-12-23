@@ -107,13 +107,13 @@ const tableActionMenuItems = ref([
     { label: 'Edit', action: 'edit' },
     { label: 'Delete', action: 'delete', disabled: true, tooltip: 'This action is disabled.'},
     { label: 'More',
-        children:
-        [
-            { label: 'Export', action: 'export' },
-            { separator: true },
-            { label: 'Duplicate', action: 'dup', disabled: true, },
-            { label: 'Email', action: 'email', disabled: true },
-        ]
+      children:
+          [
+              { label: 'Export', action: 'export' },
+              { separator: true },
+              { label: 'Duplicate', action: 'dup', disabled: true, },
+              { label: 'Email', action: 'email', disabled: true },
+          ]
     }
 ]);
 

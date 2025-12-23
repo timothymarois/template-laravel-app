@@ -4,7 +4,7 @@ import { cn } from '@/utils';
 import { useSidebar } from "./utils";
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
+    class?: HTMLAttributes["class"]
 }>();
 
 const { toggleSidebar } = useSidebar();

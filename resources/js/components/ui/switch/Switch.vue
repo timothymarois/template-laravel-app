@@ -5,34 +5,34 @@ import { SwitchRoot, SwitchThumb } from "reka-ui";
 import { cn } from '@/utils';
 
 interface Props {
-  class?: HTMLAttributes["class"]
-  size?: "sm" | "default"
-  modelValue?: boolean
-  defaultValue?: boolean
-  disabled?: boolean
+    class?: HTMLAttributes["class"]
+    size?: "sm" | "default"
+    modelValue?: boolean
+    defaultValue?: boolean
+    disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: "default",
-  modelValue: undefined,
-  defaultValue: undefined,
-  disabled: false,
+    size: "default",
+    modelValue: undefined,
+    defaultValue: undefined,
+    disabled: false,
 });
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
+    'update:modelValue': [value: boolean]
 }>();
 
 const sizeClasses = computed(() => {
-  return props.size === "sm"
-    ? "h-5 w-9"
-    : "h-6 w-11";
+    return props.size === "sm"
+        ? "h-5 w-9"
+        : "h-6 w-11";
 });
 
 const thumbSizeClasses = computed(() => {
-  return props.size === "sm"
-    ? "h-4 w-4 data-[state=checked]:translate-x-4"
-    : "h-5 w-5 data-[state=checked]:translate-x-5";
+    return props.size === "sm"
+        ? "h-4 w-4 data-[state=checked]:translate-x-4"
+        : "h-5 w-5 data-[state=checked]:translate-x-5";
 });
 </script>
 

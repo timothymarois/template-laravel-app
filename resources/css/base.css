@@ -10,92 +10,92 @@
  */
 
 @theme inline {
-  /* Animations for shadcn */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-collapsible-down: collapsible-down 0.2s ease-out;
-  --animate-collapsible-up: collapsible-up 0.2s ease-out;
+    /* Animations for shadcn */
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+    --animate-collapsible-down: collapsible-down 0.2s ease-out;
+    --animate-collapsible-up: collapsible-up 0.2s ease-out;
 
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
-  --color-sidebar: hsl(var(--sidebar));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
+    --color-chart-1: hsl(var(--chart-1));
+    --color-chart-2: hsl(var(--chart-2));
+    --color-chart-3: hsl(var(--chart-3));
+    --color-chart-4: hsl(var(--chart-4));
+    --color-chart-5: hsl(var(--chart-5));
+    --color-sidebar: hsl(var(--sidebar));
+    --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+    --color-sidebar-primary: hsl(var(--sidebar-primary));
+    --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+    --color-sidebar-accent: hsl(var(--sidebar-accent));
+    --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+    --color-sidebar-border: hsl(var(--sidebar-border));
+    --color-sidebar-ring: hsl(var(--sidebar-ring));
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+    width: 10px;
+    height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border: 0px;
-  cursor: pointer;
+    background: hsl(var(--muted));
+    border: 0px;
+    cursor: pointer;
 }
 ::-webkit-scrollbar-track:hover {
-  background: hsl(var(--muted) / 0.8);
+    background: hsl(var(--muted) / 0.8);
 }
 ::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted-foreground) / 0.35);
-  border-radius: 10px;
-  border: 2px solid hsl(var(--muted));
-  box-sizing: border-box;
-  cursor: pointer;
+    background-color: hsl(var(--muted-foreground) / 0.35);
+    border-radius: 10px;
+    border: 2px solid hsl(var(--muted));
+    box-sizing: border-box;
+    cursor: pointer;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--muted-foreground));
+    background-color: hsl(var(--muted-foreground));
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+    background: hsl(var(--background));
 }
 .dark ::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--muted-foreground) / 0.5);
-  border: 2px solid hsl(var(--background));
+    background-color: hsl(var(--muted-foreground) / 0.5);
+    border: 2px solid hsl(var(--background));
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--muted-foreground));
+    background-color: hsl(var(--muted-foreground));
 }
 
 /* Native Date/Time Input Styling */
@@ -104,11 +104,10 @@ input[type="datetime-local"],
 input[type="time"],
 input[type="month"],
 input[type="week"] {
-  /* Ensure consistent appearance */
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  padding-right: 2.5rem;
+    /* Ensure consistent appearance */
+    appearance: none;
+    position: relative;
+    padding-right: 2.5rem;
 }
 
 /* WebKit calendar picker button */
@@ -117,13 +116,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator,
 input[type="month"]::-webkit-calendar-picker-indicator,
 input[type="week"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  opacity: 0.5;
-  transition: opacity 0.15s;
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.15s;
 }
 
 input[type="date"]:hover::-webkit-calendar-picker-indicator,
@@ -131,7 +130,7 @@ input[type="datetime-local"]:hover::-webkit-calendar-picker-indicator,
 input[type="time"]:hover::-webkit-calendar-picker-indicator,
 input[type="month"]:hover::-webkit-calendar-picker-indicator,
 input[type="week"]:hover::-webkit-calendar-picker-indicator {
-  opacity: 1;
+    opacity: 1;
 }
 
 /* Dark mode invert for the icon */
@@ -140,5 +139,26 @@ input[type="week"]:hover::-webkit-calendar-picker-indicator {
 .dark input[type="time"]::-webkit-calendar-picker-indicator,
 .dark input[type="month"]::-webkit-calendar-picker-indicator,
 .dark input[type="week"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+    filter: invert(1);
+}
+
+/* Unovis Chart Styles */
+.unovis-tooltip {
+    --vis-tooltip-background-color: hsl(var(--popover)) !important;
+    --vis-tooltip-border-color: hsl(var(--border)) !important;
+    --vis-tooltip-text-color: hsl(var(--popover-foreground)) !important;
+    --vis-tooltip-shadow-color: rgb(0, 0, 0, 0.1) !important;
+    --vis-tooltip-padding: 8px 12px !important;
+    --vis-tooltip-border-radius: 6px !important;
+}
+
+/* Donut/Pie chart segment hover effects - only for interactive charts */
+.chart-interactive path[class*="segment"] {
+    cursor: pointer !important;
+    transition: fill-opacity 0.15s ease !important;
+}
+
+/* Only dim siblings when a segment is hovered */
+.chart-interactive:has(path[class*="segment"]:hover) path[class*="segment"]:not(:hover) {
+    fill-opacity: 0.35 !important;
 }

@@ -27,19 +27,19 @@ const percentage = computed(() => {
 
 const sizeClasses = computed(() => {
     switch (props.size) {
-        case 'sm': return 'h-1';
-        case 'lg': return 'h-3';
-        default: return 'h-2';
+    case 'sm': return 'h-1';
+    case 'lg': return 'h-3';
+    default: return 'h-2';
     }
 });
 
 const variantClasses = computed(() => {
     switch (props.variant) {
-        case 'primary': return 'bg-primary';
-        case 'success': return 'bg-green-500';
-        case 'warning': return 'bg-yellow-500';
-        case 'destructive': return 'bg-destructive';
-        default: return 'bg-primary';
+    case 'primary': return 'bg-primary';
+    case 'success': return 'bg-green-500';
+    case 'warning': return 'bg-yellow-500';
+    case 'destructive': return 'bg-destructive';
+    default: return 'bg-primary';
     }
 });
 </script>

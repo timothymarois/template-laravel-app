@@ -88,24 +88,24 @@ const editorInstance = useEditor({
     autofocus: props.autofocus,
     extensions: props.textOnly
         ? [
-              Document,
-              Paragraph,
-              Text,
-              HardBreak,
-              Placeholder.configure({
-                  placeholder: props.placeholder,
-              }),
-          ]
+            Document,
+            Paragraph,
+            Text,
+            HardBreak,
+            Placeholder.configure({
+                placeholder: props.placeholder,
+            }),
+        ]
         : [
-              StarterKit,
-              Link.configure({
-                  openOnClick: false,
-                  defaultProtocol: 'https',
-              }),
-              Placeholder.configure({
-                  placeholder: props.placeholder,
-              }),
-          ],
+            StarterKit,
+            Link.configure({
+                openOnClick: false,
+                defaultProtocol: 'https',
+            }),
+            Placeholder.configure({
+                placeholder: props.placeholder,
+            }),
+        ],
     onUpdate: ({ editor }) => {
         emit('update:modelValue', props.textOnly ? editor.getText() : editor.getHTML());
     },

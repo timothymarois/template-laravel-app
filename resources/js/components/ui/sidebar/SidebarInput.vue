@@ -4,7 +4,7 @@ import { cn } from '@/utils';
 import { Input } from '@/components/ui/form';
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
+    class?: HTMLAttributes["class"]
 }>();
 </script>
 

@@ -23,12 +23,12 @@ const className = computed(() => props.class || '');
 
 const computedVariant = computed(() => {
     switch (props.severity) {
-        case 'secondary': return 'secondary';
-        case 'danger': return 'destructive';
-        case 'success': return 'default'; // Would need custom variant
-        case 'info': return 'secondary';
-        case 'warn': return 'outline';
-        default: return 'default';
+    case 'secondary': return 'secondary';
+    case 'danger': return 'destructive';
+    case 'success': return 'default'; // Would need custom variant
+    case 'info': return 'secondary';
+    case 'warn': return 'outline';
+    default: return 'default';
     }
 });
 

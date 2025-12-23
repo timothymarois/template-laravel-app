@@ -32,6 +32,18 @@ export default [
             'vue/no-multi-spaces': 'off',
             'quotes': 'off',
             'semi': ['error', 'always'],
+            'vue/script-indent': ['error', 4, { baseIndent: 0 }],
+        }
+    },
+    {
+        files: ['**/*.js', '**/*.ts', '**/*.tsx'],
+        rules: {
+            'indent': ['error', 4],
+        }
+    },
+    {
+        files: ['**/*.vue'],
+        rules: {
             'indent': 'off',
         }
     }

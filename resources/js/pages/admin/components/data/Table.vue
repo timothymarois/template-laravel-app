@@ -291,20 +291,20 @@ const activities = [
 
 const getStatusClass = (status: string) => {
     switch (status) {
-        case 'Active': return 'bg-green-500 hover:bg-green-500/80 border-transparent text-white';
-        case 'Pending': return 'bg-yellow-500 hover:bg-yellow-500/80 border-transparent text-white';
-        case 'Inactive': return 'bg-gray-500 hover:bg-gray-500/80 border-transparent text-white';
-        default: return '';
+    case 'Active': return 'bg-green-500 hover:bg-green-500/80 border-transparent text-white';
+    case 'Pending': return 'bg-yellow-500 hover:bg-yellow-500/80 border-transparent text-white';
+    case 'Inactive': return 'bg-gray-500 hover:bg-gray-500/80 border-transparent text-white';
+    default: return '';
     }
 };
 
 const getOrderStatusClass = (status: string) => {
     switch (status) {
-        case 'Completed': return 'bg-green-500 hover:bg-green-500/80 border-transparent text-white';
-        case 'Processing': return 'bg-blue-500 hover:bg-blue-500/80 border-transparent text-white';
-        case 'Pending': return 'bg-yellow-500 hover:bg-yellow-500/80 border-transparent text-white';
-        case 'Cancelled': return 'bg-red-500 hover:bg-red-500/80 border-transparent text-white';
-        default: return '';
+    case 'Completed': return 'bg-green-500 hover:bg-green-500/80 border-transparent text-white';
+    case 'Processing': return 'bg-blue-500 hover:bg-blue-500/80 border-transparent text-white';
+    case 'Pending': return 'bg-yellow-500 hover:bg-yellow-500/80 border-transparent text-white';
+    case 'Cancelled': return 'bg-red-500 hover:bg-red-500/80 border-transparent text-white';
+    default: return '';
     }
 };
 </script>
