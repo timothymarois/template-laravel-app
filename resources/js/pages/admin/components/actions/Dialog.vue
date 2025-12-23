@@ -50,6 +50,27 @@
                         />
                     </div>
 
+                    <!-- Draggable Dialog -->
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Draggable Dialog</h4>
+                        <Button @click="showDraggableDialog = true">Open Draggable Dialog</Button>
+                        <DialogBase v-model:open="showDraggableDialog" :modal="false">
+                            <DialogContent draggable class="max-w-md">
+                                <DialogHeader>
+                                    <DialogTitle>Draggable Dialog</DialogTitle>
+                                    <DialogDescription>Drag the header to move this dialog around.</DialogDescription>
+                                </DialogHeader>
+                                <div class="py-4">
+                                    <p class="text-sm text-muted-foreground">This dialog can be dragged by its header. Try clicking and dragging the title area to reposition the dialog on the screen.</p>
+                                </div>
+                                <DialogFooter>
+                                    <Button variant="outline" @click="showDraggableDialog = false">Cancel</Button>
+                                    <Button @click="showDraggableDialog = false">Confirm</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </DialogBase>
+                    </div>
+
                     <!-- Form Dialog -->
                     <div>
                         <h4 class="text-sm font-medium mb-3">Form Dialog</h4>
@@ -187,6 +208,55 @@
                                     <Button @click="showScrollDialog = false">Accept Terms</Button>
                                 </DialogFooter>
                             </DialogContent>
+                        </DialogBase>
+                    </div>
+
+                    <!-- Large Scrollable Page Dialog -->
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Large Dialog (Page Scrolls)</h4>
+                        <Button variant="outline" @click="showLargeDialog = true">Open Large Dialog</Button>
+                        <DialogBase v-model:open="showLargeDialog">
+                            <DialogScrollContent class="p-0 gap-0 max-w-2xl">
+                                <DialogHeader class="p-6 border-b">
+                                    <DialogTitle>Privacy Policy</DialogTitle>
+                                    <DialogDescription>Last updated: December 2024</DialogDescription>
+                                </DialogHeader>
+                                <div class="p-6 space-y-4">
+                                    <h3 class="font-semibold">1. Introduction</h3>
+                                    <p class="text-sm text-muted-foreground">Welcome to our Privacy Policy. This document explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.</p>
+
+                                    <h3 class="font-semibold">2. Information We Collect</h3>
+                                    <p class="text-sm text-muted-foreground">We may collect information about you in a variety of ways. The information we may collect on the Site includes personal data, such as your name, shipping address, email address, and telephone number, and demographic information, such as your age, gender, hometown, and interests.</p>
+
+                                    <h3 class="font-semibold">3. Use of Your Information</h3>
+                                    <p class="text-sm text-muted-foreground">Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to create and manage your account, process transactions, send you emails regarding your account, and respond to inquiries.</p>
+
+                                    <h3 class="font-semibold">4. Disclosure of Your Information</h3>
+                                    <p class="text-sm text-muted-foreground">We may share information we have collected about you in certain situations. Your information may be disclosed as follows: by law or to protect rights, third-party service providers, marketing communications, and business transfers.</p>
+
+                                    <h3 class="font-semibold">5. Security of Your Information</h3>
+                                    <p class="text-sm text-muted-foreground">We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable.</p>
+
+                                    <h3 class="font-semibold">6. Policy for Children</h3>
+                                    <p class="text-sm text-muted-foreground">We do not knowingly solicit information from or market to children under the age of 13. If we learn that we have collected personal information from a child under age 13 without verification of parental consent, we will delete that information as quickly as possible.</p>
+
+                                    <h3 class="font-semibold">7. Controls for Do-Not-Track Features</h3>
+                                    <p class="text-sm text-muted-foreground">Most web browsers and some mobile operating systems include a Do-Not-Track feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected.</p>
+
+                                    <h3 class="font-semibold">8. Options Regarding Your Information</h3>
+                                    <p class="text-sm text-muted-foreground">You may at any time review or change the information in your account or terminate your account by logging into your account settings and updating your account, contacting us using the contact information provided, or noting that upon your request to terminate your account, we will deactivate or delete your account.</p>
+
+                                    <h3 class="font-semibold">9. California Privacy Rights</h3>
+                                    <p class="text-sm text-muted-foreground">California Civil Code Section 1798.83 permits our users who are California residents to request certain information regarding our disclosure of personal information to third parties for their direct marketing purposes.</p>
+
+                                    <h3 class="font-semibold">10. Contact Us</h3>
+                                    <p class="text-sm text-muted-foreground">If you have questions or comments about this Privacy Policy, please contact us at privacy@example.com or by mail at 123 Privacy Street, Suite 100, San Francisco, CA 94102.</p>
+                                </div>
+                                <DialogFooter class="p-6 border-t">
+                                    <Button variant="outline" @click="showLargeDialog = false">Close</Button>
+                                    <Button @click="showLargeDialog = false">I Agree</Button>
+                                </DialogFooter>
+                            </DialogScrollContent>
                         </DialogBase>
                     </div>
 
@@ -519,11 +589,13 @@ const { sideNavItems, actionsTabs } = useShowcaseNav();
 const showBasicDialog = ref(false);
 const showConfirmDialog = ref(false);
 const showDestructiveDialog = ref(false);
+const showDraggableDialog = ref(false);
 const showFormDialog = ref(false);
 const showGradientDialog = ref(false);
 const showGradientDialog2 = ref(false);
 const showGradientDialog3 = ref(false);
 const showScrollDialog = ref(false);
+const showLargeDialog = ref(false);
 const showInfoDialog = ref(false);
 const showWarningDialog = ref(false);
 const showSuccessDialog = ref(false);

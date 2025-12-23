@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
+import { inject, computed } from "vue";
 import { cn } from "@/utils";
 
 const props = defineProps<{
-    class?: HTMLAttributes["class"]
+    class?: HTMLAttributes["class"];
 }>();
+
+const isDraggable = inject<ReturnType<typeof computed<boolean>>>('dialogDraggable', computed(() => false));
 </script>
 
 <template>
     <div
-        :class="cn('flex flex-col gap-y-1.5 text-center sm:text-left', props.class)"
+        data-dialog-header
+        :class="cn(
+            'flex flex-col gap-y-1.5 text-center sm:text-left',
+            isDraggable && 'cursor-move select-none',
+            props.class
+        )"
     >
         <slot />
     </div>
