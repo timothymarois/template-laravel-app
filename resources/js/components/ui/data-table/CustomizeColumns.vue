@@ -233,13 +233,20 @@ const checkLocked = ({ draggedContext, relatedContext }: any) => {
 
 const close = () => { isOpen.value = false; };
 
+// Store scroll handler reference for cleanup
+let scrollHandler: { add: () => void; remove: () => void } | null = null;
+
 // Watch for open state changes
 watch(isOpen, (newValue) => {
     if (newValue) {
         applyInitColumns();
         nextTick(() => {
-            bindScrollHandler(frame).add();
+            scrollHandler = bindScrollHandler(frame);
+            scrollHandler.add();
         });
+    } else {
+        scrollHandler?.remove();
+        scrollHandler = null;
     }
 });
 </script>

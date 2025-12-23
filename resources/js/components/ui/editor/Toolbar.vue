@@ -14,13 +14,13 @@
 
 <script setup>
 import { computed } from 'vue';
-import BoldTool from './Tools/BoldTool.vue';
-import ItalicTool from './Tools/ItalicTool.vue';
-import StrikeTool from './Tools/StrikeTool.vue';
-import BulletListTool from './Tools/BulletListTool.vue';
-import OrderedListTool from './Tools/OrderedListTool.vue';
-import LinkTool from './Tools/LinkTool.vue';
-import ClearFormattingTool from './Tools/ClearFormattingTool.vue';
+import BoldTool from './tools/BoldTool.vue';
+import ItalicTool from './tools/ItalicTool.vue';
+import StrikeTool from './tools/StrikeTool.vue';
+import BulletListTool from './tools/BulletListTool.vue';
+import OrderedListTool from './tools/OrderedListTool.vue';
+import LinkTool from './tools/LinkTool.vue';
+import ClearFormattingTool from './tools/ClearFormattingTool.vue';
 
 const props = defineProps({
     editor: Object,
