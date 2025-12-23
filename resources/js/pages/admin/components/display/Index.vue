@@ -118,6 +118,20 @@
                 </Card>
             </Link>
 
+            <Link :href="$route('admin.components.display.resizable')">
+                <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                    <CardHeader>
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-primary/10 rounded-lg">
+                                <PanelLeftClose class="size-5 text-primary" />
+                            </div>
+                            <CardTitle class="text-base">Resizable</CardTitle>
+                        </div>
+                        <CardDescription>Resizable panels with draggable handles</CardDescription>
+                    </CardHeader>
+                </Card>
+            </Link>
+
             <Link :href="$route('admin.components.display.tabs')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                     <CardHeader>
@@ -177,6 +191,7 @@ import {
     LayoutPanelTop,
     Loader2,
     MessageSquare,
+    PanelLeftClose,
     PanelTopOpen,
     Tag,
 } from 'lucide-vue-next';

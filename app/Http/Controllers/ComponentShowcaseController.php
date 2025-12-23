@@ -155,6 +155,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/display/Carousel');
     }
 
+    public function displayResizable(): Response
+    {
+        return Inertia::render('admin/components/display/Resizable');
+    }
+
     // Data
     public function dataIndex(): Response
     {
