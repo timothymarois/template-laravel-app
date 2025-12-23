@@ -7,11 +7,9 @@
                         class="relative overflow-hidden flex items-center justify-center rounded-md text-foreground hover:bg-accent cursor-pointer"
                         :class="avatarOnly ? 'w-12 h-12' : 'w-full mr-2 p-2 px-3'"
                     >
-                        <Avatar
-                            :label="user.name?.charAt(0).toUpperCase()"
-                            class="m-auto border border-border bg-muted text-foreground"
-                            shape="circle"
-                        />
+                        <Avatar size="sm" shape="circle" class="border border-border">
+                            <AvatarFallback>{{ user.name?.charAt(0).toUpperCase() }}</AvatarFallback>
+                        </Avatar>
                         <div v-if="!avatarOnly" class="ml-2 flex flex-col text-left flex-1 min-w-0">
                             <span class="font-bold truncate">{{ user.name }}</span>
                             <span class="text-sm truncate">{{ user.email }}</span>
@@ -29,11 +27,9 @@
                                 ? 'text-foreground hover:bg-accent cursor-pointer'
                                 : 'text-foreground cursor-default'"
                         >
-                            <Avatar
-                                :label="user?.name?.charAt(0).toUpperCase()"
-                                class="mr-2 border border-border"
-                                shape="circle"
-                            />
+                            <Avatar size="sm" shape="circle" class="mr-2 border border-border">
+                                <AvatarFallback>{{ user?.name?.charAt(0).toUpperCase() }}</AvatarFallback>
+                            </Avatar>
                             <div class="flex flex-col text-left flex-1 min-w-0">
                                 <span class="font-bold truncate">{{ user?.name }}</span>
                                 <span class="text-sm truncate">{{ user?.email }}</span>
@@ -75,7 +71,7 @@
 
 <script setup>
 import { IconArrowUpRight } from '@tabler/icons-vue';
-import { Avatar } from '@/components/ui';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     DropdownMenu,
     DropdownMenuContent,

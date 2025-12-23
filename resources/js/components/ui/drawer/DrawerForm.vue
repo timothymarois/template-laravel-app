@@ -2,14 +2,12 @@
     <Sheet v-model:open="isOpen">
         <SheetContent :side="position" class="flex flex-col !max-w-none p-0 overflow-hidden" :style="widthStyle">
             <!-- Header -->
-            <div class="px-6 py-4" :class="tabs?.length ? '' : 'border-b border-border'">
-                <SheetHeader>
-                    <SheetTitle>{{ title }}</SheetTitle>
-                </SheetHeader>
+            <div class="px-6 pt-4" :class="tabs?.length ? 'pb-2' : 'pb-4 border-b border-border'">
+                <SheetTitle>{{ title }}</SheetTitle>
             </div>
 
             <!-- Tabs -->
-            <div v-if="tabs?.length" class="flex gap-2 px-6 border-b border-border -mt-2">
+            <div v-if="tabs?.length" class="flex gap-2 px-6 border-b border-border">
                 <button
                     v-for="(tab, index) in tabs"
                     :key="index"
@@ -17,7 +15,7 @@
                     :class="[
                         'px-4 py-3 text-sm font-medium transition-colors -mb-px',
                         activeTab === index
-                            ? 'border-b-2 border-primary text-foreground'
+                            ? 'border-b-4 border-primary text-foreground'
                             : 'text-muted-foreground hover:text-foreground',
                         tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                     ]"
@@ -70,8 +68,6 @@ import { ref, computed } from 'vue';
 import {
     Sheet,
     SheetContent,
-    SheetFooter,
-    SheetHeader,
     SheetTitle,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';

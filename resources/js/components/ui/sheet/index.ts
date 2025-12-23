@@ -11,7 +11,7 @@ export { default as SheetTitle } from "./SheetTitle.vue"
 export { default as SheetTrigger } from "./SheetTrigger.vue"
 
 export const sheetVariants = cva(
-    "fixed z-50 gap-4 bg-background p-6",
+    "fixed z-50 bg-background p-6",
     {
         variants: {
             side: {

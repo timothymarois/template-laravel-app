@@ -81,14 +81,14 @@
                                     <DialogTitle>Add New Item</DialogTitle>
                                 </DialogHeader>
                                 <div class="p-6 space-y-4">
-                                    <LabelField label="Name" name="name" required>
-                                        <Input placeholder="Enter name" fluid />
+                                    <LabelField label="Name" name="itemName" required>
+                                        <Input id="itemName" placeholder="Enter name" fluid />
                                     </LabelField>
-                                    <LabelField label="Description" name="description">
-                                        <Input placeholder="Enter description" fluid />
+                                    <LabelField label="Description" name="itemDescription">
+                                        <Input id="itemDescription" placeholder="Enter description" fluid />
                                     </LabelField>
-                                    <LabelField label="Category" name="category">
-                                        <Select :options="categoryOptions" placeholder="Select category" fluid />
+                                    <LabelField label="Category" name="itemCategory">
+                                        <Select id="itemCategory" :options="categoryOptions" placeholder="Select category" fluid />
                                     </LabelField>
                                 </div>
                                 <DialogFooter class="p-6 border-t">
@@ -111,13 +111,13 @@
                                 </DialogHeader>
                                 <div class="p-6 space-y-4">
                                     <LabelField label="Project Name" name="projectName" required :error="formErrors.projectName">
-                                        <Input v-model="projectForm.name" placeholder="Enter project name" fluid :invalid="!!formErrors.projectName" />
+                                        <Input id="projectName" v-model="projectForm.name" placeholder="Enter project name" fluid :invalid="!!formErrors.projectName" />
                                     </LabelField>
                                     <LabelField label="Description" name="projectDesc">
-                                        <Input v-model="projectForm.description" placeholder="Enter description" fluid />
+                                        <Input id="projectDesc" v-model="projectForm.description" placeholder="Enter description" fluid />
                                     </LabelField>
                                     <LabelField label="Team Lead" name="teamLead" required :error="formErrors.teamLead">
-                                        <Select v-model="projectForm.teamLead" :options="teamLeadOptions" placeholder="Select team lead" fluid :invalid="!!formErrors.teamLead" />
+                                        <Select id="teamLead" v-model="projectForm.teamLead" :options="teamLeadOptions" placeholder="Select team lead" fluid :invalid="!!formErrors.teamLead" />
                                     </LabelField>
                                 </div>
                                 <DialogFooter class="p-6 border-t sm:flex-col sm:items-stretch gap-4">
@@ -462,21 +462,21 @@
                                         <h4 class="font-medium text-sm">Account Details</h4>
                                         <div class="space-y-4">
                                             <LabelField label="Full Name" name="userName" required>
-                                                <Input placeholder="John Doe" fluid>
+                                                <Input id="userName" placeholder="John Doe" fluid>
                                                     <template #icon><User class="size-4" /></template>
                                                 </Input>
                                             </LabelField>
                                             <LabelField label="Email Address" name="userEmail" required>
-                                                <Input type="email" placeholder="john@example.com" fluid>
+                                                <Input id="userEmail" type="email" placeholder="john@example.com" fluid>
                                                     <template #icon><Mail class="size-4" /></template>
                                                 </Input>
                                             </LabelField>
                                             <div class="grid grid-cols-2 gap-4">
                                                 <LabelField label="Role" name="userRole" required>
-                                                    <Select :options="roleOptions" placeholder="Select role" fluid />
+                                                    <Select id="userRole" :options="roleOptions" placeholder="Select role" fluid />
                                                 </LabelField>
                                                 <LabelField label="Department" name="userDept">
-                                                    <Select :options="deptOptions" placeholder="Select" fluid />
+                                                    <Select id="userDept" :options="deptOptions" placeholder="Select" fluid />
                                                 </LabelField>
                                             </div>
                                         </div>
@@ -539,11 +539,11 @@
                                         <h4 class="text-sm font-medium mb-1">Appearance</h4>
                                         <p class="text-xs text-muted-foreground mb-4">Customize how the app looks and feels.</p>
                                         <div class="space-y-4">
-                                            <LabelField label="Theme" name="theme">
-                                                <Select v-model="settingsForm.theme" :options="themeOptions" fluid />
+                                            <LabelField label="Theme" name="settingsTheme">
+                                                <Select id="settingsTheme" v-model="settingsForm.theme" :options="themeOptions" fluid />
                                             </LabelField>
-                                            <LabelField label="Language" name="language">
-                                                <Select v-model="settingsForm.language" :options="langOptions" fluid />
+                                            <LabelField label="Language" name="settingsLanguage">
+                                                <Select id="settingsLanguage" v-model="settingsForm.language" :options="langOptions" fluid />
                                             </LabelField>
                                         </div>
                                     </div>
@@ -599,24 +599,24 @@
                             <div class="space-y-4">
                                 <div class="grid grid-cols-2 gap-4">
                                     <LabelField label="First Name" name="firstName" required>
-                                        <Input v-model="employeeForm.firstName" placeholder="John" fluid />
+                                        <Input id="firstName" v-model="employeeForm.firstName" placeholder="John" fluid />
                                     </LabelField>
                                     <LabelField label="Last Name" name="lastName" required>
-                                        <Input v-model="employeeForm.lastName" placeholder="Doe" fluid />
+                                        <Input id="lastName" v-model="employeeForm.lastName" placeholder="Doe" fluid />
                                     </LabelField>
                                 </div>
                                 <LabelField label="Email" name="email" required>
-                                    <Input v-model="employeeForm.email" type="email" placeholder="john.doe@company.com" fluid>
+                                    <Input id="email" v-model="employeeForm.email" type="email" placeholder="john.doe@company.com" fluid>
                                         <template #icon><Mail class="size-4" /></template>
                                     </Input>
                                 </LabelField>
                                 <LabelField label="Phone" name="phone">
-                                    <Input v-model="employeeForm.phone" placeholder="+1 (555) 123-4567" fluid>
+                                    <Input id="phone" v-model="employeeForm.phone" placeholder="+1 (555) 123-4567" fluid>
                                         <template #icon><Phone class="size-4" /></template>
                                     </Input>
                                 </LabelField>
                                 <LabelField label="Date of Birth" name="dob">
-                                    <Input v-model="employeeForm.dob" type="date" fluid />
+                                    <Input id="dob" v-model="employeeForm.dob" type="date" fluid />
                                 </LabelField>
                             </div>
 
@@ -624,24 +624,24 @@
                             <template #tab-1>
                                 <div class="space-y-4">
                                     <LabelField label="Department" name="department" required>
-                                        <Select v-model="employeeForm.department" :options="deptOptions" placeholder="Select department" fluid />
+                                        <Select id="department" v-model="employeeForm.department" :options="deptOptions" placeholder="Select department" fluid />
                                     </LabelField>
                                     <LabelField label="Position" name="position" required>
-                                        <Input v-model="employeeForm.position" placeholder="Software Engineer" fluid />
+                                        <Input id="position" v-model="employeeForm.position" placeholder="Software Engineer" fluid />
                                     </LabelField>
                                     <LabelField label="Manager" name="manager">
-                                        <Select v-model="employeeForm.manager" :options="managerOptions" placeholder="Select manager" fluid />
+                                        <Select id="manager" v-model="employeeForm.manager" :options="managerOptions" placeholder="Select manager" fluid />
                                     </LabelField>
                                     <div class="grid grid-cols-2 gap-4">
                                         <LabelField label="Start Date" name="startDate" required>
-                                            <Input v-model="employeeForm.startDate" type="date" fluid />
+                                            <Input id="startDate" v-model="employeeForm.startDate" type="date" fluid />
                                         </LabelField>
                                         <LabelField label="Employment Type" name="type">
-                                            <Select v-model="employeeForm.type" :options="employmentTypeOptions" placeholder="Select type" fluid />
+                                            <Select id="type" v-model="employeeForm.type" :options="employmentTypeOptions" placeholder="Select type" fluid />
                                         </LabelField>
                                     </div>
                                     <LabelField label="Notes" name="notes">
-                                        <Input v-model="employeeForm.notes" placeholder="Additional notes..." fluid />
+                                        <Input id="notes" v-model="employeeForm.notes" placeholder="Additional notes..." fluid />
                                     </LabelField>
                                 </div>
                             </template>
@@ -661,15 +661,15 @@
                             <!-- Tab 1: Personal Info -->
                             <div class="space-y-4">
                                 <div class="grid grid-cols-2 gap-4">
-                                    <LabelField label="First Name" name="firstName" required :error="drawerFormErrors.firstName">
-                                        <Input v-model="employeeFormErrors.firstName" placeholder="John" fluid :invalid="!!drawerFormErrors.firstName" />
+                                    <LabelField label="First Name" name="errFirstName" required :error="drawerFormErrors.firstName">
+                                        <Input id="errFirstName" v-model="employeeFormErrors.firstName" placeholder="John" fluid :invalid="!!drawerFormErrors.firstName" />
                                     </LabelField>
-                                    <LabelField label="Last Name" name="lastName" required :error="drawerFormErrors.lastName">
-                                        <Input v-model="employeeFormErrors.lastName" placeholder="Doe" fluid :invalid="!!drawerFormErrors.lastName" />
+                                    <LabelField label="Last Name" name="errLastName" required :error="drawerFormErrors.lastName">
+                                        <Input id="errLastName" v-model="employeeFormErrors.lastName" placeholder="Doe" fluid :invalid="!!drawerFormErrors.lastName" />
                                     </LabelField>
                                 </div>
-                                <LabelField label="Email" name="email" required :error="drawerFormErrors.email">
-                                    <Input v-model="employeeFormErrors.email" type="email" placeholder="john.doe@company.com" fluid :invalid="!!drawerFormErrors.email">
+                                <LabelField label="Email" name="errEmail" required :error="drawerFormErrors.email">
+                                    <Input id="errEmail" v-model="employeeFormErrors.email" type="email" placeholder="john.doe@company.com" fluid :invalid="!!drawerFormErrors.email">
                                         <template #icon><Mail class="size-4" /></template>
                                     </Input>
                                 </LabelField>
@@ -678,11 +678,11 @@
                             <!-- Tab 2: Employment -->
                             <template #tab-1>
                                 <div class="space-y-4">
-                                    <LabelField label="Department" name="department" required :error="drawerFormErrors.department">
-                                        <Select v-model="employeeFormErrors.department" :options="deptOptions" placeholder="Select department" fluid :invalid="!!drawerFormErrors.department" />
+                                    <LabelField label="Department" name="errDepartment" required :error="drawerFormErrors.department">
+                                        <Select id="errDepartment" v-model="employeeFormErrors.department" :options="deptOptions" placeholder="Select department" fluid :invalid="!!drawerFormErrors.department" />
                                     </LabelField>
-                                    <LabelField label="Position" name="position" required :error="drawerFormErrors.position">
-                                        <Input v-model="employeeFormErrors.position" placeholder="Software Engineer" fluid :invalid="!!drawerFormErrors.position" />
+                                    <LabelField label="Position" name="errPosition" required :error="drawerFormErrors.position">
+                                        <Input id="errPosition" v-model="employeeFormErrors.position" placeholder="Software Engineer" fluid :invalid="!!drawerFormErrors.position" />
                                     </LabelField>
                                 </div>
                             </template>
