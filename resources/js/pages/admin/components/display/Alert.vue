@@ -168,8 +168,8 @@
                                     A new version is available with bug fixes and improvements.
                                 </p>
                                 <div class="mt-3 flex gap-2">
-                                    <Button size="sm">Update Now</Button>
-                                    <Button size="sm" variant="outline">Learn More</Button>
+                                    <Button>Update Now</Button>
+                                    <Button variant="outline">Learn More</Button>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                                     Please verify your email address to access all features.
                                 </p>
                                 <div class="mt-3">
-                                    <Button size="sm" variant="outline">Resend verification email</Button>
+                                    <Button variant="outline">Resend verification email</Button>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +206,7 @@
                                     A new software update is available.
                                 </p>
                             </div>
-                            <Button size="sm">Update</Button>
+                            <Button>Update</Button>
                         </div>
                     </div>
                     <div class="rounded-md bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4">
@@ -217,7 +217,7 @@
                                     Your profile has been updated successfully.
                                 </p>
                             </div>
-                            <Button size="sm" variant="outline">View Profile</Button>
+                            <Button variant="outline">View Profile</Button>
                         </div>
                     </div>
                     <div class="rounded-md bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4">
@@ -228,7 +228,7 @@
                                     Your subscription expires in 3 days.
                                 </p>
                             </div>
-                            <Button size="sm">Renew Now</Button>
+                            <Button>Renew Now</Button>
                         </div>
                     </div>
                     <div class="rounded-md bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-4">
@@ -239,7 +239,7 @@
                                     Payment failed. Please update your billing info.
                                 </p>
                             </div>
-                            <Button size="sm" variant="destructive">Fix Payment</Button>
+                            <Button variant="destructive">Fix Payment</Button>
                         </div>
                     </div>
                 </CardContent>
@@ -304,7 +304,7 @@
                             </button>
                         </div>
                     </div>
-                    <Button v-if="!showInfoAlert || !showSuccessAlert || !showWarningAlert || !showErrorAlert" variant="outline" size="sm" @click="resetAlerts">
+                    <Button v-if="!showInfoAlert || !showSuccessAlert || !showWarningAlert || !showErrorAlert" variant="outline" @click="resetAlerts">
                         Reset Alerts
                     </Button>
                 </CardContent>
@@ -346,7 +346,7 @@
                                     Your session will expire in 10 minutes.
                                 </p>
                             </div>
-                            <Button size="sm" variant="outline">Extend Session</Button>
+                            <Button variant="outline">Extend Session</Button>
                         </div>
                     </div>
                     <div class="rounded-md border p-4">

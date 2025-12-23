@@ -27,8 +27,8 @@
                         <p class="text-sm text-muted-foreground">Content with footer actions below.</p>
                     </CardContent>
                     <CardFooter class="border-t pt-4 justify-end gap-2">
-                        <Button variant="outline" size="sm">Cancel</Button>
-                        <Button size="sm">Save</Button>
+                        <Button variant="outline">Cancel</Button>
+                        <Button>Save</Button>
                     </CardFooter>
                 </Card>
 

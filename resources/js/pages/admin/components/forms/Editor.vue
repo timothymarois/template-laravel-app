@@ -211,8 +211,8 @@
                                 />
                             </div>
                             <div class="flex justify-end gap-2">
-                                <Button variant="outline" size="sm">Save Draft</Button>
-                                <Button size="sm">Publish</Button>
+                                <Button variant="outline">Save Draft</Button>
+                                <Button>Publish</Button>
                             </div>
                         </div>
 
@@ -228,7 +228,7 @@
                                 />
                             </div>
                             <div class="flex justify-end">
-                                <Button size="sm">Post Comment</Button>
+                                <Button>Post Comment</Button>
                             </div>
                         </div>
 
@@ -245,8 +245,8 @@
                                 />
                             </div>
                             <div class="flex justify-end gap-2">
-                                <Button variant="outline" size="sm">Discard</Button>
-                                <Button size="sm">Send</Button>
+                                <Button variant="outline">Discard</Button>
+                                <Button>Send</Button>
                             </div>
                         </div>
 
@@ -263,7 +263,7 @@
                             </div>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs text-muted-foreground">Auto-saved</span>
-                                <Button variant="ghost" size="sm">Clear</Button>
+                                <Button variant="ghost">Clear</Button>
                             </div>
                         </div>
                     </div>

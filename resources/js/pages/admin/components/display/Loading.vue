@@ -188,8 +188,8 @@
                         </template>
                     </Progress>
                     <div class="flex gap-2">
-                        <Button size="sm" variant="outline" @click="simulateProgress">Simulate Progress</Button>
-                        <Button size="sm" variant="outline" @click="resetProgress">Reset</Button>
+                        <Button variant="outline" @click="simulateProgress">Simulate Progress</Button>
+                        <Button variant="outline" @click="resetProgress">Reset</Button>
                     </div>
                 </CardContent>
             </Card>
@@ -286,8 +286,8 @@
                             </div>
                             <p class="text-sm text-muted-foreground">This is the description of the product that would appear once the content has loaded.</p>
                             <div class="flex gap-2">
-                                <Button size="sm">View</Button>
-                                <Button size="sm" variant="outline">Edit</Button>
+                                <Button>View</Button>
+                                <Button variant="outline">Edit</Button>
                             </div>
                         </div>
                     </CardContent>

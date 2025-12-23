@@ -120,10 +120,10 @@
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="flex gap-2 flex-wrap">
-                        <Button size="sm" variant="outline" @click="openItem = 'controlled-1'">Open Item 1</Button>
-                        <Button size="sm" variant="outline" @click="openItem = 'controlled-2'">Open Item 2</Button>
-                        <Button size="sm" variant="outline" @click="openItem = 'controlled-3'">Open Item 3</Button>
-                        <Button size="sm" variant="outline" @click="openItem = ''">Close All</Button>
+                        <Button variant="outline" @click="openItem = 'controlled-1'">Open Item 1</Button>
+                        <Button variant="outline" @click="openItem = 'controlled-2'">Open Item 2</Button>
+                        <Button variant="outline" @click="openItem = 'controlled-3'">Open Item 3</Button>
+                        <Button variant="outline" @click="openItem = ''">Close All</Button>
                     </div>
                     <p class="text-sm text-muted-foreground">
                         Currently open: <code class="bg-muted px-1 py-0.5 rounded">{{ openItem || 'none' }}</code>
@@ -232,7 +232,7 @@
                                         <h4 class="font-medium">John Doe</h4>
                                         <p class="text-sm text-muted-foreground">john@example.com</p>
                                     </div>
-                                    <Button size="sm" variant="outline" class="ml-auto">Edit</Button>
+                                    <Button variant="outline" class="ml-auto">Edit</Button>
                                 </div>
                             </AccordionContent>
                         </AccordionItem>
@@ -267,7 +267,7 @@
                                         <label class="text-sm font-medium">Name</label>
                                         <Input type="text" placeholder="Enter your name" />
                                     </div>
-                                    <Button size="sm">Submit</Button>
+                                    <Button>Submit</Button>
                                 </div>
                             </AccordionContent>
                         </AccordionItem>

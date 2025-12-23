@@ -33,10 +33,10 @@
                             />
                         </div>
                         <div class="flex items-center gap-2 mt-3">
-                            <Button variant="outline" size="sm" @click="selectedCount = Math.min(selectedCount + 1, 10)">
+                            <Button variant="outline" @click="selectedCount = Math.min(selectedCount + 1, 10)">
                                 Add Selection
                             </Button>
-                            <Button variant="outline" size="sm" @click="selectedCount = Math.max(selectedCount - 1, 1)">
+                            <Button variant="outline" @click="selectedCount = Math.max(selectedCount - 1, 1)">
                                 Remove Selection
                             </Button>
                             <span class="text-sm text-muted-foreground">Selected: {{ selectedCount }}</span>

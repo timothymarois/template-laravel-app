@@ -140,11 +140,11 @@
                         <Badge variant="default" class="h-5 min-w-5 justify-center p-0 text-[10px]">12</Badge>
                     </div>
                     <div class="flex items-center gap-3">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline">
                             Inbox
                             <Badge variant="secondary" class="ml-2 h-5 min-w-5 justify-center p-0 text-[10px]">99+</Badge>
                         </Button>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline">
                             Updates
                             <Badge class="ml-2 h-5 min-w-5 justify-center p-0 text-[10px] bg-blue-500 text-white border-transparent">5</Badge>
                         </Button>

@@ -155,7 +155,7 @@
                                         @change="(e) => inputGroupFile2 = (e.target as HTMLInputElement).files?.[0] || null"
                                     />
                                 </label>
-                                <Button class="rounded-l-none" size="default" :disabled="!inputGroupFile2">
+                                <Button class="rounded-l-none" :disabled="!inputGroupFile2">
                                     <Upload class="size-4 mr-2" />
                                     Upload
                                 </Button>
@@ -331,9 +331,14 @@
                                 <Input v-model="form.email" type="email" placeholder="Enter email..." fluid />
                             </LabelField>
                         </div>
-                        <LabelField label="Avatar" name="avatar">
-                            <FileInput v-model="form.avatar" accept="image/*" fluid />
-                        </LabelField>
+                        <div class="grid grid-cols-2 gap-4">
+                            <LabelField label="Category" name="category">
+                                <Select v-model="form.category" :options="categoryOptions" placeholder="Select category..." fluid />
+                            </LabelField>
+                            <LabelField label="Avatar" name="avatar">
+                                <FileInput v-model="form.avatar" accept="image/*" fluid />
+                            </LabelField>
+                        </div>
                         <LabelField label="Documents" name="documents">
                             <Dropzone
                                 v-model="form.documents"
@@ -397,7 +402,7 @@
                                 hint="Drop documents here"
                             />
                             <div class="flex justify-end">
-                                <Button size="sm" :disabled="!documentFiles || (documentFiles as File[]).length === 0">
+                                <Button :disabled="!documentFiles || (documentFiles as File[]).length === 0">
                                     Upload {{ documentFiles ? (documentFiles as File[]).length : 0 }} file(s)
                                 </Button>
                             </div>
@@ -414,7 +419,7 @@
                             />
                             <div class="flex items-center justify-between">
                                 <a href="#" class="text-xs text-primary hover:underline">Download template</a>
-                                <Button size="sm" :disabled="!importFile">Import Data</Button>
+                                <Button :disabled="!importFile">Import Data</Button>
                             </div>
                         </div>
 
@@ -500,7 +505,7 @@ const submit = () => {
 import { ref, computed } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input, FileInput, Dropzone, LabelField } from '@/components/ui/form';
+import { Input, FileInput, Dropzone, LabelField, Select } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { User, Upload, X } from 'lucide-vue-next';
@@ -555,9 +560,17 @@ const idDoc = ref<File | null>(null);
 const idDocError = 'Please upload a valid ID document';
 
 // Inertia form example
+const categoryOptions = [
+    { label: 'Personal', value: 'personal' },
+    { label: 'Business', value: 'business' },
+    { label: 'Education', value: 'education' },
+    { label: 'Other', value: 'other' },
+];
+
 const form = ref({
     name: '',
     email: '',
+    category: null as string | null,
     avatar: null as File | null,
     documents: null as File[] | null,
 });
@@ -567,6 +580,7 @@ const formPreview = computed(() => {
     return {
         name: form.value.name,
         email: form.value.email,
+        category: form.value.category,
         avatar: form.value.avatar?.name || null,
         documents: form.value.documents?.map(f => f.name) || [],
     };
@@ -586,6 +600,7 @@ const resetForm = () => {
     form.value = {
         name: '',
         email: '',
+        category: null,
         avatar: null,
         documents: null,
     };

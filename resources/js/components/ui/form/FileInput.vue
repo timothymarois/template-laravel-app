@@ -13,7 +13,7 @@
             type="button"
             :disabled="disabled"
             :class="[
-                'flex items-center gap-2 rounded-md border bg-background px-3 py-2 text-sm transition-all cursor-pointer',
+                'flex items-center gap-2 h-9 rounded-md border bg-background px-3 text-sm transition-all cursor-pointer',
                 'disabled:cursor-not-allowed disabled:opacity-50',
                 invalid
                     ? 'border-destructive hover:border-destructive focus-visible:border-destructive'

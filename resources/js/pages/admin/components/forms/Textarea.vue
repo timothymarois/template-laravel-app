@@ -193,7 +193,7 @@
                             <h4 class="font-medium text-sm">Comment Form</h4>
                             <Textarea v-model="commentValue" placeholder="Write a comment..." :rows="3" fluid />
                             <div class="flex justify-end">
-                                <Button size="sm">Post Comment</Button>
+                                <Button>Post Comment</Button>
                             </div>
                         </div>
 
@@ -203,8 +203,8 @@
                             <Input placeholder="Subject" fluid />
                             <Textarea v-model="messageValue" placeholder="Your message..." :rows="4" fluid />
                             <div class="flex justify-end gap-2">
-                                <Button variant="outline" size="sm">Cancel</Button>
-                                <Button size="sm">Send Message</Button>
+                                <Button variant="outline">Cancel</Button>
+                                <Button>Send Message</Button>
                             </div>
                         </div>
 

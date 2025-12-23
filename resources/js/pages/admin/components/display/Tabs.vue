@@ -27,8 +27,8 @@
                                     change your email address, or configure your account security options.
                                 </p>
                                 <div class="flex gap-2">
-                                    <Button size="sm">Save Changes</Button>
-                                    <Button size="sm" variant="outline">Cancel</Button>
+                                    <Button>Save Changes</Button>
+                                    <Button variant="outline">Cancel</Button>
                                 </div>
                             </div>
                         </TabsContent>
@@ -39,7 +39,7 @@
                                     Update your password to keep your account secure. We recommend using a strong,
                                     unique password that you don't use elsewhere.
                                 </p>
-                                <Button size="sm">Change Password</Button>
+                                <Button>Change Password</Button>
                             </div>
                         </TabsContent>
                         <TabsContent value="notifications">
@@ -49,7 +49,7 @@
                                     Configure how and when you receive notifications. Choose between email,
                                     push notifications, or in-app alerts.
                                 </p>
-                                <Button size="sm">Update Preferences</Button>
+                                <Button>Update Preferences</Button>
                             </div>
                         </TabsContent>
                     </Tabs>
@@ -191,9 +191,9 @@
                 </CardHeader>
                 <CardContent class="space-y-4">
                     <div class="flex gap-2">
-                        <Button size="sm" variant="outline" @click="activeTab = 'tab1'">Go to Tab 1</Button>
-                        <Button size="sm" variant="outline" @click="activeTab = 'tab2'">Go to Tab 2</Button>
-                        <Button size="sm" variant="outline" @click="activeTab = 'tab3'">Go to Tab 3</Button>
+                        <Button variant="outline" @click="activeTab = 'tab1'">Go to Tab 1</Button>
+                        <Button variant="outline" @click="activeTab = 'tab2'">Go to Tab 2</Button>
+                        <Button variant="outline" @click="activeTab = 'tab3'">Go to Tab 3</Button>
                     </div>
                     <p class="text-sm text-muted-foreground">Current tab: <code class="bg-muted px-1 py-0.5 rounded">{{ activeTab }}</code></p>
                     <Tabs v-model="activeTab" variant="pills">
