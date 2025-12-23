@@ -90,6 +90,46 @@
                 </CardContent>
             </Card>
 
+            <!-- Input with Icon -->
+            <Card>
+                <CardHeader>
+                    <CardTitle>Input with Icon</CardTitle>
+                    <CardDescription>Input fields with icons inside for visual context</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Search</div>
+                            <div class="relative w-full">
+                                <Search class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                                <InputBase v-model="iconSearchValue" placeholder="Search..." class="pl-9 w-full" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Email</div>
+                            <div class="relative w-full">
+                                <Mail class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                                <InputBase v-model="iconEmailValue" type="email" placeholder="email@example.com" class="pl-9 w-full" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">User</div>
+                            <div class="relative w-full">
+                                <User class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                                <InputBase v-model="iconUserValue" placeholder="Username" class="pl-9 w-full" />
+                            </div>
+                        </div>
+                        <div class="opacity-50">
+                            <div class="text-xs text-muted-foreground mb-1">Disabled</div>
+                            <div class="relative w-full">
+                                <Lock class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                                <InputBase placeholder="Locked" disabled class="pl-9 w-full" />
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
             <!-- Input Groups -->
             <Card>
                 <CardHeader>
@@ -140,8 +180,9 @@ import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input, Select } from '@/components/ui/form';
+import { InputBase } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-vue-next';
+import { Search, Mail, User, Lock } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sideNavItems, formsTabs } = useShowcaseNav();
@@ -158,6 +199,11 @@ const passwordValue = ref('secret123');
 const invalidValue = ref('Invalid data');
 const invalidClearable = ref('Bad input');
 const invalidDisabled = ref('Error');
+
+// Input with icon
+const iconSearchValue = ref('');
+const iconEmailValue = ref('');
+const iconUserValue = ref('johndoe');
 
 // Input groups
 const searchValue = ref('');
