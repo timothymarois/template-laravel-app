@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Dialog & Sheet"
-        pageTitle="Actions"
-        :pageNavItems="sideNavItems"
-        :pageTabs="actionsTabs"
+        pageTitle="Dialog"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Dialog Examples -->
@@ -776,7 +776,7 @@ import { DrawerForm } from '@/components/ui/drawer';
 import { Check, Info, AlertTriangle, CheckCircle, Settings, X, Mail, Phone, User } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, actionsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Dialog states
 const showBasicDialog = ref(false);

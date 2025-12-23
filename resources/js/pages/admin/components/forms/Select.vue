@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Select"
-        pageTitle="Forms"
-        :pageNavItems="sideNavItems"
-        :pageTabs="formsTabs"
+        pageTitle="Select"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Basic Select -->
@@ -341,7 +341,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Select } from '@/components/ui/form';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, formsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Basic Select
 const basicEmpty = ref('');

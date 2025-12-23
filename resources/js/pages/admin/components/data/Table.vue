@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Table"
-        pageTitle="Data"
-        :pageNavItems="sideNavItems"
-        :pageTabs="dataTabs"
+        pageTitle="Table"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Basic Table in Card -->
@@ -216,7 +216,7 @@ import { CustomizeColumns } from '@/components/ui/data-table';
 import { Filter, Plus } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, dataTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 const activeTab = ref('all');
 const selectedUsers = ref<number[]>([]);

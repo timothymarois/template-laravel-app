@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Tooltip & Popover"
-        pageTitle="Display"
-        :pageNavItems="sideNavItems"
-        :pageTabs="displayTabs"
+        pageTitle="Tooltip"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Tooltip Positions -->
@@ -425,5 +425,5 @@ import {
 import { Calendar, HelpCircle, Settings, Share, User } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, displayTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

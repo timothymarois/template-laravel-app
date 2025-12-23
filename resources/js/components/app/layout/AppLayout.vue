@@ -5,6 +5,8 @@
         :pageTitle="pageTitle"
         :pageTabs="pageTabs"
         :pageNavItems="pageNavItems"
+        :pageSidebarItems="pageSidebarItems"
+        :pageSidebarTitle="pageSidebarTitle"
         :pageUrl="$page.url"
         :sideBarItems="sideBarItems"
         :topBarItems="topBarItems"
@@ -94,6 +96,14 @@ const props = defineProps({
     pageNavItems: {
         type: Array,
         default: () => [],
+    },
+    pageSidebarItems: {
+        type: Array,
+        default: () => [],
+    },
+    pageSidebarTitle: {
+        type: String,
+        default: '',
     },
     containerClass: {
         type: String,

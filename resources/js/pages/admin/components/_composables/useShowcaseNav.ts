@@ -1,5 +1,65 @@
+import {
+    Home,
+    FormInput,
+    MousePointerClick,
+    Eye,
+    Database,
+} from 'lucide-vue-next';
+
 export const useShowcaseNav = () => {
-    // Side navigation - main categories
+    // Hierarchical sidebar navigation with collapsible sections
+    const sidebarItems = [
+        {
+            label: 'Overview',
+            href: '/admin/components',
+            icon: Home,
+        },
+        {
+            label: 'Forms',
+            icon: FormInput,
+            children: [
+                { label: 'Overview', href: '/admin/components/forms' },
+                { label: 'Input', href: '/admin/components/forms/input' },
+                { label: 'Select', href: '/admin/components/forms/select' },
+                { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
+                { label: 'Calendar', href: '/admin/components/forms/calendar' },
+                { label: 'Fields', href: '/admin/components/forms/fields' },
+            ],
+        },
+        {
+            label: 'Actions',
+            icon: MousePointerClick,
+            children: [
+                { label: 'Overview', href: '/admin/components/actions' },
+                { label: 'Button', href: '/admin/components/actions/button' },
+                { label: 'Menu', href: '/admin/components/actions/menu' },
+                { label: 'Dialog', href: '/admin/components/actions/dialog' },
+            ],
+        },
+        {
+            label: 'Display',
+            icon: Eye,
+            children: [
+                { label: 'Overview', href: '/admin/components/display' },
+                { label: 'Alert', href: '/admin/components/display/alert' },
+                { label: 'Card', href: '/admin/components/display/card' },
+                { label: 'Badge', href: '/admin/components/display/badge' },
+                { label: 'Tooltip', href: '/admin/components/display/tooltip' },
+            ],
+        },
+        {
+            label: 'Data',
+            icon: Database,
+            children: [
+                { label: 'Overview', href: '/admin/components/data' },
+                { label: 'Table', href: '/admin/components/data/table' },
+                { label: 'Actions', href: '/admin/components/data/actions' },
+                { label: 'Pagination', href: '/admin/components/data/pagination' },
+            ],
+        },
+    ];
+
+    // Legacy flat navigation (kept for backwards compatibility)
     const sideNavItems = [
         { label: 'Overview', href: '/admin/components' },
         { label: 'Forms', href: '/admin/components/forms', parent: '/admin/components/forms' },
@@ -41,6 +101,7 @@ export const useShowcaseNav = () => {
     ];
 
     return {
+        sidebarItems,
         sideNavItems,
         formsTabs,
         actionsTabs,

@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Checkbox"
-        pageTitle="Forms"
-        :pageNavItems="sideNavItems"
-        :pageTabs="formsTabs"
+        pageTitle="Checkbox"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="grid grid-cols-2 gap-4">
             <!-- Checkbox Card -->
@@ -239,7 +239,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, formsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Checkbox states
 const checkbox1 = ref(false);

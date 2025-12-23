@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Card"
-        pageTitle="Display"
-        :pageNavItems="sideNavItems"
-        :pageTabs="displayTabs"
+        pageTitle="Card"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Basic Cards -->
@@ -288,5 +288,5 @@ import {
 import { Ellipsis } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, displayTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

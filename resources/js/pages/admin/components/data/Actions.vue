@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Table Actions"
-        pageTitle="Data"
-        :pageNavItems="sideNavItems"
-        :pageTabs="dataTabs"
+        pageTitle="Actions"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <Card>
@@ -56,7 +56,7 @@ import { Button } from '@/components/ui/button';
 import { TableActions } from '@/components/ui/data-table';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, dataTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 const selectedCount = ref(3);
 

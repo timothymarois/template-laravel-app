@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Input"
-        pageTitle="Forms"
-        :pageNavItems="sideNavItems"
-        :pageTabs="formsTabs"
+        pageTitle="Input"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Input -->
@@ -180,7 +180,7 @@ import { Button } from '@/components/ui/button';
 import { Search, Mail, User, Lock } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, formsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Input states
 const inputValue = ref('Hello world');

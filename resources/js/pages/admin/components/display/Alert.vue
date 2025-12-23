@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Alerts"
-        pageTitle="Display"
-        :pageNavItems="sideNavItems"
-        :pageTabs="displayTabs"
+        pageTitle="Alert"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Info Alerts -->
@@ -410,7 +410,7 @@ import { Errors } from '@/components/ui/form';
 import { Info, CheckCircle, AlertTriangle, XCircle, X } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, displayTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Sample errors for the Errors component
 const sampleErrors = [

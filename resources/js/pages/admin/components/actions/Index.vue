@@ -2,8 +2,8 @@
     <LayoutApp
         title="Components - Actions"
         pageTitle="Actions"
-        :pageNavItems="sideNavItems"
-        :pageTabs="actionsTabs"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="grid grid-cols-2 gap-4">
                 <Link :href="$route('admin.components.actions.button')">
@@ -58,5 +58,5 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { MousePointerClick, Menu, PanelRight } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, actionsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

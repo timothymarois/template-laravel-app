@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp title="Components" pageTitle="Components" :pageNavItems="sideNavItems">
+    <LayoutApp title="Components" pageTitle="Components" :pageSidebarItems="sidebarItems" pageSidebarTitle="Components">
         <div class="grid grid-cols-2 gap-4">
                 <Link :href="$route('admin.components.forms')">
                     <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
@@ -83,5 +83,5 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { TextCursorInput, MousePointerClick, LayoutGrid, Table2 } from 'lucide-vue-next';
 import { useShowcaseNav } from './_composables/useShowcaseNav';
 
-const { sideNavItems } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

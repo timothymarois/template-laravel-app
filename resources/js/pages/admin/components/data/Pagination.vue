@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Pagination"
-        pageTitle="Data"
-        :pageNavItems="sideNavItems"
-        :pageTabs="dataTabs"
+        pageTitle="Pagination"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <Card>
@@ -56,7 +56,7 @@ import { Select } from '@/components/ui/form';
 import { Paginator } from '@/components/ui/data-table';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, dataTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 const perPage = ref('10');
 

@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Badge & Avatar"
-        pageTitle="Display"
-        :pageNavItems="sideNavItems"
-        :pageTabs="displayTabs"
+        pageTitle="Badge"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Badge Variants -->
@@ -522,5 +522,5 @@ import {
 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, displayTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

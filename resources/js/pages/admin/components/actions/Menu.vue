@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Menu"
-        pageTitle="Actions"
-        :pageNavItems="sideNavItems"
-        :pageTabs="actionsTabs"
+        pageTitle="Menu"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <Card>
@@ -228,7 +228,7 @@ import {
 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, actionsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 const showName = ref(true);
 const showEmail = ref(true);

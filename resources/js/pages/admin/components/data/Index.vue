@@ -2,8 +2,8 @@
     <LayoutApp
         title="Components - Data"
         pageTitle="Data"
-        :pageNavItems="sideNavItems"
-        :pageTabs="dataTabs"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="grid grid-cols-2 gap-4">
                 <Link :href="$route('admin.components.data.table')">
@@ -58,5 +58,5 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { Table2, MousePointerClick, ChevronLeft } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, dataTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

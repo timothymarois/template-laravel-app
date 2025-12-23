@@ -2,8 +2,8 @@
     <LayoutApp
         title="Components - Display"
         pageTitle="Display"
-        :pageNavItems="sideNavItems"
-        :pageTabs="displayTabs"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="grid grid-cols-2 gap-4">
                 <Link :href="$route('admin.components.display.alert')">
@@ -72,5 +72,5 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { AlertCircle, LayoutGrid, Tag, MessageSquare } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, displayTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Calendar"
-        pageTitle="Forms"
-        :pageNavItems="sideNavItems"
-        :pageTabs="formsTabs"
+        pageTitle="Calendar"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Native Browser Date Inputs -->
@@ -264,7 +264,7 @@ import { DatePicker, DateInput, DateRangePicker } from '@/components/ui/date-pic
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 import { today, getLocalTimeZone, getDayOfWeek } from '@internationalized/date';
 
-const { sideNavItems, formsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Native date inputs
 const nativeDate = ref('');

@@ -2,8 +2,8 @@
     <LayoutApp
         title="Components - Forms"
         pageTitle="Forms"
-        :pageNavItems="sideNavItems"
-        :pageTabs="formsTabs"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="grid grid-cols-2 gap-4">
                 <Link :href="$route('admin.components.forms.input')">
@@ -86,5 +86,5 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { TextCursorInput, ChevronDown, CheckSquare, CalendarDays, FormInput } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, formsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 </script>

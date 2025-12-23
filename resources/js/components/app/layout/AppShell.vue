@@ -46,8 +46,15 @@
                 </template>
             </AppTopbar>
             <div class="flex flex-1 overflow-hidden">
+                <PageSidebar
+                    v-if="pageSidebarItems?.length"
+                    ref="pageSideNavRef"
+                    :items="pageSidebarItems"
+                    :title="pageSidebarTitle"
+                    :linkComponent="linkComponent"
+                />
                 <PageSideNav
-                    v-if="pageNavItems?.length"
+                    v-else-if="pageNavItems?.length"
                     ref="pageSideNavRef"
                     :items="pageNavItems"
                     :linkComponent="linkComponent"
@@ -126,6 +133,7 @@ import PageHeader from '../page/Header.vue';
 import PageFooter from '../page/Footer.vue';
 import PageContent from '../page/Content.vue';
 import PageSideNav from '../page/SideNav.vue';
+import PageSidebar from '../page/PageSidebar.vue';
 import PageSideContent from '../page/SideContent.vue';
 import NavSidebar from '../navigation/Sidebar.vue';
 import NavTopbar from '../navigation/Topbar.vue';
@@ -141,6 +149,8 @@ interface Props {
     pageTitle?: string;
     pageTabs?: any[];
     pageNavItems?: any[];
+    pageSidebarItems?: any[];
+    pageSidebarTitle?: string;
     sideBarItems?: any[];
     topBarItems?: any[];
     linkComponent?: string | object;
@@ -160,6 +170,8 @@ const props = withDefaults(defineProps<Props>(), {
     pageTitle: 'Home',
     pageTabs: () => [],
     pageNavItems: () => [],
+    pageSidebarItems: () => [],
+    pageSidebarTitle: '',
     sideBarItems: () => [],
     topBarItems: () => [],
     linkComponent: 'a',
@@ -227,7 +239,7 @@ const observeElements = () => {
     const sideContentEl = sideContentRef.value;
 
     [sideNavEl, pageSideNavEl, sideContentEl].forEach((el) => {
-        if (el) {
+        if (el instanceof Element) {
             resizeObserver!.observe(el);
         }
     });

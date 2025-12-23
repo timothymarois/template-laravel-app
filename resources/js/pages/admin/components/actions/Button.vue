@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Button"
-        pageTitle="Actions"
-        :pageNavItems="sideNavItems"
-        :pageTabs="actionsTabs"
+        pageTitle="Button"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <Card>
@@ -343,7 +343,7 @@ import {
 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, actionsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 const isLoading = ref(false);
 const simulateLoading = () => {

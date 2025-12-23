@@ -1,9 +1,9 @@
 <template>
     <LayoutApp
         title="Components - Form Fields"
-        pageTitle="Forms"
-        :pageNavItems="sideNavItems"
-        :pageTabs="formsTabs"
+        pageTitle="Fields"
+        :pageSidebarItems="sidebarItems"
+        pageSidebarTitle="Components"
     >
         <div class="space-y-4">
             <!-- Label Field Examples -->
@@ -205,7 +205,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
-const { sideNavItems, formsTabs } = useShowcaseNav();
+const { sidebarItems } = useShowcaseNav();
 
 // Slider examples
 const sliderDefault = ref([50]);
