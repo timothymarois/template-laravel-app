@@ -13,7 +13,7 @@ export const useShowcaseNav = () => {
         { title: 'Overview', href: '/admin/components/forms' },
         { title: 'Input', href: '/admin/components/forms/input' },
         { title: 'Select', href: '/admin/components/forms/select' },
-        { title: 'Checkbox & Radio', href: '/admin/components/forms/checkbox' },
+        { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
         { title: 'Fields', href: '/admin/components/forms/fields' },
     ];
 

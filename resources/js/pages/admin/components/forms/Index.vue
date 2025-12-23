@@ -41,9 +41,9 @@
                                 <div class="p-2 bg-primary/10 rounded-lg">
                                     <CheckSquare class="size-5 text-primary" />
                                 </div>
-                                <CardTitle class="text-base">Checkbox & Radio</CardTitle>
+                                <CardTitle class="text-base">Checkbox</CardTitle>
                             </div>
-                            <CardDescription>Boolean and single selection controls</CardDescription>
+                            <CardDescription>Checkbox, radio, and toggle switch controls</CardDescription>
                         </CardHeader>
                     </Card>
                 </Link>

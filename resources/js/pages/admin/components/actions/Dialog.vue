@@ -511,26 +511,26 @@
                                         <h4 class="text-sm font-medium mb-1">Notifications</h4>
                                         <p class="text-xs text-muted-foreground mb-4">Choose how you want to be notified.</p>
                                         <div class="space-y-4">
-                                            <label class="flex items-start justify-between gap-4 cursor-pointer">
+                                            <label class="flex items-center justify-between gap-4 cursor-pointer">
                                                 <div>
                                                     <div class="text-sm font-medium">Email notifications</div>
                                                     <div class="text-xs text-muted-foreground">Receive updates about your account via email.</div>
                                                 </div>
-                                                <Checkbox v-model="settingsForm.emailNotifications" class="mt-0.5" />
+                                                <Switch v-model="settingsForm.emailNotifications" />
                                             </label>
-                                            <label class="flex items-start justify-between gap-4 cursor-pointer">
+                                            <label class="flex items-center justify-between gap-4 cursor-pointer">
                                                 <div>
                                                     <div class="text-sm font-medium">Push notifications</div>
                                                     <div class="text-xs text-muted-foreground">Get instant alerts on your device.</div>
                                                 </div>
-                                                <Checkbox v-model="settingsForm.pushNotifications" class="mt-0.5" />
+                                                <Switch v-model="settingsForm.pushNotifications" />
                                             </label>
-                                            <label class="flex items-start justify-between gap-4 cursor-pointer">
+                                            <label class="flex items-center justify-between gap-4 cursor-pointer">
                                                 <div>
                                                     <div class="text-sm font-medium">Marketing emails</div>
                                                     <div class="text-xs text-muted-foreground">Receive tips, product updates and more.</div>
                                                 </div>
-                                                <Checkbox v-model="settingsForm.marketingEmails" class="mt-0.5" />
+                                                <Switch v-model="settingsForm.marketingEmails" />
                                             </label>
                                         </div>
                                     </div>
@@ -749,6 +749,7 @@ import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input, Select, LabelField, Checkbox, Errors } from '@/components/ui/form';
+import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import {
     Dialog,

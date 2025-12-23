@@ -1,6 +1,6 @@
 <template>
     <LayoutApp
-        title="Components - Checkbox & Radio"
+        title="Components - Checkbox"
         pageTitle="Forms"
         :pageNavItems="sideNavItems"
         :pageTabs="formsTabs"
@@ -115,6 +115,116 @@
                     </div>
                 </CardContent>
             </Card>
+
+            <!-- Toggle Switch Card -->
+            <Card class="flex flex-col col-span-2">
+                <CardHeader>
+                    <CardTitle>Toggle Switch</CardTitle>
+                    <CardDescription>Binary on/off controls for settings and preferences</CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-6 flex-1">
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">States</h4>
+                        <div class="flex items-center gap-8">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="switchOff" />
+                                <span class="text-sm">Off</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="switchOn" />
+                                <span class="text-sm">On</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-not-allowed">
+                                <Switch :defaultValue="false" disabled />
+                                <span class="text-sm text-muted-foreground">Disabled</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-not-allowed">
+                                <Switch :defaultValue="true" disabled />
+                                <span class="text-sm text-muted-foreground">Disabled On</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Dynamic Label</h4>
+                        <div class="flex items-center gap-8">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="dynamicSwitch" />
+                                <span class="text-sm">{{ dynamicSwitch ? 'Enabled' : 'Disabled' }}</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="activeSwitch" />
+                                <span class="text-sm font-medium" :class="activeSwitch ? 'text-green-600' : 'text-muted-foreground'">
+                                    {{ activeSwitch ? 'Active' : 'Inactive' }}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Color Variants</h4>
+                        <div class="flex items-center gap-8">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="colorDefault" />
+                                <span class="text-sm">Default</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="colorGreen" class="data-[state=checked]:bg-green-600" />
+                                <span class="text-sm">Green</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="colorBlue" class="data-[state=checked]:bg-blue-600" />
+                                <span class="text-sm">Blue</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="colorRed" class="data-[state=checked]:bg-red-600" />
+                                <span class="text-sm">Red</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">With Labels</h4>
+                        <div class="space-y-3 max-w-md">
+                            <label class="flex items-center justify-between gap-4 cursor-pointer">
+                                <div>
+                                    <div class="text-sm font-medium">Dark mode</div>
+                                    <div class="text-xs text-muted-foreground">Use dark theme across the application</div>
+                                </div>
+                                <Switch v-model="darkMode" />
+                            </label>
+                            <label class="flex items-center justify-between gap-4 cursor-pointer">
+                                <div>
+                                    <div class="text-sm font-medium">Email notifications</div>
+                                    <div class="text-xs text-muted-foreground">Receive updates about your account</div>
+                                </div>
+                                <Switch v-model="emailNotifs" />
+                            </label>
+                            <label class="flex items-center justify-between gap-4 cursor-pointer">
+                                <div>
+                                    <div class="text-sm font-medium">Two-factor authentication</div>
+                                    <div class="text-xs text-muted-foreground">Add an extra layer of security</div>
+                                </div>
+                                <Switch v-model="twoFactor" />
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Sizes</h4>
+                        <div class="flex items-center gap-8">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="sizeSmall" size="sm" />
+                                <span class="text-sm">Small</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <Switch v-model="sizeDefault" />
+                                <span class="text-sm">Default</span>
+                            </label>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     </LayoutApp>
 </template>
@@ -126,6 +236,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Checkbox } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sideNavItems, formsTabs } = useShowcaseNav();
@@ -143,6 +254,21 @@ const radioState2 = ref('selected');
 const radioInvalid = ref('');
 const radioInvalidSelected = ref('invalid-selected');
 const selectedPlan = ref('basic');
+
+// Switch states
+const switchOff = ref(false);
+const switchOn = ref(true);
+const dynamicSwitch = ref(false);
+const activeSwitch = ref(true);
+const colorDefault = ref(true);
+const colorGreen = ref(true);
+const colorBlue = ref(true);
+const colorRed = ref(true);
+const darkMode = ref(false);
+const emailNotifs = ref(true);
+const twoFactor = ref(false);
+const sizeSmall = ref(true);
+const sizeDefault = ref(true);
 
 const notificationOptions = [
     { label: 'Email notifications', value: 'email' },
