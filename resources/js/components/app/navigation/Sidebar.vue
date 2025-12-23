@@ -1,9 +1,9 @@
 <template>
     <div
-        class="relative flex flex-col items-center w-16 h-full border-r z-40"
+        class="relative flex flex-col items-center w-16 h-full border-r z-40 select-none"
         :class="containerClass"
     >
-        <component :is="linkComponent" class="flex items-center justify-center h-14" :href="logoLinkPath">
+        <component :is="linkComponent" class="flex items-center justify-center h-14" :href="logoLinkPath" draggable="false">
             <div class="flex-shrink-0">
                 <slot name="logo">
                     <svg
@@ -32,6 +32,7 @@
                                         class="relative flex items-center justify-center w-12 h-12 mt-2 rounded-md"
                                         :href="child.href"
                                         :class="linkClass(child)"
+                                        draggable="false"
                                     >
                                         <component :is="getIcon(child)" />
                                     </component>

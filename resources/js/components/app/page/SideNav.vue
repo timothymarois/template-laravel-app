@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="items && items.length"
-        class="w-64 shrink-0 border-r border-border bg-card overflow-hidden"
+        class="w-64 shrink-0 border-r border-border bg-card overflow-hidden select-none"
     >
         <ScrollFrame>
             <div class="py-2 px-2 space-y-2">
@@ -15,6 +15,7 @@
                                 <component
                                     :is="linkComponent"
                                     :href="child.href"
+                                    draggable="false"
                                     class="block rounded-md px-4 py-2 text-sm font-medium"
                                     :class="[
                                         isActive(child)
@@ -44,6 +45,7 @@
                         v-else
                         :is="linkComponent"
                         :href="item.href"
+                        draggable="false"
                         class="block rounded-md px-4 py-2 text-sm font-medium"
                         :class="[
                             isActive(item)

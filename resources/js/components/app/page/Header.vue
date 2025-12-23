@@ -53,7 +53,7 @@
                             :class="{ 'pt-2': hideTitle }"
                         >
                             <div class="grow">
-                                <ul class="flex flex-wrap -mb-[0px]">
+                                <ul class="flex flex-wrap -mb-[0px] select-none">
                                     <li
                                         v-for="tab in tabs"
                                         :key="tab.href"
@@ -62,6 +62,7 @@
                                         <component
                                             :is="linkComponent"
                                             :href="tab.href"
+                                            draggable="false"
                                             class="text-base inline-flex items-center gap-1 py-2 px-4 border-b-4"
                                             :class="[
                                                 tab?.disabled
