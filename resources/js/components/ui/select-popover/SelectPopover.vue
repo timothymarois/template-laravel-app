@@ -8,9 +8,9 @@
                 :aria-haspopup="'listbox'"
                 :disabled="disabled"
                 :class="cn(
-                    'inline-flex items-center justify-between gap-2 rounded-md border border-ring bg-background px-3 text-sm text-start transition-all cursor-pointer',
+                    'inline-flex items-center justify-between gap-2 rounded-md border border-input bg-background px-3 text-sm text-start transition-all cursor-pointer',
                     'hover:border-foreground/50 focus:outline-none focus:border-foreground/50',
-                    'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-ring',
+                    'disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-input',
                     multiple && showChips ? 'min-h-9 py-1.5' : 'h-9 py-1',
                     fluid ? 'w-full' : '',
                     triggerClass,

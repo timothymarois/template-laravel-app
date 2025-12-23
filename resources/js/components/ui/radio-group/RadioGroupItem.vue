@@ -22,7 +22,7 @@ const forwardedProps = useForwardProps(delegatedProps);
         v-bind="forwardedProps"
         :class="
             cn(
-                'group peer relative aspect-square h-4 w-4 rounded-full border border-ring bg-background text-primary cursor-pointer transition-all hover:border-foreground/50 focus:outline-none focus-visible:border-foreground/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-ring data-[state=checked]:border-primary data-[state=checked]:text-primary data-[state=checked]:hover:text-primary/70 data-[state=checked]:disabled:hover:text-primary',
+                'group peer relative aspect-square h-4 w-4 rounded-full border border-input bg-background text-primary cursor-pointer transition-all hover:border-foreground/50 focus:outline-none focus-visible:border-foreground/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-input data-[state=checked]:border-primary data-[state=checked]:text-primary data-[state=checked]:hover:text-primary/70 data-[state=checked]:disabled:hover:text-primary',
                 props.class,
             )
         "

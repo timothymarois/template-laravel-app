@@ -40,7 +40,7 @@
 
   /* Borders & Inputs */
   --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
+  --input: 240 5.9% 82%;
   --ring: 240 5% 65%;
 
   /* Border Radius */
@@ -97,7 +97,7 @@
 
   /* Borders & Inputs */
   --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
+  --input: 240 3.7% 26%;
   --ring: 240 4.9% 83.9%;
 
   /* Chart Colors */

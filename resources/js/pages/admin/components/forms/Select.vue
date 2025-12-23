@@ -24,20 +24,20 @@
                         </div>
                         <div class="opacity-50">
                             <div class="text-xs text-muted-foreground mb-1">Disabled</div>
-                            <Select v-model="basicDisabledEmpty" :options="basicOptions" placeholder="Disabled" disabled clearable fluid />
+                            <Select v-model="basicDisabledEmpty" :options="basicOptions" placeholder="Disabled" disabled fluid />
                         </div>
                         <div class="opacity-50">
-                            <div class="text-xs text-muted-foreground mb-1">Disabled with Value</div>
+                            <div class="text-xs text-muted-foreground mb-1">Disabled Clearable</div>
                             <Select v-model="basicDisabledFilled" :options="basicOptions" placeholder="Select option..." disabled clearable fluid />
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
-            <!-- Searchable Select -->
+            <!-- Select Searchable -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Searchable Select</CardTitle>
+                    <CardTitle>Select Searchable</CardTitle>
                     <CardDescription>Select with search/filter functionality (combobox)</CardDescription>
                 </CardHeader>
                 <CardContent>
