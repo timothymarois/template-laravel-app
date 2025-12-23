@@ -34,16 +34,24 @@
                         <h4 class="text-sm font-medium mb-3">States</h4>
                         <div class="flex items-end gap-4">
                             <div class="w-48">
-                                <div class="text-xs text-muted-foreground mb-1">Normal</div>
-                                <Input placeholder="Normal" fluid />
+                                <div class="text-xs text-muted-foreground mb-1">Empty</div>
+                                <Input placeholder="Empty input" fluid />
+                            </div>
+                            <div class="w-48">
+                                <div class="text-xs text-muted-foreground mb-1">With Value</div>
+                                <Input modelValue="Hello world" fluid />
                             </div>
                             <div class="w-48">
                                 <div class="text-xs text-muted-foreground mb-1">Invalid</div>
                                 <Input placeholder="Invalid" invalid fluid />
                             </div>
-                            <div class="w-48">
+                            <div class="w-48 opacity-50">
                                 <div class="text-xs text-muted-foreground mb-1">Disabled</div>
                                 <Input placeholder="Disabled" disabled fluid />
+                            </div>
+                            <div class="w-48 opacity-50">
+                                <div class="text-xs text-muted-foreground mb-1">Disabled with Value</div>
+                                <Input modelValue="Can't edit" disabled fluid />
                             </div>
                         </div>
                     </div>

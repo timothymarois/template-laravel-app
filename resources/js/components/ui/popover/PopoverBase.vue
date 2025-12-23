@@ -2,7 +2,9 @@
 import type { PopoverRootEmits, PopoverRootProps } from "reka-ui";
 import { PopoverRoot, useForwardPropsEmits } from "reka-ui";
 
-const props = defineProps<PopoverRootProps>();
+const props = withDefaults(defineProps<PopoverRootProps>(), {
+    modal: false,
+});
 const emits = defineEmits<PopoverRootEmits>();
 
 const forwarded = useForwardPropsEmits(props, emits);
