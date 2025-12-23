@@ -31,6 +31,10 @@ import { computed } from 'vue';
 import { InputBase as Input } from '@/components/ui/input';
 import { X } from 'lucide-vue-next';
 
+defineOptions({
+    inheritAttrs: false,
+});
+
 interface Props {
     modelValue?: string | number | null;
     type?: string;

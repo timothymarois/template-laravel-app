@@ -5,16 +5,17 @@
         :pageNavItems="sideNavItems"
         :pageTabs="formsTabs"
     >
-        <div class="space-y-6">
-            <Card>
+        <div class="grid grid-cols-2 gap-6">
+            <!-- Checkbox Card -->
+            <Card class="flex flex-col">
                 <CardHeader>
                     <CardTitle>Checkbox</CardTitle>
-                    <CardDescription>Boolean selection controls</CardDescription>
+                    <CardDescription>Boolean selection controls for multiple choices</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-6 flex-1">
                     <div>
-                        <h4 class="text-sm font-medium mb-3">Basic</h4>
-                        <div class="flex items-center gap-6">
+                        <h4 class="text-sm font-medium mb-3">States</h4>
+                        <div class="grid grid-cols-2 gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <Checkbox v-model="checkbox1" />
                                 <span class="text-sm">Unchecked</span>
@@ -35,10 +36,10 @@
                     </div>
 
                     <div>
-                        <h4 class="text-sm font-medium mb-3">Checkbox Group</h4>
+                        <h4 class="text-sm font-medium mb-3">Group Selection</h4>
                         <div class="space-y-2">
-                            <label v-for="option in checkboxOptions" :key="option.value" class="flex items-center gap-2 cursor-pointer">
-                                <Checkbox v-model="selectedCheckboxes" :value="option.value" />
+                            <label v-for="option in notificationOptions" :key="option.value" class="flex items-center gap-2 cursor-pointer">
+                                <Checkbox v-model="selectedNotifications" :value="option.value" />
                                 <span class="text-sm">{{ option.label }}</span>
                             </label>
                         </div>
@@ -46,46 +47,49 @@
                 </CardContent>
             </Card>
 
-            <Card>
+            <!-- Radio Card -->
+            <Card class="flex flex-col">
                 <CardHeader>
                     <CardTitle>Radio Group</CardTitle>
                     <CardDescription>Single selection from multiple options</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-6">
+                <CardContent class="space-y-6 flex-1">
                     <div>
-                        <h4 class="text-sm font-medium mb-3">Vertical Layout</h4>
-                        <RadioGroup v-model="radioValue" class="space-y-2">
-                            <div v-for="option in radioOptions" :key="option.value" class="flex items-center gap-2">
-                                <RadioGroupItem :value="option.value" :id="`radio-${option.value}`" />
-                                <Label :for="`radio-${option.value}`" class="cursor-pointer">{{ option.label }}</Label>
+                        <h4 class="text-sm font-medium mb-3">States</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <RadioGroup v-model="radioState1">
+                                    <RadioGroupItem value="unselected" id="radio-unselected" />
+                                </RadioGroup>
+                                <span class="text-sm">Unselected</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <RadioGroup v-model="radioState2">
+                                    <RadioGroupItem value="selected" id="radio-selected" />
+                                </RadioGroup>
+                                <span class="text-sm">Selected</span>
+                            </label>
+                            <div class="flex items-center gap-2 cursor-not-allowed opacity-50">
+                                <RadioGroup model-value="">
+                                    <RadioGroupItem value="disabled" id="radio-disabled" disabled />
+                                </RadioGroup>
+                                <span class="text-sm">Disabled</span>
                             </div>
-                        </RadioGroup>
+                            <div class="flex items-center gap-2 cursor-not-allowed opacity-50">
+                                <RadioGroup model-value="disabled-checked">
+                                    <RadioGroupItem value="disabled-checked" id="radio-disabled-checked" disabled />
+                                </RadioGroup>
+                                <span class="text-sm">Disabled Selected</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
-                        <h4 class="text-sm font-medium mb-3">Horizontal Layout</h4>
-                        <RadioGroup v-model="radioValue2" class="flex gap-6">
-                            <div v-for="option in radioOptions" :key="option.value" class="flex items-center gap-2">
-                                <RadioGroupItem :value="option.value" :id="`radio2-${option.value}`" />
-                                <Label :for="`radio2-${option.value}`" class="cursor-pointer">{{ option.label }}</Label>
-                            </div>
-                        </RadioGroup>
-                    </div>
-
-                    <div>
-                        <h4 class="text-sm font-medium mb-3">Disabled State</h4>
-                        <RadioGroup v-model="radioValue3" class="space-y-2">
-                            <div class="flex items-center gap-2">
-                                <RadioGroupItem value="enabled" id="radio3-enabled" />
-                                <Label for="radio3-enabled" class="cursor-pointer">Enabled option</Label>
-                            </div>
-                            <div class="flex items-center gap-2 opacity-50">
-                                <RadioGroupItem value="disabled" id="radio3-disabled" disabled />
-                                <Label for="radio3-disabled" class="cursor-not-allowed">Disabled option</Label>
-                            </div>
-                            <div class="flex items-center gap-2 opacity-50">
-                                <RadioGroupItem value="disabled-checked" id="radio3-disabled-checked" disabled />
-                                <Label for="radio3-disabled-checked" class="cursor-not-allowed">Disabled checked</Label>
+                        <h4 class="text-sm font-medium mb-3">Group Selection</h4>
+                        <RadioGroup v-model="selectedPlan" class="space-y-2">
+                            <div v-for="option in planOptions" :key="option.value" class="flex items-center gap-2">
+                                <RadioGroupItem :value="option.value" :id="`plan-${option.value}`" />
+                                <Label :for="`plan-${option.value}`" class="cursor-pointer">{{ option.label }}</Label>
                             </div>
                         </RadioGroup>
                     </div>
@@ -106,22 +110,25 @@ import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sideNavItems, formsTabs } = useShowcaseNav();
 
+// Checkbox states
 const checkbox1 = ref(false);
 const checkbox2 = ref(true);
-const selectedCheckboxes = ref<string[]>([]);
-const radioValue = ref('option1');
-const radioValue2 = ref('option2');
-const radioValue3 = ref('disabled-checked');
+const selectedNotifications = ref<string[]>(['email']);
 
-const checkboxOptions = [
+// Radio states
+const radioState1 = ref('');
+const radioState2 = ref('selected');
+const selectedPlan = ref('basic');
+
+const notificationOptions = [
     { label: 'Email notifications', value: 'email' },
     { label: 'SMS notifications', value: 'sms' },
     { label: 'Push notifications', value: 'push' },
 ];
 
-const radioOptions = [
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' },
+const planOptions = [
+    { label: 'Basic Plan', value: 'basic' },
+    { label: 'Pro Plan', value: 'pro' },
+    { label: 'Enterprise Plan', value: 'enterprise' },
 ];
 </script>
