@@ -446,3 +446,52 @@
 [data-state="closed"][data-side] {
   animation: popover-out 100ms ease-in;
 }
+
+/* Dialog animations */
+@keyframes dialog-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dialog-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes dialog-content-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dialog-content-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.dialog-overlay[data-state="open"] {
+  animation: dialog-overlay-in 150ms ease-out;
+}
+
+.dialog-overlay[data-state="closed"] {
+  animation: dialog-overlay-out 100ms ease-in;
+}
+
+.dialog-content[data-state="open"] {
+  animation: dialog-content-in 150ms ease-out;
+}
+
+.dialog-content[data-state="closed"] {
+  animation: dialog-content-out 100ms ease-in;
+}
