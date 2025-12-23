@@ -20,6 +20,20 @@
                     </Card>
                 </Link>
 
+                <Link :href="$route('admin.components.data.actions')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <MousePointerClick class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Actions</CardTitle>
+                            </div>
+                            <CardDescription>Bulk actions and table action bars</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
                 <Link :href="$route('admin.components.data.pagination')">
                     <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                         <CardHeader>
@@ -29,7 +43,7 @@
                                 </div>
                                 <CardTitle class="text-base">Pagination</CardTitle>
                             </div>
-                            <CardDescription>Page navigation and table actions</CardDescription>
+                            <CardDescription>Page navigation controls</CardDescription>
                         </CardHeader>
                     </Card>
                 </Link>
@@ -41,7 +55,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Table2, ChevronLeft } from 'lucide-vue-next';
+import { Table2, MousePointerClick, ChevronLeft } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sideNavItems, dataTabs } = useShowcaseNav();

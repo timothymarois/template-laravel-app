@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             // Data
             Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('data');
             Route::get('/data/table', [ComponentShowcaseController::class, 'dataTable'])->name('data.table');
+            Route::get('/data/actions', [ComponentShowcaseController::class, 'dataActions'])->name('data.actions');
             Route::get('/data/pagination', [ComponentShowcaseController::class, 'dataPagination'])->name('data.pagination');
         });
     });

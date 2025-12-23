@@ -34,6 +34,7 @@ export const useShowcaseNav = () => {
     const dataTabs = [
         { title: 'Overview', href: '/admin/components/data' },
         { title: 'Table', href: '/admin/components/data/table' },
+        { title: 'Actions', href: '/admin/components/data/actions' },
         { title: 'Pagination', href: '/admin/components/data/pagination' },
     ];
 

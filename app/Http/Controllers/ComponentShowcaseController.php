@@ -91,6 +91,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/data/Table');
     }
 
+    public function dataActions(): Response
+    {
+        return Inertia::render('admin/components/data/Actions');
+    }
+
     public function dataPagination(): Response
     {
         return Inertia::render('admin/components/data/Pagination');
