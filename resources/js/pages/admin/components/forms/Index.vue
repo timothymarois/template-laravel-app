@@ -20,6 +20,20 @@
                     </Card>
                 </Link>
 
+                <Link :href="$route('admin.components.forms.textarea')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <AlignLeft class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Textarea</CardTitle>
+                            </div>
+                            <CardDescription>Multi-line text inputs for longer content</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
                 <Link :href="$route('admin.components.forms.select')">
                     <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                         <CardHeader>
@@ -111,7 +125,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { TextCursorInput, ChevronDown, CheckSquare, CalendarDays, FormInput, ToggleLeft, SlidersHorizontal } from 'lucide-vue-next';
+import { TextCursorInput, AlignLeft, ChevronDown, CheckSquare, CalendarDays, FormInput, ToggleLeft, SlidersHorizontal } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

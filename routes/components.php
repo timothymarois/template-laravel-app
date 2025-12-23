@@ -8,6 +8,7 @@ Route::get('/', [ComponentShowcaseController::class, 'index'])->name('index');
 // Forms
 Route::get('/forms', [ComponentShowcaseController::class, 'formsIndex'])->name('forms');
 Route::get('/forms/input', [ComponentShowcaseController::class, 'formsInput'])->name('forms.input');
+Route::get('/forms/textarea', [ComponentShowcaseController::class, 'formsTextarea'])->name('forms.textarea');
 Route::get('/forms/select', [ComponentShowcaseController::class, 'formsSelect'])->name('forms.select');
 Route::get('/forms/checkbox', [ComponentShowcaseController::class, 'formsCheckbox'])->name('forms.checkbox');
 Route::get('/forms/switch', [ComponentShowcaseController::class, 'formsSwitch'])->name('forms.switch');
@@ -33,6 +34,7 @@ Route::get('/display/popover', [ComponentShowcaseController::class, 'displayPopo
 Route::get('/display/loading', [ComponentShowcaseController::class, 'displayLoading'])->name('display.loading');
 Route::get('/display/tabs', [ComponentShowcaseController::class, 'displayTabs'])->name('display.tabs');
 Route::get('/display/accordion', [ComponentShowcaseController::class, 'displayAccordion'])->name('display.accordion');
+Route::get('/display/toast', [ComponentShowcaseController::class, 'displayToast'])->name('display.toast');
 
 // Data
 Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('data');

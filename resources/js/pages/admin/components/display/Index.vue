@@ -131,6 +131,20 @@
                         </CardHeader>
                     </Card>
                 </Link>
+
+                <Link :href="$route('admin.components.display.toast')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <Bell class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Toast</CardTitle>
+                            </div>
+                            <CardDescription>Non-intrusive notification messages</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
         </div>
     </LayoutApp>
 </template>
@@ -139,7 +153,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { AlertCircle, LayoutGrid, Tag, MessageSquare, CircleUser, PanelTopOpen, Loader2, LayoutPanelTop, ChevronDown } from 'lucide-vue-next';
+import { AlertCircle, LayoutGrid, Tag, MessageSquare, CircleUser, PanelTopOpen, Loader2, LayoutPanelTop, ChevronDown, Bell } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

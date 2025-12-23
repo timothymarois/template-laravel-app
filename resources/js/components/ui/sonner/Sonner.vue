@@ -10,7 +10,7 @@ const delegatedProps = reactiveOmit(props, "toastOptions");
 
 <template>
     <Sonner
-        class="toaster group"
+        class="toaster group sonner-custom"
         :toast-options="{
             classes: {
                 toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
@@ -19,6 +19,8 @@ const delegatedProps = reactiveOmit(props, "toastOptions");
                     'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
                 cancelButton:
                     'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+                closeButton:
+                    '!absolute !left-[unset] !right-1.5 !top-1.5 !translate-x-0 !translate-y-0 !border-0 !bg-transparent hover:!bg-muted !rounded-md !text-muted-foreground hover:!text-foreground',
             },
         }"
         v-bind="delegatedProps"
@@ -45,3 +47,25 @@ const delegatedProps = reactiveOmit(props, "toastOptions");
         </template>
     </Sonner>
 </template>
+
+<style>
+[data-sonner-toast] [data-close-button] {
+    left: unset !important;
+    right: 6px !important;
+    top: 6px !important;
+    transform: none !important;
+    border: none !important;
+    background: transparent !important;
+    color: hsl(var(--muted-foreground)) !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+    background: hsl(var(--muted)) !important;
+    color: hsl(var(--foreground)) !important;
+}
+
+/* Hide close button when toast has action buttons */
+[data-sonner-toast]:has([data-button]) [data-close-button] {
+    display: none !important;
+}
+</style>

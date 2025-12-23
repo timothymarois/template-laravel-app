@@ -23,6 +23,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/forms/Input');
     }
 
+    public function formsTextarea(): Response
+    {
+        return Inertia::render('admin/components/forms/Textarea');
+    }
+
     public function formsSelect(): Response
     {
         return Inertia::render('admin/components/forms/Select');
@@ -128,6 +133,11 @@ class ComponentShowcaseController extends Controller
     public function displayAccordion(): Response
     {
         return Inertia::render('admin/components/display/Accordion');
+    }
+
+    public function displayToast(): Response
+    {
+        return Inertia::render('admin/components/display/Toast');
     }
 
     // Data

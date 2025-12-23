@@ -20,6 +20,7 @@ export const useShowcaseNav = () => {
             children: [
                 { label: 'Overview', href: '/admin/components/forms' },
                 { label: 'Input', href: '/admin/components/forms/input' },
+                { label: 'Textarea', href: '/admin/components/forms/textarea' },
                 { label: 'Select', href: '/admin/components/forms/select' },
                 { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
                 { label: 'Switch', href: '/admin/components/forms/switch' },
@@ -53,6 +54,7 @@ export const useShowcaseNav = () => {
                 { label: 'Loading', href: '/admin/components/display/loading' },
                 { label: 'Tabs', href: '/admin/components/display/tabs' },
                 { label: 'Accordion', href: '/admin/components/display/accordion' },
+                { label: 'Toast', href: '/admin/components/display/toast' },
             ],
         },
         {
@@ -80,6 +82,7 @@ export const useShowcaseNav = () => {
     const formsTabs = [
         { title: 'Overview', href: '/admin/components/forms' },
         { title: 'Input', href: '/admin/components/forms/input' },
+        { title: 'Textarea', href: '/admin/components/forms/textarea' },
         { title: 'Select', href: '/admin/components/forms/select' },
         { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
         { title: 'Calendar', href: '/admin/components/forms/calendar' },
@@ -105,6 +108,7 @@ export const useShowcaseNav = () => {
         { title: 'Loading', href: '/admin/components/display/loading' },
         { title: 'Tabs', href: '/admin/components/display/tabs' },
         { title: 'Accordion', href: '/admin/components/display/accordion' },
+        { title: 'Toast', href: '/admin/components/display/toast' },
     ];
 
     const dataTabs = [

@@ -120,7 +120,7 @@
                 </div>
             </div>
         </div>
-        <Toaster v-if="hasToast" position="bottom-left" />
+        <Toaster v-if="hasToast" :position="toastPosition" :close-button="toastCloseButton" />
     </div>
     <slot name="modals" />
     </TooltipProvider>
@@ -145,6 +145,8 @@ interface Props {
     pageUrl?: string;
     isSideNav?: boolean;
     hasToast?: boolean;
+    toastPosition?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+    toastCloseButton?: boolean;
     title?: string;
     pageTitle?: string;
     pageTabs?: any[];
@@ -167,6 +169,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     isSideNav: true,
     hasToast: true,
+    toastPosition: 'bottom-left',
+    toastCloseButton: true,
     pageTitle: 'Home',
     pageTabs: () => [],
     pageNavItems: () => [],
