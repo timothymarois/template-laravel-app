@@ -19,7 +19,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
         v-bind="forwarded"
         :class="
             cn('group peer relative h-4 w-4 shrink-0 rounded-sm border border-input bg-background transition-all cursor-pointer hover:border-foreground/50 focus-visible:outline-none focus-visible:border-foreground/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-input data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:hover:bg-primary/80 data-[state=checked]:disabled:hover:bg-primary',
-                 props.class)"
+               props.class)"
     >
         <span class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-30 group-data-[state=checked]:opacity-0 group-disabled:!opacity-0">
             <Check class="h-3 w-3" :stroke-width="3" />

@@ -52,11 +52,11 @@ function template(d: any, i: number, elements: (HTMLElement | SVGElement)[]) {
 </script>
 
 <template>
-  <span ref="markerRef" class="hidden" aria-hidden="true" />
-  <VisTooltip
-    :horizontal-shift="15"
-    :vertical-shift="15"
-    :triggers="{ [selector]: template }"
-  />
+    <span ref="markerRef" class="hidden" aria-hidden="true" />
+    <VisTooltip
+        :horizontal-shift="15"
+        :vertical-shift="15"
+        :triggers="{ [selector]: template }"
+    />
 </template>
 

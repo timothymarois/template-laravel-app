@@ -15,16 +15,16 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <CalendarNext
-    :class="cn(
-      buttonVariants({ variant: 'outline' }),
-      'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
-      props.class,
-    )"
-    v-bind="forwardedProps"
-  >
-    <slot>
-      <ChevronRight class="h-4 w-4" />
-    </slot>
-  </CalendarNext>
+    <CalendarNext
+        :class="cn(
+            buttonVariants({ variant: 'outline' }),
+            'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+            props.class,
+        )"
+        v-bind="forwardedProps"
+    >
+        <slot>
+            <ChevronRight class="h-4 w-4" />
+        </slot>
+    </CalendarNext>
 </template>

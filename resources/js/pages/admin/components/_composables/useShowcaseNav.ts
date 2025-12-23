@@ -9,6 +9,7 @@ import {
 
 export const useShowcaseNav = () => {
     // Hierarchical sidebar navigation with collapsible sections
+    // Items sorted alphabetically with Overview always first
     const sidebarItems = [
         {
             label: 'Overview',
@@ -16,58 +17,14 @@ export const useShowcaseNav = () => {
             icon: Home,
         },
         {
-            label: 'Forms',
-            icon: FormInput,
-            children: [
-                { label: 'Overview', href: '/admin/components/forms' },
-                { label: 'Input', href: '/admin/components/forms/input' },
-                { label: 'Textarea', href: '/admin/components/forms/textarea' },
-                { label: 'Select', href: '/admin/components/forms/select' },
-                { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
-                { label: 'Switch', href: '/admin/components/forms/switch' },
-                { label: 'Slider', href: '/admin/components/forms/slider' },
-                { label: 'Calendar', href: '/admin/components/forms/calendar' },
-                { label: 'Fields', href: '/admin/components/forms/fields' },
-                { label: 'Editor', href: '/admin/components/forms/editor' },
-                { label: 'Upload', href: '/admin/components/forms/upload' },
-            ],
-        },
-        {
             label: 'Actions',
             icon: MousePointerClick,
             children: [
                 { label: 'Overview', href: '/admin/components/actions' },
                 { label: 'Button', href: '/admin/components/actions/button' },
-                { label: 'Menu', href: '/admin/components/actions/menu' },
                 { label: 'Dialog', href: '/admin/components/actions/dialog' },
+                { label: 'Menu', href: '/admin/components/actions/menu' },
                 { label: 'Sheet', href: '/admin/components/actions/sheet' },
-            ],
-        },
-        {
-            label: 'Display',
-            icon: Eye,
-            children: [
-                { label: 'Overview', href: '/admin/components/display' },
-                { label: 'Alert', href: '/admin/components/display/alert' },
-                { label: 'Card', href: '/admin/components/display/card' },
-                { label: 'Badge', href: '/admin/components/display/badge' },
-                { label: 'Avatar', href: '/admin/components/display/avatar' },
-                { label: 'Tooltip', href: '/admin/components/display/tooltip' },
-                { label: 'Popover', href: '/admin/components/display/popover' },
-                { label: 'Loading', href: '/admin/components/display/loading' },
-                { label: 'Tabs', href: '/admin/components/display/tabs' },
-                { label: 'Accordion', href: '/admin/components/display/accordion' },
-                { label: 'Toast', href: '/admin/components/display/toast' },
-            ],
-        },
-        {
-            label: 'Data',
-            icon: Database,
-            children: [
-                { label: 'Overview', href: '/admin/components/data' },
-                { label: 'Table', href: '/admin/components/data/table' },
-                { label: 'Actions', href: '/admin/components/data/actions' },
-                { label: 'Pagination', href: '/admin/components/data/pagination' },
             ],
         },
         {
@@ -75,10 +32,55 @@ export const useShowcaseNav = () => {
             icon: BarChart3,
             children: [
                 { label: 'Overview', href: '/admin/components/charts' },
+                { label: 'Area', href: '/admin/components/charts/area' },
                 { label: 'Bar', href: '/admin/components/charts/bar' },
                 { label: 'Line', href: '/admin/components/charts/line' },
-                { label: 'Area', href: '/admin/components/charts/area' },
                 { label: 'Pie & Donut', href: '/admin/components/charts/pie' },
+            ],
+        },
+        {
+            label: 'Data',
+            icon: Database,
+            children: [
+                { label: 'Overview', href: '/admin/components/data' },
+                { label: 'Actions', href: '/admin/components/data/actions' },
+                { label: 'Pagination', href: '/admin/components/data/pagination' },
+                { label: 'Table', href: '/admin/components/data/table' },
+            ],
+        },
+        {
+            label: 'Display',
+            icon: Eye,
+            children: [
+                { label: 'Overview', href: '/admin/components/display' },
+                { label: 'Accordion', href: '/admin/components/display/accordion' },
+                { label: 'Alert', href: '/admin/components/display/alert' },
+                { label: 'Avatar', href: '/admin/components/display/avatar' },
+                { label: 'Badge', href: '/admin/components/display/badge' },
+                { label: 'Card', href: '/admin/components/display/card' },
+                { label: 'Carousel', href: '/admin/components/display/carousel' },
+                { label: 'Loading', href: '/admin/components/display/loading' },
+                { label: 'Popover', href: '/admin/components/display/popover' },
+                { label: 'Tabs', href: '/admin/components/display/tabs' },
+                { label: 'Toast', href: '/admin/components/display/toast' },
+                { label: 'Tooltip', href: '/admin/components/display/tooltip' },
+            ],
+        },
+        {
+            label: 'Forms',
+            icon: FormInput,
+            children: [
+                { label: 'Overview', href: '/admin/components/forms' },
+                { label: 'Calendar', href: '/admin/components/forms/calendar' },
+                { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
+                { label: 'Editor', href: '/admin/components/forms/editor' },
+                { label: 'Fields', href: '/admin/components/forms/fields' },
+                { label: 'Input', href: '/admin/components/forms/input' },
+                { label: 'Select', href: '/admin/components/forms/select' },
+                { label: 'Slider', href: '/admin/components/forms/slider' },
+                { label: 'Switch', href: '/admin/components/forms/switch' },
+                { label: 'Textarea', href: '/admin/components/forms/textarea' },
+                { label: 'Upload', href: '/admin/components/forms/upload' },
             ],
         },
     ];
@@ -86,70 +88,73 @@ export const useShowcaseNav = () => {
     // Legacy flat navigation (kept for backwards compatibility)
     const sideNavItems = [
         { label: 'Overview', href: '/admin/components' },
-        { label: 'Forms', href: '/admin/components/forms', parent: '/admin/components/forms' },
         { label: 'Actions', href: '/admin/components/actions', parent: '/admin/components/actions' },
-        { label: 'Display', href: '/admin/components/display', parent: '/admin/components/display' },
-        { label: 'Data', href: '/admin/components/data', parent: '/admin/components/data' },
         { label: 'Charts', href: '/admin/components/charts', parent: '/admin/components/charts' },
+        { label: 'Data', href: '/admin/components/data', parent: '/admin/components/data' },
+        { label: 'Display', href: '/admin/components/display', parent: '/admin/components/display' },
+        { label: 'Forms', href: '/admin/components/forms', parent: '/admin/components/forms' },
     ];
 
-    // Tabs for each category - specific page URLs
-    const formsTabs = [
-        { title: 'Overview', href: '/admin/components/forms' },
-        { title: 'Input', href: '/admin/components/forms/input' },
-        { title: 'Textarea', href: '/admin/components/forms/textarea' },
-        { title: 'Select', href: '/admin/components/forms/select' },
-        { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
-        { title: 'Calendar', href: '/admin/components/forms/calendar' },
-        { title: 'Fields', href: '/admin/components/forms/fields' },
-        { title: 'Editor', href: '/admin/components/forms/editor' },
-        { title: 'Upload', href: '/admin/components/forms/upload' },
-    ];
-
+    // Tabs for each category - sorted alphabetically with Overview first
     const actionsTabs = [
         { title: 'Overview', href: '/admin/components/actions' },
         { title: 'Button', href: '/admin/components/actions/button' },
-        { title: 'Menu', href: '/admin/components/actions/menu' },
         { title: 'Dialog', href: '/admin/components/actions/dialog' },
+        { title: 'Menu', href: '/admin/components/actions/menu' },
         { title: 'Sheet', href: '/admin/components/actions/sheet' },
-    ];
-
-    const displayTabs = [
-        { title: 'Overview', href: '/admin/components/display' },
-        { title: 'Alert', href: '/admin/components/display/alert' },
-        { title: 'Card', href: '/admin/components/display/card' },
-        { title: 'Badge', href: '/admin/components/display/badge' },
-        { title: 'Avatar', href: '/admin/components/display/avatar' },
-        { title: 'Tooltip', href: '/admin/components/display/tooltip' },
-        { title: 'Popover', href: '/admin/components/display/popover' },
-        { title: 'Loading', href: '/admin/components/display/loading' },
-        { title: 'Tabs', href: '/admin/components/display/tabs' },
-        { title: 'Accordion', href: '/admin/components/display/accordion' },
-        { title: 'Toast', href: '/admin/components/display/toast' },
-    ];
-
-    const dataTabs = [
-        { title: 'Overview', href: '/admin/components/data' },
-        { title: 'Table', href: '/admin/components/data/table' },
-        { title: 'Actions', href: '/admin/components/data/actions' },
-        { title: 'Pagination', href: '/admin/components/data/pagination' },
     ];
 
     const chartsTabs = [
         { title: 'Overview', href: '/admin/components/charts' },
+        { title: 'Area', href: '/admin/components/charts/area' },
         { title: 'Bar', href: '/admin/components/charts/bar' },
         { title: 'Line', href: '/admin/components/charts/line' },
-        { title: 'Area', href: '/admin/components/charts/area' },
         { title: 'Pie & Donut', href: '/admin/components/charts/pie' },
+    ];
+
+    const dataTabs = [
+        { title: 'Overview', href: '/admin/components/data' },
+        { title: 'Actions', href: '/admin/components/data/actions' },
+        { title: 'Pagination', href: '/admin/components/data/pagination' },
+        { title: 'Table', href: '/admin/components/data/table' },
+    ];
+
+    const displayTabs = [
+        { title: 'Overview', href: '/admin/components/display' },
+        { title: 'Accordion', href: '/admin/components/display/accordion' },
+        { title: 'Alert', href: '/admin/components/display/alert' },
+        { title: 'Avatar', href: '/admin/components/display/avatar' },
+        { title: 'Badge', href: '/admin/components/display/badge' },
+        { title: 'Card', href: '/admin/components/display/card' },
+        { title: 'Carousel', href: '/admin/components/display/carousel' },
+        { title: 'Loading', href: '/admin/components/display/loading' },
+        { title: 'Popover', href: '/admin/components/display/popover' },
+        { title: 'Tabs', href: '/admin/components/display/tabs' },
+        { title: 'Toast', href: '/admin/components/display/toast' },
+        { title: 'Tooltip', href: '/admin/components/display/tooltip' },
+    ];
+
+    const formsTabs = [
+        { title: 'Overview', href: '/admin/components/forms' },
+        { title: 'Calendar', href: '/admin/components/forms/calendar' },
+        { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
+        { title: 'Editor', href: '/admin/components/forms/editor' },
+        { title: 'Fields', href: '/admin/components/forms/fields' },
+        { title: 'Input', href: '/admin/components/forms/input' },
+        { title: 'Select', href: '/admin/components/forms/select' },
+        { title: 'Slider', href: '/admin/components/forms/slider' },
+        { title: 'Switch', href: '/admin/components/forms/switch' },
+        { title: 'Textarea', href: '/admin/components/forms/textarea' },
+        { title: 'Upload', href: '/admin/components/forms/upload' },
     ];
 
     return {
         sidebarItems,
         sideNavItems,
-        formsTabs,
         actionsTabs,
-        displayTabs,
-        dataTabs,
         chartsTabs,
+        dataTabs,
+        displayTabs,
+        formsTabs,
     };
 };

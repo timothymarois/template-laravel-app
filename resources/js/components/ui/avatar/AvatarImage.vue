@@ -9,5 +9,5 @@ const forwarded = useForwardPropsEmits(props, emits);
 </script>
 
 <template>
-  <AvatarImage v-bind="forwarded" class="h-full w-full object-cover" />
+    <AvatarImage v-bind="forwarded" class="h-full w-full object-cover" />
 </template>

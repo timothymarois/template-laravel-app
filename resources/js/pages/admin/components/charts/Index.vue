@@ -17,6 +17,15 @@
                         a modular data visualization framework. These charts support theming, responsive layouts, and interactive tooltips.
                     </p>
                     <div class="grid grid-cols-2 gap-4">
+                        <Link href="/admin/components/charts/area" class="block p-4 border rounded-lg hover:border-primary hover:bg-muted/50 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <AreaChart class="size-8 text-primary" />
+                                <div>
+                                    <h3 class="font-medium">Area Charts</h3>
+                                    <p class="text-sm text-muted-foreground">Filled area and stacked charts</p>
+                                </div>
+                            </div>
+                        </Link>
                         <Link href="/admin/components/charts/bar" class="block p-4 border rounded-lg hover:border-primary hover:bg-muted/50 transition-colors">
                             <div class="flex items-center gap-3">
                                 <BarChart3 class="size-8 text-primary" />
@@ -32,15 +41,6 @@
                                 <div>
                                     <h3 class="font-medium">Line Charts</h3>
                                     <p class="text-sm text-muted-foreground">Trend lines and time series</p>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link href="/admin/components/charts/area" class="block p-4 border rounded-lg hover:border-primary hover:bg-muted/50 transition-colors">
-                            <div class="flex items-center gap-3">
-                                <AreaChart class="size-8 text-primary" />
-                                <div>
-                                    <h3 class="font-medium">Area Charts</h3>
-                                    <p class="text-sm text-muted-foreground">Filled area and stacked charts</p>
                                 </div>
                             </div>
                         </Link>
@@ -64,7 +64,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { BarChart3, LineChart, AreaChart, PieChart } from 'lucide-vue-next';
+import { AreaChart, BarChart3, LineChart, PieChart } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

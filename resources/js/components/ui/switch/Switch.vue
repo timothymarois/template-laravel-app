@@ -37,21 +37,21 @@ const thumbSizeClasses = computed(() => {
 </script>
 
 <template>
-  <SwitchRoot
-    :model-value="props.modelValue"
-    :default-value="props.defaultValue"
-    :disabled="props.disabled"
-    :class="cn(
-      'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-      sizeClasses,
-      props.class,
-    )"
-    @update:model-value="emit('update:modelValue', $event)"
-  >
-    <SwitchThumb
-      :class="cn('pointer-events-none block rounded-full bg-background shadow-lg ring-0 transition-transform', thumbSizeClasses)"
+    <SwitchRoot
+        :model-value="props.modelValue"
+        :default-value="props.defaultValue"
+        :disabled="props.disabled"
+        :class="cn(
+            'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
+            sizeClasses,
+            props.class,
+        )"
+        @update:model-value="emit('update:modelValue', $event)"
     >
-      <slot name="thumb" />
-    </SwitchThumb>
-  </SwitchRoot>
+        <SwitchThumb
+            :class="cn('pointer-events-none block rounded-full bg-background shadow-lg ring-0 transition-transform', thumbSizeClasses)"
+        >
+            <slot name="thumb" />
+        </SwitchThumb>
+    </SwitchRoot>
 </template>

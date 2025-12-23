@@ -1,128 +1,128 @@
 <template>
     <TooltipProvider :delay-duration="0">
-    <div
-        class="min-h-screen w-full bg-muted"
-        :class="{
-            'relative h-screen flex w-full overflow-hidden': isSideNav === true
-        }"
-    >
-        <div>
-            <slot name="nav">
-                <NavSidebar
-                    v-if="isSideNav"
-                    ref="sideNavRef"
-                    :items="sideBarItems"
-                    :linkComponent="linkComponent"
-                    :backgroundClass="sideBarBackgroundClass"
-                    :activeClass="sideBarActiveClass"
-                >
-                    <template #logo>
-                        <slot name="navLogo" />
-                    </template>
-                    <template #actions>
-                        <slot name="navActions" />
-                    </template>
-                </NavSidebar>
-                <NavTopbar v-else
-                    :items="topBarItems"
-                    :linkComponent="linkComponent"
-                    :widthClass="widthClass"
-                    :backgroundClass="topBarBackgroundClass"
-                    :activeClass="topBarActiveClass"
-                >
-                    <template #logo>
-                        <slot name="navLogo" />
-                    </template>
-                    <template #actions>
-                        <slot name="navActions" />
-                    </template>
-                </NavTopbar>
-            </slot>
-        </div>
-        <div class="flex-1 min-w-0 flex flex-col">
-            <AppTopbar v-if="hasAppTopBar">
-                <template #default>
-                    <slot name="appTopBar" />
-                </template>
-            </AppTopbar>
-            <div class="flex flex-1 overflow-hidden">
-                <PageSidebar
-                    v-if="pageSidebarItems?.length"
-                    ref="pageSideNavRef"
-                    :items="pageSidebarItems"
-                    :title="pageSidebarTitle"
-                    :linkComponent="linkComponent"
-                />
-                <PageSideNav
-                    v-else-if="pageNavItems?.length"
-                    ref="pageSideNavRef"
-                    :items="pageNavItems"
-                    :linkComponent="linkComponent"
-                />
-                <div class="flex-1 min-w-0">
-    <PageHeader
-                        v-if="hasPageHeader"
-                        :title="resolvedPageTitle"
-                        :tabs="pageTabs"
+        <div
+            class="min-h-screen w-full bg-muted"
+            :class="{
+                'relative h-screen flex w-full overflow-hidden': isSideNav === true
+            }"
+        >
+            <div>
+                <slot name="nav">
+                    <NavSidebar
+                        v-if="isSideNav"
+                        ref="sideNavRef"
+                        :items="sideBarItems"
                         :linkComponent="linkComponent"
-                        :breadcrumbs="breadcrumbs"
-                        :widthClass="widthClass"
+                        :backgroundClass="sideBarBackgroundClass"
+                        :activeClass="sideBarActiveClass"
                     >
-                        <template #title>
-                            <slot name="headerTitle" />
+                        <template #logo>
+                            <slot name="navLogo" />
                         </template>
-                        <template #action>
-                            <slot name="headerAction" />
+                        <template #actions>
+                            <slot name="navActions" />
                         </template>
-                    </PageHeader>
-                    <div class="w-full flex h-screen overflow-hidden">
-                        <div
-                            v-if="hasPageSideContent"
-                            ref="sideContentRef"
-                            class="flex-none border-r h-full bg-card min-w-64 shadow-sm"
+                    </NavSidebar>
+                    <NavTopbar v-else
+                               :items="topBarItems"
+                               :linkComponent="linkComponent"
+                               :widthClass="widthClass"
+                               :backgroundClass="topBarBackgroundClass"
+                               :activeClass="topBarActiveClass"
+                    >
+                        <template #logo>
+                            <slot name="navLogo" />
+                        </template>
+                        <template #actions>
+                            <slot name="navActions" />
+                        </template>
+                    </NavTopbar>
+                </slot>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col">
+                <AppTopbar v-if="hasAppTopBar">
+                    <template #default>
+                        <slot name="appTopBar" />
+                    </template>
+                </AppTopbar>
+                <div class="flex flex-1 overflow-hidden">
+                    <PageSidebar
+                        v-if="pageSidebarItems?.length"
+                        ref="pageSideNavRef"
+                        :items="pageSidebarItems"
+                        :title="pageSidebarTitle"
+                        :linkComponent="linkComponent"
+                    />
+                    <PageSideNav
+                        v-else-if="pageNavItems?.length"
+                        ref="pageSideNavRef"
+                        :items="pageNavItems"
+                        :linkComponent="linkComponent"
+                    />
+                    <div class="flex-1 min-w-0">
+                        <PageHeader
+                            v-if="hasPageHeader"
+                            :title="resolvedPageTitle"
+                            :tabs="pageTabs"
+                            :linkComponent="linkComponent"
+                            :breadcrumbs="breadcrumbs"
+                            :widthClass="widthClass"
                         >
-                            <PageSideContent>
-                                <template #default>
-                                    <slot name="pageSideContent" />
-                                </template>
-                            </PageSideContent>
-                        </div>
-                        <div class="flex-grow min-w-0">
-                            <PageContent
-                                :footerHeight="footerHeight"
-                                :containerClass="containerClass"
-                                :widthClass="widthClass"
-                                :rootClass="noScroll ? 'overflow-hidden' : 'overflow-y-auto'"
-                                :scrollable="!noScroll"
+                            <template #title>
+                                <slot name="headerTitle" />
+                            </template>
+                            <template #action>
+                                <slot name="headerAction" />
+                            </template>
+                        </PageHeader>
+                        <div class="w-full flex h-screen overflow-hidden">
+                            <div
+                                v-if="hasPageSideContent"
+                                ref="sideContentRef"
+                                class="flex-none border-r h-full bg-card min-w-64 shadow-sm"
                             >
-                                <template #side>
-                                    <slot name="pageSideContent" />
-                                </template>
-                                <template #default>
-                                    <slot />
-                                </template>
-                            </PageContent>
-                            <PageFooter
-                                v-if="hasPageFooter"
-                                ref="footerRef"
-                                :leftOffset="footerLeftOffset"
-                                :widthClass="widthClass"
-                            >
-                                <template #default>
-                                    <slot name="footer" />
-                                </template>
-                                <template #action>
-                                    <slot name="footerAction" />
-                                </template>
-                            </PageFooter>
+                                <PageSideContent>
+                                    <template #default>
+                                        <slot name="pageSideContent" />
+                                    </template>
+                                </PageSideContent>
+                            </div>
+                            <div class="flex-grow min-w-0">
+                                <PageContent
+                                    :footerHeight="footerHeight"
+                                    :containerClass="containerClass"
+                                    :widthClass="widthClass"
+                                    :rootClass="noScroll ? 'overflow-hidden' : 'overflow-y-auto'"
+                                    :scrollable="!noScroll"
+                                >
+                                    <template #side>
+                                        <slot name="pageSideContent" />
+                                    </template>
+                                    <template #default>
+                                        <slot />
+                                    </template>
+                                </PageContent>
+                                <PageFooter
+                                    v-if="hasPageFooter"
+                                    ref="footerRef"
+                                    :leftOffset="footerLeftOffset"
+                                    :widthClass="widthClass"
+                                >
+                                    <template #default>
+                                        <slot name="footer" />
+                                    </template>
+                                    <template #action>
+                                        <slot name="footerAction" />
+                                    </template>
+                                </PageFooter>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <Toaster v-if="hasToast" :position="toastPosition" :close-button="toastCloseButton" />
         </div>
-        <Toaster v-if="hasToast" :position="toastPosition" :close-button="toastCloseButton" />
-    </div>
-    <slot name="modals" />
+        <slot name="modals" />
     </TooltipProvider>
 </template>
 

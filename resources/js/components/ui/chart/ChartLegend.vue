@@ -46,14 +46,14 @@ function onLegendItemClick(d: BulletLegendItemInterface, i: number) {
 </script>
 
 <template>
-  <div
-    ref="elRef" class="w-max" :style="{
-      '--vis-legend-bullet-size': '16px',
-    }"
-  >
-    <VisBulletLegend
-      :items="items"
-      :on-legend-item-click="onLegendItemClick"
-    />
-  </div>
+    <div
+        ref="elRef" class="w-max" :style="{
+            '--vis-legend-bullet-size': '16px',
+        }"
+    >
+        <VisBulletLegend
+            :items="items"
+            :on-legend-item-click="onLegendItemClick"
+        />
+    </div>
 </template>

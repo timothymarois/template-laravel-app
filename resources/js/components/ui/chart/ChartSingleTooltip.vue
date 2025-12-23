@@ -56,9 +56,9 @@ function template(d: any, i: number, elements: (HTMLElement | SVGElement)[]) {
 </script>
 
 <template>
-  <VisTooltip
-    :horizontal-shift="20" :vertical-shift="20" :triggers="{
-      [selector]: template,
-    }"
-  />
+    <VisTooltip
+        :horizontal-shift="20" :vertical-shift="20" :triggers="{
+            [selector]: template,
+        }"
+    />
 </template>

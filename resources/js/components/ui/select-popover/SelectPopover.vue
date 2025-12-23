@@ -45,58 +45,58 @@
                 </span>
             </button>
         </PopoverTrigger>
-            <PopoverContent
-                :class="cn('p-0', contentClass)"
-                :style="{ width: 'var(--reka-popover-trigger-width)' }"
+        <PopoverContent
+            :class="cn('p-0', contentClass)"
+            :style="{ width: 'var(--reka-popover-trigger-width)' }"
+        >
+            <!-- Search input -->
+            <div v-if="searchable" class="flex items-center border-b px-3">
+                <Search class="mr-2 h-4 w-4 shrink-0 opacity-50" />
+                <input
+                    ref="searchInput"
+                    v-model="searchQuery"
+                    :placeholder="searchPlaceholder"
+                    class="flex h-10 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
+                    @keydown="handleSearchKeydown"
+                />
+            </div>
+            <!-- Options list -->
+            <div
+                ref="listRef"
+                role="listbox"
+                :aria-multiselectable="multiple"
+                class="max-h-60 overflow-y-auto p-1"
+                @keydown="handleListKeydown"
             >
-                <!-- Search input -->
-                <div v-if="searchable" class="flex items-center border-b px-3">
-                    <Search class="mr-2 h-4 w-4 shrink-0 opacity-50" />
-                    <input
-                        ref="searchInput"
-                        v-model="searchQuery"
-                        :placeholder="searchPlaceholder"
-                        class="flex h-10 w-full bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
-                        @keydown="handleSearchKeydown"
-                    />
-                </div>
-                <!-- Options list -->
                 <div
-                    ref="listRef"
-                    role="listbox"
-                    :aria-multiselectable="multiple"
-                    class="max-h-60 overflow-y-auto p-1"
-                    @keydown="handleListKeydown"
+                    v-if="filteredOptions.length === 0"
+                    class="py-6 text-center text-sm text-muted-foreground"
                 >
-                    <div
-                        v-if="filteredOptions.length === 0"
-                        class="py-6 text-center text-sm text-muted-foreground"
-                    >
-                        {{ emptyText }}
-                    </div>
-                    <div
-                        v-for="(option, index) in filteredOptions"
-                        :key="getOptionValue(option)"
-                        role="option"
-                        :aria-selected="isSelected(getOptionValue(option))"
-                        :data-highlighted="highlightedIndex === index"
-                        :class="cn(
-                            'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
-                            'hover:bg-accent hover:text-accent-foreground',
-                            'data-[highlighted=true]:bg-accent data-[highlighted=true]:text-accent-foreground',
-                        )"
-                        @click="selectOption(option)"
-                        @mouseenter="highlightedIndex = index"
-                    >
-                        <span class="mr-2 flex h-4 w-4 items-center justify-center">
-                            <Check v-if="isSelected(getOptionValue(option))" class="h-4 w-4" />
-                        </span>
-                        <slot name="option" :option="option" :label="getOptionLabel(option)">
-                            {{ getOptionLabel(option) }}
-                        </slot>
-                    </div>
+                    {{ emptyText }}
                 </div>
-            </PopoverContent>
+                <div
+                    v-for="(option, index) in filteredOptions"
+                    :key="getOptionValue(option)"
+                    role="option"
+                    :aria-selected="isSelected(getOptionValue(option))"
+                    :data-highlighted="highlightedIndex === index"
+                    :class="cn(
+                        'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
+                        'hover:bg-accent hover:text-accent-foreground',
+                        'data-[highlighted=true]:bg-accent data-[highlighted=true]:text-accent-foreground',
+                    )"
+                    @click="selectOption(option)"
+                    @mouseenter="highlightedIndex = index"
+                >
+                    <span class="mr-2 flex h-4 w-4 items-center justify-center">
+                        <Check v-if="isSelected(getOptionValue(option))" class="h-4 w-4" />
+                    </span>
+                    <slot name="option" :option="option" :label="getOptionLabel(option)">
+                        {{ getOptionLabel(option) }}
+                    </slot>
+                </div>
+            </div>
+        </PopoverContent>
     </Popover>
 </template>
 

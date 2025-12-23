@@ -150,6 +150,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/display/Toast');
     }
 
+    public function displayCarousel(): Response
+    {
+        return Inertia::render('admin/components/display/Carousel');
+    }
+
     // Data
     public function dataIndex(): Response
     {

@@ -37,6 +37,7 @@ Route::get('/display/loading', [ComponentShowcaseController::class, 'displayLoad
 Route::get('/display/tabs', [ComponentShowcaseController::class, 'displayTabs'])->name('display.tabs');
 Route::get('/display/accordion', [ComponentShowcaseController::class, 'displayAccordion'])->name('display.accordion');
 Route::get('/display/toast', [ComponentShowcaseController::class, 'displayToast'])->name('display.toast');
+Route::get('/display/carousel', [ComponentShowcaseController::class, 'displayCarousel'])->name('display.carousel');
 
 // Data
 Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('data');
