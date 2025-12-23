@@ -22,6 +22,8 @@ export const useShowcaseNav = () => {
                 { label: 'Input', href: '/admin/components/forms/input' },
                 { label: 'Select', href: '/admin/components/forms/select' },
                 { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
+                { label: 'Switch', href: '/admin/components/forms/switch' },
+                { label: 'Slider', href: '/admin/components/forms/slider' },
                 { label: 'Calendar', href: '/admin/components/forms/calendar' },
                 { label: 'Fields', href: '/admin/components/forms/fields' },
             ],
@@ -34,6 +36,7 @@ export const useShowcaseNav = () => {
                 { label: 'Button', href: '/admin/components/actions/button' },
                 { label: 'Menu', href: '/admin/components/actions/menu' },
                 { label: 'Dialog', href: '/admin/components/actions/dialog' },
+                { label: 'Sheet', href: '/admin/components/actions/sheet' },
             ],
         },
         {
@@ -44,7 +47,9 @@ export const useShowcaseNav = () => {
                 { label: 'Alert', href: '/admin/components/display/alert' },
                 { label: 'Card', href: '/admin/components/display/card' },
                 { label: 'Badge', href: '/admin/components/display/badge' },
+                { label: 'Avatar', href: '/admin/components/display/avatar' },
                 { label: 'Tooltip', href: '/admin/components/display/tooltip' },
+                { label: 'Popover', href: '/admin/components/display/popover' },
             ],
         },
         {
@@ -83,6 +88,7 @@ export const useShowcaseNav = () => {
         { title: 'Button', href: '/admin/components/actions/button' },
         { title: 'Menu', href: '/admin/components/actions/menu' },
         { title: 'Dialog', href: '/admin/components/actions/dialog' },
+        { title: 'Sheet', href: '/admin/components/actions/sheet' },
     ];
 
     const displayTabs = [
@@ -90,7 +96,9 @@ export const useShowcaseNav = () => {
         { title: 'Alert', href: '/admin/components/display/alert' },
         { title: 'Card', href: '/admin/components/display/card' },
         { title: 'Badge', href: '/admin/components/display/badge' },
+        { title: 'Avatar', href: '/admin/components/display/avatar' },
         { title: 'Tooltip', href: '/admin/components/display/tooltip' },
+        { title: 'Popover', href: '/admin/components/display/popover' },
     ];
 
     const dataTabs = [

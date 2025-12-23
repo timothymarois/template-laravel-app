@@ -39,11 +39,25 @@
                         <CardHeader>
                             <div class="flex items-center gap-3">
                                 <div class="p-2 bg-primary/10 rounded-lg">
+                                    <Square class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Dialog</CardTitle>
+                            </div>
+                            <CardDescription>Modal dialogs for focused interactions</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
+                <Link :href="$route('admin.components.actions.sheet')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
                                     <PanelRight class="size-5 text-primary" />
                                 </div>
-                                <CardTitle class="text-base">Dialog & Sheet</CardTitle>
+                                <CardTitle class="text-base">Sheet</CardTitle>
                             </div>
-                            <CardDescription>Modal dialogs and sliding panels</CardDescription>
+                            <CardDescription>Sliding panels and drawer forms</CardDescription>
                         </CardHeader>
                     </Card>
                 </Link>
@@ -55,7 +69,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { MousePointerClick, Menu, PanelRight } from 'lucide-vue-next';
+import { MousePointerClick, Menu, Square, PanelRight } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

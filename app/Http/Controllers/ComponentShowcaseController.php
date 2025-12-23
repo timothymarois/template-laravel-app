@@ -33,6 +33,16 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/forms/Checkbox');
     }
 
+    public function formsSwitch(): Response
+    {
+        return Inertia::render('admin/components/forms/Switch');
+    }
+
+    public function formsSlider(): Response
+    {
+        return Inertia::render('admin/components/forms/Slider');
+    }
+
     public function formsFields(): Response
     {
         return Inertia::render('admin/components/forms/Fields');
@@ -64,6 +74,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/actions/Dialog');
     }
 
+    public function actionsSheet(): Response
+    {
+        return Inertia::render('admin/components/actions/Sheet');
+    }
+
     // Display
     public function displayIndex(): Response
     {
@@ -85,9 +100,19 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/display/Badge');
     }
 
+    public function displayAvatar(): Response
+    {
+        return Inertia::render('admin/components/display/Avatar');
+    }
+
     public function displayTooltip(): Response
     {
         return Inertia::render('admin/components/display/Tooltip');
+    }
+
+    public function displayPopover(): Response
+    {
+        return Inertia::render('admin/components/display/Popover');
     }
 
     // Data

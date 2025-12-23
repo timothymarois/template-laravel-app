@@ -41,9 +41,23 @@
                                 <div class="p-2 bg-primary/10 rounded-lg">
                                     <Tag class="size-5 text-primary" />
                                 </div>
-                                <CardTitle class="text-base">Badge & Avatar</CardTitle>
+                                <CardTitle class="text-base">Badge</CardTitle>
                             </div>
-                            <CardDescription>Status indicators and user representations</CardDescription>
+                            <CardDescription>Status indicators and labels</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
+                <Link :href="$route('admin.components.display.avatar')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <CircleUser class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Avatar</CardTitle>
+                            </div>
+                            <CardDescription>User representations and profile images</CardDescription>
                         </CardHeader>
                     </Card>
                 </Link>
@@ -55,9 +69,23 @@
                                 <div class="p-2 bg-primary/10 rounded-lg">
                                     <MessageSquare class="size-5 text-primary" />
                                 </div>
-                                <CardTitle class="text-base">Tooltip & Popover</CardTitle>
+                                <CardTitle class="text-base">Tooltip</CardTitle>
                             </div>
-                            <CardDescription>Contextual information overlays</CardDescription>
+                            <CardDescription>Contextual hints on hover</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
+                <Link :href="$route('admin.components.display.popover')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <PanelTopOpen class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Popover</CardTitle>
+                            </div>
+                            <CardDescription>Interactive floating content panels</CardDescription>
                         </CardHeader>
                     </Card>
                 </Link>
@@ -69,7 +97,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { AlertCircle, LayoutGrid, Tag, MessageSquare } from 'lucide-vue-next';
+import { AlertCircle, LayoutGrid, Tag, MessageSquare, CircleUser, PanelTopOpen } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();
