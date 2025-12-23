@@ -4,7 +4,7 @@ import type { BulletLegendItemInterface } from "@unovis/ts";
 import type { Component } from "vue";
 import { omit } from "@unovis/ts";
 import { VisTooltip } from "@unovis/vue";
-import { createApp } from "vue";
+import { createApp, watch } from "vue";
 import { ChartTooltip } from ".";
 
 const props = defineProps<{
@@ -16,7 +16,13 @@ const props = defineProps<{
 }>();
 
 // Use weakmap to store reference to each datapoint for Tooltip
-const wm = new WeakMap();
+let wm = new WeakMap();
+
+// Reset cache when props that affect tooltip content change
+watch(() => [props.index, props.items, props.valueFormatter], () => {
+    wm = new WeakMap();
+});
+
 function template(d: any, i: number, elements: (HTMLElement | SVGElement)[]) {
     const valueFormatter = props.valueFormatter ?? ((tick: number) => `${tick}`);
     if (props.index in d) {
@@ -30,9 +36,12 @@ function template(d: any, i: number, elements: (HTMLElement | SVGElement)[]) {
                 return { ...legendReference, value: valueFormatter(value) };
             });
             const TooltipComponent = props.customTooltip ?? ChartTooltip;
-            createApp(TooltipComponent, { title: d[props.index], data: omittedData }).mount(componentDiv);
-            wm.set(d, componentDiv.innerHTML);
-            return componentDiv.innerHTML;
+            const app = createApp(TooltipComponent, { title: d[props.index], data: omittedData });
+            app.mount(componentDiv);
+            const html = componentDiv.innerHTML;
+            app.unmount();
+            wm.set(d, html);
+            return html;
         }
     }
 
@@ -47,9 +56,12 @@ function template(d: any, i: number, elements: (HTMLElement | SVGElement)[]) {
             const omittedData = [{ name: data.name, value: valueFormatter(data[props.index]), color: style.fill }];
             const componentDiv = document.createElement("div");
             const TooltipComponent = props.customTooltip ?? ChartTooltip;
-            createApp(TooltipComponent, { title: d[props.index], data: omittedData }).mount(componentDiv);
-            wm.set(d, componentDiv.innerHTML);
-            return componentDiv.innerHTML;
+            const app = createApp(TooltipComponent, { title: d[props.index], data: omittedData });
+            app.mount(componentDiv);
+            const html = componentDiv.innerHTML;
+            app.unmount();
+            wm.set(d, html);
+            return html;
         }
     }
 }

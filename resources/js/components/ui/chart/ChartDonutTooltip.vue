@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { VisTooltip } from "@unovis/vue";
 import { Donut } from "@unovis/ts";
 
@@ -10,10 +10,11 @@ const props = defineProps<{
 
 const selector = Donut.selectors.segment;
 const markerRef = ref<HTMLElement | null>(null);
+let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
 // Add interactive class only to this tooltip's container
 onMounted(() => {
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
         if (!markerRef.value) return;
 
         // Find the container that holds both the marker and the donut
@@ -29,6 +30,13 @@ onMounted(() => {
             parent = parent.parentElement;
         }
     }, 100);
+});
+
+onBeforeUnmount(() => {
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+    }
 });
 
 function template(d: any, i: number, elements: (HTMLElement | SVGElement)[]) {
