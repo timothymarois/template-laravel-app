@@ -15,7 +15,7 @@
                 <CardContent class="space-y-4 flex-1">
                     <div>
                         <h4 class="text-sm font-medium mb-3">States</h4>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-3 gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <Checkbox v-model="checkbox1" />
                                 <span class="text-sm">Unchecked</span>
@@ -24,6 +24,10 @@
                                 <Checkbox v-model="checkbox2" />
                                 <span class="text-sm">Checked</span>
                             </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <Checkbox v-model="checkboxInvalid" invalid />
+                                <span class="text-sm">Invalid</span>
+                            </label>
                             <label class="flex items-center gap-2 cursor-not-allowed opacity-50">
                                 <Checkbox :modelValue="false" disabled />
                                 <span class="text-sm">Disabled</span>
@@ -31,6 +35,10 @@
                             <label class="flex items-center gap-2 cursor-not-allowed opacity-50">
                                 <Checkbox :modelValue="true" disabled />
                                 <span class="text-sm">Disabled Checked</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <Checkbox v-model="checkboxInvalidChecked" invalid />
+                                <span class="text-sm">Invalid Checked</span>
                             </label>
                         </div>
                     </div>
@@ -56,7 +64,7 @@
                 <CardContent class="space-y-4 flex-1">
                     <div>
                         <h4 class="text-sm font-medium mb-3">States</h4>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-3 gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <RadioGroup v-model="radioState1">
                                     <RadioGroupItem value="unselected" id="radio-unselected" />
@@ -68,6 +76,12 @@
                                     <RadioGroupItem value="selected" id="radio-selected" />
                                 </RadioGroup>
                                 <span class="text-sm">Selected</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <RadioGroup v-model="radioInvalid">
+                                    <RadioGroupItem value="invalid" id="radio-invalid" invalid />
+                                </RadioGroup>
+                                <span class="text-sm">Invalid</span>
                             </label>
                             <div class="flex items-center gap-2 cursor-not-allowed opacity-50">
                                 <RadioGroup model-value="">
@@ -81,6 +95,12 @@
                                 </RadioGroup>
                                 <span class="text-sm">Disabled Selected</span>
                             </div>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <RadioGroup v-model="radioInvalidSelected">
+                                    <RadioGroupItem value="invalid-selected" id="radio-invalid-selected" invalid />
+                                </RadioGroup>
+                                <span class="text-sm">Invalid Selected</span>
+                            </label>
                         </div>
                     </div>
 
@@ -113,11 +133,15 @@ const { sideNavItems, formsTabs } = useShowcaseNav();
 // Checkbox states
 const checkbox1 = ref(false);
 const checkbox2 = ref(true);
+const checkboxInvalid = ref(false);
+const checkboxInvalidChecked = ref(true);
 const selectedNotifications = ref<string[]>(['email']);
 
 // Radio states
 const radioState1 = ref('');
 const radioState2 = ref('selected');
+const radioInvalid = ref('');
+const radioInvalidSelected = ref('invalid-selected');
 const selectedPlan = ref('basic');
 
 const notificationOptions = [

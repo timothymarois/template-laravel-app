@@ -2,7 +2,7 @@
     <Checkbox
         :modelValue="isChecked"
         :disabled="disabled"
-        :class="[computedSizeClass, className]"
+        :class="[computedSizeClass, invalidClass, className]"
         @update:modelValue="handleChange"
     />
 </template>
@@ -34,6 +34,10 @@ const computedSizeClass = computed(() => {
     if (props.size === 'small') return 'w-4 h-4';
     if (props.size === 'large') return 'w-6 h-6';
     return '';
+});
+
+const invalidClass = computed(() => {
+    return props.invalid ? 'border-destructive data-[state=unchecked]:border-destructive' : '';
 });
 
 // Check if we're in array mode (checkbox group)

@@ -46,6 +46,7 @@ interface Props {
     chipVariant?: 'default' | 'secondary' | 'outline' | 'primary';
     fluid?: boolean;
     size?: 'small' | 'large' | 'default';
+    invalid?: boolean;
     class?: string;
     contentClass?: string;
 }
@@ -73,6 +74,7 @@ const modelProxy = computed({
 
 const computedTriggerClass = computed(() => {
     const sizeClass = props.size === 'small' ? 'h-8' : props.size === 'large' ? 'h-10' : '';
-    return cn(sizeClass, props.class);
+    const invalidClass = props.invalid ? 'border-destructive focus-visible:ring-destructive' : '';
+    return cn(sizeClass, invalidClass, props.class);
 });
 </script>

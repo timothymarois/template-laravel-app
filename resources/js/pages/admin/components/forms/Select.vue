@@ -13,7 +13,7 @@
                     <CardDescription>Dropdown selection with single value</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Empty</div>
                             <Select v-model="basicEmpty" :options="basicOptions" placeholder="Select option..." fluid />
@@ -21,6 +21,10 @@
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">With Value</div>
                             <Select v-model="basicFilled" :options="basicOptions" placeholder="Select option..." clearable fluid />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <Select v-model="basicInvalid" :options="basicOptions" placeholder="Select option..." invalid clearable fluid />
                         </div>
                         <div class="opacity-50">
                             <div class="text-xs text-muted-foreground mb-1">Disabled</div>
@@ -41,7 +45,7 @@
                     <CardDescription>Select with search/filter functionality (combobox)</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Empty</div>
                             <Select
@@ -62,6 +66,18 @@
                                 clearable
                                 placeholder="Search countries..."
                                 search-placeholder="Type to search..."
+                                fluid
+                            />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <Select
+                                v-model="searchInvalid"
+                                :options="countries"
+                                searchable
+                                placeholder="Search countries..."
+                                invalid
+                                clearable
                                 fluid
                             />
                         </div>
@@ -100,7 +116,7 @@
                     <CardDescription>Select multiple values from a list</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Empty</div>
                             <Select
@@ -121,6 +137,19 @@
                                 :chips="false"
                                 clearable
                                 placeholder="Select permissions..."
+                                fluid
+                            />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <Select
+                                v-model="multiInvalid"
+                                :options="permissionOptions"
+                                multiple
+                                :chips="false"
+                                placeholder="Select permissions..."
+                                invalid
+                                clearable
                                 fluid
                             />
                         </div>
@@ -160,7 +189,7 @@
                     <CardDescription>Multi-select with search/filter functionality</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Empty</div>
                             <Select
@@ -185,6 +214,20 @@
                                 clearable
                                 placeholder="Search and select..."
                                 search-placeholder="Search countries..."
+                                fluid
+                            />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <Select
+                                v-model="multiSearchInvalid"
+                                :options="countries"
+                                multiple
+                                searchable
+                                :chips="false"
+                                placeholder="Search countries..."
+                                invalid
+                                clearable
                                 fluid
                             />
                         </div>
@@ -226,7 +269,7 @@
                     <CardDescription>Multi-select with inline chip/tag display</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Default</div>
                             <Select
@@ -246,6 +289,18 @@
                                 clearable
                                 chip-variant="secondary"
                                 placeholder="Select..."
+                                fluid
+                            />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <Select
+                                v-model="chipsInvalid"
+                                :options="techOptions"
+                                multiple
+                                placeholder="Select..."
+                                invalid
+                                clearable
                                 fluid
                             />
                         </div>
@@ -291,30 +346,35 @@ const { sideNavItems, formsTabs } = useShowcaseNav();
 // Basic Select
 const basicEmpty = ref('');
 const basicFilled = ref('option2');
+const basicInvalid = ref('option1');
 const basicDisabledEmpty = ref('');
 const basicDisabledFilled = ref('option1');
 
 // Searchable Select
 const searchEmpty = ref('');
 const searchFilled = ref('us');
+const searchInvalid = ref('ca');
 const searchClearable = ref('vue');
 const searchDisabled = ref('ca');
 
 // Multi Select
 const multiEmpty = ref<string[]>([]);
 const multiFilled = ref<string[]>(['read', 'write']);
+const multiInvalid = ref<string[]>(['read']);
 const multiMany = ref<string[]>(['read', 'write', 'delete']);
 const multiDisabled = ref<string[]>(['read']);
 
 // Multi Searchable
 const multiSearchEmpty = ref<string[]>([]);
 const multiSearchFilled = ref<string[]>(['us', 'ca']);
+const multiSearchInvalid = ref<string[]>(['us']);
 const multiSearchMany = ref<string[]>(['us', 'ca', 'mx', 'br']);
 const multiSearchDisabled = ref<string[]>(['us']);
 
 // Chip Variants Examples
 const chipsDefault = ref<string[]>(['vue', 'react']);
 const chipsSecondary = ref<string[]>(['vue', 'typescript']);
+const chipsInvalid = ref<string[]>(['vue', 'react']);
 const chipsOutline = ref<string[]>(['react', 'node']);
 const chipsDisabled = ref<string[]>(['vue', 'typescript']);
 

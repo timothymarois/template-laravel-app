@@ -10,9 +10,14 @@ import {
 } from "reka-ui";
 import { cn } from "@/utils";
 
-const props = defineProps<RadioGroupItemProps & { class?: HTMLAttributes["class"] }>();
+interface Props extends RadioGroupItemProps {
+    class?: HTMLAttributes["class"];
+    invalid?: boolean;
+}
 
-const delegatedProps = reactiveOmit(props, "class");
+const props = defineProps<Props>();
+
+const delegatedProps = reactiveOmit(props, "class", "invalid");
 
 const forwardedProps = useForwardProps(delegatedProps);
 </script>
@@ -23,6 +28,7 @@ const forwardedProps = useForwardProps(delegatedProps);
         :class="
             cn(
                 'group peer relative aspect-square h-4 w-4 rounded-full border border-input bg-background text-primary cursor-pointer transition-all hover:border-foreground/50 focus:outline-none focus-visible:border-foreground/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-input data-[state=checked]:border-primary data-[state=checked]:text-primary data-[state=checked]:hover:text-primary/70 data-[state=checked]:disabled:hover:text-primary',
+                props.invalid && 'border-destructive data-[state=unchecked]:border-destructive',
                 props.class,
             )
         "

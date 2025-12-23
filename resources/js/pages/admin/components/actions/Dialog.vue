@@ -88,12 +88,48 @@
                                         <Input placeholder="Enter description" fluid />
                                     </LabelField>
                                     <LabelField label="Category" name="category">
-                                        <Select :options="categoryOptions" placeholder="Select category" />
+                                        <Select :options="categoryOptions" placeholder="Select category" fluid />
                                     </LabelField>
                                 </div>
                                 <DialogFooter class="p-6 border-t">
                                     <Button variant="outline" @click="showFormDialog = false">Cancel</Button>
                                     <Button @click="showFormDialog = false">Save Item</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </DialogBase>
+                    </div>
+
+                    <!-- Form Dialog with Errors -->
+                    <div>
+                        <h4 class="text-sm font-medium mb-3">Form Dialog with Validation</h4>
+                        <Button @click="showErrorFormDialog = true">Open Form with Validation</Button>
+                        <DialogBase v-model:open="showErrorFormDialog">
+                            <DialogContent class="p-0 gap-0 max-w-md">
+                                <DialogHeader class="p-6 border-b">
+                                    <DialogTitle>Create Project</DialogTitle>
+                                    <DialogDescription>Fill in the project details below.</DialogDescription>
+                                </DialogHeader>
+                                <div class="p-6 space-y-4">
+                                    <LabelField label="Project Name" name="projectName" required :error="formErrors.projectName">
+                                        <Input v-model="projectForm.name" placeholder="Enter project name" fluid :invalid="!!formErrors.projectName" />
+                                    </LabelField>
+                                    <LabelField label="Description" name="projectDesc">
+                                        <Input v-model="projectForm.description" placeholder="Enter description" fluid />
+                                    </LabelField>
+                                    <LabelField label="Team Lead" name="teamLead" required :error="formErrors.teamLead">
+                                        <Select v-model="projectForm.teamLead" :options="teamLeadOptions" placeholder="Select team lead" fluid :invalid="!!formErrors.teamLead" />
+                                    </LabelField>
+                                </div>
+                                <DialogFooter class="p-6 border-t sm:flex-col sm:items-stretch gap-4">
+                                    <Errors
+                                        v-if="Object.keys(formErrors).length > 0"
+                                        :errors="Object.values(formErrors)"
+                                        title="Please fix the following errors"
+                                    />
+                                    <div class="flex gap-2 justify-end">
+                                        <Button variant="outline" @click="closeErrorFormDialog">Cancel</Button>
+                                        <Button @click="submitErrorForm">Create Project</Button>
+                                    </div>
                                 </DialogFooter>
                             </DialogContent>
                         </DialogBase>
@@ -557,7 +593,7 @@ import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input, Select, LabelField, Checkbox } from '@/components/ui/form';
+import { Input, Select, LabelField, Checkbox, Errors } from '@/components/ui/form';
 import { Badge } from '@/components/ui/badge';
 import {
     Dialog,
@@ -591,6 +627,43 @@ const showConfirmDialog = ref(false);
 const showDestructiveDialog = ref(false);
 const showDraggableDialog = ref(false);
 const showFormDialog = ref(false);
+const showErrorFormDialog = ref(false);
+
+// Form with validation state
+const projectForm = ref({
+    name: '',
+    description: '',
+    teamLead: '',
+});
+const formErrors = ref<Record<string, string>>({});
+
+const teamLeadOptions = [
+    { label: 'John Doe', value: 'john' },
+    { label: 'Jane Smith', value: 'jane' },
+    { label: 'Bob Wilson', value: 'bob' },
+];
+
+const submitErrorForm = () => {
+    formErrors.value = {};
+
+    if (!projectForm.value.name) {
+        formErrors.value.projectName = 'Project name is required';
+    }
+    if (!projectForm.value.teamLead) {
+        formErrors.value.teamLead = 'Team lead is required';
+    }
+
+    if (Object.keys(formErrors.value).length === 0) {
+        showErrorFormDialog.value = false;
+        projectForm.value = { name: '', description: '', teamLead: '' };
+    }
+};
+
+const closeErrorFormDialog = () => {
+    showErrorFormDialog.value = false;
+    formErrors.value = {};
+    projectForm.value = { name: '', description: '', teamLead: '' };
+};
 const showGradientDialog = ref(false);
 const showGradientDialog2 = ref(false);
 const showGradientDialog3 = ref(false);
