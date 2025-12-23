@@ -103,6 +103,12 @@
                     </div>
                     <div class="flex items-center gap-2 pb-3">
                         <Input placeholder="Search..." clearable class="w-64" />
+                        <CustomizeColumns
+                            :columns="orderColumnDefs"
+                            :activeColumnList="activeOrderColumns"
+                            :defaultColumnList="defaultOrderColumns"
+                            @update="activeOrderColumns = $event"
+                        />
                         <Button variant="outline">Export</Button>
                     </div>
                 </CardHeader>
@@ -110,24 +116,24 @@
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead class="pl-6">Order</TableHead>
-                                <TableHead>Customer</TableHead>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead class="text-right pr-6">Amount</TableHead>
+                                <TableHead v-if="isColumnVisible('order')" class="pl-6">Order</TableHead>
+                                <TableHead v-if="isColumnVisible('customer')">Customer</TableHead>
+                                <TableHead v-if="isColumnVisible('date')">Date</TableHead>
+                                <TableHead v-if="isColumnVisible('status')">Status</TableHead>
+                                <TableHead v-if="isColumnVisible('amount')" class="text-right pr-6">Amount</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             <TableRow v-for="order in orders" :key="order.id">
-                                <TableCell class="pl-6 font-medium">{{ order.id }}</TableCell>
-                                <TableCell>{{ order.customer }}</TableCell>
-                                <TableCell class="text-muted-foreground">{{ order.date }}</TableCell>
-                                <TableCell>
+                                <TableCell v-if="isColumnVisible('order')" class="pl-6 font-medium">{{ order.id }}</TableCell>
+                                <TableCell v-if="isColumnVisible('customer')">{{ order.customer }}</TableCell>
+                                <TableCell v-if="isColumnVisible('date')" class="text-muted-foreground">{{ order.date }}</TableCell>
+                                <TableCell v-if="isColumnVisible('status')">
                                     <Badge :class="getOrderStatusClass(order.status)">
                                         {{ order.status }}
                                     </Badge>
                                 </TableCell>
-                                <TableCell class="text-right pr-6 font-medium">{{ order.amount }}</TableCell>
+                                <TableCell v-if="isColumnVisible('amount')" class="text-right pr-6 font-medium">{{ order.amount }}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -206,6 +212,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
+import { CustomizeColumns } from '@/components/ui/data-table';
 import { Filter, Plus } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
@@ -261,6 +268,19 @@ const orders = [
     { id: '#ORD-004', customer: 'Alice Brown', date: 'Dec 17, 2024', status: 'Completed', amount: '$320.00' },
     { id: '#ORD-005', customer: 'Charlie Davis', date: 'Dec 16, 2024', status: 'Cancelled', amount: '$45.00' },
 ];
+
+const orderColumnDefs = [
+    { key: 'order', header: 'Order' },
+    { key: 'customer', header: 'Customer' },
+    { key: 'date', header: 'Date' },
+    { key: 'status', header: 'Status' },
+    { key: 'amount', header: 'Amount' },
+];
+
+const defaultOrderColumns = ['order', 'customer', 'date', 'status', 'amount'];
+const activeOrderColumns = ref([...defaultOrderColumns]);
+
+const isColumnVisible = (key: string) => activeOrderColumns.value.includes(key);
 
 const activities = [
     { id: 1, action: 'Created new project', user: 'John Doe', time: '2 min ago', color: 'bg-green-500' },

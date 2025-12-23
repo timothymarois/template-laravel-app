@@ -2,17 +2,18 @@
     <Popover v-model:open="isOpen">
         <PopoverTrigger>
             <Button variant="outline" size="icon">
-                <IconSettings class="size-4" />
+                <Settings2 class="size-4" />
             </Button>
         </PopoverTrigger>
         <PopoverContent class="w-[360px] p-0" @open-auto-focus.prevent>
             <div class="flex flex-col">
-                <div class="p-4 py-3">
+                <div class="p-4 py-3" :class="{ 'border-b border-border': !showSearch }">
                     <div class="text-lg font-semibold flex items-center gap-x-1 text-foreground">
                         Customize columns
                     </div>
                 </div>
                 <div
+                    v-if="showSearch"
                     class="p-4 pt-0 border-b border-border text-sm font-normal"
                     :class="{ 'shadow-sm': !isTop }"
                 >
@@ -23,15 +24,15 @@
                         placeholder="Search columns"
                     />
                 </div>
-                <div ref="frame" class="h-[300px] overflow-hidden overflow-y-auto">
-                    <div class="text-xs py-1 px-3 border-b border-border text-foreground font-semibold uppercase">
+                <div ref="frame" class="max-h-[300px] overflow-hidden overflow-y-auto">
+                    <div class="text-xs py-1 px-4 border-b border-border text-foreground font-semibold uppercase">
                         Visible
                     </div>
                     <draggable
                         v-model="selectedColumns"
                         item-key="key"
                         group="columns"
-                        class="p-2 px-3"
+                        class="p-2 px-4"
                         ghost-class="ghost-card"
                         :animation="200"
                         :move="checkLocked"
@@ -74,11 +75,11 @@
                     </draggable>
                     <template v-if="Object.keys(filteredUnselectedColumnGroups).length > 0">
                         <div
-                            class="text-xs py-1 px-3 border-y border-border text-foreground font-semibold uppercase"
+                            class="text-xs py-1 px-4 border-y border-border text-foreground font-semibold uppercase"
                         >
                             Not visible
                         </div>
-                        <div class="flex flex-col w-full p-2 px-3 space-y-2">
+                        <div class="flex flex-col w-full p-2 px-4 space-y-2">
                             <template
                                 v-for="(group, groupName) in filteredUnselectedColumnGroups"
                                 :key="groupName"
@@ -137,7 +138,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue';
-import { IconGripVertical, IconSettings } from '@tabler/icons-vue';
+import { IconGripVertical } from '@tabler/icons-vue';
+import { Settings2 } from 'lucide-vue-next';
 import draggable from 'vuedraggable';
 import {
     PopoverBase as Popover,
@@ -208,6 +210,8 @@ const filteredUnselectedColumnGroups = computed(() => {
         return groups;
     }, {} as Record<string, any[]>);
 });
+
+const showSearch = computed(() => (props.columns as any[])?.length > 10);
 
 const isDefault = computed(() => {
     const defaultKeys = (props.defaultColumnList as any[]).filter(key =>
