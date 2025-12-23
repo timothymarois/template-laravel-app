@@ -29,6 +29,7 @@ export const useShowcaseNav = () => {
                 { label: 'Calendar', href: '/admin/components/forms/calendar' },
                 { label: 'Fields', href: '/admin/components/forms/fields' },
                 { label: 'Editor', href: '/admin/components/forms/editor' },
+                { label: 'Upload', href: '/admin/components/forms/upload' },
             ],
         },
         {
@@ -102,6 +103,7 @@ export const useShowcaseNav = () => {
         { title: 'Calendar', href: '/admin/components/forms/calendar' },
         { title: 'Fields', href: '/admin/components/forms/fields' },
         { title: 'Editor', href: '/admin/components/forms/editor' },
+        { title: 'Upload', href: '/admin/components/forms/upload' },
     ];
 
     const actionsTabs = [

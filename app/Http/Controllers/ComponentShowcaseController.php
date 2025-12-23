@@ -63,6 +63,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/forms/Editor');
     }
 
+    public function formsUpload(): Response
+    {
+        return Inertia::render('admin/components/forms/Upload');
+    }
+
     // Actions
     public function actionsIndex(): Response
     {
