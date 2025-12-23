@@ -184,37 +184,84 @@
 
                     <div>
                         <h4 class="text-sm font-medium mb-3">Icon-Only Toolbar (Text Editor)</h4>
-                        <div class="inline-flex rounded-md border bg-background p-1 gap-0.5">
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatBold }" @click="formatBold = !formatBold">
-                                <Bold class="size-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatItalic }" @click="formatItalic = !formatItalic">
-                                <Italic class="size-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatUnderline }" @click="formatUnderline = !formatUnderline">
-                                <Underline class="size-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatStrike }" @click="formatStrike = !formatStrike">
-                                <Strikethrough class="size-4" />
-                            </Button>
-                            <div class="w-px bg-border mx-1" />
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignLeft }" @click="setAlign('left')">
-                                <AlignLeft class="size-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignCenter }" @click="setAlign('center')">
-                                <AlignCenter class="size-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignRight }" @click="setAlign('right')">
-                                <AlignRight class="size-4" />
-                            </Button>
-                            <div class="w-px bg-border mx-1" />
-                            <Button variant="ghost" size="icon-sm">
-                                <Link2 class="size-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm">
-                                <Image class="size-4" />
-                            </Button>
-                        </div>
+                        <TooltipProvider :delay-duration="300">
+                            <div class="inline-flex rounded-md border bg-background p-1 gap-0.5">
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatBold }" @click="formatBold = !formatBold">
+                                            <Bold class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Bold</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatItalic }" @click="formatItalic = !formatItalic">
+                                            <Italic class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Italic</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatUnderline }" @click="formatUnderline = !formatUnderline">
+                                            <Underline class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Underline</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': formatStrike }" @click="formatStrike = !formatStrike">
+                                            <Strikethrough class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Strikethrough</TooltipContent>
+                                </Tooltip>
+                                <div class="w-px bg-border mx-1" />
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignLeft }" @click="setAlign('left')">
+                                            <AlignLeft class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Align Left</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignCenter }" @click="setAlign('center')">
+                                            <AlignCenter class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Align Center</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm" :class="{ 'bg-muted': alignRight }" @click="setAlign('right')">
+                                            <AlignRight class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Align Right</TooltipContent>
+                                </Tooltip>
+                                <div class="w-px bg-border mx-1" />
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm">
+                                            <Link2 class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Insert Link</TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <Button variant="ghost" size="icon-sm">
+                                            <Image class="size-4" />
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>Insert Image</TooltipContent>
+                                </Tooltip>
+                            </div>
+                        </TooltipProvider>
                     </div>
 
                     <div>
@@ -263,6 +310,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
     Plus,
     Download,
