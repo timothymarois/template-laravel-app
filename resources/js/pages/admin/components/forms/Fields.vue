@@ -121,7 +121,9 @@
 import { reactive, ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Input, Checkbox, LabelField } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { LabelField } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 

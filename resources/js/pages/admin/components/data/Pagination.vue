@@ -52,7 +52,7 @@
 import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Select } from '@/components/ui/form';
+import { Select } from '@/components/ui/select-popover';
 import { Paginator } from '@/components/ui/data-table';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 

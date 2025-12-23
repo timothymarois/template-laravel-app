@@ -257,7 +257,7 @@ import { ref } from 'vue';
 import type { DateValue, DateRange } from 'reka-ui';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { RangeCalendar } from '@/components/ui/range-calendar';
 import { DatePicker, DateInput, DateRangePicker } from '@/components/ui/date-picker';

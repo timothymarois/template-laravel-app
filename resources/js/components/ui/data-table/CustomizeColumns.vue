@@ -147,7 +147,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { Input as InputText, Checkbox } from '@/components/ui/form';
+import { Input as InputText } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useScroll } from '@/composables/useScroll';
 
 const props = defineProps({

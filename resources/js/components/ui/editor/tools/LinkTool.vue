@@ -56,7 +56,7 @@ import { IconLink } from '@tabler/icons-vue';
 import { Check } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { PopoverBase, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import { Input as InputText } from '@/components/ui/form';
+import { Input as InputText } from '@/components/ui/input';
 import {
     Tooltip,
     TooltipContent,

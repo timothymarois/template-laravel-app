@@ -1,33 +1,67 @@
-<script setup lang="ts">
-import type { CheckboxRootEmits, CheckboxRootProps } from "reka-ui";
-import type { HTMLAttributes } from "vue";
-import { reactiveOmit } from "@vueuse/core";
-import { Check } from "lucide-vue-next";
-import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "reka-ui";
-import { cn } from "@/utils";
-
-const props = defineProps<CheckboxRootProps & { class?: HTMLAttributes["class"] }>();
-const emits = defineEmits<CheckboxRootEmits>();
-
-const delegatedProps = reactiveOmit(props, "class");
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
-</script>
-
 <template>
-    <CheckboxRoot
-        v-bind="forwarded"
-        :class="
-            cn('group peer relative h-4 w-4 shrink-0 rounded-sm border border-input bg-background transition-all cursor-pointer hover:border-foreground/50 focus-visible:outline-none focus-visible:border-foreground/50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-input data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:hover:bg-primary/80 data-[state=checked]:disabled:hover:bg-primary',
-               props.class)"
-    >
-        <span class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-30 group-data-[state=checked]:opacity-0 group-disabled:!opacity-0">
-            <Check class="h-3 w-3" :stroke-width="3" />
-        </span>
-        <CheckboxIndicator class="absolute inset-0 flex items-center justify-center text-current">
-            <slot>
-                <Check class="h-3 w-3" :stroke-width="3" />
-            </slot>
-        </CheckboxIndicator>
-    </CheckboxRoot>
+    <CheckboxBase
+        :modelValue="isChecked"
+        :disabled="disabled"
+        :class="[computedSizeClass, invalidClass, className]"
+        @update:modelValue="handleChange"
+    />
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import CheckboxBase from './CheckboxBase.vue';
+
+interface Props {
+    modelValue?: boolean | string[];
+    value?: string;
+    disabled?: boolean;
+    invalid?: boolean;
+    size?: 'small' | 'large' | 'default';
+    class?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    size: 'default',
+});
+
+const emit = defineEmits<{
+    'update:modelValue': [value: boolean | string[]];
+}>();
+
+const className = computed(() => props.class || '');
+
+const computedSizeClass = computed(() => {
+    if (props.size === 'small') return 'w-4 h-4';
+    if (props.size === 'large') return 'w-6 h-6';
+    return '';
+});
+
+const invalidClass = computed(() => {
+    return props.invalid ? 'border-destructive data-[state=unchecked]:border-destructive' : '';
+});
+
+// Check if we're in array mode (checkbox group)
+const isArrayMode = computed(() => Array.isArray(props.modelValue));
+
+// Determine if checkbox is checked
+const isChecked = computed(() => {
+    if (isArrayMode.value && props.value !== undefined) {
+        return (props.modelValue as string[]).includes(props.value);
+    }
+    return props.modelValue as boolean;
+});
+
+// Handle checkbox change
+const handleChange = (checked: boolean) => {
+    if (isArrayMode.value && props.value !== undefined) {
+        const currentArray = props.modelValue as string[];
+        if (checked) {
+            emit('update:modelValue', [...currentArray, props.value]);
+        } else {
+            emit('update:modelValue', currentArray.filter(v => v !== props.value));
+        }
+    } else {
+        emit('update:modelValue', checked);
+    }
+};
+</script>

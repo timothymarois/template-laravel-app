@@ -19,7 +19,7 @@
                 </template>
                 <template #footer>
                     <div class="w-full flex flex-col space-y-4">
-                        <Errors :errors="form.errors" />
+                        <FormErrors :errors="form.errors" />
                         <div class="w-full">
                             <Button
                                 fluid
@@ -44,7 +44,7 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
 import { DefaultLayout as LayoutDefault } from '@/components/site';
-import { Card, LabelField, Input as InputText, Errors, Button } from '@/components/ui';
+import { Card, LabelField, Input as InputText, FormErrors, Button } from '@/components/ui';
 import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();
 

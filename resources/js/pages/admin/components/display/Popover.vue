@@ -175,7 +175,7 @@
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
     PopoverBase as Popover,
     PopoverContent,

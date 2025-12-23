@@ -505,7 +505,10 @@ const submit = () => {
 import { ref, computed } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input, FileInput, Dropzone, LabelField, Select } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select-popover';
+import { FileInput, Dropzone } from '@/components/ui/upload';
+import { LabelField } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { User, Upload, X } from 'lucide-vue-next';

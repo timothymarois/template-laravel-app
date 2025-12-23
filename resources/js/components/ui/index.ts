@@ -32,8 +32,8 @@ export * from './dropdown-menu';
 // Import directly from '@/components/ui/editor' when needed
 // export * from './editor';
 
-// Form
-export * from './form';
+// Form Errors
+export * from './form-errors';
 
 // Input
 export * from './input';
@@ -53,8 +53,11 @@ export * from './radio-group';
 // Scroll Frame
 export * from './scroll-frame';
 
-// Select
+// Select (primitives)
 export * from './select';
+
+// Select Popover (enhanced select)
+export * from './select-popover';
 
 // Sheet
 export * from './sheet';
@@ -65,5 +68,11 @@ export * from './sonner';
 // Table
 export * from './table';
 
+// Textarea
+export * from './textarea';
+
 // Tooltip
 export * from './tooltip';
+
+// Upload
+export * from './upload';

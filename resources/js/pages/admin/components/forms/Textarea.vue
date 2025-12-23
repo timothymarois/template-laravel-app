@@ -244,7 +244,9 @@
 import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input, Textarea, LabelField } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { LabelField } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 

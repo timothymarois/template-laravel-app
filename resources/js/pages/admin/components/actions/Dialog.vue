@@ -134,7 +134,7 @@
                                     </LabelField>
                                 </div>
                                 <DialogFooter class="p-6 border-t sm:flex-col sm:items-stretch gap-4">
-                                    <Errors
+                                    <FormErrors
                                         v-if="Object.keys(formErrors).length > 0"
                                         :errors="Object.values(formErrors)"
                                         title="Please fix the following errors"
@@ -410,7 +410,10 @@ import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input, Select, LabelField, Errors } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select-popover';
+import { LabelField } from '@/components/ui/label';
+import { FormErrors } from '@/components/ui/form-errors';
 import {
     Dialog,
     DialogBase,

@@ -175,7 +175,8 @@
 import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input, Select } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select-popover';
 import { Button } from '@/components/ui/button';
 import { Search, Mail, User, Lock } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';

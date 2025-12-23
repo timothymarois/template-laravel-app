@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import type { DateValue } from 'reka-ui';
-import { Input } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next';

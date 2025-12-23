@@ -49,7 +49,7 @@
             <!-- Footer -->
             <div class="bg-muted/30">
                 <!-- Errors -->
-                <Errors
+                <FormErrors
                     v-if="hasErrors"
                     :errors="errors"
                     :expandDefault="true"
@@ -75,7 +75,7 @@ import SheetTitle from './SheetTitle.vue';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-vue-next';
-import { Errors } from '@/components/ui/form';
+import { FormErrors } from '@/components/ui/form-errors';
 
 interface Tab {
     title: string;

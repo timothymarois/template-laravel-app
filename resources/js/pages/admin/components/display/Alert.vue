@@ -137,15 +137,15 @@
                     <CardDescription>Expandable error list for form validation</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
-                    <Errors
+                    <FormErrors
                         :errors="sampleErrors"
                         title="Please fix the following errors"
                     />
-                    <Errors
+                    <FormErrors
                         :errors="singleError"
                         title="Validation Error"
                     />
-                    <Errors
+                    <FormErrors
                         :failed="true"
                         title="Server Error"
                     />
@@ -406,7 +406,7 @@ import { ref } from 'vue';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Errors } from '@/components/ui/form';
+import { FormErrors } from '@/components/ui/form-errors';
 import { Info, CheckCircle, AlertTriangle, XCircle, X } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
