@@ -72,6 +72,24 @@
                         </CardContent>
                     </Card>
                 </Link>
+
+                <Link :href="$route('admin.components.charts')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <BarChart3 class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Charts</CardTitle>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <CardDescription>
+                                Bar, line, area, pie, and donut charts for data visualization.
+                            </CardDescription>
+                        </CardContent>
+                    </Card>
+                </Link>
         </div>
     </LayoutApp>
 </template>
@@ -80,7 +98,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { TextCursorInput, MousePointerClick, LayoutGrid, Table2 } from 'lucide-vue-next';
+import { TextCursorInput, MousePointerClick, LayoutGrid, Table2, BarChart3 } from 'lucide-vue-next';
 import { useShowcaseNav } from './_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

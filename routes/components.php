@@ -41,3 +41,10 @@ Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('da
 Route::get('/data/table', [ComponentShowcaseController::class, 'dataTable'])->name('data.table');
 Route::get('/data/actions', [ComponentShowcaseController::class, 'dataActions'])->name('data.actions');
 Route::get('/data/pagination', [ComponentShowcaseController::class, 'dataPagination'])->name('data.pagination');
+
+// Charts
+Route::get('/charts', [ComponentShowcaseController::class, 'chartsIndex'])->name('charts');
+Route::get('/charts/bar', [ComponentShowcaseController::class, 'chartsBar'])->name('charts.bar');
+Route::get('/charts/line', [ComponentShowcaseController::class, 'chartsLine'])->name('charts.line');
+Route::get('/charts/area', [ComponentShowcaseController::class, 'chartsArea'])->name('charts.area');
+Route::get('/charts/pie', [ComponentShowcaseController::class, 'chartsPie'])->name('charts.pie');

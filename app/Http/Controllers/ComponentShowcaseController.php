@@ -160,4 +160,30 @@ class ComponentShowcaseController extends Controller
     {
         return Inertia::render('admin/components/data/Pagination');
     }
+
+    // Charts
+    public function chartsIndex(): Response
+    {
+        return Inertia::render('admin/components/charts/Index');
+    }
+
+    public function chartsBar(): Response
+    {
+        return Inertia::render('admin/components/charts/Bar');
+    }
+
+    public function chartsLine(): Response
+    {
+        return Inertia::render('admin/components/charts/Line');
+    }
+
+    public function chartsArea(): Response
+    {
+        return Inertia::render('admin/components/charts/Area');
+    }
+
+    public function chartsPie(): Response
+    {
+        return Inertia::render('admin/components/charts/Pie');
+    }
 }

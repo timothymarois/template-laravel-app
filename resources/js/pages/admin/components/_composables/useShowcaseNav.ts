@@ -4,6 +4,7 @@ import {
     MousePointerClick,
     Eye,
     Database,
+    BarChart3,
 } from 'lucide-vue-next';
 
 export const useShowcaseNav = () => {
@@ -67,6 +68,17 @@ export const useShowcaseNav = () => {
                 { label: 'Pagination', href: '/admin/components/data/pagination' },
             ],
         },
+        {
+            label: 'Charts',
+            icon: BarChart3,
+            children: [
+                { label: 'Overview', href: '/admin/components/charts' },
+                { label: 'Bar', href: '/admin/components/charts/bar' },
+                { label: 'Line', href: '/admin/components/charts/line' },
+                { label: 'Area', href: '/admin/components/charts/area' },
+                { label: 'Pie & Donut', href: '/admin/components/charts/pie' },
+            ],
+        },
     ];
 
     // Legacy flat navigation (kept for backwards compatibility)
@@ -76,6 +88,7 @@ export const useShowcaseNav = () => {
         { label: 'Actions', href: '/admin/components/actions', parent: '/admin/components/actions' },
         { label: 'Display', href: '/admin/components/display', parent: '/admin/components/display' },
         { label: 'Data', href: '/admin/components/data', parent: '/admin/components/data' },
+        { label: 'Charts', href: '/admin/components/charts', parent: '/admin/components/charts' },
     ];
 
     // Tabs for each category - specific page URLs
@@ -118,6 +131,14 @@ export const useShowcaseNav = () => {
         { title: 'Pagination', href: '/admin/components/data/pagination' },
     ];
 
+    const chartsTabs = [
+        { title: 'Overview', href: '/admin/components/charts' },
+        { title: 'Bar', href: '/admin/components/charts/bar' },
+        { title: 'Line', href: '/admin/components/charts/line' },
+        { title: 'Area', href: '/admin/components/charts/area' },
+        { title: 'Pie & Donut', href: '/admin/components/charts/pie' },
+    ];
+
     return {
         sidebarItems,
         sideNavItems,
@@ -125,5 +146,6 @@ export const useShowcaseNav = () => {
         actionsTabs,
         displayTabs,
         dataTabs,
+        chartsTabs,
     };
 };
