@@ -103,6 +103,34 @@
                         </CardHeader>
                     </Card>
                 </Link>
+
+                <Link :href="$route('admin.components.display.tabs')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <LayoutPanelTop class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Tabs</CardTitle>
+                            </div>
+                            <CardDescription>Tabbed navigation with multiple style variants</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
+
+                <Link :href="$route('admin.components.display.accordion')">
+                    <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                        <CardHeader>
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-primary/10 rounded-lg">
+                                    <ChevronDown class="size-5 text-primary" />
+                                </div>
+                                <CardTitle class="text-base">Accordion</CardTitle>
+                            </div>
+                            <CardDescription>Collapsible content sections</CardDescription>
+                        </CardHeader>
+                    </Card>
+                </Link>
         </div>
     </LayoutApp>
 </template>
@@ -111,7 +139,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AdminLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { AlertCircle, LayoutGrid, Tag, MessageSquare, CircleUser, PanelTopOpen, Loader2 } from 'lucide-vue-next';
+import { AlertCircle, LayoutGrid, Tag, MessageSquare, CircleUser, PanelTopOpen, Loader2, LayoutPanelTop, ChevronDown } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

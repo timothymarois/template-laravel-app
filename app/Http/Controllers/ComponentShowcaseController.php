@@ -120,6 +120,16 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/display/Loading');
     }
 
+    public function displayTabs(): Response
+    {
+        return Inertia::render('admin/components/display/Tabs');
+    }
+
+    public function displayAccordion(): Response
+    {
+        return Inertia::render('admin/components/display/Accordion');
+    }
+
     // Data
     public function dataIndex(): Response
     {

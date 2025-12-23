@@ -51,6 +51,8 @@ export const useShowcaseNav = () => {
                 { label: 'Tooltip', href: '/admin/components/display/tooltip' },
                 { label: 'Popover', href: '/admin/components/display/popover' },
                 { label: 'Loading', href: '/admin/components/display/loading' },
+                { label: 'Tabs', href: '/admin/components/display/tabs' },
+                { label: 'Accordion', href: '/admin/components/display/accordion' },
             ],
         },
         {
@@ -101,6 +103,8 @@ export const useShowcaseNav = () => {
         { title: 'Tooltip', href: '/admin/components/display/tooltip' },
         { title: 'Popover', href: '/admin/components/display/popover' },
         { title: 'Loading', href: '/admin/components/display/loading' },
+        { title: 'Tabs', href: '/admin/components/display/tabs' },
+        { title: 'Accordion', href: '/admin/components/display/accordion' },
     ];
 
     const dataTabs = [

@@ -28,8 +28,8 @@ const percentage = computed(() => {
 const sizeClasses = computed(() => {
     switch (props.size) {
         case 'sm': return 'h-1';
-        case 'default': return 'h-2';
         case 'lg': return 'h-3';
+        default: return 'h-2';
     }
 });
 

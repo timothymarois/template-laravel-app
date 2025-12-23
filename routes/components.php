@@ -31,6 +31,8 @@ Route::get('/display/avatar', [ComponentShowcaseController::class, 'displayAvata
 Route::get('/display/tooltip', [ComponentShowcaseController::class, 'displayTooltip'])->name('display.tooltip');
 Route::get('/display/popover', [ComponentShowcaseController::class, 'displayPopover'])->name('display.popover');
 Route::get('/display/loading', [ComponentShowcaseController::class, 'displayLoading'])->name('display.loading');
+Route::get('/display/tabs', [ComponentShowcaseController::class, 'displayTabs'])->name('display.tabs');
+Route::get('/display/accordion', [ComponentShowcaseController::class, 'displayAccordion'])->name('display.accordion');
 
 // Data
 Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('data');

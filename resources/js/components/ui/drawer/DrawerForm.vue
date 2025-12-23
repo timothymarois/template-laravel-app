@@ -6,41 +6,45 @@
                 <SheetTitle>{{ title }}</SheetTitle>
             </div>
 
-            <!-- Tabs -->
-            <div v-if="tabs?.length" class="flex gap-2 px-6 border-b border-border">
-                <button
-                    v-for="(tab, index) in tabs"
-                    :key="index"
-                    :disabled="tab.disabled"
-                    :class="[
-                        'px-4 py-3 text-sm font-medium transition-colors -mb-px',
-                        activeTab === index
-                            ? 'border-b-4 border-primary text-foreground'
-                            : 'text-muted-foreground hover:text-foreground',
-                        tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                    ]"
-                    @click="!tab.disabled && (activeTab = index)"
-                >
-                    {{ tab.title }}
-                </button>
-            </div>
-
-            <!-- Content -->
-            <div class="flex-1 min-h-0 overflow-y-auto px-6 py-4">
-                <template v-if="tabs?.length">
-                    <div v-show="activeTab === 0">
-                        <slot />
+            <!-- With Tabs -->
+            <template v-if="tabs?.length">
+                <Tabs v-model="activeTabValue" variant="underline" class="flex flex-col flex-1 min-h-0">
+                    <div class="border-b border-border">
+                        <TabsList class="px-6 border-b-0">
+                            <TabsTrigger
+                                v-for="(tab, index) in tabs"
+                                :key="index"
+                                :value="String(index)"
+                                :disabled="tab.disabled"
+                            >
+                                {{ tab.title }}
+                            </TabsTrigger>
+                        </TabsList>
                     </div>
-                    <template v-for="(tab, index) in tabs.slice(1)" :key="index">
-                        <div v-show="activeTab === index + 1">
+
+                    <!-- Content -->
+                    <div class="flex-1 min-h-0 overflow-y-auto px-6 py-4">
+                        <TabsContent value="0" class="mt-0">
+                            <slot />
+                        </TabsContent>
+                        <TabsContent
+                            v-for="(tab, index) in tabs.slice(1)"
+                            :key="index"
+                            :value="String(index + 1)"
+                            class="mt-0"
+                        >
                             <slot :name="`tab-${index + 1}`" />
-                        </div>
-                    </template>
-                </template>
-                <template v-else>
+                        </TabsContent>
+                    </div>
+                </Tabs>
+            </template>
+
+            <!-- Without Tabs -->
+            <template v-else>
+                <div class="flex-1 min-h-0 overflow-y-auto px-6 py-4">
                     <slot />
-                </template>
-            </div>
+                </div>
+            </template>
 
             <!-- Footer -->
             <div class="bg-muted/30">
@@ -70,6 +74,7 @@ import {
     SheetContent,
     SheetTitle,
 } from '@/components/ui/sheet';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-vue-next';
 import { Errors } from '@/components/ui/form';
@@ -104,7 +109,7 @@ const emit = defineEmits<{
     'submit': [];
 }>();
 
-const activeTab = ref(0);
+const activeTabValue = ref('0');
 
 const isOpen = computed({
     get: () => props.modelValue,

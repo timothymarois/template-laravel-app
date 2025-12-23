@@ -18,9 +18,9 @@ const sizeClasses = computed(() => {
     switch (props.size) {
         case 'xs': return 'size-3';
         case 'sm': return 'size-4';
-        case 'default': return 'size-6';
         case 'lg': return 'size-8';
         case 'xl': return 'size-12';
+        default: return 'size-6';
     }
 });
 
