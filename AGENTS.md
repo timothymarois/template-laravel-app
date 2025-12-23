@@ -98,7 +98,7 @@ The application is a unified system composed of **Laravel**, **Vue 3 + Inertia**
 * Use `<script setup lang="ts">` for all components.
 * Use typed props only – no untyped props.
 * PascalCase for component file and component names.
-* 4-space indentation for all JS/TS/Vue files.
+* 4-space indentation for all JS/TS/Vue/CSS files.
 
 ### shadcn-vue
 
@@ -329,13 +329,15 @@ Run these commands before committing changes:
 ```bash
 npm run check        # Run ALL checks (PHP + JS)
 npm run check:php    # Run PHP checks only (Pint, Larastan, Pest)
-npm run check:js     # Run JS checks only (ESLint, Vitest, Build)
+npm run check:js     # Run JS checks only (ESLint, Stylelint, Vitest, Build)
 ```
 
 ### Linting & Testing
 ```bash
-npm run lint         # Check ESLint issues
+npm run lint         # Check ESLint issues (JS/Vue)
 npm run lint:fix     # Auto-fix ESLint issues
+npm run lint:css     # Check Stylelint issues (CSS)
+npm run lint:css:fix # Auto-fix Stylelint issues
 npm run test         # Run JS unit tests (Vitest)
 ```
 
@@ -359,6 +361,7 @@ All checks must pass before committing.
 | PHP        | Larastan     | Level 5 minimum                 |
 | PHP        | Pest         | Tests required for new features |
 | JS/Vue     | ESLint       | Must pass                       |
+| CSS        | Stylelint    | Must pass                       |
 | JS/Vue     | Vitest       | Tests required for new features |
 | TypeScript | tsc          | Must compile without errors     |
 

@@ -88,16 +88,20 @@ Pre-installed code-linting and automated test services to help keep your CI pipe
 
 Linting is used on both PHP and JS side to keep all collaborators using the same format.
 
+**Code Style:** All code uses **4-space indentation** (JS, Vue, CSS, PHP).
+
 **Main Commands:**
 
-| Command             | Description                                    |
-|---------------------|------------------------------------------------|
-| `npm run lint`      | Run ESLint on JS/Vue files                     |
-| `npm run lint:fix`  | Run ESLint and auto-fix issues                 |
-| `npm run test`      | Run JS unit tests (Vitest)                     |
-| `npm run check:php` | Run PHP checks (Pint, Larastan, Pest)          |
-| `npm run check:js`  | Run JS checks (ESLint, Vitest, Build)          |
-| `npm run check`     | Run all checks (PHP + JS)                      |
+| Command                | Description                                       |
+|------------------------|---------------------------------------------------|
+| `npm run lint`         | Run ESLint on JS/Vue files                        |
+| `npm run lint:fix`     | Run ESLint and auto-fix issues                    |
+| `npm run lint:css`     | Run Stylelint on CSS files                        |
+| `npm run lint:css:fix` | Run Stylelint and auto-fix CSS issues             |
+| `npm run test`         | Run JS unit tests (Vitest)                        |
+| `npm run check:php`    | Run PHP checks (Pint, Larastan, Pest)             |
+| `npm run check:js`     | Run JS checks (ESLint, Stylelint, Vitest, Build)  |
+| `npm run check`        | Run all checks (PHP + JS)                         |
 
 **Individual Tools:**
 
@@ -106,6 +110,7 @@ Linting is used on both PHP and JS side to keep all collaborators using the same
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
 - ✅ [Laravel Pint](https://laravel.com/docs/12.x/pint) - `./vendor/bin/pint`
 - ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npm run lint` or `npm run lint:fix`
+- ✅ [Stylelint](https://stylelint.io/) - `npm run lint:css` or `npm run lint:css:fix`
 
 ---
 
