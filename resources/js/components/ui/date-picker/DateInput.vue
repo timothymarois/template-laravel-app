@@ -55,6 +55,7 @@ import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/pop
 import { Calendar } from '@/components/ui/calendar';
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next';
 import { CalendarDate } from '@internationalized/date';
+import { formatDateValue } from '@/utils/format';
 
 interface Props {
     modelValue?: DateValue;
@@ -82,7 +83,7 @@ const emit = defineEmits<{
     'update:modelValue': [value: DateValue | undefined];
 }>();
 
-const inputValue = ref(props.modelValue ? formatDate(props.modelValue) : '');
+const inputValue = ref(props.modelValue ? formatDateValue(props.modelValue) : '');
 const dateValue = ref<DateValue | undefined>(props.modelValue);
 const isOpen = ref(false);
 const isValid = ref(true);
@@ -92,7 +93,7 @@ const hasInput = computed(() => inputValue.value.length > 0);
 // Sync with external modelValue changes
 watch(() => props.modelValue, (newVal) => {
     if (newVal) {
-        const formatted = formatDate(newVal);
+        const formatted = formatDateValue(newVal);
         if (formatted !== inputValue.value) {
             inputValue.value = formatted;
             dateValue.value = newVal;
@@ -104,12 +105,6 @@ watch(() => props.modelValue, (newVal) => {
         isValid.value = true;
     }
 });
-
-function formatDate(date: DateValue) {
-    const month = String(date.month).padStart(2, '0');
-    const day = String(date.day).padStart(2, '0');
-    return `${month}/${day}/${date.year}`;
-}
 
 // Parse and validate date string (MM/DD/YYYY)
 function parseDate(str: string): DateValue | null {
@@ -190,7 +185,7 @@ function onBlur() {
 
 function onCalendarSelect(date: DateValue) {
     dateValue.value = date;
-    inputValue.value = formatDate(date);
+    inputValue.value = formatDateValue(date);
     isValid.value = true;
     isOpen.value = false;
     emit('update:modelValue', date);

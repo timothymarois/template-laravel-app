@@ -16,10 +16,10 @@
                     <span class="flex items-center">
                         <CalendarIcon class="mr-2 h-4 w-4" />
                         <template v-if="modelValue?.start && modelValue?.end">
-                            {{ formatDate(modelValue.start) }} - {{ formatDate(modelValue.end) }}
+                            {{ formatDateValue(modelValue.start) }} - {{ formatDateValue(modelValue.end) }}
                         </template>
                         <template v-else-if="modelValue?.start">
-                            {{ formatDate(modelValue.start) }} - ...
+                            {{ formatDateValue(modelValue.start) }} - ...
                         </template>
                         <template v-else>
                             {{ placeholder }}
@@ -52,12 +52,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { DateValue } from 'reka-ui';
-import type { DateRange } from 'reka-ui';
+import type { DateValue, DateRange } from 'reka-ui';
 import { Button } from '@/components/ui/button';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RangeCalendar } from '@/components/ui/range-calendar';
 import { Calendar as CalendarIcon, ChevronDown, X } from 'lucide-vue-next';
+import { formatDateValue } from '@/utils/format';
 
 interface Props {
     modelValue?: DateRange;
@@ -84,12 +84,6 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = ref(false);
-
-function formatDate(date: DateValue) {
-    const month = String(date.month).padStart(2, '0');
-    const day = String(date.day).padStart(2, '0');
-    return `${month}/${day}/${date.year}`;
-}
 
 function onSelect(range: DateRange) {
     emit('update:modelValue', range);
