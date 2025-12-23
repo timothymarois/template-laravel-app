@@ -28,6 +28,7 @@ export const useShowcaseNav = () => {
                 { label: 'Slider', href: '/admin/components/forms/slider' },
                 { label: 'Calendar', href: '/admin/components/forms/calendar' },
                 { label: 'Fields', href: '/admin/components/forms/fields' },
+                { label: 'Editor', href: '/admin/components/forms/editor' },
             ],
         },
         {
@@ -100,6 +101,7 @@ export const useShowcaseNav = () => {
         { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
         { title: 'Calendar', href: '/admin/components/forms/calendar' },
         { title: 'Fields', href: '/admin/components/forms/fields' },
+        { title: 'Editor', href: '/admin/components/forms/editor' },
     ];
 
     const actionsTabs = [

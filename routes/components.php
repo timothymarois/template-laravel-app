@@ -15,6 +15,7 @@ Route::get('/forms/switch', [ComponentShowcaseController::class, 'formsSwitch'])
 Route::get('/forms/slider', [ComponentShowcaseController::class, 'formsSlider'])->name('forms.slider');
 Route::get('/forms/fields', [ComponentShowcaseController::class, 'formsFields'])->name('forms.fields');
 Route::get('/forms/calendar', [ComponentShowcaseController::class, 'formsCalendar'])->name('forms.calendar');
+Route::get('/forms/editor', [ComponentShowcaseController::class, 'formsEditor'])->name('forms.editor');
 
 // Actions
 Route::get('/actions', [ComponentShowcaseController::class, 'actionsIndex'])->name('actions');

@@ -17,7 +17,6 @@
 <script setup>
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import HardBreak from '@tiptap/extension-hard-break';
 import Document from '@tiptap/extension-document';
@@ -97,10 +96,11 @@ const editorInstance = useEditor({
             }),
         ]
         : [
-            StarterKit,
-            Link.configure({
-                openOnClick: false,
-                defaultProtocol: 'https',
+            StarterKit.configure({
+                link: {
+                    openOnClick: false,
+                    defaultProtocol: 'https',
+                },
             }),
             Placeholder.configure({
                 placeholder: props.placeholder,
