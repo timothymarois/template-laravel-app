@@ -31,16 +31,11 @@ import DialogTitle from './DialogTitle.vue';
 interface Props {
     visible?: boolean;
     header?: string;
-    modal?: boolean;
-    closable?: boolean;
-    maximizable?: boolean;
     class?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     visible: false,
-    modal: true,
-    closable: true,
 });
 
 const emit = defineEmits<{

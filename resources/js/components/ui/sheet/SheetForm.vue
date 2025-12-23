@@ -69,11 +69,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import {
-    Sheet,
-    SheetContent,
-    SheetTitle,
-} from '@/components/ui/sheet';
+import Sheet from './Sheet.vue';
+import SheetContent from './SheetContent.vue';
+import SheetTitle from './SheetTitle.vue';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-vue-next';

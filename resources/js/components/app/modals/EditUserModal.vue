@@ -1,5 +1,5 @@
 <template>
-    <DrawerForm
+    <SheetForm
         v-model="showModal"
         :title="form.id ? 'Edit user' : 'Add user'"
         :tabs="[{title: 'Details'}, {title: 'Line items'}, {title: 'Roles', disabled: true}]"
@@ -40,11 +40,11 @@
                 </template>
             </Card>
         </template>
-    </DrawerForm>
+    </SheetForm>
 </template>
 
 <script setup>
-import { DrawerForm, Card, TooltipIcon, LabelField, Input as InputText } from '@/components/ui';
+import { SheetForm, Card, TooltipIcon, LabelField, Input as InputText } from '@/components/ui';
 import { useModal } from '@/composables';
 import { useForm } from '@inertiajs/vue3';
 import { useFormSubmit } from '@/composables/useFormSubmit';

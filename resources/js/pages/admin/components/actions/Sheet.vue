@@ -219,27 +219,27 @@
                 </CardContent>
             </Card>
 
-            <!-- Drawer Form with Tabs -->
+            <!-- Sheet Form with Tabs -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Drawer Form with Tabs</CardTitle>
+                    <CardTitle>Sheet Form with Tabs</CardTitle>
                     <CardDescription>Complex forms with tabbed navigation</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div class="flex gap-2">
-                        <Button @click="showDrawerForm = true">Add Employee</Button>
-                        <Button variant="outline" @click="showDrawerFormWithErrors = true">With Validation Errors</Button>
+                        <Button @click="showSheetForm = true">Add Employee</Button>
+                        <Button variant="outline" @click="showSheetFormWithErrors = true">With Validation Errors</Button>
                     </div>
 
-                    <!-- Basic Drawer Form -->
-                    <DrawerForm
-                        v-model="showDrawerForm"
+                    <!-- Basic Sheet Form -->
+                    <SheetForm
+                        v-model="showSheetForm"
                         title="Add Employee"
                         :tabs="[{ title: 'Personal Info' }, { title: 'Employment' }, { title: 'Documents', disabled: true }]"
                         position="right"
                         width="550px"
-                        :loading="drawerLoading"
-                        @submit="handleDrawerSubmit"
+                        :loading="sheetLoading"
+                        @submit="handleSheetSubmit"
                     >
                         <!-- Tab 1: Personal Info -->
                         <div class="space-y-4">
@@ -291,31 +291,31 @@
                                 </LabelField>
                             </div>
                         </template>
-                    </DrawerForm>
+                    </SheetForm>
 
-                    <!-- Drawer Form with Errors -->
-                    <DrawerForm
-                        v-model="showDrawerFormWithErrors"
+                    <!-- Sheet Form with Errors -->
+                    <SheetForm
+                        v-model="showSheetFormWithErrors"
                         title="Add Employee (With Errors)"
                         :tabs="[{ title: 'Personal Info' }, { title: 'Employment' }]"
                         position="right"
                         width="550px"
-                        :loading="drawerLoadingErrors"
-                        :errors="drawerFormErrors"
-                        @submit="handleDrawerSubmitWithErrors"
+                        :loading="sheetLoadingErrors"
+                        :errors="sheetFormErrors"
+                        @submit="handleSheetSubmitWithErrors"
                     >
                         <!-- Tab 1: Personal Info -->
                         <div class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
-                                <LabelField label="First Name" name="errFirstName" required :error="drawerFormErrors.firstName">
-                                    <Input id="errFirstName" v-model="employeeFormErrors.firstName" placeholder="John" fluid :invalid="!!drawerFormErrors.firstName" />
+                                <LabelField label="First Name" name="errFirstName" required :error="sheetFormErrors.firstName">
+                                    <Input id="errFirstName" v-model="employeeFormErrors.firstName" placeholder="John" fluid :invalid="!!sheetFormErrors.firstName" />
                                 </LabelField>
-                                <LabelField label="Last Name" name="errLastName" required :error="drawerFormErrors.lastName">
-                                    <Input id="errLastName" v-model="employeeFormErrors.lastName" placeholder="Doe" fluid :invalid="!!drawerFormErrors.lastName" />
+                                <LabelField label="Last Name" name="errLastName" required :error="sheetFormErrors.lastName">
+                                    <Input id="errLastName" v-model="employeeFormErrors.lastName" placeholder="Doe" fluid :invalid="!!sheetFormErrors.lastName" />
                                 </LabelField>
                             </div>
-                            <LabelField label="Email" name="errEmail" required :error="drawerFormErrors.email">
-                                <Input id="errEmail" v-model="employeeFormErrors.email" type="email" placeholder="john.doe@company.com" fluid :invalid="!!drawerFormErrors.email">
+                            <LabelField label="Email" name="errEmail" required :error="sheetFormErrors.email">
+                                <Input id="errEmail" v-model="employeeFormErrors.email" type="email" placeholder="john.doe@company.com" fluid :invalid="!!sheetFormErrors.email">
                                     <template #icon><Mail class="size-4" /></template>
                                 </Input>
                             </LabelField>
@@ -324,15 +324,15 @@
                         <!-- Tab 2: Employment -->
                         <template #tab-1>
                             <div class="space-y-4">
-                                <LabelField label="Department" name="errDepartment" required :error="drawerFormErrors.department">
-                                    <Select id="errDepartment" v-model="employeeFormErrors.department" :options="deptOptions" placeholder="Select department" fluid :invalid="!!drawerFormErrors.department" />
+                                <LabelField label="Department" name="errDepartment" required :error="sheetFormErrors.department">
+                                    <Select id="errDepartment" v-model="employeeFormErrors.department" :options="deptOptions" placeholder="Select department" fluid :invalid="!!sheetFormErrors.department" />
                                 </LabelField>
-                                <LabelField label="Position" name="errPosition" required :error="drawerFormErrors.position">
-                                    <Input id="errPosition" v-model="employeeFormErrors.position" placeholder="Software Engineer" fluid :invalid="!!drawerFormErrors.position" />
+                                <LabelField label="Position" name="errPosition" required :error="sheetFormErrors.position">
+                                    <Input id="errPosition" v-model="employeeFormErrors.position" placeholder="Software Engineer" fluid :invalid="!!sheetFormErrors.position" />
                                 </LabelField>
                             </div>
                         </template>
-                    </DrawerForm>
+                    </SheetForm>
                 </CardContent>
             </Card>
 
@@ -406,11 +406,11 @@ import {
     SheetContent,
     SheetDescription,
     SheetFooter,
+    SheetForm,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import { DrawerForm } from '@/components/ui/drawer';
 import { Settings, Mail, Phone, User } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
@@ -436,12 +436,12 @@ const settingsForm = ref({
     activityStatus: false,
 });
 
-// Drawer Form states
-const showDrawerForm = ref(false);
-const showDrawerFormWithErrors = ref(false);
-const drawerLoading = ref(false);
-const drawerLoadingErrors = ref(false);
-const drawerFormErrors = ref<Record<string, string>>({});
+// Sheet Form states
+const showSheetForm = ref(false);
+const showSheetFormWithErrors = ref(false);
+const sheetLoading = ref(false);
+const sheetLoadingErrors = ref(false);
+const sheetFormErrors = ref<Record<string, string>>({});
 
 const employeeForm = ref({
     firstName: '',
@@ -465,19 +465,19 @@ const employeeFormErrors = ref({
     position: '',
 });
 
-const handleDrawerSubmit = () => {
-    drawerLoading.value = true;
+const handleSheetSubmit = () => {
+    sheetLoading.value = true;
     setTimeout(() => {
-        drawerLoading.value = false;
-        showDrawerForm.value = false;
+        sheetLoading.value = false;
+        showSheetForm.value = false;
     }, 1500);
 };
 
-const handleDrawerSubmitWithErrors = () => {
-    drawerLoadingErrors.value = true;
+const handleSheetSubmitWithErrors = () => {
+    sheetLoadingErrors.value = true;
     setTimeout(() => {
-        drawerLoadingErrors.value = false;
-        drawerFormErrors.value = {
+        sheetLoadingErrors.value = false;
+        sheetFormErrors.value = {
             firstName: 'First name is required',
             email: 'Please enter a valid email address',
             department: 'Department is required',

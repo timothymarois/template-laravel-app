@@ -14,9 +14,8 @@ export { ButtonMenu } from './ui/button';
 export { Dialog } from './ui/dialog';
 export { DialogConfirmation } from './ui/dialog';
 
-// From ui/drawer
-export { Drawer } from './ui/drawer';
-export { DrawerForm } from './ui/drawer';
+// From ui/sheet
+export { SheetForm } from './ui/sheet';
 
 // From ui/card
 export { Card } from './ui/card';

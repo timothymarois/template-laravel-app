@@ -25,9 +25,6 @@ export * from './data-table';
 // Dialog
 export * from './dialog';
 
-// Drawer
-export * from './drawer';
-
 // Dropdown Menu
 export * from './dropdown-menu';
 
