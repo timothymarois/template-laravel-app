@@ -115,6 +115,11 @@ class ComponentShowcaseController extends Controller
         return Inertia::render('admin/components/display/Popover');
     }
 
+    public function displayLoading(): Response
+    {
+        return Inertia::render('admin/components/display/Loading');
+    }
+
     // Data
     public function dataIndex(): Response
     {

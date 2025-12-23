@@ -30,6 +30,7 @@ Route::get('/display/badge', [ComponentShowcaseController::class, 'displayBadge'
 Route::get('/display/avatar', [ComponentShowcaseController::class, 'displayAvatar'])->name('display.avatar');
 Route::get('/display/tooltip', [ComponentShowcaseController::class, 'displayTooltip'])->name('display.tooltip');
 Route::get('/display/popover', [ComponentShowcaseController::class, 'displayPopover'])->name('display.popover');
+Route::get('/display/loading', [ComponentShowcaseController::class, 'displayLoading'])->name('display.loading');
 
 // Data
 Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('data');

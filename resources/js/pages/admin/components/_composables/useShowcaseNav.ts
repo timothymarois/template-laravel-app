@@ -50,6 +50,7 @@ export const useShowcaseNav = () => {
                 { label: 'Avatar', href: '/admin/components/display/avatar' },
                 { label: 'Tooltip', href: '/admin/components/display/tooltip' },
                 { label: 'Popover', href: '/admin/components/display/popover' },
+                { label: 'Loading', href: '/admin/components/display/loading' },
             ],
         },
         {
@@ -99,6 +100,7 @@ export const useShowcaseNav = () => {
         { title: 'Avatar', href: '/admin/components/display/avatar' },
         { title: 'Tooltip', href: '/admin/components/display/tooltip' },
         { title: 'Popover', href: '/admin/components/display/popover' },
+        { title: 'Loading', href: '/admin/components/display/loading' },
     ];
 
     const dataTabs = [
