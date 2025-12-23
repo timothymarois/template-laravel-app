@@ -51,7 +51,7 @@
                 <div class="flex items-center gap-2 min-w-0">
                     <FileIcon class="size-4 text-muted-foreground shrink-0" />
                     <span class="text-sm truncate">{{ file.name }}</span>
-                    <span class="text-xs text-muted-foreground shrink-0">({{ formatFileSize(file.size) }})</span>
+                    <span class="text-xs text-muted-foreground shrink-0">({{ formatBytes(file.size, 1) }})</span>
                 </div>
                 <button
                     type="button"
@@ -66,8 +66,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { Upload, X, File as FileIcon } from 'lucide-vue-next';
+import { formatBytes } from '@/utils/format';
 
 interface Props {
     modelValue?: File | File[] | null;
@@ -102,20 +103,12 @@ const files = computed<File[]>(() => {
     return [props.modelValue];
 });
 
-const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-};
-
 const validateFile = (file: File): boolean => {
     // Check file size
     if (props.maxSize && file.size > props.maxSize) {
         emit('error', {
             type: 'size',
-            message: `File "${file.name}" exceeds maximum size of ${formatFileSize(props.maxSize)}`,
+            message: `File "${file.name}" exceeds maximum size of ${formatBytes(props.maxSize, 1)}`,
             file,
         });
         return false;

@@ -103,53 +103,53 @@
                             <Button variant="outline">Export</Button>
                         </div>
                     </div>
-                <CardContent class="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead v-if="isColumnVisible('order')" class="pl-6">Order</TableHead>
-                                <TableHead v-if="isColumnVisible('customer')">Customer</TableHead>
-                                <TableHead v-if="isColumnVisible('date')">Date</TableHead>
-                                <TableHead v-if="isColumnVisible('status')">Status</TableHead>
-                                <TableHead v-if="isColumnVisible('amount')" class="text-right pr-6">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow v-for="order in orders" :key="order.id">
-                                <TableCell v-if="isColumnVisible('order')" class="pl-6 font-medium">{{ order.id }}</TableCell>
-                                <TableCell v-if="isColumnVisible('customer')">{{ order.customer }}</TableCell>
-                                <TableCell v-if="isColumnVisible('date')" class="text-muted-foreground">{{ order.date }}</TableCell>
-                                <TableCell v-if="isColumnVisible('status')">
-                                    <Badge :class="getOrderStatusClass(order.status)">
-                                        {{ order.status }}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell v-if="isColumnVisible('amount')" class="text-right pr-6 font-medium">{{ order.amount }}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </CardContent>
-                <CardFooter class="border-t py-4 px-6 justify-between">
-                    <span class="text-sm text-muted-foreground">Showing 1-10 of 50 orders</span>
-                    <Pagination v-slot="{ page }" :total="50" :items-per-page="10" :default-page="1" class="mx-0 w-auto">
-                        <PaginationContent>
-                            <PaginationFirst />
-                            <PaginationPrevious />
-                            <PaginationItem :value="1" as-child>
-                                <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === 1 }">1</Button>
-                            </PaginationItem>
-                            <PaginationItem :value="2" as-child>
-                                <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === 2 }">2</Button>
-                            </PaginationItem>
-                            <PaginationEllipsis />
-                            <PaginationItem :value="5" as-child>
-                                <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === 5 }">5</Button>
-                            </PaginationItem>
-                            <PaginationNext />
-                            <PaginationLast />
-                        </PaginationContent>
-                    </Pagination>
-                </CardFooter>
+                    <CardContent class="p-0">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead v-if="isColumnVisible('order')" class="pl-6">Order</TableHead>
+                                    <TableHead v-if="isColumnVisible('customer')">Customer</TableHead>
+                                    <TableHead v-if="isColumnVisible('date')">Date</TableHead>
+                                    <TableHead v-if="isColumnVisible('status')">Status</TableHead>
+                                    <TableHead v-if="isColumnVisible('amount')" class="text-right pr-6">Amount</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow v-for="order in orders" :key="order.id">
+                                    <TableCell v-if="isColumnVisible('order')" class="pl-6 font-medium">{{ order.id }}</TableCell>
+                                    <TableCell v-if="isColumnVisible('customer')">{{ order.customer }}</TableCell>
+                                    <TableCell v-if="isColumnVisible('date')" class="text-muted-foreground">{{ order.date }}</TableCell>
+                                    <TableCell v-if="isColumnVisible('status')">
+                                        <Badge :class="getOrderStatusClass(order.status)">
+                                            {{ order.status }}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell v-if="isColumnVisible('amount')" class="text-right pr-6 font-medium">{{ order.amount }}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                    <CardFooter class="border-t py-4 px-6 justify-between">
+                        <span class="text-sm text-muted-foreground">Showing 1-10 of 50 orders</span>
+                        <Pagination v-slot="{ page }" :total="50" :items-per-page="10" :default-page="1" class="mx-0 w-auto">
+                            <PaginationContent>
+                                <PaginationFirst />
+                                <PaginationPrevious />
+                                <PaginationItem :value="1" as-child>
+                                    <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === 1 }">1</Button>
+                                </PaginationItem>
+                                <PaginationItem :value="2" as-child>
+                                    <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === 2 }">2</Button>
+                                </PaginationItem>
+                                <PaginationEllipsis />
+                                <PaginationItem :value="5" as-child>
+                                    <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === 5 }">5</Button>
+                                </PaginationItem>
+                                <PaginationNext />
+                                <PaginationLast />
+                            </PaginationContent>
+                        </Pagination>
+                    </CardFooter>
                 </Tabs>
             </Card>
 
