@@ -13,24 +13,6 @@
                 </CardHeader>
                 <CardContent class="space-y-6">
                     <div>
-                        <h4 class="text-sm font-medium mb-3">Sizes</h4>
-                        <div class="flex items-end gap-4">
-                            <div class="w-48">
-                                <div class="text-xs text-muted-foreground mb-1">Small</div>
-                                <Input size="small" placeholder="Small input" fluid />
-                            </div>
-                            <div class="w-48">
-                                <div class="text-xs text-muted-foreground mb-1">Default</div>
-                                <Input placeholder="Default input" fluid />
-                            </div>
-                            <div class="w-48">
-                                <div class="text-xs text-muted-foreground mb-1">Large</div>
-                                <Input size="large" placeholder="Large input" fluid />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
                         <h4 class="text-sm font-medium mb-3">States</h4>
                         <div class="flex items-end gap-4">
                             <div class="w-48">
