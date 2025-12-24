@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { DialogContentEmits, DialogContentProps } from "reka-ui";
 import type { HTMLAttributes } from "vue";
-import { ref, provide, computed, onMounted } from "vue";
+import { ref, provide, computed, onMounted, onUnmounted } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { X } from "lucide-vue-next";
 import {
@@ -76,6 +76,12 @@ const dialogStyle = computed(() => {
 // Reset position when dialog opens
 onMounted(() => {
     offset.value = { x: 0, y: 0 };
+});
+
+// Clean up event listeners if unmounted mid-drag
+onUnmounted(() => {
+    window.removeEventListener('mousemove', onMouseMove);
+    window.removeEventListener('mouseup', onMouseUp);
 });
 
 // Provide draggable state for DialogHeader
