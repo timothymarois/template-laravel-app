@@ -20,6 +20,20 @@
                 </Card>
             </Link>
 
+            <Link :href="$route('admin.components.actions.command')">
+                <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                    <CardHeader>
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-primary/10 rounded-lg">
+                                <Command class="size-5 text-primary" />
+                            </div>
+                            <CardTitle class="text-base">Command</CardTitle>
+                        </div>
+                        <CardDescription>Command palette with search and keyboard navigation</CardDescription>
+                    </CardHeader>
+                </Card>
+            </Link>
+
             <Link :href="$route('admin.components.actions.dialog')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                     <CardHeader>
@@ -69,7 +83,7 @@
 import { Link } from '@inertiajs/vue3';
 import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Menu, MousePointerClick, PanelRight, Square } from 'lucide-vue-next';
+import { Command, Menu, MousePointerClick, PanelRight, Square } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();

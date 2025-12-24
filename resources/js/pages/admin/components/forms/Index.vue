@@ -34,6 +34,20 @@
                 </Card>
             </Link>
 
+            <Link :href="$route('admin.components.forms.combobox')">
+                <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                    <CardHeader>
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-primary/10 rounded-lg">
+                                <ListFilter class="size-5 text-primary" />
+                            </div>
+                            <CardTitle class="text-base">Combobox</CardTitle>
+                        </div>
+                        <CardDescription>Autocomplete inputs with search and multi-select</CardDescription>
+                    </CardHeader>
+                </Card>
+            </Link>
+
             <Link :href="$route('admin.components.forms.editor')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                     <CardHeader>
@@ -160,6 +174,7 @@ import {
     ChevronDown,
     FileText,
     FormInput,
+    ListFilter,
     SlidersHorizontal,
     TextCursorInput,
     ToggleLeft,
