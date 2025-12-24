@@ -171,11 +171,11 @@ The UI components follow a simple 2-layer architecture:
 
 ### Layer Overview
 
-| Layer | Location | Purpose | Rules |
-|-------|----------|---------|-------|
-| **ui/** | `components/ui/` | Base components (shadcn + enhanced) | [README](resources/js/components/ui/README.md) |
-| **app/** | `components/app/` | Application components | [README](resources/js/components/app/README.md) |
-| **site/** | `components/site/` | Website components | [README](resources/js/components/site/README.md) |
+| Layer     | Location           | Purpose                             | Rules                                            |
+|-----------|--------------------|-------------------------------------|--------------------------------------------------|
+| **ui/**   | `components/ui/`   | Base components (shadcn + enhanced) | [README](resources/js/components/ui/README.md)   |
+| **app/**  | `components/app/`  | Application components              | [README](resources/js/components/app/README.md)  |
+| **site/** | `components/site/` | Website components                  | [README](resources/js/components/site/README.md) |
 
 ### ui/ - Base Components
 
@@ -278,13 +278,13 @@ pages/
 
 Routes use prefixed names for clarity:
 
-| Route | Name | Layout |
-|-------|------|--------|
-| `/` | `home` | SiteLayout |
-| `/login` | `login` | SiteLayout |
-| `/register` | `register` | SiteLayout |
-| `/admin` | `admin.index` | AppLayout |
-| `/admin/users` | `admin.users.index` | AppLayout |
+| Route          | Name                | Layout     |
+|----------------|---------------------|------------|
+| `/`            | `home`              | SiteLayout |
+| `/login`       | `login`             | SiteLayout |
+| `/register`    | `register`          | SiteLayout |
+| `/admin`       | `admin.index`       | AppLayout  |
+| `/admin/users` | `admin.users.index` | AppLayout  |
 
 Use `$route('admin.users.index')` in templates, `route('admin.users.index')` in scripts.
 

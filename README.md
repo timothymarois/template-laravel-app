@@ -369,9 +369,9 @@ SSR settings are in `config/inertia.php`:
 
 **Build Commands:**
 
-| Command | Description |
-|---------|-------------|
-| `pnpm build` | Build client-side only |
+| Command          | Description                       |
+|------------------|-----------------------------------|
+| `pnpm build`     | Build client-side only            |
 | `pnpm build-ssr` | Build both client and SSR bundles |
 
 **Running SSR in Production:**
@@ -421,13 +421,13 @@ Layouts include built-in support for SEO meta tags and social sharing (Open Grap
 
 **Available props (all optional):**
 
-| Prop | Description |
-|------|-------------|
-| `title` | Page title (used in `<title>` and og:title) |
+| Prop          | Description                                            |
+|---------------|--------------------------------------------------------|
+| `title`       | Page title (used in `<title>` and og:title)            |
 | `description` | Meta description (og:description, twitter:description) |
-| `ogImage` | Social sharing image URL (absolute or relative) |
-| `ogImageAlt` | Alt text for social image |
-| `siteName` | Site name for og:site_name |
+| `ogImage`     | Social sharing image URL (absolute or relative)        |
+| `ogImageAlt`  | Alt text for social image                              |
+| `siteName`    | Site name for og:site_name                             |
 
 **Supported platforms:**
 - Facebook, LinkedIn, Slack, Discord (Open Graph)
