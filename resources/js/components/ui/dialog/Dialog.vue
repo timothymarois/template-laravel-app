@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useModelValue } from '@/composables';
 import DialogBase from './DialogBase.vue';
 import DialogContent from './DialogContent.vue';
 import DialogDescription from './DialogDescription.vue';
@@ -44,8 +45,5 @@ const emit = defineEmits<{
 
 const className = computed(() => props.class || '');
 
-const isOpen = computed({
-    get: () => props.visible,
-    set: (val) => emit('update:visible', val),
-});
+const isOpen = useModelValue<boolean, 'visible'>({ props, emit, name: 'visible' });
 </script>

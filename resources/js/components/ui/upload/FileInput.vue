@@ -40,6 +40,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { Upload, X } from 'lucide-vue-next';
+import { hasFiles as checkHasFiles, getFileNames } from '@/utils/file';
 
 interface Props {
     modelValue?: File | File[] | null;
@@ -64,19 +65,9 @@ const emit = defineEmits<{
 
 const inputRef = ref<HTMLInputElement | null>(null);
 
-const hasFiles = computed(() => {
-    if (!props.modelValue) return false;
-    if (Array.isArray(props.modelValue)) return props.modelValue.length > 0;
-    return true;
-});
+const hasFiles = computed(() => checkHasFiles(props.modelValue));
 
-const fileNames = computed(() => {
-    if (!props.modelValue) return '';
-    if (Array.isArray(props.modelValue)) {
-        return props.modelValue.map(f => f.name).join(', ');
-    }
-    return props.modelValue.name;
-});
+const fileNames = computed(() => getFileNames(props.modelValue));
 
 const triggerInput = () => {
     inputRef.value?.click();

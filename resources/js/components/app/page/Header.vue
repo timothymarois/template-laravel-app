@@ -95,7 +95,7 @@
 <script setup lang="ts">
 import { computed, useSlots, toRefs } from 'vue';
 import { IconLock } from '@tabler/icons-vue';
-import { useScroll } from '@/composables/useScroll';
+import { useScroll } from '@/composables';
 import { hasSlotContent } from '@/utils';
 import { isPageActive } from '@/utils/vue/inertia';
 

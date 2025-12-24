@@ -149,7 +149,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input as InputText } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useScroll } from '@/composables/useScroll';
+import { useScroll } from '@/composables';
 
 const props = defineProps({
     columns: Array,

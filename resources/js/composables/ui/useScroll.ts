@@ -1,5 +1,5 @@
 import { reactive, computed, Ref } from 'vue';
-import { isClient } from '../utils';
+import { isClient } from '@/utils';
 
 interface ScrollState {
     isTop: boolean;

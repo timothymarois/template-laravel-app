@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted, onBeforeUnmount, onUpdated } from 'vue';
-import { useScroll } from '@/composables/useScroll';
+import { useScroll } from '@/composables';
 
 defineEmits<{
     scroll: [event: Event]

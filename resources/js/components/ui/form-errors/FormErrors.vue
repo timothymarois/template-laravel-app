@@ -44,8 +44,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { IconAlertCircle, IconChevronDown } from '@tabler/icons-vue';
-import { isEmpty } from '@/utils';
-import { cn } from '@/utils';
+import { isEmpty, cn, createExpandTransition } from '@/utils';
 
 interface Props {
     errors?: Record<string, any> | any[];
@@ -71,19 +70,7 @@ onMounted(() => {
 
 const hasErrors = computed(() => !isEmpty(props.errors));
 
-function expandEnter(el: HTMLElement) {
-    el.style.height = '0';
-    el.offsetHeight; // force reflow
-    el.style.transition = 'height 200ms ease';
-    el.style.height = el.scrollHeight + 'px';
-}
-
-function expandLeave(el: HTMLElement) {
-    el.style.height = el.scrollHeight + 'px';
-    el.offsetHeight; // force reflow
-    el.style.transition = 'height 200ms ease';
-    el.style.height = '0';
-}
+const { expandEnter, expandLeave } = createExpandTransition(200);
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { ref } from 'vue';
-import { useScroll } from '@/composables/useScroll';
+import { useScroll } from '@/composables/ui/useScroll';
 
 describe('useScroll', () => {
     beforeEach(() => {

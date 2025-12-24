@@ -69,6 +69,7 @@
 import { ref, computed } from 'vue';
 import { Upload, X, File as FileIcon } from 'lucide-vue-next';
 import { formatBytes } from '@/utils/format';
+import { normalizeFiles, validateFileSize, validateFileType } from '@/utils/file';
 
 interface Props {
     modelValue?: File | File[] | null;
@@ -97,15 +98,11 @@ const inputRef = ref<HTMLInputElement | null>(null);
 const dropzoneRef = ref<HTMLElement | null>(null);
 const isDragOver = ref(false);
 
-const files = computed<File[]>(() => {
-    if (!props.modelValue) return [];
-    if (Array.isArray(props.modelValue)) return props.modelValue;
-    return [props.modelValue];
-});
+const files = computed<File[]>(() => normalizeFiles(props.modelValue));
 
 const validateFile = (file: File): boolean => {
     // Check file size
-    if (props.maxSize && file.size > props.maxSize) {
+    if (props.maxSize && !validateFileSize(file, props.maxSize)) {
         emit('error', {
             type: 'size',
             message: `File "${file.name}" exceeds maximum size of ${formatBytes(props.maxSize, 1)}`,
@@ -115,29 +112,13 @@ const validateFile = (file: File): boolean => {
     }
 
     // Check file type
-    if (props.accept) {
-        const acceptedTypes = props.accept.split(',').map(t => t.trim());
-        const fileType = file.type;
-        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-
-        const isAccepted = acceptedTypes.some(type => {
-            if (type.startsWith('.')) {
-                return fileExtension === type.toLowerCase();
-            }
-            if (type.endsWith('/*')) {
-                return fileType.startsWith(type.replace('/*', '/'));
-            }
-            return fileType === type;
+    if (props.accept && !validateFileType(file, props.accept)) {
+        emit('error', {
+            type: 'type',
+            message: `File "${file.name}" is not an accepted file type`,
+            file,
         });
-
-        if (!isAccepted) {
-            emit('error', {
-                type: 'type',
-                message: `File "${file.name}" is not an accepted file type`,
-                file,
-            });
-            return false;
-        }
+        return false;
     }
 
     return true;

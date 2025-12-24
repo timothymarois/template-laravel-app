@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { useModal } from '@/composables/useModal';
+import { useModal } from '@/composables/ui/useModal';
 
 describe('useModal', () => {
     let modal: ReturnType<typeof useModal>;
