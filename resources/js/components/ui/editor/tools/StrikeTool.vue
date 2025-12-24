@@ -1,34 +1,16 @@
 <template>
-    <Tooltip>
-        <TooltipTrigger as-child>
-            <Button
-                icon
-                text
-                size="small"
-                class="!px-2"
-                :class="{
-                    'hover:!bg-accent/50': true,
-                    '!bg-accent text-foreground': editor?.isActive('strike')
-                }"
-                @click="editor?.chain().focus().toggleStrike().run()"
-            >
-                <div class="flex items-center text-foreground">
-                    <IconStrikethrough class="size-5" />
-                </div>
-            </Button>
-        </TooltipTrigger>
-        <TooltipContent>Strikethrough</TooltipContent>
-    </Tooltip>
+    <EditorToolButton
+        :isActive="editor?.isActive('strike')"
+        tooltip="Strikethrough"
+        @click="editor?.chain().focus().toggleStrike().run()"
+    >
+        <IconStrikethrough class="size-5" />
+    </EditorToolButton>
 </template>
 
 <script setup lang="ts">
 import { IconStrikethrough } from '@tabler/icons-vue';
-import { Button } from '@/components/ui/button';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from '@/components/ui/tooltip';
+import EditorToolButton from './EditorToolButton.vue';
 
-const props = defineProps({ editor: Object });
+defineProps({ editor: Object });
 </script>

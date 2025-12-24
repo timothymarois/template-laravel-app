@@ -1,3 +1,7 @@
+// Base component for creating custom tools
+export { default as EditorToolButton } from './EditorToolButton.vue';
+
+// Built-in tools
 export { default as BoldTool } from './BoldTool.vue';
 export { default as ItalicTool } from './ItalicTool.vue';
 export { default as StrikeTool } from './StrikeTool.vue';

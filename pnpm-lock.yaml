@@ -41,6 +41,9 @@ importers:
       '@tiptap/extension-text':
         specifier: ^3.14.0
         version: 3.14.0(@tiptap/core@3.14.0(@tiptap/pm@3.14.0))
+      '@tiptap/extension-underline':
+        specifier: ^3.14.0
+        version: 3.14.0(@tiptap/core@3.14.0(@tiptap/pm@3.14.0))
       '@tiptap/starter-kit':
         specifier: ^3.14.0
         version: 3.14.0

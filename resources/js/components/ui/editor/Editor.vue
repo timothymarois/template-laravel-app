@@ -5,6 +5,7 @@
             :editor="editorInstance"
             :rootClass="toolbarClass"
             :options="toolbarOptions"
+            :customTools="customTools"
         >
             <template #default="{ editor }">
                 <slot name="toolbar" :editor="editor" />
@@ -15,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import type { Extension } from '@tiptap/core';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -23,7 +25,7 @@ import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import EditorToolbar from './Toolbar.vue';
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -59,7 +61,85 @@ const props = defineProps({
     toolbarClass: {
         type: String,
         default: 'border-b border-border',
+    },
+    /**
+     * Custom Tiptap extensions to add to the editor.
+     * These are merged with the default extensions (StarterKit + Placeholder).
+     * Pass `null` to use only the default extensions.
+     *
+     * @example
+     * import Underline from '@tiptap/extension-underline'
+     * import Image from '@tiptap/extension-image'
+     *
+     * <Editor :extensions="[Underline, Image]" />
+     */
+    extensions: {
+        type: Array as () => Extension[],
+        default: null,
+    },
+    /**
+     * Replace all default extensions with custom ones.
+     * When true, only the extensions provided in `extensions` prop will be used.
+     * When false (default), custom extensions are merged with defaults.
+     */
+    replaceExtensions: {
+        type: Boolean,
+        default: false,
+    },
+    /**
+     * Custom tool components to register with the toolbar.
+     * Keys are tool names (used in toolbarOptions), values are Vue components.
+     *
+     * @example
+     * import UnderlineTool from './UnderlineTool.vue'
+     *
+     * <Editor
+     *     :toolbarOptions="['bold', 'italic', 'underline']"
+     *     :customTools="{ underline: UnderlineTool }"
+     * />
+     */
+    customTools: {
+        type: Object,
+        default: () => ({}),
+    },
+});
+
+// Build the extensions array based on props
+const resolvedExtensions = computed(() => {
+    // If replacing all extensions, use only what's provided
+    if (props.replaceExtensions && props.extensions) {
+        return props.extensions;
     }
+
+    // Default extensions based on textOnly mode
+    const defaultExtensions = props.textOnly
+        ? [
+            Document,
+            Paragraph,
+            Text,
+            HardBreak,
+            Placeholder.configure({
+                placeholder: props.placeholder,
+            }),
+        ]
+        : [
+            StarterKit.configure({
+                link: {
+                    openOnClick: false,
+                    defaultProtocol: 'https',
+                },
+            }),
+            Placeholder.configure({
+                placeholder: props.placeholder,
+            }),
+        ];
+
+    // Merge with custom extensions if provided
+    if (props.extensions && props.extensions.length > 0) {
+        return [...defaultExtensions, ...props.extensions];
+    }
+
+    return defaultExtensions;
 });
 
 const editorInstance = useEditor({
@@ -85,27 +165,7 @@ const editorInstance = useEditor({
     },
     content: props.modelValue,
     autofocus: props.autofocus,
-    extensions: props.textOnly
-        ? [
-            Document,
-            Paragraph,
-            Text,
-            HardBreak,
-            Placeholder.configure({
-                placeholder: props.placeholder,
-            }),
-        ]
-        : [
-            StarterKit.configure({
-                link: {
-                    openOnClick: false,
-                    defaultProtocol: 'https',
-                },
-            }),
-            Placeholder.configure({
-                placeholder: props.placeholder,
-            }),
-        ],
+    extensions: resolvedExtensions.value,
     onUpdate: ({ editor }) => {
         emit('update:modelValue', props.textOnly ? editor.getText() : editor.getHTML());
     },

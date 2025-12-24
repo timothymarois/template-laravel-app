@@ -159,6 +159,76 @@
                 </CardContent>
             </Card>
 
+            <!-- Custom Extensions & Tools -->
+            <Card>
+                <CardHeader>
+                    <CardTitle>Custom Extensions & Tools</CardTitle>
+                    <CardDescription>Add custom Tiptap extensions and toolbar tools</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">With Underline Extension + Custom Tool</div>
+                            <div class="border rounded-lg overflow-hidden">
+                                <Editor
+                                    v-model="customExtensionContent"
+                                    placeholder="Try the underline button..."
+                                    :extensions="[Underline]"
+                                    :toolbarOptions="['bold', 'italic', 'underline', 'strike']"
+                                    :customTools="{ underline: UnderlineTool }"
+                                />
+                            </div>
+                            <div class="mt-2 text-xs text-muted-foreground">
+                                Output: <code class="bg-muted px-1 py-0.5 rounded text-[10px]">{{ customExtensionContent || '(empty)' }}</code>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Custom Tool via Slot</div>
+                            <div class="border rounded-lg overflow-hidden">
+                                <Editor
+                                    v-model="customSlotContent"
+                                    placeholder="Custom tool added via slot..."
+                                    :extensions="[Underline]"
+                                    :toolbarOptions="['bold', 'italic']"
+                                >
+                                    <template #toolbar="{ editor }">
+                                        <EditorToolButton
+                                            :isActive="editor?.isActive('underline')"
+                                            tooltip="Underline (slot)"
+                                            @click="editor?.chain().focus().toggleUnderline().run()"
+                                        >
+                                            <IconUnderline class="size-5" />
+                                        </EditorToolButton>
+                                    </template>
+                                </Editor>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-muted/50 rounded-lg">
+                        <div class="text-xs font-medium mb-2">Usage Example:</div>
+                        <pre class="text-xs overflow-x-auto"><code>// 1. Import extension and create custom tool
+import Underline from '@tiptap/extension-underline'
+import { EditorToolButton } from '@/components/ui/editor'
+
+// 2. Create custom tool component (UnderlineTool.vue)
+&lt;EditorToolButton
+    :isActive="editor?.isActive('underline')"
+    tooltip="Underline"
+    @click="editor?.chain().focus().toggleUnderline().run()"
+&gt;
+    &lt;IconUnderline class="size-5" /&gt;
+&lt;/EditorToolButton&gt;
+
+// 3. Use in Editor
+&lt;Editor
+    :extensions="[Underline]"
+    :toolbarOptions="['bold', 'italic', 'underline']"
+    :customTools="{ underline: UnderlineTool }"
+/&gt;</code></pre>
+                    </div>
+                </CardContent>
+            </Card>
+
             <!-- Custom Styling -->
             <Card>
                 <CardHeader>
@@ -325,7 +395,10 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { LabelField } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Editor } from '@/components/ui/editor';
+import { Editor, EditorToolButton } from '@/components/ui/editor';
+import { IconUnderline } from '@tabler/icons-vue';
+import Underline from '@tiptap/extension-underline';
+import UnderlineTool from './_components/UnderlineTool.vue';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();
@@ -348,6 +421,10 @@ const noToolbarContent = ref('');
 // Text only mode
 const richTextContent = ref('');
 const plainTextContent = ref('');
+
+// Custom extensions & tools
+const customExtensionContent = ref('');
+const customSlotContent = ref('');
 
 // Custom styling
 const customPadding = ref('');
