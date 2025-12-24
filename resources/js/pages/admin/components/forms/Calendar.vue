@@ -41,7 +41,7 @@
                     <CardDescription>Editable text input with validation and calendar picker</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Default</div>
                             <DateInput v-model="dateInputEmpty" />
@@ -53,6 +53,10 @@
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">With Value</div>
                             <DateInput v-model="dateInputValue" clearable />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <DateInput v-model="dateInputInvalid" invalid :showError="false" />
                         </div>
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Disabled</div>
@@ -69,7 +73,7 @@
                     <CardDescription>Button-style picker with calendar popover</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-5 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Default</div>
                             <DatePicker v-model="datePickerEmpty" fluid />
@@ -81,6 +85,10 @@
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">With Value</div>
                             <DatePicker v-model="datePickerValue" clearable fluid />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <DatePicker v-model="datePickerInvalid" invalid fluid />
                         </div>
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Disabled</div>
@@ -232,7 +240,7 @@
                     <CardDescription>Button-style picker for date ranges</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-4 gap-4">
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Default</div>
                             <DateRangePicker v-model="rangePickerEmpty" fluid />
@@ -240,6 +248,10 @@
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">Clearable</div>
                             <DateRangePicker v-model="rangePickerClearable" clearable fluid />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <DateRangePicker v-model="rangePickerInvalid" invalid fluid />
                         </div>
                         <div>
                             <div class="text-xs text-muted-foreground mb-1">No Weekends</div>
@@ -276,12 +288,14 @@ const nativeMonth = ref('');
 const dateInputEmpty = ref<DateValue>();
 const dateInputClearable = ref<DateValue>();
 const dateInputValue = ref<DateValue>(today(getLocalTimeZone()));
+const dateInputInvalid = ref<DateValue>(today(getLocalTimeZone()));
 const dateInputDisabled = ref<DateValue>(today(getLocalTimeZone()));
 
 // Date Picker examples
 const datePickerEmpty = ref<DateValue>();
 const datePickerClearable = ref<DateValue>();
 const datePickerValue = ref<DateValue>(today(getLocalTimeZone()));
+const datePickerInvalid = ref<DateValue>(today(getLocalTimeZone()));
 const datePickerDisabled = ref<DateValue>(today(getLocalTimeZone()));
 
 // Inline calendar
@@ -306,6 +320,7 @@ const inputNoPast = ref<DateValue>();
 const dateRange = ref<DateRange>();
 const rangePickerEmpty = ref<DateRange>();
 const rangePickerClearable = ref<DateRange>();
+const rangePickerInvalid = ref<DateRange>();
 const rangePickerNoWeekends = ref<DateRange>();
 
 // Disable functions

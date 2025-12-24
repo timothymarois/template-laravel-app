@@ -10,7 +10,8 @@
                         fluid ? 'w-full' : '',
                         !fluid && !clearable ? '' : 'flex-1',
                         !modelValue?.start && 'text-muted-foreground',
-                        modelValue?.start && clearable && 'rounded-r-none border-r-0'
+                        modelValue?.start && clearable && 'rounded-r-none border-r-0',
+                        invalid && 'border-destructive focus:ring-destructive'
                     ]"
                 >
                     <span class="flex items-center">
@@ -64,6 +65,7 @@ interface Props {
     placeholder?: string;
     clearable?: boolean;
     disabled?: boolean;
+    invalid?: boolean;
     fluid?: boolean;
     align?: 'start' | 'center' | 'end';
     numberOfMonths?: number;
@@ -74,6 +76,7 @@ const props = withDefaults(defineProps<Props>(), {
     placeholder: 'Pick a date range',
     clearable: false,
     disabled: false,
+    invalid: false,
     fluid: false,
     align: 'start',
     numberOfMonths: 2,

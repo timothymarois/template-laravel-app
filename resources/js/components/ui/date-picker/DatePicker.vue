@@ -10,7 +10,8 @@
                         fluid ? 'w-full' : '',
                         !fluid && !clearable ? '' : 'flex-1',
                         !modelValue && 'text-muted-foreground',
-                        modelValue && clearable && 'rounded-r-none border-r-0'
+                        modelValue && clearable && 'rounded-r-none border-r-0',
+                        invalid && 'border-destructive focus:ring-destructive'
                     ]"
                 >
                     <span class="flex items-center">
@@ -55,6 +56,7 @@ interface Props {
     placeholder?: string;
     clearable?: boolean;
     disabled?: boolean;
+    invalid?: boolean;
     fluid?: boolean;
     align?: 'start' | 'center' | 'end';
     isDateDisabled?: (date: DateValue) => boolean;
@@ -64,6 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
     placeholder: 'Pick a date',
     clearable: false,
     disabled: false,
+    invalid: false,
     fluid: false,
     align: 'start',
 });
