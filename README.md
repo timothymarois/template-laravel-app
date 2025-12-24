@@ -243,6 +243,46 @@ php artisan queue:restart
 
 ---
 
+## SEO & Social Sharing
+
+Layouts include built-in support for SEO meta tags and social sharing (Open Graph + Twitter Cards). Tags are rendered server-side via SSR for optimal crawler indexing.
+
+**Usage:**
+
+```vue
+<SiteLayout
+    title="Product Page"
+    description="Discover our amazing product features"
+    ogImage="/images/product-og.jpg"
+    ogImageAlt="Product screenshot"
+    siteName="My App"
+>
+    <!-- content -->
+</SiteLayout>
+```
+
+**Available props (all optional):**
+
+| Prop | Description |
+|------|-------------|
+| `title` | Page title (used in `<title>` and og:title) |
+| `description` | Meta description (og:description, twitter:description) |
+| `ogImage` | Social sharing image URL (absolute or relative) |
+| `ogImageAlt` | Alt text for social image |
+| `siteName` | Site name for og:site_name |
+
+**Supported platforms:**
+- Facebook, LinkedIn, Slack, Discord (Open Graph)
+- Twitter/X (Twitter Cards with `summary_large_image`)
+- iMessage, WhatsApp, and other link previews
+
+**Image recommendations:**
+- Minimum size: 1200x630px for best display
+- Format: JPG or PNG
+- Relative paths are automatically converted to absolute URLs
+
+---
+
 ## Features:
 
 ### Routes (by Ziggy)

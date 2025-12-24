@@ -1,5 +1,24 @@
 <template>
-    <Head :title="title" />
+    <Head :title="title">
+        <!-- Standard meta -->
+        <meta v-if="description" name="description" :content="description" />
+
+        <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+        <meta v-if="title" property="og:title" :content="title" />
+        <meta v-if="description" property="og:description" :content="description" />
+        <meta v-if="ogImage" property="og:image" :content="absoluteOgImage" />
+        <meta v-if="ogImage" property="og:image:alt" :content="ogImageAlt || title" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" :content="canonicalUrl" />
+        <meta v-if="siteName" property="og:site_name" :content="siteName" />
+
+        <!-- Twitter/X -->
+        <meta name="twitter:card" :content="ogImage ? 'summary_large_image' : 'summary'" />
+        <meta v-if="title" name="twitter:title" :content="title" />
+        <meta v-if="description" name="twitter:description" :content="description" />
+        <meta v-if="ogImage" name="twitter:image" :content="absoluteOgImage" />
+        <meta v-if="ogImage" name="twitter:image:alt" :content="ogImageAlt || title" />
+    </Head>
     <AppShell
         :isSideNav="true"
         :pageTitle="pageTitle"
@@ -78,18 +97,35 @@ import ModeToggle from '../navigation/ModeToggle.vue';
 import EditUserModal from '../modals/EditUserModal.vue';
 import DeleteUserModal from '../modals/DeleteUserModal.vue';
 
-const user = usePage().props.user;
+const page = usePage();
+const user = page.props.user;
 
 const props = defineProps({
-    title : {
+    title: {
         type: String,
         default: 'Home'
     },
-    pageTitle : {
+    description: {
+        type: String,
+        default: ''
+    },
+    ogImage: {
+        type: String,
+        default: ''
+    },
+    ogImageAlt: {
+        type: String,
+        default: ''
+    },
+    siteName: {
+        type: String,
+        default: ''
+    },
+    pageTitle: {
         type: String,
         default: 'Home'
     },
-    pageTabs : {
+    pageTabs: {
         type: Array,
         default: () => []
     },
@@ -113,6 +149,18 @@ const props = defineProps({
         type: Boolean,
         default: false
     }
+});
+
+const canonicalUrl = computed(() => {
+    if (typeof window === 'undefined') return '';
+    return window.location.origin + page.url;
+});
+
+const absoluteOgImage = computed(() => {
+    if (!props.ogImage) return '';
+    if (props.ogImage.startsWith('http')) return props.ogImage;
+    if (typeof window === 'undefined') return props.ogImage;
+    return window.location.origin + (props.ogImage.startsWith('/') ? '' : '/') + props.ogImage;
 });
 
 const profileMenuItems = computed(() => [
