@@ -22,6 +22,9 @@ class User extends Authenticatable
         'email',
         'password',
         'timezone',
+        'last_seen_at',
+        'last_ip_address',
+        'last_user_agent',
     ];
 
     /**
@@ -43,7 +46,19 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_seen_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if the user is currently online (seen within last 5 minutes).
+     */
+    public function isOnline(): bool
+    {
+        /** @var \Illuminate\Support\Carbon|null $lastSeen */
+        $lastSeen = $this->last_seen_at;
+
+        return $lastSeen !== null && $lastSeen->greaterThan(now()->subMinutes(5));
     }
 }
