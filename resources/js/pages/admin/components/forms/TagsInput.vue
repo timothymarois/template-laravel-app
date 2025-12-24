@@ -110,6 +110,58 @@
                 </CardContent>
             </Card>
 
+            <!-- Variants -->
+            <Card>
+                <CardHeader>
+                    <CardTitle>Variants</CardTitle>
+                    <CardDescription>Different tag styles to match your design</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Default</div>
+                            <TagsInput v-model="variantDefault" variant="default">
+                                <TagsInputItem v-for="tag in variantDefault" :key="tag" :value="tag">
+                                    <TagsInputItemText />
+                                    <TagsInputItemDelete />
+                                </TagsInputItem>
+                                <TagsInputInput placeholder="Add tag..." />
+                            </TagsInput>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Secondary</div>
+                            <TagsInput v-model="variantSecondary" variant="secondary">
+                                <TagsInputItem v-for="tag in variantSecondary" :key="tag" :value="tag">
+                                    <TagsInputItemText />
+                                    <TagsInputItemDelete />
+                                </TagsInputItem>
+                                <TagsInputInput placeholder="Add tag..." />
+                            </TagsInput>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Outline</div>
+                            <TagsInput v-model="variantOutline" variant="outline">
+                                <TagsInputItem v-for="tag in variantOutline" :key="tag" :value="tag">
+                                    <TagsInputItemText />
+                                    <TagsInputItemDelete />
+                                </TagsInputItem>
+                                <TagsInputInput placeholder="Add tag..." />
+                            </TagsInput>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Primary</div>
+                            <TagsInput v-model="variantPrimary" variant="primary">
+                                <TagsInputItem v-for="tag in variantPrimary" :key="tag" :value="tag">
+                                    <TagsInputItemText />
+                                    <TagsInputItemDelete />
+                                </TagsInputItem>
+                                <TagsInputInput placeholder="Add tag..." />
+                            </TagsInput>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
             <!-- Features -->
             <Card>
                 <CardHeader>
@@ -266,6 +318,12 @@ const invalidEmpty = ref<string[]>([]);
 const invalidWithValue = ref(['Invalid']);
 const invalidMany = ref(['Too', 'Many', 'Tags']);
 const invalidDisabled = ref(['Error']);
+
+// Variant examples
+const variantDefault = ref(['Vue', 'React']);
+const variantSecondary = ref(['Vue', 'React']);
+const variantOutline = ref(['Vue', 'React']);
+const variantPrimary = ref(['Vue', 'React']);
 
 // Feature examples
 const delimiterTags = ref(['one@example.com']);

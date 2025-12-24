@@ -293,18 +293,6 @@
                             />
                         </div>
                         <div>
-                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
-                            <Select
-                                v-model="chipsInvalid"
-                                :options="techOptions"
-                                multiple
-                                placeholder="Select..."
-                                invalid
-                                clearable
-                                fluid
-                            />
-                        </div>
-                        <div>
                             <div class="text-xs text-muted-foreground mb-1">Outline</div>
                             <Select
                                 v-model="chipsOutline"
@@ -312,6 +300,18 @@
                                 multiple
                                 clearable
                                 chip-variant="outline"
+                                placeholder="Select..."
+                                fluid
+                            />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Primary</div>
+                            <Select
+                                v-model="chipsPrimary"
+                                :options="techOptions"
+                                multiple
+                                clearable
+                                chip-variant="primary"
                                 placeholder="Select..."
                                 fluid
                             />
@@ -374,8 +374,8 @@ const multiSearchDisabled = ref<string[]>(['us']);
 // Chip Variants Examples
 const chipsDefault = ref<string[]>(['vue', 'react']);
 const chipsSecondary = ref<string[]>(['vue', 'typescript']);
-const chipsInvalid = ref<string[]>(['vue', 'react']);
 const chipsOutline = ref<string[]>(['react', 'node']);
+const chipsPrimary = ref<string[]>(['vue', 'tailwind']);
 const chipsDisabled = ref<string[]>(['vue', 'typescript']);
 
 // Options

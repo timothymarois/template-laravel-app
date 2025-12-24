@@ -17,16 +17,16 @@
                 )"
             >
                 <!-- Multi-select with chips -->
-                <span v-if="multiple && showChips && selectedValues.length > 0" class="flex flex-wrap gap-1 flex-1">
+                <span v-if="multiple && showChips && selectedValues.length > 0" class="flex flex-wrap gap-1 flex-1 overflow-hidden">
                     <span
                         v-for="value in selectedValues"
                         :key="value"
-                        :class="chipClasses"
+                        :class="cn(chipClasses, 'max-w-full min-w-0')"
                     >
-                        {{ getLabel(value) }}
+                        <span class="truncate">{{ getLabel(value) }}</span>
                         <X
                             v-if="!disabled"
-                            class="h-3 w-3 cursor-pointer hover:text-destructive"
+                            class="h-3 w-3 shrink-0 cursor-pointer hover:text-destructive"
                             @click.stop="removeValue(value)"
                         />
                     </span>
@@ -169,8 +169,8 @@ const chipClasses = computed(() => {
     const variants = {
         default: 'rounded bg-secondary px-2 py-0.5',
         secondary: 'rounded-full bg-secondary px-2.5 py-0.5',
-        outline: 'rounded-full border px-2.5 py-0.5',
-        primary: 'rounded-full bg-primary/10 text-primary px-2.5 py-0.5',
+        outline: 'rounded border px-2 py-0.5',
+        primary: 'rounded bg-primary text-primary-foreground px-2 py-0.5',
     };
     return cn(base, variants[props.chipVariant]);
 });

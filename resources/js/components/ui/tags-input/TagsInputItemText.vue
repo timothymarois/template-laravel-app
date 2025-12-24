@@ -15,6 +15,6 @@ const forwardedProps = useForwardProps(delegatedProps);
 <template>
     <TagsInputItemText
         v-bind="forwardedProps"
-        :class="cn('text-xs', props.class)"
+        :class="cn('text-xs truncate', props.class)"
     />
 </template>
