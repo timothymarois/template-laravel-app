@@ -4,6 +4,21 @@
 
 This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web-based applications; **allowing you to focus solely on your application requirements**.
 
+## Table of Contents
+
+- [Tech Stack](#tech-stack)
+- [Component Architecture](#component-architecture)
+- [Tests and Linting](#tests-and-linting)
+- [Monitoring](#monitoring)
+- [WebSockets (Reverb)](#websockets-reverb)
+- [Solo (Dev Runner)](#solo-dev-runner)
+- [Local Installation](#local-installation)
+- [Production Deployment](#production-deployment)
+- [Server-Side Rendering (SSR)](#server-side-rendering-ssr)
+- [SEO & Social Sharing](#seo--social-sharing)
+- [Security](#security)
+- [Features](#features)
+
 ---
 
 ## Tech Stack
