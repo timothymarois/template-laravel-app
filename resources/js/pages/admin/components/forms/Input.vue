@@ -167,6 +167,44 @@
                     </div>
                 </CardContent>
             </Card>
+
+            <!-- Number Input -->
+            <Card>
+                <CardHeader>
+                    <CardTitle>Number Input</CardTitle>
+                    <CardDescription>Numeric input with increment/decrement buttons</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Default</div>
+                            <NumberInput v-model="numberDefault" placeholder="0" />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">With Min/Max (0-10)</div>
+                            <NumberInput v-model="numberMinMax" :min="0" :max="10" />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Step (0.5)</div>
+                            <NumberInput v-model="numberStep" :step="0.5" :min="0" />
+                        </div>
+                        <div class="opacity-50">
+                            <div class="text-xs text-muted-foreground mb-1">Disabled</div>
+                            <NumberInput v-model="numberDisabled" disabled />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4 mt-4">
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+                            <NumberInput v-model="numberInvalid" invalid />
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Fluid Width</div>
+                            <NumberInput v-model="numberFluid" fluid :min="0" :max="100" />
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     </LayoutApp>
 </template>
@@ -175,7 +213,7 @@
 import { ref } from 'vue';
 import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { Input, NumberInput } from '@/components/ui/input';
 import { Select } from '@/components/ui/select-popover';
 import { Button } from '@/components/ui/button';
 import { Search, Mail, User, Lock } from 'lucide-vue-next';
@@ -211,4 +249,12 @@ const currencyOptions = [
     { label: 'EUR', value: 'EUR' },
     { label: 'GBP', value: 'GBP' },
 ];
+
+// Number input
+const numberDefault = ref(5);
+const numberMinMax = ref(5);
+const numberStep = ref(2.5);
+const numberDisabled = ref(10);
+const numberInvalid = ref(-1);
+const numberFluid = ref(50);
 </script>

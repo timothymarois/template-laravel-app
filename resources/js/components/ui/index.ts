@@ -13,6 +13,9 @@ export * from './badge';
 // Button
 export * from './button';
 
+// Calendar
+export * from './calendar';
+
 // Card
 export * from './card';
 
@@ -21,6 +24,9 @@ export * from './checkbox';
 
 // Data Table
 export * from './data-table';
+
+// Date Picker
+export * from './date-picker';
 
 // Dialog
 export * from './dialog';
@@ -50,6 +56,9 @@ export * from './popover';
 // Radio Group
 export * from './radio-group';
 
+// Range Calendar
+export * from './range-calendar';
+
 // Scroll Frame
 export * from './scroll-frame';
 
@@ -62,8 +71,14 @@ export * from './select-popover';
 // Sheet
 export * from './sheet';
 
+// Slider
+export * from './slider';
+
 // Sonner (Toast)
 export * from './sonner';
+
+// Switch
+export * from './switch';
 
 // Table
 export * from './table';
