@@ -8,21 +8,21 @@
         <div class="space-y-4">
             <!-- Basic Table in Card -->
             <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b">
-                    <div class="space-y-1">
-                        <CardTitle>Users</CardTitle>
-                        <CardDescription>Manage your team members</CardDescription>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <Input placeholder="Search users..." clearable class="w-64" />
-                        <Button variant="outline">
-                            <Filter class="size-4" />
-                        </Button>
-                        <Button>
-                            <Plus class="size-4 mr-2" />
-                            Add User
-                        </Button>
-                    </div>
+                <CardHeader class="border-b">
+                    <CardTitle>Users</CardTitle>
+                    <CardDescription>Manage your team members</CardDescription>
+                    <CardAction>
+                        <div class="flex items-center gap-2">
+                            <Input placeholder="Search users..." clearable class="w-64" />
+                            <Button variant="outline">
+                                <Filter class="size-4" />
+                            </Button>
+                            <Button>
+                                <Plus class="size-4 mr-2" />
+                                Add User
+                            </Button>
+                        </div>
+                    </CardAction>
                 </CardHeader>
                 <CardContent class="p-0">
                     <Table>
@@ -155,9 +155,11 @@
 
             <!-- Compact Table -->
             <Card>
-                <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b">
+                <CardHeader class="border-b">
                     <CardTitle>Recent Activity</CardTitle>
-                    <Button variant="ghost">View All</Button>
+                    <CardAction>
+                        <Button variant="ghost">View All</Button>
+                    </CardAction>
                 </CardHeader>
                 <CardContent class="p-0">
                     <Table>
@@ -181,7 +183,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { AppLayout as LayoutApp } from '@/components/app';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
