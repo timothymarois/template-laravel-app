@@ -3,7 +3,17 @@ import tsParser from '@typescript-eslint/parser';
 export default [
     ...pluginVue.configs['flat/recommended'],
     {
-        files: ['**/*.{js,ts,vue,tsx}'],
+        files: ['**/*.{ts,tsx}'],
+        languageOptions: {
+            parser: tsParser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+            },
+        },
+    },
+    {
+        files: ['**/*.vue'],
         languageOptions: {
             parserOptions: {
                 parser: tsParser,
@@ -12,6 +22,9 @@ export default [
                 extraFileExtensions: ['.vue'],
             },
         },
+    },
+    {
+        files: ['**/*.{js,ts,vue,tsx}'],
         rules: {
             'vue/attribute-hyphenation': 'off',
             'vue/no-unused-vars': 'warn',
