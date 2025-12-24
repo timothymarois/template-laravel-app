@@ -1,2 +1,12 @@
+# Allow all crawlers
 User-agent: *
-Disallow:
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin
+Disallow: /api/
+Disallow: /horizon
+Disallow: /log-viewer
+
+# Sitemap location (update domain in production)
+# Sitemap: https://example.com/sitemap.xml

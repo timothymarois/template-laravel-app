@@ -425,6 +425,45 @@ Layouts include built-in support for SEO meta tags and social sharing (Open Grap
 
 ---
 
+## Security
+
+Pre-configured security features to protect your application.
+
+**Security Headers:**
+
+The `SecurityHeaders` middleware automatically adds security headers to all responses:
+- `X-Frame-Options: SAMEORIGIN` - Prevents clickjacking
+- `X-Content-Type-Options: nosniff` - Prevents MIME sniffing
+- `Referrer-Policy: strict-origin-when-cross-origin` - Controls referrer information
+- `Permissions-Policy` - Restricts browser features (camera, microphone, geolocation)
+- `Strict-Transport-Security` - Forces HTTPS in production (HSTS)
+
+**Rate Limiting:**
+
+Pre-configured rate limiters in `AppServiceProvider`:
+- `api` - 60 requests/minute per user (or IP if unauthenticated)
+- `auth` - 5 requests/minute per IP (for login/registration)
+- `uploads` - 10 requests/minute per user
+
+Apply to routes: `Route::middleware('throttle:auth')->post('/login', ...)`
+
+**CORS Configuration:**
+
+For production, set allowed origins via environment variable:
+```
+CORS_ALLOWED_ORIGINS=https://example.com,https://api.example.com
+```
+
+**Authentication:**
+
+Sanctum provides API token and SPA authentication. Features:
+- Session-based auth for SPA
+- CSRF protection
+- Rate-limited login attempts
+- Session regeneration on login
+
+---
+
 ## Features:
 
 ### Routes (by Ziggy)

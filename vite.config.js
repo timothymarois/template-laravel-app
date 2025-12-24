@@ -16,7 +16,8 @@ export default defineConfig({
         }),
     ],
     build: {
-        sourcemap: true,
+        // Enable source maps only in development
+        sourcemap: process.env.NODE_ENV !== 'production',
     },
     resolve: {
         dedupe: ['vue'],

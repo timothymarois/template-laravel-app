@@ -17,18 +17,22 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => ['*'],
+    // In production, set CORS_ALLOWED_ORIGINS to your domain(s)
+    // Example: CORS_ALLOWED_ORIGINS=https://example.com,https://api.example.com
+    'allowed_origins' => env('CORS_ALLOWED_ORIGINS')
+        ? explode(',', env('CORS_ALLOWED_ORIGINS'))
+        : ['*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['Content-Type', 'X-Requested-With', 'Authorization', 'X-XSRF-TOKEN'],
 
     'exposed_headers' => [],
 
-    'max_age' => 0,
+    'max_age' => 86400, // 24 hours
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];
