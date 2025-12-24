@@ -49,15 +49,9 @@ export default [
         }
     },
     {
-        files: ['**/*.js', '**/*.ts', '**/*.tsx'],
+        files: ['**/*.js', '**/*.ts', '**/*.tsx', '**/*.vue'],
         rules: {
             'indent': ['error', 4],
         }
     },
-    {
-        files: ['**/*.vue'],
-        rules: {
-            'indent': 'off',
-        }
-    }
 ]
