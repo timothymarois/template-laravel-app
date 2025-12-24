@@ -30,8 +30,8 @@
                             <TableRow>
                                 <TableHead class="w-12 text-center">
                                     <Checkbox
-                                        :checked="headerCheckboxState"
-                                        @update:checked="toggleAllUsers"
+                                        :modelValue="headerCheckboxState"
+                                        @update:modelValue="toggleAllUsers"
                                     />
                                 </TableHead>
                                 <TableHead>Name</TableHead>
@@ -44,12 +44,12 @@
                             <TableRow
                                 v-for="user in paginatedUsers"
                                 :key="user.id"
-                                :data-state="selectedUsers.includes(user.id) ? 'selected' : undefined"
+                                :class="selectedUsers.includes(user.id) ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''"
                             >
                                 <TableCell class="text-center">
                                     <Checkbox
-                                        :checked="selectedUsers.includes(user.id)"
-                                        @update:checked="(checked) => toggleUser(user.id, checked)"
+                                        :modelValue="selectedUsers.includes(user.id)"
+                                        @update:modelValue="(checked) => toggleUser(user.id, checked)"
                                     />
                                 </TableCell>
                                 <TableCell class="font-medium">{{ user.name }}</TableCell>

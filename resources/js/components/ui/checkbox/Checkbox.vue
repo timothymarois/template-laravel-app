@@ -8,11 +8,26 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Checkbox - Enhanced checkbox component with array mode support
+ *
+ * Usage:
+ *   Single boolean: <Checkbox v-model="isChecked" />
+ *   Array mode:     <Checkbox v-model="selectedItems" value="item1" />
+ *   Indeterminate:  <Checkbox :modelValue="'indeterminate'" />
+ *
+ * Props:
+ *   - modelValue: boolean | 'indeterminate' | string[] - The checked state
+ *   - value: string - Value for array mode (checkbox groups)
+ *   - disabled: boolean - Disable the checkbox
+ *   - invalid: boolean - Show invalid/error state
+ *   - size: 'small' | 'default' | 'large' - Checkbox size
+ */
 import { computed } from 'vue';
 import CheckboxBase from './CheckboxBase.vue';
 
 interface Props {
-    modelValue?: boolean | string[];
+    modelValue?: boolean | 'indeterminate' | string[];
     value?: string;
     disabled?: boolean;
     invalid?: boolean;
@@ -25,7 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-    'update:modelValue': [value: boolean | string[]];
+    'update:modelValue': [value: boolean | 'indeterminate' | string[]];
 }>();
 
 const className = computed(() => props.class || '');
@@ -44,18 +59,18 @@ const invalidClass = computed(() => {
 const isArrayMode = computed(() => Array.isArray(props.modelValue));
 
 // Determine if checkbox is checked
-const isChecked = computed(() => {
+const isChecked = computed((): boolean | 'indeterminate' => {
     if (isArrayMode.value && props.value !== undefined) {
         return (props.modelValue as string[]).includes(props.value);
     }
-    return props.modelValue as boolean;
+    return props.modelValue as boolean | 'indeterminate';
 });
 
 // Handle checkbox change
-const handleChange = (checked: boolean) => {
+const handleChange = (checked: boolean | 'indeterminate') => {
     if (isArrayMode.value && props.value !== undefined) {
         const currentArray = props.modelValue as string[];
-        if (checked) {
+        if (checked === true) {
             emit('update:modelValue', [...currentArray, props.value]);
         } else {
             emit('update:modelValue', currentArray.filter(v => v !== props.value));
