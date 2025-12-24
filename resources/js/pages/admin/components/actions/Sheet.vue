@@ -119,8 +119,8 @@
                                 </div>
                             </div>
                             <SheetFooter class="px-6 py-4 border-t">
-                                <Button variant="outline" @click="showFormSheet = false">Cancel</Button>
                                 <Button @click="showFormSheet = false">Create User</Button>
+                                <Button variant="outline" @click="showFormSheet = false">Cancel</Button>
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>
@@ -211,8 +211,8 @@
                                 </div>
                             </div>
                             <SheetFooter class="px-6 py-4 border-t">
-                                <Button variant="outline" @click="showSettingsSheet = false">Cancel</Button>
                                 <Button @click="showSettingsSheet = false">Save Changes</Button>
+                                <Button variant="outline" @click="showSettingsSheet = false">Cancel</Button>
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>
@@ -382,8 +382,8 @@
                                 </div>
                             </div>
                             <SheetFooter class="border-t p-6">
-                                <Button variant="outline" @click="showDetailSheet = false">Close</Button>
                                 <Button>Download Invoice</Button>
+                                <Button variant="outline" @click="showDetailSheet = false">Close</Button>
                             </SheetFooter>
                         </SheetContent>
                     </Sheet>
