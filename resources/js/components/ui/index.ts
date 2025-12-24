@@ -89,6 +89,9 @@ export * from './switch';
 // Table
 export * from './table';
 
+// Tags Input
+export * from './tags-input';
+
 // Textarea
 export * from './textarea';
 

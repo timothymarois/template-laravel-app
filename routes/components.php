@@ -18,6 +18,7 @@ Route::get('/forms/fields', [ComponentController::class, 'formsFields'])->name('
 Route::get('/forms/calendar', [ComponentController::class, 'formsCalendar'])->name('forms.calendar');
 Route::get('/forms/editor', [ComponentController::class, 'formsEditor'])->name('forms.editor');
 Route::get('/forms/upload', [ComponentController::class, 'formsUpload'])->name('forms.upload');
+Route::get('/forms/tags-input', [ComponentController::class, 'formsTagsInput'])->name('forms.tags-input');
 
 // Actions
 Route::get('/actions', [ComponentController::class, 'actionsIndex'])->name('actions');

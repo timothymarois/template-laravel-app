@@ -132,6 +132,20 @@
                 </Card>
             </Link>
 
+            <Link :href="$route('admin.components.forms.tags-input')">
+                <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
+                    <CardHeader>
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 bg-primary/10 rounded-lg">
+                                <Tags class="size-5 text-primary" />
+                            </div>
+                            <CardTitle class="text-base">Tags Input</CardTitle>
+                        </div>
+                        <CardDescription>Input for adding and removing tags</CardDescription>
+                    </CardHeader>
+                </Card>
+            </Link>
+
             <Link :href="$route('admin.components.forms.textarea')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                     <CardHeader>
@@ -176,6 +190,7 @@ import {
     FormInput,
     ListFilter,
     SlidersHorizontal,
+    Tags,
     TextCursorInput,
     ToggleLeft,
     Upload,
