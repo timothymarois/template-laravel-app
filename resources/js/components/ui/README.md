@@ -1,12 +1,24 @@
 # UI Components
 
-Base-level UI components for the application. This is the single source of truth for all UI primitives.
+Base-level, stateless UI components. Single source of truth for all UI primitives.
 
-## Before Creating New Components
+## Rules
 
-1. **Check shadcn-vue first**: https://www.shadcn-vue.com/docs/components
-2. If available, install it: `pnpm dlx shadcn-vue@latest add <component>`
-3. Only create custom components if shadcn doesn't have what you need
+1. **Stateless only** - No Inertia, routes, auth, or business logic
+2. **Self-contained** - Each component in its own folder with `index.ts`
+3. **Primitives use `*Base` suffix** - e.g., `InputBase.vue`, `CheckboxBase.vue`
+4. **Enhanced versions are main export** - e.g., `Input.vue` wraps `InputBase.vue`
+
+## Usage
+
+```typescript
+// From barrel export
+import { Button, Input, DataTable } from '@/components/ui';
+
+// From specific folder
+import { Input, InputBase } from '@/components/ui/input';
+import { Select } from '@/components/ui/select-popover';
+```
 
 ## Adding shadcn Components
 
@@ -14,29 +26,11 @@ Base-level UI components for the application. This is the single source of truth
 pnpm dlx shadcn-vue@latest add <component>
 ```
 
-New primitives are renamed to `*Base.vue` and enhanced wrappers are created as the main export.
+Check https://www.shadcn-vue.com/docs/components first before creating custom components.
 
-## Component Naming
+## Adding Custom Components
 
-- **shadcn primitives**: `ButtonBase.vue`, `CardBase.vue`, `SelectBase.vue`
-- **Enhanced wrappers**: `Button.vue`, `Card.vue`, `Select.vue` (main exports)
-
-## Usage
-
-```typescript
-// Import enhanced components (recommended)
-import { Button, Card, DataTable } from '@/components/ui';
-
-// Or from specific folder
-import { Button, ButtonMenu } from '@/components/ui/button';
-```
-
-## Rules
-
-- Components must be **stateless** - no Inertia, routes, or auth
-- Enhanced versions wrap `*Base` components with added features
-- Add new custom components following the same pattern:
-  1. Create folder: `ui/<component>/`
-  2. Create component: `<ComponentName>.vue`
-  3. Create barrel: `index.ts`
-  4. Export from `ui/index.ts`
+1. Create folder: `ui/<component>/`
+2. Create component: `<ComponentName>.vue`
+3. Create barrel: `index.ts`
+4. Export from `ui/index.ts`

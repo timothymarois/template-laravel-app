@@ -154,9 +154,7 @@ resources/js/
 ├── components/         # Reusable components (see Component Architecture below)
 │   ├── ui/             # Base components (shadcn + custom enhanced)
 │   ├── app/            # Application components (authenticated app)
-│   │   └── ui/         # App-specific design wrappers
 │   └── site/           # Website components (public marketing pages)
-│       └── ui/         # Site-specific design wrappers
 ├── pages/              # Inertia pages (organized by route)
 │   ├── Index.vue       # Home page
 │   └── admin/          # /admin/* routes
@@ -175,9 +173,9 @@ The UI components follow a simple 2-layer architecture:
 
 | Layer | Location | Purpose | Rules |
 |-------|----------|---------|-------|
-| **ui/** | `components/ui/` | Base components (shadcn + enhanced) | Single source of truth for all UI |
-| **app/** | `components/app/` | Application components | Uses Inertia, routes, auth |
-| **site/** | `components/site/` | Website components | Uses Inertia, routes, public-facing |
+| **ui/** | `components/ui/` | Base components (shadcn + enhanced) | [README](resources/js/components/ui/README.md) |
+| **app/** | `components/app/` | Application components | [README](resources/js/components/app/README.md) |
+| **site/** | `components/site/` | Website components | [README](resources/js/components/site/README.md) |
 
 ### ui/ - Base Components
 
@@ -228,32 +226,10 @@ site/
 - Public-facing, no authentication required
 - For marketing and public website pages
 
-### Design Wrappers (when needed)
-
-When app or site needs different styling for a component, create a wrapper in `app/ui/` or `site/ui/`:
-
-```vue
-<!-- app/ui/button/Button.vue -->
-<script setup lang="ts">
-import { Button as BaseButton, type ButtonProps } from '@/components/ui/button';
-const props = defineProps<ButtonProps>();
-</script>
-
-<template>
-    <BaseButton v-bind="props" class="rounded-md">
-        <slot />
-    </BaseButton>
-</template>
-```
-
-**Wrapper Rules:**
-- Design ONLY - same API as base, different appearance
-- No behavior changes, no new props for logic
-
 ### Import Patterns
 
 ```typescript
-// Base components (recommended)
+// Base components
 import { Button, Card, DataTable } from '@/components/ui';
 
 // Application-specific
@@ -261,10 +237,6 @@ import { AppLayout, Sidebar } from '@/components/app';
 
 // Website-specific
 import { SiteLayout } from '@/components/site';
-
-// If design wrappers exist:
-import { Button } from '@/components/app/ui';
-import { Button } from '@/components/site/ui';
 ```
 
 ### Decision Tree: Where Does My Component Go?
@@ -275,9 +247,6 @@ Adding a new component?
 ├─ Is it a UI primitive (button, input, card)?
 │  ├─ Available in shadcn? → pnpm dlx shadcn-vue@latest add <name>
 │  └─ Custom enhanced? → Add to ui/<component>/
-│
-├─ Need different STYLING for app vs site?
-│  └─ Create wrapper in app/ui/ or site/ui/
 │
 ├─ Uses Inertia/routes/auth?
 │  ├─ Authenticated app → Add to app/<category>/
