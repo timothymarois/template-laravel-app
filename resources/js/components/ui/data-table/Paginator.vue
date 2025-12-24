@@ -71,7 +71,7 @@ interface PaginationLink {
 }
 
 interface Props {
-    links: PaginationLink[];
+    links?: PaginationLink[];
     linkComponent?: string | object;
 }
 

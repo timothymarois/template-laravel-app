@@ -7,7 +7,7 @@ import { createApp, watch } from "vue";
 import { ChartTooltip } from ".";
 
 const props = withDefaults(defineProps<{
-    colors: string[]
+    colors?: string[]
     index: string
     items: BulletLegendItemInterface[]
     customTooltip?: Component
