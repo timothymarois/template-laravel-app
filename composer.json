@@ -19,6 +19,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "opcodesio/log-viewer": "^3.10",
         "sentry/sentry-laravel": "^4.7",
+        "spatie/laravel-sitemap": "^7.3",
         "tightenco/ziggy": "^2.3"
     },
     "require-dev": {

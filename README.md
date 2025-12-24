@@ -311,6 +311,7 @@ php artisan inertia:stop-ssr
 ```bash
 php artisan optimize          # Cache config, routes, and events
 php artisan view:cache        # Compile all Blade views
+php artisan sitemap:generate  # Regenerate sitemap with public pages
 php artisan horizon:terminate # Gracefully restart Horizon workers
 php artisan reverb:restart    # Gracefully restart Reverb WebSocket server
 ```
@@ -422,6 +423,53 @@ Layouts include built-in support for SEO meta tags and social sharing (Open Grap
 - Minimum size: 1200x630px for best display
 - Format: JPG or PNG
 - Relative paths are automatically converted to absolute URLs
+
+**Sitemap Generation:**
+
+Generate a sitemap with only public pages (excludes admin, auth, API routes):
+
+```bash
+php artisan sitemap:generate
+```
+
+This creates `public/sitemap.xml`. The command automatically:
+- Includes only GET routes without authentication
+- Excludes admin, auth, API, and internal routes
+- Sets homepage priority to 1.0, other pages to 0.8
+
+**Adding dynamic pages:** Edit `addDynamicPages()` in `GenerateSitemap.php`:
+
+```php
+protected function addDynamicPages(Sitemap $sitemap): void
+{
+    // Add all published products
+    Product::where('published', true)->each(function ($product) use ($sitemap) {
+        $sitemap->add(
+            Url::create(route('products.show', $product))
+                ->setLastModificationDate($product->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                ->setPriority(0.8)
+        );
+    });
+
+    // Add blog posts by slug
+    Post::published()->each(function ($post) use ($sitemap) {
+        $sitemap->add(
+            Url::create(route('blog.show', $post->slug))
+                ->setLastModificationDate($post->updated_at)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                ->setPriority(0.7)
+        );
+    });
+}
+```
+
+For production, uncomment the sitemap line in `public/robots.txt`:
+```
+Sitemap: https://yourdomain.com/sitemap.xml
+```
+
+Add sitemap generation to your deployment pipeline to keep it updated.
 
 ---
 
