@@ -44,6 +44,11 @@ class ComponentController extends Controller
         return $this->inertia->render('admin/components/forms/Checkbox');
     }
 
+    public function formsCombobox(): Response
+    {
+        return $this->inertia->render('admin/components/forms/Combobox');
+    }
+
     public function formsSwitch(): Response
     {
         return $this->inertia->render('admin/components/forms/Switch');
@@ -83,6 +88,11 @@ class ComponentController extends Controller
     public function actionsButton(): Response
     {
         return $this->inertia->render('admin/components/actions/Button');
+    }
+
+    public function actionsCommand(): Response
+    {
+        return $this->inertia->render('admin/components/actions/Command');
     }
 
     public function actionsMenu(): Response

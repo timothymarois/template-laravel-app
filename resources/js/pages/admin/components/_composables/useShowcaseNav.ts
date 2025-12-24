@@ -22,6 +22,7 @@ export const useShowcaseNav = () => {
             children: [
                 { label: 'Overview', href: '/admin/components/actions' },
                 { label: 'Button', href: '/admin/components/actions/button' },
+                { label: 'Command', href: '/admin/components/actions/command' },
                 { label: 'Dialog', href: '/admin/components/actions/dialog' },
                 { label: 'Menu', href: '/admin/components/actions/menu' },
                 { label: 'Sheet', href: '/admin/components/actions/sheet' },
@@ -74,6 +75,7 @@ export const useShowcaseNav = () => {
                 { label: 'Overview', href: '/admin/components/forms' },
                 { label: 'Calendar', href: '/admin/components/forms/calendar' },
                 { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
+                { label: 'Combobox', href: '/admin/components/forms/combobox' },
                 { label: 'Editor', href: '/admin/components/forms/editor' },
                 { label: 'Fields', href: '/admin/components/forms/fields' },
                 { label: 'Input', href: '/admin/components/forms/input' },
@@ -100,6 +102,7 @@ export const useShowcaseNav = () => {
     const actionsTabs = [
         { title: 'Overview', href: '/admin/components/actions' },
         { title: 'Button', href: '/admin/components/actions/button' },
+        { title: 'Command', href: '/admin/components/actions/command' },
         { title: 'Dialog', href: '/admin/components/actions/dialog' },
         { title: 'Menu', href: '/admin/components/actions/menu' },
         { title: 'Sheet', href: '/admin/components/actions/sheet' },
@@ -140,6 +143,7 @@ export const useShowcaseNav = () => {
         { title: 'Overview', href: '/admin/components/forms' },
         { title: 'Calendar', href: '/admin/components/forms/calendar' },
         { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
+        { title: 'Combobox', href: '/admin/components/forms/combobox' },
         { title: 'Editor', href: '/admin/components/forms/editor' },
         { title: 'Fields', href: '/admin/components/forms/fields' },
         { title: 'Input', href: '/admin/components/forms/input' },

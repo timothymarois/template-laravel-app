@@ -11,6 +11,7 @@ Route::get('/forms/input', [ComponentController::class, 'formsInput'])->name('fo
 Route::get('/forms/textarea', [ComponentController::class, 'formsTextarea'])->name('forms.textarea');
 Route::get('/forms/select', [ComponentController::class, 'formsSelect'])->name('forms.select');
 Route::get('/forms/checkbox', [ComponentController::class, 'formsCheckbox'])->name('forms.checkbox');
+Route::get('/forms/combobox', [ComponentController::class, 'formsCombobox'])->name('forms.combobox');
 Route::get('/forms/switch', [ComponentController::class, 'formsSwitch'])->name('forms.switch');
 Route::get('/forms/slider', [ComponentController::class, 'formsSlider'])->name('forms.slider');
 Route::get('/forms/fields', [ComponentController::class, 'formsFields'])->name('forms.fields');
@@ -21,8 +22,9 @@ Route::get('/forms/upload', [ComponentController::class, 'formsUpload'])->name('
 // Actions
 Route::get('/actions', [ComponentController::class, 'actionsIndex'])->name('actions');
 Route::get('/actions/button', [ComponentController::class, 'actionsButton'])->name('actions.button');
-Route::get('/actions/menu', [ComponentController::class, 'actionsMenu'])->name('actions.menu');
+Route::get('/actions/command', [ComponentController::class, 'actionsCommand'])->name('actions.command');
 Route::get('/actions/dialog', [ComponentController::class, 'actionsDialog'])->name('actions.dialog');
+Route::get('/actions/menu', [ComponentController::class, 'actionsMenu'])->name('actions.menu');
 Route::get('/actions/sheet', [ComponentController::class, 'actionsSheet'])->name('actions.sheet');
 
 // Display

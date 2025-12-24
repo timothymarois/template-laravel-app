@@ -22,6 +22,9 @@ export * from './card';
 // Checkbox
 export * from './checkbox';
 
+// Combobox (autocomplete input)
+export * from './combobox';
+
 // Data Table
 export * from './data-table';
 
