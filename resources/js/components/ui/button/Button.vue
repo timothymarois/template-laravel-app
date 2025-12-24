@@ -7,7 +7,7 @@
         :as-child="asChild"
         :class="[
             fluid ? 'w-full' : '',
-            className
+            props.class
         ]"
         v-bind="$attrs"
     >
@@ -57,8 +57,6 @@ const props = withDefaults(defineProps<Props>(), {
     size: 'default',
     iconPos: 'left',
 });
-
-const className = computed(() => props.class || '');
 
 const computedVariant = computed(() => {
     // If variant is explicitly passed, use it

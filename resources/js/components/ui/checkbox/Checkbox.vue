@@ -2,7 +2,7 @@
     <CheckboxBase
         :modelValue="isChecked"
         :disabled="disabled"
-        :class="[computedSizeClass, invalidClass, className]"
+        :class="[computedSizeClass, invalidClass, props.class]"
         @update:modelValue="handleChange"
     />
 </template>
@@ -42,8 +42,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
     'update:modelValue': [value: boolean | 'indeterminate' | string[]];
 }>();
-
-const className = computed(() => props.class || '');
 
 const computedSizeClass = computed(() => {
     if (props.size === 'small') return 'w-4 h-4';

@@ -1,5 +1,5 @@
 <template>
-    <CardBase :class="className">
+    <CardBase :class="props.class">
         <CardHeader v-if="$slots.header || $slots.title || $slots.subtitle">
             <slot name="header">
                 <CardTitle v-if="$slots.title">
@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import CardBase from './CardBase.vue';
 import CardContent from './CardContent.vue';
 import CardDescription from './CardDescription.vue';
@@ -37,6 +36,4 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     noPadding: false,
 });
-
-const className = computed(() => props.class || '');
 </script>

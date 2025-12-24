@@ -3,14 +3,14 @@
         <PopoverTrigger as-child>
             <slot name="trigger" />
         </PopoverTrigger>
-        <PopoverContent :class="cn('w-auto', className)">
+        <PopoverContent :class="cn('w-auto', props.class)">
             <slot />
         </PopoverContent>
     </PopoverBase>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import PopoverBase from './PopoverBase.vue';
 import PopoverContent from './PopoverContent.vue';
 import PopoverTrigger from './PopoverTrigger.vue';
@@ -22,7 +22,6 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const className = computed(() => props.class || '');
 const isOpen = ref(false);
 
 defineExpose({

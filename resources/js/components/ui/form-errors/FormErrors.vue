@@ -1,7 +1,7 @@
 <template>
     <div
         v-if="hasErrors || failed"
-        :class="cn('rounded-md bg-destructive/10 border border-destructive/30 p-4 cursor-pointer', className)"
+        :class="cn('rounded-md bg-destructive/10 border border-destructive/30 p-4 cursor-pointer', props.class)"
         @click="expandErrors = !expandErrors"
     >
         <div class="flex">
@@ -62,7 +62,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const expandErrors = ref(props.expandDefault);
-const className = computed(() => props.class || '');
 
 onMounted(() => {
     expandErrors.value = props.expandDefault;

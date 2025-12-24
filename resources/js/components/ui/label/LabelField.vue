@@ -1,5 +1,5 @@
 <template>
-    <div :class="cn('w-full', className)">
+    <div :class="cn('w-full', props.class)">
         <label
             v-if="label"
             :for="name"
@@ -19,7 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { TooltipIcon } from '@/components/ui/tooltip';
 import { cn } from '@/utils';
 
@@ -39,6 +38,4 @@ const props = withDefaults(defineProps<Props>(), {
     required: false,
     error: ''
 });
-
-const className = computed(() => props.class || '');
 </script>

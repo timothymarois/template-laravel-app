@@ -101,17 +101,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick, toRef } from 'vue';
 import { PopoverBase as Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Check, ChevronsUpDown, Search, X } from 'lucide-vue-next';
 import { cn } from '@/utils';
+import { useSelectableOptions, type SelectableOption } from '@/composables';
 
-export interface SelectOption {
-    label: string;
-    value: string | number;
-    disabled?: boolean;
-    [key: string]: any;
-}
+export type SelectOption = SelectableOption;
 
 interface Props {
     modelValue?: string | number | (string | number)[] | null;
@@ -160,6 +156,26 @@ const highlightedIndex = ref(0);
 const searchInput = ref<HTMLInputElement>();
 const listRef = ref<HTMLElement>();
 
+// Use shared selectable options composable
+const {
+    normalizedOptions,
+    selectedValues,
+    hasValue,
+    getOptionLabel,
+    getOptionValue,
+    getLabel,
+    isSelected,
+    toggleOption,
+    removeValue: composableRemoveValue,
+    clearAll: composableClearAll,
+} = useSelectableOptions({
+    modelValue: toRef(props, 'modelValue'),
+    options: toRef(props, 'options'),
+    optionLabel: props.optionLabel,
+    optionValue: props.optionValue,
+    multiple: props.multiple,
+});
+
 // Whether to show chips in trigger
 const showChips = computed(() => props.chips);
 
@@ -175,16 +191,6 @@ const chipClasses = computed(() => {
     return cn(base, variants[props.chipVariant]);
 });
 
-// Normalize options to always have label/value
-const normalizedOptions = computed(() => {
-    return props.options.map(opt => {
-        if (typeof opt === 'string' || typeof opt === 'number') {
-            return { label: String(opt), value: opt };
-        }
-        return opt;
-    });
-});
-
 // Filter options based on search
 const filteredOptions = computed(() => {
     if (!searchQuery.value) return normalizedOptions.value;
@@ -193,15 +199,6 @@ const filteredOptions = computed(() => {
         getOptionLabel(opt).toLowerCase().includes(query)
     );
 });
-
-// Get the selected values as array
-const selectedValues = computed<(string | number)[]>(() => {
-    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') return [];
-    if (Array.isArray(props.modelValue)) return props.modelValue.filter(v => v !== '' && v !== null && v !== undefined);
-    return [props.modelValue];
-});
-
-const hasValue = computed(() => selectedValues.value.length > 0);
 
 // Display label for trigger
 const displayLabel = computed(() => {
@@ -217,49 +214,22 @@ const displayLabel = computed(() => {
     return getLabel(selectedValues.value[0]);
 });
 
-// Helper functions
-const getOptionLabel = (option: SelectOption | string | number): string => {
-    if (typeof option === 'string' || typeof option === 'number') return String(option);
-    return option[props.optionLabel] ?? option.label ?? String(option.value);
-};
-
-const getOptionValue = (option: SelectOption | string | number): string | number => {
-    if (typeof option === 'string' || typeof option === 'number') return option;
-    return option[props.optionValue] ?? option.value;
-};
-
-const getLabel = (value: string | number): string => {
-    const option = normalizedOptions.value.find(opt => getOptionValue(opt) === value);
-    return option ? getOptionLabel(option) : String(value);
-};
-
-const isSelected = (value: string | number): boolean => {
-    return selectedValues.value.includes(value);
-};
-
 const selectOption = (option: SelectOption | string | number) => {
-    const value = getOptionValue(option);
+    const newValue = toggleOption(option);
+    emit('update:modelValue', newValue);
 
-    if (props.multiple) {
-        const newValues = isSelected(value)
-            ? selectedValues.value.filter(v => v !== value)
-            : [...selectedValues.value, value];
-        emit('update:modelValue', newValues);
-    } else {
-        emit('update:modelValue', value);
+    if (!props.multiple) {
         isOpen.value = false;
         searchQuery.value = '';
     }
 };
 
 const removeValue = (value: string | number) => {
-    if (props.multiple) {
-        emit('update:modelValue', selectedValues.value.filter(v => v !== value));
-    }
+    emit('update:modelValue', composableRemoveValue(value));
 };
 
 const clearAll = () => {
-    emit('update:modelValue', props.multiple ? [] : null);
+    emit('update:modelValue', composableClearAll());
 };
 
 // Keyboard navigation

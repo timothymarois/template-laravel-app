@@ -1,6 +1,6 @@
 <template>
     <DialogBase v-model:open="isOpen">
-        <DialogContent :class="className">
+        <DialogContent :class="props.class">
             <DialogHeader v-if="$slots.header || header">
                 <DialogTitle>
                     <slot name="header">{{ header }}</slot>
@@ -42,8 +42,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
     'update:visible': [value: boolean];
 }>();
-
-const className = computed(() => props.class || '');
 
 const isOpen = useModelValue<boolean, 'visible'>({ props, emit, name: 'visible' });
 </script>

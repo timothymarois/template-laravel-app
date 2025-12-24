@@ -1,5 +1,5 @@
 <template>
-    <BadgeBase :variant="computedVariant" :class="[computedSizeClass, className]">
+    <BadgeBase :variant="computedVariant" :class="[computedSizeClass, props.class]">
         <slot>{{ value }}</slot>
     </BadgeBase>
 </template>
@@ -18,8 +18,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     severity: 'primary',
 });
-
-const className = computed(() => props.class || '');
 
 const computedVariant = computed(() => {
     switch (props.severity) {

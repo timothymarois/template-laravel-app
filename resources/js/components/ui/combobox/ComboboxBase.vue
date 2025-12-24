@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, toRef } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
@@ -13,13 +13,9 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { Check, ChevronsUpDown, X } from 'lucide-vue-next';
 import { cn } from '@/utils';
+import { useSelectableOptions, type SelectableOption } from '@/composables';
 
-export interface ComboboxOption {
-    label: string;
-    value: string | number;
-    disabled?: boolean;
-    [key: string]: any;
-}
+export type ComboboxOption = SelectableOption;
 
 interface Props {
     modelValue?: string | number | (string | number)[] | null;
@@ -70,6 +66,25 @@ const emit = defineEmits<{
 
 const isOpen = ref(false);
 
+// Use shared selectable options composable
+const {
+    normalizedOptions,
+    selectedValues,
+    hasValue,
+    getOptionLabel,
+    getOptionValue,
+    getLabel,
+    isSelected,
+    toggleOption,
+    clearAll,
+} = useSelectableOptions({
+    modelValue: toRef(props, 'modelValue'),
+    options: toRef(props, 'options'),
+    optionLabel: props.optionLabel,
+    optionValue: props.optionValue,
+    multiple: props.multiple,
+});
+
 // Debounced search emission
 const debouncedEmitSearch = useDebounceFn((query: string) => {
     emit('search', query);
@@ -79,26 +94,6 @@ const debouncedEmitSearch = useDebounceFn((query: string) => {
 const handleSearchChange = (query: string) => {
     debouncedEmitSearch(query);
 };
-
-
-// Normalize options to always have label/value
-const normalizedOptions = computed(() => {
-    return props.options.map(opt => {
-        if (typeof opt === 'string' || typeof opt === 'number') {
-            return { label: String(opt), value: opt };
-        }
-        return opt;
-    });
-});
-
-// Get the selected values as array
-const selectedValues = computed<(string | number)[]>(() => {
-    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') return [];
-    if (Array.isArray(props.modelValue)) return props.modelValue.filter(v => v !== '' && v !== null && v !== undefined);
-    return [props.modelValue];
-});
-
-const hasValue = computed(() => selectedValues.value.length > 0);
 
 // Display label for trigger
 const displayLabel = computed(() => {
@@ -111,69 +106,31 @@ const displayLabel = computed(() => {
     return getLabel(selectedValues.value[0]);
 });
 
-// Helper functions
-const getOptionLabel = (option: ComboboxOption | string | number): string => {
-    if (typeof option === 'string' || typeof option === 'number') return String(option);
-    return option[props.optionLabel] ?? option.label ?? String(option.value);
-};
-
-const getOptionValue = (option: ComboboxOption | string | number): string | number => {
-    if (typeof option === 'string' || typeof option === 'number') return option;
-    return option[props.optionValue] ?? option.value;
-};
-
-const getLabel = (value: string | number): string => {
-    const option = normalizedOptions.value.find(opt => getOptionValue(opt) === value);
-    return option ? getOptionLabel(option) : String(value);
-};
-
-const isSelected = (value: string | number): boolean => {
-    return selectedValues.value.includes(value);
-};
-
 const handleSelect = (ev: { detail: { value: string } }) => {
     const label = ev.detail.value;
     // Find the option by label (Command uses label as value for filtering)
     const option = normalizedOptions.value.find(opt => getOptionLabel(opt) === label);
     if (!option) return;
 
-    const optionValue = getOptionValue(option);
+    const newValue = toggleOption(option);
+    emit('update:modelValue', newValue);
 
-    if (props.multiple) {
-        const newValues = isSelected(optionValue)
-            ? selectedValues.value.filter(v => v !== optionValue)
-            : [...selectedValues.value, optionValue];
-        emit('update:modelValue', newValues);
-    } else {
-        if (isSelected(optionValue)) {
-            emit('update:modelValue', null);
-        } else {
-            emit('update:modelValue', optionValue);
-        }
+    if (!props.multiple) {
         isOpen.value = false;
     }
 };
 
 const clearValue = (e: Event) => {
     e.stopPropagation();
-    emit('update:modelValue', props.multiple ? [] : null);
+    emit('update:modelValue', clearAll());
 };
 
 // Simple select handler for when disableFilter is true (bypasses Command)
 const handleSimpleSelect = (option: ComboboxOption | string | number) => {
-    const optionValue = getOptionValue(option);
+    const newValue = toggleOption(option);
+    emit('update:modelValue', newValue);
 
-    if (props.multiple) {
-        const newValues = isSelected(optionValue)
-            ? selectedValues.value.filter(v => v !== optionValue)
-            : [...selectedValues.value, optionValue];
-        emit('update:modelValue', newValues);
-    } else {
-        if (isSelected(optionValue)) {
-            emit('update:modelValue', null);
-        } else {
-            emit('update:modelValue', optionValue);
-        }
+    if (!props.multiple) {
         isOpen.value = false;
     }
 };

@@ -8,7 +8,7 @@
             fluid ? 'w-full' : '',
             invalid ? 'border-destructive focus-visible:ring-destructive' : '',
             resize === 'none' ? 'resize-none' : resize === 'horizontal' ? 'resize-x' : resize === 'vertical' ? 'resize-y' : 'resize',
-            className,
+            props.class,
         ]"
         v-bind="$attrs"
         @update:modelValue="$emit('update:modelValue', $event)"
@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { TextareaBase } from '@/components/ui/textarea';
 
 defineOptions({
@@ -42,6 +41,4 @@ const props = withDefaults(defineProps<Props>(), {
 defineEmits<{
     'update:modelValue': [value: string];
 }>();
-
-const className = computed(() => props.class || '');
 </script>

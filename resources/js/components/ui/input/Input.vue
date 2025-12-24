@@ -17,7 +17,7 @@
                 $slots.icon ? 'pl-9' : '',
                 clearable && modelValue ? 'pr-8' : '',
                 computedSizeClass,
-                className
+                props.class
             ]"
             v-bind="$attrs"
             @update:modelValue="$emit('update:modelValue', $event)"
@@ -62,8 +62,6 @@ const props = withDefaults(defineProps<Props>(), {
 defineEmits<{
     'update:modelValue': [value: string | number | null];
 }>();
-
-const className = computed(() => props.class || '');
 
 const computedSizeClass = computed(() => {
     if (props.size === 'small') return 'h-8';
