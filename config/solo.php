@@ -47,6 +47,7 @@ return [
     'commands' => [
         'SSR' => Command::from('herd php artisan inertia:start-ssr')->lazy(),
         'Queue' => Command::from('php artisan horizon')->lazy(),
+        'Reverb' => Command::from('php artisan reverb:start')->lazy(),
         'Schedule' => Command::from('php artisan schedule:work')->lazy(),
         'Check:JS' => Command::from('pnpm check:js')->lazy(),
         'Check:PHP' => Command::from('pnpm check:php')->withEnv(['APP_ENV' => 'testing'])->lazy(),

@@ -12,6 +12,7 @@
         "laravel/cashier": "*",
         "laravel/framework": "^12.0",
         "laravel/horizon": "^5.24",
+        "laravel/reverb": "^1.6",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.19",
         "laravel/tinker": "^2.9",

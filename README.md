@@ -129,6 +129,65 @@ Pre-installed monitoring packages allow you to view logs, worker jobs, and debug
 
 ---
 
+## WebSockets (Reverb)
+
+[Laravel Reverb](https://laravel.com/docs/12.x/reverb) provides real-time WebSocket communication. Pre-configured with [Laravel Echo](https://laravel.com/docs/12.x/broadcasting#client-side-installation) on the frontend.
+
+```bash
+php artisan reverb:start
+```
+
+**Vue composables (recommended):**
+
+```js
+import { useChannel, usePrivateChannel, useListen } from '@/composables/useEcho';
+
+// Public channel with auto-cleanup on unmount
+const { channel } = useChannel('orders');
+channel.value.listen('OrderShipped', (e) => console.log(e));
+
+// Private channel (requires auth)
+const { channel: privateChannel } = usePrivateChannel('user.1');
+
+// Simplified listener (auto-subscribes and cleans up)
+useListen('orders', 'OrderShipped', (e) => console.log(e.order));
+useListen('user.1', 'MessageSent', (e) => console.log(e), { private: true });
+```
+
+**Creating broadcast events (Laravel):**
+
+```bash
+php artisan make:event OrderShipped
+```
+
+```php
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+class OrderShipped implements ShouldBroadcast
+{
+    public function __construct(public Order $order) {}
+
+    public function broadcastOn(): array
+    {
+        return [new Channel('orders')];
+    }
+}
+
+// Dispatch: event(new OrderShipped($order));
+```
+
+**Configure `.env`:**
+
+```
+REVERB_APP_ID=local
+REVERB_APP_KEY=local
+REVERB_APP_SECRET=local
+REVERB_HOST=localhost
+REVERB_PORT=8080
+```
+
+---
+
 ## Solo (Dev Runner)
 
 [Solo](https://github.com/soloterm/solo) is a terminal UI for running multiple Laravel processes simultaneously during development. Pre-configured commands are available in `config/solo.php`.
@@ -137,7 +196,7 @@ Pre-installed monitoring packages allow you to view logs, worker jobs, and debug
 php artisan solo
 ```
 
-**Configured commands:** SSR server, Queue worker, Scheduler, JS/PHP checks, Migrations, and more.
+**Configured commands:** SSR server, Queue worker, Reverb WebSockets, Scheduler, JS/PHP checks, Migrations, and more.
 
 ---
 
@@ -249,7 +308,25 @@ php artisan inertia:stop-ssr
 php artisan optimize          # Cache config, routes, and events
 php artisan view:cache        # Compile all Blade views
 php artisan horizon:terminate # Gracefully restart Horizon workers
+php artisan reverb:restart    # Gracefully restart Reverb WebSocket server
 ```
+
+</details>
+
+<details>
+<summary>Running Reverb in production</summary>
+
+Reverb should run as a daemon process via [Supervisor](http://supervisord.org/). Example config:
+
+```ini
+[program:reverb]
+command=php /path/to/artisan reverb:start --host=0.0.0.0 --port=8080
+user=www-data
+autostart=true
+autorestart=true
+```
+
+For production, configure your reverse proxy (Nginx) to handle WebSocket connections on port 443 and proxy to Reverb. See [Reverb docs](https://laravel.com/docs/12.x/reverb#production) for full setup.
 
 </details>
 
