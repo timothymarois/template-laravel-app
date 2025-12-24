@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 </script>

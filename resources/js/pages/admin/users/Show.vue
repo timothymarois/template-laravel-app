@@ -42,7 +42,7 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 import { Button } from '@/components/ui';
 import { useModal } from '@/composables';
 import { ArrowLeft } from 'lucide-vue-next';

@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { AreaChart, BarChart3, LineChart, PieChart } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';

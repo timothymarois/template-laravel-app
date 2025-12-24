@@ -274,7 +274,7 @@
 </template>
 
 <script setup lang="ts">
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

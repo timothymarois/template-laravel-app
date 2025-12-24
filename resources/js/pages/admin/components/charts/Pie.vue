@@ -373,7 +373,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { VisSingleContainer, VisDonut } from '@unovis/vue';
 import { ChartDonutTooltip } from '@/components/ui/chart';

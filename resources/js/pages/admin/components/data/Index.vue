@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ChevronLeft, MousePointerClick, Table2 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';

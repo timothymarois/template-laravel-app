@@ -275,7 +275,7 @@
 </template>
 
 <script setup lang="ts">
-import { AdminLayout as LayoutApp } from '@/components/app';
+import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { VisXYContainer, VisGroupedBar, VisStackedBar, VisAxis, VisCrosshair, VisTooltip } from '@unovis/vue';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
