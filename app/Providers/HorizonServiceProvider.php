@@ -24,13 +24,15 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      * Register the Horizon gate.
      *
      * This gate determines who can access Horizon in non-local environments.
+     * Set HORIZON_ALLOWED_EMAILS in .env (comma-separated list of emails).
      */
     protected function gate(): void
     {
         Gate::define('viewHorizon', function ($user) {
-            return in_array($user->email, [
-                //
-            ]);
+            /** @var array<string> $allowedEmails */
+            $allowedEmails = config('horizon.allowed_emails', []);
+
+            return in_array($user->email, $allowedEmails);
         });
     }
 }

@@ -32,6 +32,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Horizon Allowed Emails
+    |--------------------------------------------------------------------------
+    |
+    | Comma-separated list of email addresses that can access Horizon in
+    | non-local environments. Set via HORIZON_ALLOWED_EMAILS in .env.
+    |
+    */
+
+    'allowed_emails' => env('HORIZON_ALLOWED_EMAILS')
+        ? explode(',', env('HORIZON_ALLOWED_EMAILS'))
+        : [],
+
+    /*
+    |--------------------------------------------------------------------------
     | Horizon Redis Connection
     |--------------------------------------------------------------------------
     |
