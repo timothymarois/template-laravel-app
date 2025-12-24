@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue";
-import { computed } from "vue";
+import { ref, onMounted } from "vue";
 import { cn } from '@/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -9,8 +9,11 @@ const props = defineProps<{
     class?: HTMLAttributes["class"]
 }>();
 
-const width = computed(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
+// Use a default value for SSR, randomize on mount to avoid hydration mismatch
+const width = ref('70%');
+
+onMounted(() => {
+    width.value = `${Math.floor(Math.random() * 40) + 50}%`;
 });
 </script>
 
