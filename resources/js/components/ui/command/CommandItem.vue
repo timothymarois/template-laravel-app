@@ -61,6 +61,11 @@ onMounted(() => {
 });
 onUnmounted(() => {
     allItems.value.delete(id);
+    // Also remove from the group's Set to avoid stale references
+    const groupId = groupContext?.id;
+    if (groupId) {
+        allGroups.value.get(groupId)?.delete(id);
+    }
 });
 </script>
 
