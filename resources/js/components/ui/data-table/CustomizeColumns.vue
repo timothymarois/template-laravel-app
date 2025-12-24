@@ -1,9 +1,11 @@
 <template>
     <Popover v-model:open="isOpen">
-        <PopoverTrigger>
-            <Button variant="outline" size="icon">
-                <Settings2 class="size-4" />
-            </Button>
+        <PopoverTrigger as-child>
+            <slot>
+                <Button variant="outline" size="icon">
+                    <Settings2 class="size-4" />
+                </Button>
+            </slot>
         </PopoverTrigger>
         <PopoverContent class="w-[360px] p-0" @open-auto-focus.prevent>
             <div class="flex flex-col">
@@ -24,7 +26,7 @@
                         placeholder="Search columns"
                     />
                 </div>
-                <div ref="frame" class="max-h-[300px] overflow-hidden overflow-y-auto">
+                <div ref="frame" class="max-h-[300px] overflow-hidden overflow-y-auto" :class="{ 'is-dragging': isDragging }">
                     <div class="text-xs py-1 px-4 border-b border-border text-foreground font-semibold uppercase">
                         Visible
                     </div>
@@ -36,6 +38,8 @@
                         ghost-class="ghost-card"
                         :animation="200"
                         :move="checkLocked"
+                        @start="isDragging = true"
+                        @end="isDragging = false"
                     >
                         <template #item="{ element: column }">
                             <div
@@ -46,8 +50,8 @@
                             >
                                 <div class="grow flex items-center space-x-2">
                                     <IconGripVertical
-                                        class="cursor-grab text-muted-foreground size-4"
-                                        :class="{ 'cursor-not-allowed opacity-50': column.locked }"
+                                        class="text-muted-foreground size-4"
+                                        :class="column.locked ? 'cursor-not-allowed opacity-50' : 'cursor-grab'"
                                     />
                                     <Checkbox
                                         :model-value="activeColumns[column.key]"
@@ -139,7 +143,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick, useSlots } from 'vue';
 import { IconGripVertical } from '@tabler/icons-vue';
 import { Settings2 } from 'lucide-vue-next';
 import draggable from 'vuedraggable';
@@ -158,32 +162,42 @@ interface SortState {
     direction: 'asc' | 'desc' | null;
 }
 
+interface Column {
+    key: string;
+    header: string;
+    group?: string;
+    locked?: boolean;
+    hidden?: boolean;
+}
+
 const props = defineProps<{
-    columns: any[];
-    activeColumnList: any[];
-    defaultColumnList: any[];
+    modelValue: string[];
+    columns: Column[];
+    defaultColumns: string[];
     sort?: SortState;
     defaultSort?: SortState;
 }>();
 
 const emit = defineEmits<{
-    update: [columns: string[]];
+    'update:modelValue': [columns: string[]];
     'update:sort': [sort: SortState];
 }>();
 
+const slots = useSlots();
 const defaultSortState: SortState = { column: null, direction: null };
 
 const { bindScrollHandler, isTop } = useScroll('customize-columns');
 
-const frame = ref<any>(null);
+const frame = ref<HTMLElement | null>(null);
 const isOpen = ref(false);
+const isDragging = ref(false);
 const searchColumns = ref('');
 const activeColumns = ref<Record<string, boolean>>({});
-const selectedColumns = ref<any[]>([]);
+const selectedColumns = ref<Column[]>([]);
 
-const applyColumns = (columnsList: any[]) => {
+const applyColumns = (columnsList: string[]) => {
     const map: Record<string, boolean> = {};
-    const selected: any[] = [];
+    const selected: Column[] = [];
 
     // Build map for all columns
     for (const column of props.columns) {
@@ -201,13 +215,13 @@ const applyColumns = (columnsList: any[]) => {
 };
 
 const applyInitColumns = () => {
-    applyColumns(props.activeColumnList.length ? props.activeColumnList : props.defaultColumnList);
+    applyColumns(props.modelValue.length ? props.modelValue : props.defaultColumns);
 };
 
 const toggleColumn = (key: string) => {
     const index = selectedColumns.value.findIndex(col => col.key === key);
-    const column = (props.columns as any[]).find(col => col.key === key);
-    if (!column || (column as any).locked) return;
+    const column = props.columns.find(col => col.key === key);
+    if (!column || column.locked) return;
 
     activeColumns.value[key] = !activeColumns.value[key];
 
@@ -219,19 +233,19 @@ const toggleColumn = (key: string) => {
 };
 
 const filteredUnselectedColumnGroups = computed(() => {
-    const list = (props.columns as any[]).filter(col =>
+    const list = props.columns.filter(col =>
         !activeColumns.value[col.key] &&
         col.header.toLowerCase().includes(searchColumns.value.toLowerCase())
     );
 
-    return list.reduce((groups: Record<string, any[]>, column: any) => {
+    return list.reduce((groups: Record<string, Column[]>, column) => {
         const group = column.group || '';
         (groups[group] ||= []).push(column);
         return groups;
-    }, {} as Record<string, any[]>);
+    }, {});
 });
 
-const showSearch = computed(() => (props.columns as any[])?.length > 10);
+const showSearch = computed(() => props.columns.length > 10);
 
 const isSortDefault = computed(() => {
     const currentSort = props.sort ?? defaultSortState;
@@ -240,7 +254,7 @@ const isSortDefault = computed(() => {
 });
 
 const isColumnsDefault = computed(() => {
-    const defaultKeys = props.defaultColumnList.filter(key =>
+    const defaultKeys = props.defaultColumns.filter(key =>
         props.columns.some(col => col.key === key)
     );
 
@@ -251,14 +265,14 @@ const isColumnsDefault = computed(() => {
 const isDefault = computed(() => isColumnsDefault.value && isSortDefault.value);
 
 const resetToDefault = () => {
-    applyColumns(props.defaultColumnList);
+    applyColumns(props.defaultColumns);
     emit('update:sort', props.defaultSort ?? defaultSortState);
-    emit('update', props.defaultColumnList);
+    emit('update:modelValue', props.defaultColumns);
     close();
 };
 
 const submitColumns = () => {
-    emit('update', selectedColumns.value.map(col => col.key));
+    emit('update:modelValue', selectedColumns.value.map(col => col.key));
     close();
 };
 
@@ -289,5 +303,10 @@ watch(isOpen, (newValue) => {
 <style scoped>
 .ghost-card {
     opacity: 0;
+}
+
+.is-dragging,
+.is-dragging * {
+    cursor: grabbing !important;
 }
 </style>

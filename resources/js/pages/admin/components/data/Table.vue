@@ -95,10 +95,9 @@
                         <div class="flex items-center gap-2 py-3">
                             <Input placeholder="Search..." clearable class="w-64" />
                             <CustomizeColumns
+                                v-model="activeOrderColumns"
                                 :columns="orderColumnDefs"
-                                :activeColumnList="activeOrderColumns"
-                                :defaultColumnList="defaultOrderColumns"
-                                @update="activeOrderColumns = $event"
+                                :defaultColumns="defaultOrderColumns"
                             />
                             <Button variant="outline">Export</Button>
                         </div>

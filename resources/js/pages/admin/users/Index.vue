@@ -18,12 +18,11 @@
                     />
                     <Button label="Add user" @click="open('ADD_EDIT_USER')" />
                     <CustomizeColumns
+                        v-model="viewFields"
                         :columns="columns"
-                        :activeColumnList="viewFields"
-                        :defaultColumnList="defaultColumnList"
+                        :defaultColumns="defaultColumnList"
                         :sort="{ column: sortField, direction: sortOrder === 1 ? 'asc' : sortOrder === -1 ? 'desc' : null }"
                         :defaultSort="defaultSort"
-                        @update="viewFields = $event"
                         @update:sort="onSortReset"
                     />
                 </div>
