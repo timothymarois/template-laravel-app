@@ -12,7 +12,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 import BoldTool from './tools/BoldTool.vue';
 import ItalicTool from './tools/ItalicTool.vue';

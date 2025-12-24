@@ -21,7 +21,7 @@
     </Tooltip>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { IconItalic } from '@tabler/icons-vue';
 import { Button } from '@/components/ui/button';
 import {

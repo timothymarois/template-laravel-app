@@ -50,8 +50,9 @@
     </PopoverBase>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue';
+import { isValidURL } from '@/utils/validate';
 import { IconLink } from '@tabler/icons-vue';
 import { Check } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -71,7 +72,7 @@ const isPopoverOpen = ref(false);
 const linkText = ref('');
 const inputRef = ref(null);
 
-const isValidUrl = computed(() => /^https?:\/\//i.test(linkText.value));
+const isValidUrl = computed(() => isValidURL(linkText.value));
 
 const applyLink = () => {
     if (!props.editor || !isValidUrl.value) return;
