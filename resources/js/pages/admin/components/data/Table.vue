@@ -139,13 +139,18 @@
                 </CardContent>
                 <CardFooter class="border-t py-4 px-6 justify-between">
                     <span class="text-sm text-muted-foreground">
-                        Showing {{ Math.min((currentPage - 1) * itemsPerPage + 1, filteredUsers.length) }}-{{ Math.min(currentPage * itemsPerPage, filteredUsers.length) }} of {{ filteredUsers.length }} users
-                        <template v-if="filteredUsers.length !== allUsers.length">
-                            (filtered from {{ allUsers.length }})
+                        <template v-if="filteredUsers.length === 0">
+                            No users found
+                        </template>
+                        <template v-else>
+                            Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, filteredUsers.length) }} of {{ filteredUsers.length }} users
+                            <template v-if="filteredUsers.length !== allUsers.length">
+                                (filtered from {{ allUsers.length }})
+                            </template>
                         </template>
                     </span>
                     <Pagination
-                        v-if="totalPages > 1"
+                        v-if="filteredUsers.length > 0"
                         v-slot="{ page }"
                         v-model:page="currentPage"
                         :total="filteredUsers.length"
