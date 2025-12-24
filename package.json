@@ -15,7 +15,8 @@
     "lint:css:fix": "stylelint \"resources/css/**/*.css\" --fix",
     "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse && ./vendor/bin/pest",
     "check:js": "pnpm lint && pnpm lint:css && pnpm test && pnpm build",
-    "check": "pnpm check:php && pnpm check:js && pnpm exec vite build --ssr"
+    "check": "pnpm check:php && pnpm check:js && pnpm exec vite build --ssr",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@inertiajs/vue3": "^2.0.0",
@@ -31,7 +32,9 @@
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^10.6.2",
     "happy-dom": "^20.0.11",
+    "husky": "^9.1.7",
     "laravel-vite-plugin": "^2.0.1",
+    "lint-staged": "^16.2.7",
     "lodash": "^4.17.21",
     "stylelint": "^16.26.1",
     "stylelint-config-standard": "^39.0.1",
@@ -75,6 +78,17 @@
       "esbuild",
       "vue-demi",
       "maplibre-gl"
+    ]
+  },
+  "lint-staged": {
+    "resources/js/**/*.{js,vue}": [
+      "eslint --fix"
+    ],
+    "resources/css/**/*.css": [
+      "stylelint --fix"
+    ],
+    "**/*.php": [
+      "./vendor/bin/pint"
     ]
   }
 }

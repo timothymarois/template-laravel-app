@@ -6,6 +6,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configurePasswordRules();
         $this->configureRateLimiting();
+    }
+
+    /**
+     * Configure the default password validation rules.
+     */
+    protected function configurePasswordRules(): void
+    {
+        Password::defaults(function () {
+            $rule = Password::min(8);
+
+            // In production, require stronger passwords
+            if (app()->isProduction()) {
+                $rule = $rule
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols();
+            }
+
+            return $rule;
+        });
     }
 
     /**
