@@ -5,7 +5,7 @@
         :pageSidebarItems="sidebarItems"
         pageSidebarTitle="Components"
     >
-        <div class="space-y-8">
+        <div class="space-y-4">
             <!-- Basic Two Panel -->
             <Card>
                 <CardHeader>

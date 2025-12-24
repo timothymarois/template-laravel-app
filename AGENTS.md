@@ -169,6 +169,17 @@ resources/js/
 
 The UI components follow a simple 2-layer architecture:
 
+### Component Reuse Priority (IMPORTANT)
+
+**Before writing ANY new component, follow this checklist:**
+
+1. **Search existing components first** - Check if a component already exists in `components/ui/`, `components/app/`, or `components/site/`
+2. **Check shadcn-vue** - If not found, check https://www.shadcn-vue.com/docs/components
+3. **Install from shadcn** - If available: `pnpm dlx shadcn-vue@latest add <component>`
+4. **Create new only as last resort** - Only create custom components when nothing suitable exists
+
+**Reuse over recreation** - Always prefer composing existing components over creating new ones. If an existing component is close but not quite right, consider extending or wrapping it rather than building from scratch.
+
 ### Layer Overview
 
 | Layer     | Location           | Purpose                             | Rules                                            |
@@ -177,24 +188,32 @@ The UI components follow a simple 2-layer architecture:
 | **app/**  | `components/app/`  | Application components              | [README](resources/js/components/app/README.md)  |
 | **site/** | `components/site/` | Website components                  | [README](resources/js/components/site/README.md) |
 
-### ui/ - Base Components
+### ui/ - Base Components (Reusable Only)
 
 All base-level UI components live here. This is the single source of truth for all UI primitives.
 
-**Before creating a new component:**
-1. Check if shadcn-vue has the component: https://www.shadcn-vue.com/docs/components
-2. If available, install it: `pnpm dlx shadcn-vue@latest add <component>`
-3. Only create a custom component if shadcn doesn't have what you need
-
 **Rules:**
+- **Isolated & Reusable** - No application-specific logic, no business rules
+- **Single Purpose** - Each component does one thing well
+- **Stateless** - No Inertia, routes, auth, or external dependencies
+- **Props-driven** - All behavior controlled via props and events
 - Contains ALL base-level components (shadcn + custom)
-- Components are **stateless** - no Inertia, routes, or auth
 - shadcn primitives use `*Base` suffix (ButtonBase, CardBase)
 - Enhanced versions wrap `*Base` components with added features (loading states, icons, etc.)
 
-### app/ - Application Components
+**What belongs in ui/:**
+- Buttons, inputs, cards, modals, tables, forms
+- Generic data display components
+- Layout primitives (grids, containers)
 
-Components for the main application (authenticated dashboard, management interfaces).
+**What does NOT belong in ui/:**
+- Components that fetch data
+- Components with hardcoded routes or API calls
+- Components tied to specific features (use `app/` or `site/` instead)
+
+### app/ - Application Components (Feature-Specific)
+
+Components for the main application (authenticated dashboard, management interfaces). These contain **application-specific logic** that doesn't belong in reusable UI components.
 
 ```
 app/
@@ -209,11 +228,18 @@ app/
 - May use Inertia (`usePage()`, `router.visit()`, `Link`)
 - May use authentication state
 - May define route-specific behavior
-- For authenticated application functionality
+- May contain business logic specific to app features
+- Compose from `ui/` components - don't recreate primitives
 
-### site/ - Website Components
+**What belongs in app/:**
+- User management modals (EditUserModal, DeleteUserModal)
+- Navigation components that use auth state
+- Feature-specific forms and wizards
+- Dashboard widgets with data fetching
 
-Components for the public website (marketing pages, landing pages, unauthenticated flows).
+### site/ - Website Components (Feature-Specific)
+
+Components for the public website (marketing pages, landing pages, unauthenticated flows). These contain **site-specific logic** separate from the authenticated app.
 
 ```
 site/
@@ -225,6 +251,12 @@ site/
 - May use Inertia and routes
 - Public-facing, no authentication required
 - For marketing and public website pages
+- Compose from `ui/` components - don't recreate primitives
+
+**What belongs in site/:**
+- Marketing page sections
+- Public forms (contact, newsletter)
+- Landing page components
 
 ### Import Patterns
 
@@ -242,19 +274,30 @@ import { SiteLayout } from '@/components/site';
 ### Decision Tree: Where Does My Component Go?
 
 ```
-Adding a new component?
+Need a component?
 │
-├─ Is it a UI primitive (button, input, card)?
-│  ├─ Available in shadcn? → pnpm dlx shadcn-vue@latest add <name>
-│  └─ Custom enhanced? → Add to ui/<component>/
+├─ 1. SEARCH FIRST: Does it already exist?
+│     └─ Check ui/, app/, site/ directories
+│     └─ If found → USE IT (don't recreate)
 │
-├─ Uses Inertia/routes/auth?
-│  ├─ Authenticated app → Add to app/<category>/
-│  └─ Public website → Add to site/<category>/
+├─ 2. CHECK SHADCN: Is it a standard UI pattern?
+│     └─ Check https://www.shadcn-vue.com/docs/components
+│     └─ If available → pnpm dlx shadcn-vue@latest add <name>
 │
-└─ Application-specific (modals, page sections)?
-   ├─ App → app/modals/ or app/page/
-   └─ Site → site/page/
+├─ 3. DETERMINE LOCATION: Where should new component live?
+│     │
+│     ├─ Is it reusable with NO app logic?
+│     │  └─ YES → ui/<component>/
+│     │
+│     ├─ Does it use Inertia/routes/auth?
+│     │  ├─ Authenticated app → app/<category>/
+│     │  └─ Public website → site/<category>/
+│     │
+│     └─ Is it feature-specific (modals, widgets)?
+│        ├─ App feature → app/modals/ or app/page/
+│        └─ Site feature → site/page/
+│
+└─ 4. COMPOSE: Build new components from existing ui/ primitives
 ```
 
 ### Pages Organization

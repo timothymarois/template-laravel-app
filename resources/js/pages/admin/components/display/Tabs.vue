@@ -300,7 +300,7 @@
             <!-- Card Header with Pills Tabs -->
             <Card>
                 <Tabs default-value="overview" variant="pills">
-                    <CardHeader class="flex flex-row items-center justify-between space-y-0 border-b">
+                    <div class="flex items-center justify-between p-6 pb-4 border-b">
                         <TabsList>
                             <TabsTrigger value="overview">Overview</TabsTrigger>
                             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -314,7 +314,7 @@
                                 Settings
                             </Button>
                         </div>
-                    </CardHeader>
+                    </div>
                     <CardContent class="pt-6">
                         <TabsContent value="overview" class="mt-0">
                             <div class="space-y-4">
@@ -390,7 +390,7 @@
             <!-- Full Width Header Tabs -->
             <Card class="overflow-hidden">
                 <Tabs default-value="overview" variant="underline">
-                    <div class="border-b">
+                    <div class="border-b pt-4">
                         <TabsList class="w-full justify-start rounded-none border-b-0 px-6">
                             <TabsTrigger value="overview">Overview</TabsTrigger>
                             <TabsTrigger value="activity">Activity</TabsTrigger>

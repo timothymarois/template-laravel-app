@@ -37,7 +37,7 @@
                     <CardTitle>Carousel Sizes</CardTitle>
                     <CardDescription>Different carousel widths and item basis configurations</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-8">
+                <CardContent class="space-y-4">
                     <div>
                         <p class="text-sm font-medium mb-3">1/3 Width Items</p>
                         <Carousel class="w-full max-w-sm mx-auto">
@@ -136,7 +136,7 @@
                     <CardTitle>Carousel Options</CardTitle>
                     <CardDescription>Using Embla Carousel options for loop and alignment</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-8">
+                <CardContent class="space-y-4">
                     <div>
                         <p class="text-sm font-medium mb-3">Loop Enabled</p>
                         <Carousel :opts="{ loop: true }" class="w-full max-w-xs mx-auto">
