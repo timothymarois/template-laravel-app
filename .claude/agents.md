@@ -7,9 +7,31 @@
 1. **PRDs override assumptions** - Never implement undefined behavior. PRDs live in `/docs/prd/`
 2. **Ask before coding** - If requirements are unclear, request clarification first
 3. **Run `pnpm check` before committing** - All checks must pass
-4. **Reuse components first** - Search existing components before creating new ones
-5. **Check shadcn-vue** - Before creating custom UI components
-6. **Follow existing patterns** - Consistency over cleverness
+4. **Review component showcase first** - Before implementing any UI, study examples in `pages/admin/components/`
+5. **Reuse components first** - Search existing components before creating new ones
+6. **Check shadcn-vue** - Before creating custom UI components
+7. **Follow existing patterns** - Consistency over cleverness
+
+## Component Showcase (REQUIRED)
+
+**Before implementing ANY UI component, you MUST review the component showcase examples.**
+
+Location: `resources/js/pages/admin/components/`
+
+The showcase demonstrates correct usage patterns for all components. Study these examples to understand:
+- How to structure props and handle states (empty, filled, invalid, disabled)
+- Correct variant usage (sizes, styles, chip variants)
+- Form integration patterns and validation states
+- Consistent layout patterns (grid columns, labels, spacing)
+
+**Categories:**
+- `forms/` - Input, Select, Checkbox, Switch, TagsInput, Textarea, etc.
+- `actions/` - Button, Dialog, Sheet, Menu, Command
+- `display/` - Card, Badge, Alert, Avatar, Tabs, Toast, Tooltip
+- `data/` - Table, Pagination, Actions
+- `charts/` - Area, Bar, Line, Pie
+
+**Always copy patterns from the showcase rather than inventing new ones.**
 
 ## Component Guidelines
 

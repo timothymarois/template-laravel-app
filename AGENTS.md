@@ -180,6 +180,62 @@ The UI components follow a simple 2-layer architecture:
 
 **Reuse over recreation** - Always prefer composing existing components over creating new ones. If an existing component is close but not quite right, consider extending or wrapping it rather than building from scratch.
 
+### Component Examples & Showcase (REQUIRED READING)
+
+**Before implementing any UI component, you MUST review the component showcase examples.**
+
+The application includes a comprehensive component showcase at `resources/js/pages/admin/components/` that demonstrates:
+- Correct usage patterns for all UI components
+- Prop combinations and variants (sizes, states, styles)
+- Invalid/error states and disabled states
+- Form integration patterns
+- Real-world use cases and edge cases
+
+**How to use the showcase:**
+
+1. **Find the relevant showcase page** - Examples are organized by category:
+   - `forms/` - Input, Select, Checkbox, Switch, TagsInput, etc.
+   - `actions/` - Button, Dialog, Sheet, Menu, Command
+   - `display/` - Card, Badge, Alert, Avatar, Tabs, Toast
+   - `data/` - Table, Pagination, Actions
+   - `charts/` - Area, Bar, Line, Pie charts
+
+2. **Study the examples before implementing** - Each showcase demonstrates:
+   - Basic usage with different states (empty, filled, disabled)
+   - Variants and sizes
+   - Error/invalid states for form validation
+   - Feature combinations (clearable, searchable, multiple, etc.)
+
+3. **Copy patterns from examples** - The showcase code shows exactly how to:
+   - Structure component props
+   - Handle v-model bindings
+   - Apply consistent styling (grid layouts, labels, spacing)
+   - Implement common patterns (form fields with labels, disabled states with opacity)
+
+**Example pattern from showcase:**
+```vue
+<div class="grid grid-cols-4 gap-4">
+    <div>
+        <div class="text-xs text-muted-foreground mb-1">Empty</div>
+        <Input v-model="empty" placeholder="Enter value..." fluid />
+    </div>
+    <div>
+        <div class="text-xs text-muted-foreground mb-1">With Value</div>
+        <Input v-model="filled" placeholder="Enter value..." fluid />
+    </div>
+    <div>
+        <div class="text-xs text-muted-foreground mb-1">Invalid</div>
+        <Input v-model="invalid" placeholder="Required..." invalid fluid />
+    </div>
+    <div class="opacity-50">
+        <div class="text-xs text-muted-foreground mb-1">Disabled</div>
+        <Input v-model="disabled" placeholder="Disabled" disabled fluid />
+    </div>
+</div>
+```
+
+**This ensures consistency across the application and prevents reinventing patterns that already exist.**
+
 ### Layer Overview
 
 | Layer     | Location           | Purpose                             | Rules                                            |
