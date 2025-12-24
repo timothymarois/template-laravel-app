@@ -50,10 +50,11 @@
                                         :class="{ 'cursor-not-allowed opacity-50': column.locked }"
                                     />
                                     <Checkbox
-                                        v-model="activeColumns[column.key]"
+                                        :model-value="activeColumns[column.key]"
                                         binary
                                         size="small"
                                         :disabled="column.locked"
+                                        @click.stop="!column.locked && toggleColumn(column.key)"
                                     />
                                     <div
                                         :class="{
@@ -101,10 +102,11 @@
                                     >
                                         <div class="grow flex items-center space-x-2">
                                             <Checkbox
-                                                v-model="activeColumns[column.key]"
+                                                :model-value="activeColumns[column.key]"
                                                 binary
                                                 size="small"
                                                 :disabled="column.locked"
+                                                @click.stop="!column.locked && toggleColumn(column.key)"
                                             />
                                             <div class="hover:underline">
                                                 {{ column.header }}
