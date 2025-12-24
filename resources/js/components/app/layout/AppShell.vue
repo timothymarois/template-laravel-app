@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, nextTick, useSlots, watch, provide } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, useSlots, watch, provide, defineAsyncComponent } from 'vue';
 import { hasSlotContent } from '@/utils';
 import PageHeader from '../page/Header.vue';
 import PageFooter from '../page/Footer.vue';
@@ -136,10 +136,12 @@ import PageSideNav from '../page/SideNav.vue';
 import PageSidebar from '../page/PageSidebar.vue';
 import PageSideContent from '../page/SideContent.vue';
 import NavSidebar from '../navigation/Sidebar.vue';
-import NavTopbar from '../navigation/Topbar.vue';
 import AppTopbar from './AppTopbar.vue';
-import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
+
+// Lazy load components that aren't needed on initial render
+const Toaster = defineAsyncComponent(() => import('@/components/ui/sonner/Sonner.vue'));
+const NavTopbar = defineAsyncComponent(() => import('../navigation/Topbar.vue'));
 
 interface Props {
     pageUrl?: string;
