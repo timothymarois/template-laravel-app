@@ -1,11 +1,11 @@
 <template>
-    <div class="flex">
+    <div class="flex min-w-0">
         <PopoverBase v-model:open="isOpen">
             <PopoverTrigger as-child>
                 <Button
                     variant="outline"
                     :disabled="disabled"
-                    class="justify-between text-left font-normal"
+                    class="justify-between text-left font-normal min-w-0"
                     :class="[
                         fluid ? 'w-full' : '',
                         !fluid && !clearable ? '' : 'flex-1',
@@ -14,11 +14,11 @@
                         invalid && 'border-destructive focus:ring-destructive'
                     ]"
                 >
-                    <span class="flex items-center">
-                        <CalendarIcon class="mr-2 h-4 w-4" />
-                        {{ modelValue ? formatDateValue(modelValue) : placeholder }}
+                    <span class="flex items-center min-w-0 flex-1">
+                        <CalendarIcon class="mr-2 h-4 w-4 shrink-0" />
+                        <span class="truncate">{{ modelValue ? formatDateValue(modelValue) : placeholder }}</span>
                     </span>
-                    <ChevronDown class="h-4 w-4 opacity-50" />
+                    <ChevronDown class="h-4 w-4 opacity-50 shrink-0 ml-2" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent class="w-auto p-0" :align="align">
