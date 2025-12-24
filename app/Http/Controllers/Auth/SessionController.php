@@ -7,14 +7,18 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class SessionController extends Controller
 {
+    public function __construct(
+        protected ResponseFactory $inertia
+    ) {}
+
     public function loginView(): Response
     {
-        return Inertia::render('Login');
+        return $this->inertia->render('Login');
     }
 
     public function authenticate(LoginRequest $request): RedirectResponse

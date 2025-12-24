@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class PageController extends Controller
 {
+    public function __construct(
+        protected ResponseFactory $inertia
+    ) {}
+
     public function home(): Response
     {
-        return Inertia::render('Index');
+        return $this->inertia->render('Index');
     }
 
     public function index(): Response
     {
-        return Inertia::render('admin/Index');
+        return $this->inertia->render('admin/Index');
     }
 }

@@ -21,6 +21,7 @@
         "tightenco/ziggy": "^2.3"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.6",
         "fakerphp/faker": "^1.23",
         "larastan/larastan": "^3.3",
         "laravel/pint": "^1.16",
@@ -48,7 +49,11 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan ide-helper:generate --ansi --quiet"
+        ],
+        "post-install-cmd": [
+            "@php artisan ide-helper:generate --ansi --quiet"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

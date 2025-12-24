@@ -378,6 +378,28 @@ route('accounts.posts.show', [1, 123]);
 
 ---
 
+### Rendering Pages (Inertia)
+
+Controllers use dependency injection for rendering Inertia pages:
+
+```php
+use Inertia\ResponseFactory;
+
+class UserController extends Controller
+{
+    public function __construct(protected ResponseFactory $inertia) {}
+
+    public function index(): Response
+    {
+        return $this->inertia->render('admin/users/Index', [
+            'users' => User::paginate(),
+        ]);
+    }
+}
+```
+
+---
+
 ### Router & API requests (by Inertia & Axois)
 
 You can use the built-in methods to fetch data or make manual visits

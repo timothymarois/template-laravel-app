@@ -8,8 +8,8 @@ use App\Services\Models\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class UserController extends Controller
 {
@@ -25,13 +25,16 @@ class UserController extends Controller
         'sortOrder' => 1,
     ];
 
-    public function __construct(protected UserService $userService) {}
+    public function __construct(
+        protected UserService $userService,
+        protected ResponseFactory $inertia,
+    ) {}
 
     public function index(Request $request): Response
     {
         $options = $this->resolveIndexOptions($request, true, 'admin.users.index');
 
-        return Inertia::render('admin/users/Index', [
+        return $this->inertia->render('admin/users/Index', [
             'users' => $this->userService->listPaginated($options['perPage'], $options),
             'options' => $options,
         ]);
@@ -54,7 +57,7 @@ class UserController extends Controller
 
         $query = $this->userService->listPaginated($options['perPage'], $options);
 
-        return Inertia::render('admin/users/SimpleTable', [
+        return $this->inertia->render('admin/users/SimpleTable', [
             'users' => $query,
             'options' => $options,
         ]);
@@ -62,7 +65,7 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
-        return Inertia::render('admin/users/Show', [
+        return $this->inertia->render('admin/users/Show', [
             'item' => $user,
         ]);
     }

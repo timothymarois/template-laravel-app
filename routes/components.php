@@ -1,54 +1,54 @@
 <?php
 
-use App\Http\Controllers\ComponentShowcaseController;
+use App\Http\Controllers\ComponentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ComponentShowcaseController::class, 'index'])->name('index');
+Route::get('/', [ComponentController::class, 'index'])->name('index');
 
 // Forms
-Route::get('/forms', [ComponentShowcaseController::class, 'formsIndex'])->name('forms');
-Route::get('/forms/input', [ComponentShowcaseController::class, 'formsInput'])->name('forms.input');
-Route::get('/forms/textarea', [ComponentShowcaseController::class, 'formsTextarea'])->name('forms.textarea');
-Route::get('/forms/select', [ComponentShowcaseController::class, 'formsSelect'])->name('forms.select');
-Route::get('/forms/checkbox', [ComponentShowcaseController::class, 'formsCheckbox'])->name('forms.checkbox');
-Route::get('/forms/switch', [ComponentShowcaseController::class, 'formsSwitch'])->name('forms.switch');
-Route::get('/forms/slider', [ComponentShowcaseController::class, 'formsSlider'])->name('forms.slider');
-Route::get('/forms/fields', [ComponentShowcaseController::class, 'formsFields'])->name('forms.fields');
-Route::get('/forms/calendar', [ComponentShowcaseController::class, 'formsCalendar'])->name('forms.calendar');
-Route::get('/forms/editor', [ComponentShowcaseController::class, 'formsEditor'])->name('forms.editor');
-Route::get('/forms/upload', [ComponentShowcaseController::class, 'formsUpload'])->name('forms.upload');
+Route::get('/forms', [ComponentController::class, 'formsIndex'])->name('forms');
+Route::get('/forms/input', [ComponentController::class, 'formsInput'])->name('forms.input');
+Route::get('/forms/textarea', [ComponentController::class, 'formsTextarea'])->name('forms.textarea');
+Route::get('/forms/select', [ComponentController::class, 'formsSelect'])->name('forms.select');
+Route::get('/forms/checkbox', [ComponentController::class, 'formsCheckbox'])->name('forms.checkbox');
+Route::get('/forms/switch', [ComponentController::class, 'formsSwitch'])->name('forms.switch');
+Route::get('/forms/slider', [ComponentController::class, 'formsSlider'])->name('forms.slider');
+Route::get('/forms/fields', [ComponentController::class, 'formsFields'])->name('forms.fields');
+Route::get('/forms/calendar', [ComponentController::class, 'formsCalendar'])->name('forms.calendar');
+Route::get('/forms/editor', [ComponentController::class, 'formsEditor'])->name('forms.editor');
+Route::get('/forms/upload', [ComponentController::class, 'formsUpload'])->name('forms.upload');
 
 // Actions
-Route::get('/actions', [ComponentShowcaseController::class, 'actionsIndex'])->name('actions');
-Route::get('/actions/button', [ComponentShowcaseController::class, 'actionsButton'])->name('actions.button');
-Route::get('/actions/menu', [ComponentShowcaseController::class, 'actionsMenu'])->name('actions.menu');
-Route::get('/actions/dialog', [ComponentShowcaseController::class, 'actionsDialog'])->name('actions.dialog');
-Route::get('/actions/sheet', [ComponentShowcaseController::class, 'actionsSheet'])->name('actions.sheet');
+Route::get('/actions', [ComponentController::class, 'actionsIndex'])->name('actions');
+Route::get('/actions/button', [ComponentController::class, 'actionsButton'])->name('actions.button');
+Route::get('/actions/menu', [ComponentController::class, 'actionsMenu'])->name('actions.menu');
+Route::get('/actions/dialog', [ComponentController::class, 'actionsDialog'])->name('actions.dialog');
+Route::get('/actions/sheet', [ComponentController::class, 'actionsSheet'])->name('actions.sheet');
 
 // Display
-Route::get('/display', [ComponentShowcaseController::class, 'displayIndex'])->name('display');
-Route::get('/display/alert', [ComponentShowcaseController::class, 'displayAlert'])->name('display.alert');
-Route::get('/display/card', [ComponentShowcaseController::class, 'displayCard'])->name('display.card');
-Route::get('/display/badge', [ComponentShowcaseController::class, 'displayBadge'])->name('display.badge');
-Route::get('/display/avatar', [ComponentShowcaseController::class, 'displayAvatar'])->name('display.avatar');
-Route::get('/display/tooltip', [ComponentShowcaseController::class, 'displayTooltip'])->name('display.tooltip');
-Route::get('/display/popover', [ComponentShowcaseController::class, 'displayPopover'])->name('display.popover');
-Route::get('/display/loading', [ComponentShowcaseController::class, 'displayLoading'])->name('display.loading');
-Route::get('/display/tabs', [ComponentShowcaseController::class, 'displayTabs'])->name('display.tabs');
-Route::get('/display/accordion', [ComponentShowcaseController::class, 'displayAccordion'])->name('display.accordion');
-Route::get('/display/toast', [ComponentShowcaseController::class, 'displayToast'])->name('display.toast');
-Route::get('/display/carousel', [ComponentShowcaseController::class, 'displayCarousel'])->name('display.carousel');
-Route::get('/display/resizable', [ComponentShowcaseController::class, 'displayResizable'])->name('display.resizable');
+Route::get('/display', [ComponentController::class, 'displayIndex'])->name('display');
+Route::get('/display/alert', [ComponentController::class, 'displayAlert'])->name('display.alert');
+Route::get('/display/card', [ComponentController::class, 'displayCard'])->name('display.card');
+Route::get('/display/badge', [ComponentController::class, 'displayBadge'])->name('display.badge');
+Route::get('/display/avatar', [ComponentController::class, 'displayAvatar'])->name('display.avatar');
+Route::get('/display/tooltip', [ComponentController::class, 'displayTooltip'])->name('display.tooltip');
+Route::get('/display/popover', [ComponentController::class, 'displayPopover'])->name('display.popover');
+Route::get('/display/loading', [ComponentController::class, 'displayLoading'])->name('display.loading');
+Route::get('/display/tabs', [ComponentController::class, 'displayTabs'])->name('display.tabs');
+Route::get('/display/accordion', [ComponentController::class, 'displayAccordion'])->name('display.accordion');
+Route::get('/display/toast', [ComponentController::class, 'displayToast'])->name('display.toast');
+Route::get('/display/carousel', [ComponentController::class, 'displayCarousel'])->name('display.carousel');
+Route::get('/display/resizable', [ComponentController::class, 'displayResizable'])->name('display.resizable');
 
 // Data
-Route::get('/data', [ComponentShowcaseController::class, 'dataIndex'])->name('data');
-Route::get('/data/table', [ComponentShowcaseController::class, 'dataTable'])->name('data.table');
-Route::get('/data/actions', [ComponentShowcaseController::class, 'dataActions'])->name('data.actions');
-Route::get('/data/pagination', [ComponentShowcaseController::class, 'dataPagination'])->name('data.pagination');
+Route::get('/data', [ComponentController::class, 'dataIndex'])->name('data');
+Route::get('/data/table', [ComponentController::class, 'dataTable'])->name('data.table');
+Route::get('/data/actions', [ComponentController::class, 'dataActions'])->name('data.actions');
+Route::get('/data/pagination', [ComponentController::class, 'dataPagination'])->name('data.pagination');
 
 // Charts
-Route::get('/charts', [ComponentShowcaseController::class, 'chartsIndex'])->name('charts');
-Route::get('/charts/bar', [ComponentShowcaseController::class, 'chartsBar'])->name('charts.bar');
-Route::get('/charts/line', [ComponentShowcaseController::class, 'chartsLine'])->name('charts.line');
-Route::get('/charts/area', [ComponentShowcaseController::class, 'chartsArea'])->name('charts.area');
-Route::get('/charts/pie', [ComponentShowcaseController::class, 'chartsPie'])->name('charts.pie');
+Route::get('/charts', [ComponentController::class, 'chartsIndex'])->name('charts');
+Route::get('/charts/bar', [ComponentController::class, 'chartsBar'])->name('charts.bar');
+Route::get('/charts/line', [ComponentController::class, 'chartsLine'])->name('charts.line');
+Route::get('/charts/area', [ComponentController::class, 'chartsArea'])->name('charts.area');
+Route::get('/charts/pie', [ComponentController::class, 'chartsPie'])->name('charts.pie');
