@@ -129,7 +129,7 @@
                             size="small"
                             text
                             :disabled="isDefault"
-                            @click="() => applyColumns(props.defaultColumnList)"
+                            @click="resetToDefault"
                         />
                     </div>
                 </div>
@@ -153,13 +153,25 @@ import { Input as InputText } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useScroll } from '@/composables';
 
-const props = defineProps({
-    columns: Array,
-    activeColumnList: Array,
-    defaultColumnList: Array,
-});
+interface SortState {
+    column: string | null;
+    direction: 'asc' | 'desc' | null;
+}
 
-const emit = defineEmits(['update']);
+const props = defineProps<{
+    columns: any[];
+    activeColumnList: any[];
+    defaultColumnList: any[];
+    sort?: SortState;
+    defaultSort?: SortState;
+}>();
+
+const emit = defineEmits<{
+    update: [columns: string[]];
+    'update:sort': [sort: SortState];
+}>();
+
+const defaultSortState: SortState = { column: null, direction: null };
 
 const { bindScrollHandler, isTop } = useScroll('customize-columns');
 
@@ -173,10 +185,15 @@ const applyColumns = (columnsList: any[]) => {
     const map: Record<string, boolean> = {};
     const selected: any[] = [];
 
-    for (const column of props.columns as any[]) {
-        const isActive = columnsList.includes(column.key);
-        map[column.key] = isActive;
-        if (isActive) selected.push(column);
+    // Build map for all columns
+    for (const column of props.columns) {
+        map[column.key] = columnsList.includes(column.key);
+    }
+
+    // Build selected list in the order of columnsList
+    for (const key of columnsList) {
+        const column = props.columns.find(col => col.key === key);
+        if (column) selected.push(column);
     }
 
     activeColumns.value = map;
@@ -216,14 +233,29 @@ const filteredUnselectedColumnGroups = computed(() => {
 
 const showSearch = computed(() => (props.columns as any[])?.length > 10);
 
-const isDefault = computed(() => {
-    const defaultKeys = (props.defaultColumnList as any[]).filter(key =>
-        (props.columns as any[]).some(col => col.key === key)
+const isSortDefault = computed(() => {
+    const currentSort = props.sort ?? defaultSortState;
+    const defaultSort = props.defaultSort ?? defaultSortState;
+    return currentSort.column === defaultSort.column && currentSort.direction === defaultSort.direction;
+});
+
+const isColumnsDefault = computed(() => {
+    const defaultKeys = props.defaultColumnList.filter(key =>
+        props.columns.some(col => col.key === key)
     );
 
     return defaultKeys.length === selectedColumns.value.length &&
         defaultKeys.every((key, i) => selectedColumns.value[i]?.key === key);
 });
+
+const isDefault = computed(() => isColumnsDefault.value && isSortDefault.value);
+
+const resetToDefault = () => {
+    applyColumns(props.defaultColumnList);
+    emit('update:sort', props.defaultSort ?? defaultSortState);
+    emit('update', props.defaultColumnList);
+    close();
+};
 
 const submitColumns = () => {
     emit('update', selectedColumns.value.map(col => col.key));

@@ -21,7 +21,10 @@
                         :columns="columns"
                         :activeColumnList="viewFields"
                         :defaultColumnList="defaultColumnList"
+                        :sort="{ column: sortField, direction: sortOrder === 1 ? 'asc' : sortOrder === -1 ? 'desc' : null }"
+                        :defaultSort="defaultSort"
                         @update="viewFields = $event"
+                        @update:sort="onSortReset"
                     />
                 </div>
             </div>
@@ -152,10 +155,16 @@ const { search, filters, perPage, sortField, sortOrder, viewFields, selectAll, s
 });
 
 const defaultColumnList = ['edit', 'name', 'email'];
+const defaultSort = { column: 'name', direction: 'asc' };
 
 const onSort = ({ field, order }) => {
     sortField.value = field;
     sortOrder.value = order;
+};
+
+const onSortReset = (sort) => {
+    sortField.value = sort.column;
+    sortOrder.value = sort.direction === 'asc' ? 1 : sort.direction === 'desc' ? -1 : null;
 };
 
 const userTotal = computed(() => props.users?.total || 0);
