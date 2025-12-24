@@ -1,6 +1,9 @@
 // Base UI Components (shadcn + enhanced)
 // This is the single source of truth for all UI components
 
+// Alert
+export * from './alert';
+
 // Alert Dialog
 export * from './alert-dialog';
 

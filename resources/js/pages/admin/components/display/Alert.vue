@@ -6,131 +6,227 @@
         pageSidebarTitle="Components"
     >
         <div class="space-y-4">
-            <!-- Info Alerts -->
+            <!-- Basic Alerts -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Info Alerts</CardTitle>
-                    <CardDescription>Informational messages for users</CardDescription>
+                    <CardTitle>Basic Alerts</CardTitle>
+                    <CardDescription>Simple alert messages with different variants</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
-                    <div class="rounded-md bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-4">
-                        <div class="flex">
-                            <Info class="size-5 text-blue-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-blue-800 dark:text-blue-200">
-                                    A new software update is available. See what's new in version 2.0.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-4">
-                        <div class="flex">
-                            <Info class="size-5 text-blue-500 shrink-0" />
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">New features available</h3>
-                                <p class="mt-1 text-sm text-blue-700 dark:text-blue-300">
-                                    We've added several new features to improve your workflow. Check out the changelog for details.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <Alert>
+                        <Info class="size-4" />
+                        <AlertTitle>Default</AlertTitle>
+                        <AlertDescription>
+                            This is a default alert with neutral styling.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="info">
+                        <Info class="size-4" />
+                        <AlertTitle>Information</AlertTitle>
+                        <AlertDescription>
+                            A new software update is available. See what's new in version 2.0.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="success">
+                        <CheckCircle class="size-4" />
+                        <AlertTitle>Success</AlertTitle>
+                        <AlertDescription>
+                            Your changes have been saved successfully.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="warning">
+                        <AlertTriangle class="size-4" />
+                        <AlertTitle>Warning</AlertTitle>
+                        <AlertDescription>
+                            Your trial period ends in 3 days. Upgrade now to keep access.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="destructive">
+                        <XCircle class="size-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>
+                            There was an error processing your request. Please try again.
+                        </AlertDescription>
+                    </Alert>
                 </CardContent>
             </Card>
 
-            <!-- Success Alerts -->
+            <!-- Alerts without Title -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Success Alerts</CardTitle>
-                    <CardDescription>Positive feedback for completed actions</CardDescription>
+                    <CardTitle>Alerts without Title</CardTitle>
+                    <CardDescription>Simple one-line alert messages</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
-                    <div class="rounded-md bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4">
-                        <div class="flex">
-                            <CheckCircle class="size-5 text-green-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-green-800 dark:text-green-200">
-                                    Your changes have been saved successfully.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4">
-                        <div class="flex">
-                            <CheckCircle class="size-5 text-green-500 shrink-0" />
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-green-800 dark:text-green-200">Order completed</h3>
-                                <p class="mt-1 text-sm text-green-700 dark:text-green-300">
-                                    Your order #12345 has been placed successfully. You will receive a confirmation email shortly.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <Alert variant="info">
+                        <Info class="size-4" />
+                        <AlertDescription>
+                            A new software update is available. See what's new in version 2.0.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="success">
+                        <CheckCircle class="size-4" />
+                        <AlertDescription>
+                            Your profile has been updated successfully.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="warning">
+                        <AlertTriangle class="size-4" />
+                        <AlertDescription>
+                            Your session will expire in 10 minutes.
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="destructive">
+                        <XCircle class="size-4" />
+                        <AlertDescription>
+                            Payment failed. Please check your card details.
+                        </AlertDescription>
+                    </Alert>
                 </CardContent>
             </Card>
 
-            <!-- Warning Alerts -->
+            <!-- Alerts with Actions -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Warning Alerts</CardTitle>
-                    <CardDescription>Cautionary messages requiring attention</CardDescription>
+                    <CardTitle>Alerts with Actions</CardTitle>
+                    <CardDescription>Alerts that include actionable buttons</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
-                    <div class="rounded-md bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4">
-                        <div class="flex">
-                            <AlertTriangle class="size-5 text-yellow-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                                    Your trial period ends in 3 days. Upgrade now to keep access.
-                                </p>
+                    <Alert variant="info">
+                        <Info class="size-4" />
+                        <AlertTitle>Update available</AlertTitle>
+                        <AlertDescription>
+                            <p>A new version is available with bug fixes and improvements.</p>
+                            <div class="mt-3 flex gap-2">
+                                <Button size="sm">Update Now</Button>
+                                <Button variant="outline" size="sm">Learn More</Button>
                             </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4">
-                        <div class="flex">
-                            <AlertTriangle class="size-5 text-yellow-500 shrink-0" />
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Attention needed</h3>
-                                <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-                                    Some of your account settings need to be updated. Please review your profile to ensure accuracy.
-                                </p>
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="warning">
+                        <AlertTriangle class="size-4" />
+                        <AlertTitle>Verify your email</AlertTitle>
+                        <AlertDescription>
+                            <p>Please verify your email address to access all features.</p>
+                            <div class="mt-3">
+                                <Button variant="outline" size="sm">Resend verification email</Button>
                             </div>
-                        </div>
-                    </div>
+                        </AlertDescription>
+                    </Alert>
+                    <Alert variant="destructive">
+                        <XCircle class="size-4" />
+                        <AlertTitle>Payment failed</AlertTitle>
+                        <AlertDescription>
+                            <p>Your payment could not be processed. Please check your card details and try again.</p>
+                            <div class="mt-3">
+                                <Button variant="destructive" size="sm">Update Payment Method</Button>
+                            </div>
+                        </AlertDescription>
+                    </Alert>
                 </CardContent>
             </Card>
 
-            <!-- Error Alerts -->
+            <!-- Inline Alerts with Actions -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Error Alerts</CardTitle>
-                    <CardDescription>Critical errors and failure messages</CardDescription>
+                    <CardTitle>Inline Alerts with Actions</CardTitle>
+                    <CardDescription>Compact alerts with actions aligned to the right</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-4">
-                    <div class="rounded-md bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-4">
-                        <div class="flex">
-                            <XCircle class="size-5 text-red-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-red-800 dark:text-red-200">
-                                    There was an error processing your request. Please try again.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-4">
-                        <div class="flex">
-                            <XCircle class="size-5 text-red-500 shrink-0" />
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Payment failed</h3>
-                                <p class="mt-1 text-sm text-red-700 dark:text-red-300">
-                                    Your payment could not be processed. Please check your card details and try again.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <Alert variant="info" class="flex items-center">
+                        <Info class="size-4" />
+                        <AlertDescription class="flex-1">
+                            A new software update is available.
+                        </AlertDescription>
+                        <Button size="sm" class="ml-auto shrink-0">Update</Button>
+                    </Alert>
+                    <Alert variant="success" class="flex items-center">
+                        <CheckCircle class="size-4" />
+                        <AlertDescription class="flex-1">
+                            Your profile has been updated successfully.
+                        </AlertDescription>
+                        <Button variant="outline" size="sm" class="ml-auto shrink-0">View Profile</Button>
+                    </Alert>
+                    <Alert variant="warning" class="flex items-center">
+                        <AlertTriangle class="size-4" />
+                        <AlertDescription class="flex-1">
+                            Your subscription expires in 3 days.
+                        </AlertDescription>
+                        <Button size="sm" class="ml-auto shrink-0">Renew Now</Button>
+                    </Alert>
                 </CardContent>
             </Card>
 
-            <!-- Errors Component -->
+            <!-- Dismissible Alerts -->
+            <Card>
+                <CardHeader>
+                    <CardTitle>Dismissible Alerts</CardTitle>
+                    <CardDescription>Alerts that can be closed by the user</CardDescription>
+                </CardHeader>
+                <CardContent class="space-y-4">
+                    <Alert v-if="showInfoAlert" variant="info" class="relative">
+                        <Info class="size-4" />
+                        <AlertTitle>Did you know?</AlertTitle>
+                        <AlertDescription>
+                            You can customize your dashboard by dragging and dropping widgets.
+                        </AlertDescription>
+                        <button
+                            class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 cursor-pointer"
+                            @click="showInfoAlert = false"
+                        >
+                            <X class="size-4" />
+                        </button>
+                    </Alert>
+                    <Alert v-if="showSuccessAlert" variant="success" class="relative">
+                        <CheckCircle class="size-4" />
+                        <AlertTitle>Changes saved</AlertTitle>
+                        <AlertDescription>
+                            Your preferences have been updated successfully.
+                        </AlertDescription>
+                        <button
+                            class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 cursor-pointer"
+                            @click="showSuccessAlert = false"
+                        >
+                            <X class="size-4" />
+                        </button>
+                    </Alert>
+                    <Alert v-if="showWarningAlert" variant="warning" class="relative">
+                        <AlertTriangle class="size-4" />
+                        <AlertTitle>Attention needed</AlertTitle>
+                        <AlertDescription>
+                            Some of your account settings need to be updated.
+                        </AlertDescription>
+                        <button
+                            class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 cursor-pointer"
+                            @click="showWarningAlert = false"
+                        >
+                            <X class="size-4" />
+                        </button>
+                    </Alert>
+                    <Alert v-if="showErrorAlert" variant="destructive" class="relative">
+                        <XCircle class="size-4" />
+                        <AlertTitle>Error occurred</AlertTitle>
+                        <AlertDescription>
+                            Failed to sync your data. Please try again later.
+                        </AlertDescription>
+                        <button
+                            class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 cursor-pointer"
+                            @click="showErrorAlert = false"
+                        >
+                            <X class="size-4" />
+                        </button>
+                    </Alert>
+                    <Button
+                        v-if="!showInfoAlert || !showSuccessAlert || !showWarningAlert || !showErrorAlert"
+                        variant="outline"
+                        @click="resetAlerts"
+                    >
+                        Reset Alerts
+                    </Button>
+                </CardContent>
+            </Card>
+
+            <!-- Form Errors Component -->
             <Card>
                 <CardHeader>
                     <CardTitle>Form Errors Component</CardTitle>
@@ -152,248 +248,39 @@
                 </CardContent>
             </Card>
 
-            <!-- Alerts with Actions -->
+            <!-- Variant Comparison -->
             <Card>
                 <CardHeader>
-                    <CardTitle>Alerts with Actions</CardTitle>
-                    <CardDescription>Alerts that include actionable buttons</CardDescription>
+                    <CardTitle>Variant Comparison</CardTitle>
+                    <CardDescription>All alert variants side by side</CardDescription>
                 </CardHeader>
-                <CardContent class="space-y-4">
-                    <div class="rounded-md bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-4">
-                        <div class="flex">
-                            <Info class="size-5 text-blue-500 shrink-0" />
-                            <div class="ml-3 flex-1">
-                                <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">Update available</h3>
-                                <p class="mt-1 text-sm text-blue-700 dark:text-blue-300">
-                                    A new version is available with bug fixes and improvements.
-                                </p>
-                                <div class="mt-3 flex gap-2">
-                                    <Button>Update Now</Button>
-                                    <Button variant="outline">Learn More</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4">
-                        <div class="flex">
-                            <AlertTriangle class="size-5 text-yellow-500 shrink-0" />
-                            <div class="ml-3 flex-1">
-                                <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">Verify your email</h3>
-                                <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-                                    Please verify your email address to access all features.
-                                </p>
-                                <div class="mt-3">
-                                    <Button variant="outline">Resend verification email</Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <!-- Alerts with Actions on Right -->
-            <Card>
-                <CardHeader>
-                    <CardTitle>Alerts with Actions on Right</CardTitle>
-                    <CardDescription>Alerts with buttons aligned to the right side</CardDescription>
-                </CardHeader>
-                <CardContent class="space-y-4">
-                    <div class="rounded-md bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-4">
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center">
-                                <Info class="size-5 text-blue-500 shrink-0" />
-                                <p class="ml-3 text-sm text-blue-800 dark:text-blue-200">
-                                    A new software update is available.
-                                </p>
-                            </div>
-                            <Button>Update</Button>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4">
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center">
-                                <CheckCircle class="size-5 text-green-500 shrink-0" />
-                                <p class="ml-3 text-sm text-green-800 dark:text-green-200">
-                                    Your profile has been updated successfully.
-                                </p>
-                            </div>
-                            <Button variant="outline">View Profile</Button>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4">
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center">
-                                <AlertTriangle class="size-5 text-yellow-500 shrink-0" />
-                                <p class="ml-3 text-sm text-yellow-800 dark:text-yellow-200">
-                                    Your subscription expires in 3 days.
-                                </p>
-                            </div>
-                            <Button>Renew Now</Button>
-                        </div>
-                    </div>
-                    <div class="rounded-md bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-4">
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center">
-                                <XCircle class="size-5 text-red-500 shrink-0" />
-                                <p class="ml-3 text-sm text-red-800 dark:text-red-200">
-                                    Payment failed. Please update your billing info.
-                                </p>
-                            </div>
-                            <Button variant="destructive">Fix Payment</Button>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <!-- Dismissible Alerts -->
-            <Card>
-                <CardHeader>
-                    <CardTitle>Dismissible Alerts</CardTitle>
-                    <CardDescription>Alerts that can be closed by the user</CardDescription>
-                </CardHeader>
-                <CardContent class="space-y-4">
-                    <div v-if="showInfoAlert" class="rounded-md bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 p-4">
-                        <div class="flex">
-                            <Info class="size-5 text-blue-500 shrink-0" />
-                            <div class="ml-3 flex-1">
-                                <p class="text-sm text-blue-800 dark:text-blue-200">
-                                    This is a dismissible info alert. Click the X to close it.
-                                </p>
-                            </div>
-                            <button @click="showInfoAlert = false" class="ml-3 text-blue-500 hover:text-blue-700 cursor-pointer">
-                                <X class="size-5" />
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="showSuccessAlert" class="rounded-md bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4">
-                        <div class="flex">
-                            <CheckCircle class="size-5 text-green-500 shrink-0" />
-                            <div class="ml-3 flex-1">
-                                <p class="text-sm text-green-800 dark:text-green-200">
-                                    This is a dismissible success alert. Click the X to close it.
-                                </p>
-                            </div>
-                            <button @click="showSuccessAlert = false" class="ml-3 text-green-500 hover:text-green-700 cursor-pointer">
-                                <X class="size-5" />
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="showWarningAlert" class="rounded-md bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 p-4">
-                        <div class="flex">
-                            <AlertTriangle class="size-5 text-yellow-500 shrink-0" />
-                            <div class="ml-3 flex-1">
-                                <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                                    This is a dismissible warning alert. Click the X to close it.
-                                </p>
-                            </div>
-                            <button @click="showWarningAlert = false" class="ml-3 text-yellow-500 hover:text-yellow-700 cursor-pointer">
-                                <X class="size-5" />
-                            </button>
-                        </div>
-                    </div>
-                    <div v-if="showErrorAlert" class="rounded-md bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-4">
-                        <div class="flex">
-                            <XCircle class="size-5 text-red-500 shrink-0" />
-                            <div class="ml-3 flex-1">
-                                <p class="text-sm text-red-800 dark:text-red-200">
-                                    This is a dismissible error alert. Click the X to close it.
-                                </p>
-                            </div>
-                            <button @click="showErrorAlert = false" class="ml-3 text-red-500 hover:text-red-700 cursor-pointer">
-                                <X class="size-5" />
-                            </button>
-                        </div>
-                    </div>
-                    <Button v-if="!showInfoAlert || !showSuccessAlert || !showWarningAlert || !showErrorAlert" variant="outline" @click="resetAlerts">
-                        Reset Alerts
-                    </Button>
-                </CardContent>
-            </Card>
-
-            <!-- Neutral Alerts -->
-            <Card>
-                <CardHeader>
-                    <CardTitle>Neutral Alerts</CardTitle>
-                    <CardDescription>Clean alerts with colored icons and standard borders</CardDescription>
-                </CardHeader>
-                <CardContent class="space-y-4">
-                    <div class="rounded-md border p-4">
-                        <div class="flex">
-                            <Info class="size-5 text-blue-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-foreground">
-                                    This is a general information message with a neutral background.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md border p-4">
-                        <div class="flex">
-                            <Info class="size-5 text-blue-500 shrink-0" />
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-foreground">Did you know?</h3>
-                                <p class="mt-1 text-sm text-muted-foreground">
-                                    You can customize your dashboard by dragging and dropping widgets to rearrange them.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md border p-4">
-                        <div class="flex items-center justify-between gap-4">
-                            <div class="flex items-center">
-                                <Info class="size-5 text-blue-500 shrink-0" />
-                                <p class="ml-3 text-sm text-foreground">
-                                    Your session will expire in 10 minutes.
-                                </p>
-                            </div>
-                            <Button variant="outline">Extend Session</Button>
-                        </div>
-                    </div>
-                    <div class="rounded-md border p-4">
-                        <div class="flex">
-                            <CheckCircle class="size-5 text-green-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-foreground">
-                                    All systems are operational.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="rounded-md border p-4">
-                        <div class="flex">
-                            <AlertTriangle class="size-5 text-yellow-500 shrink-0" />
-                            <div class="ml-3">
-                                <p class="text-sm text-foreground">
-                                    Scheduled maintenance tonight from 2-4 AM.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <!-- Compact Alerts -->
-            <Card>
-                <CardHeader>
-                    <CardTitle>Compact Alerts</CardTitle>
-                    <CardDescription>Minimal inline alert styles</CardDescription>
-                </CardHeader>
-                <CardContent class="space-y-3">
-                    <div class="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
-                        <Info class="size-4" />
-                        <span>This is an inline info message.</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-                        <CheckCircle class="size-4" />
-                        <span>This is an inline success message.</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-yellow-600 dark:text-yellow-400">
-                        <AlertTriangle class="size-4" />
-                        <span>This is an inline warning message.</span>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-red-600 dark:text-red-400">
-                        <XCircle class="size-4" />
-                        <span>This is an inline error message.</span>
+                <CardContent>
+                    <div class="grid grid-cols-2 gap-4">
+                        <Alert>
+                            <Info class="size-4" />
+                            <AlertTitle>Default</AlertTitle>
+                            <AlertDescription>Neutral styling for general messages.</AlertDescription>
+                        </Alert>
+                        <Alert variant="info">
+                            <Info class="size-4" />
+                            <AlertTitle>Info</AlertTitle>
+                            <AlertDescription>Informational messages and tips.</AlertDescription>
+                        </Alert>
+                        <Alert variant="success">
+                            <CheckCircle class="size-4" />
+                            <AlertTitle>Success</AlertTitle>
+                            <AlertDescription>Positive feedback and confirmations.</AlertDescription>
+                        </Alert>
+                        <Alert variant="warning">
+                            <AlertTriangle class="size-4" />
+                            <AlertTitle>Warning</AlertTitle>
+                            <AlertDescription>Cautionary messages requiring attention.</AlertDescription>
+                        </Alert>
+                        <Alert variant="destructive" class="col-span-2">
+                            <XCircle class="size-4" />
+                            <AlertTitle>Destructive</AlertTitle>
+                            <AlertDescription>Critical errors and failure messages.</AlertDescription>
+                        </Alert>
                     </div>
                 </CardContent>
             </Card>
@@ -405,6 +292,7 @@
 import { ref } from 'vue';
 import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { FormErrors } from '@/components/ui/form-errors';
 import { Info, CheckCircle, AlertTriangle, XCircle, X } from 'lucide-vue-next';
