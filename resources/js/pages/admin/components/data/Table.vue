@@ -6,17 +6,27 @@
         pageSidebarTitle="Components"
     >
         <div class="space-y-4">
-            <!-- Basic Table in Card -->
+            <!-- Scrollable Table with Fixed Header -->
             <Card>
                 <CardHeader class="border-b">
                     <CardTitle>Users</CardTitle>
-                    <CardDescription>Manage your team members</CardDescription>
+                    <CardDescription>Scrollable table with fixed header, sorting, search, pagination, and column customization (500 rows)</CardDescription>
                     <CardAction>
                         <div class="flex items-center gap-2">
-                            <Input placeholder="Search users..." clearable class="w-64" />
-                            <Button variant="outline">
-                                <Filter class="size-4" />
-                            </Button>
+                            <Input
+                                v-model="userSearch"
+                                placeholder="Search users..."
+                                clearable
+                                class="w-64"
+                            />
+                            <CustomizeColumns
+                                v-model="activeUserColumns"
+                                :columns="userColumnDefs"
+                                :defaultColumns="defaultUserColumns"
+                                :sort="{ column: sortColumn, direction: sortDirection }"
+                                :defaultSort="{ column: null, direction: null }"
+                                @update:sort="handleSortUpdate"
+                            />
                             <Button>
                                 <Plus class="size-4 mr-2" />
                                 Add User
@@ -25,58 +35,146 @@
                     </CardAction>
                 </CardHeader>
                 <CardContent class="p-0">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead class="w-12 text-center">
-                                    <Checkbox
-                                        :modelValue="headerCheckboxState"
-                                        @update:modelValue="toggleAllUsers"
-                                    />
-                                </TableHead>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Role</TableHead>
-                                <TableHead>Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow
-                                v-for="user in paginatedUsers"
-                                :key="user.id"
-                                :class="selectedUsers.includes(user.id) ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''"
-                            >
-                                <TableCell class="text-center">
-                                    <Checkbox
-                                        :modelValue="selectedUsers.includes(user.id)"
-                                        @update:modelValue="(checked) => toggleUser(user.id, checked)"
-                                    />
-                                </TableCell>
-                                <TableCell class="font-medium">{{ user.name }}</TableCell>
-                                <TableCell class="text-muted-foreground">{{ user.email }}</TableCell>
-                                <TableCell>
-                                    <Badge variant="outline">{{ user.role }}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <Badge :class="getStatusClass(user.status)">
-                                        {{ user.status }}
-                                    </Badge>
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
+                    <!-- Scrollable container with fixed height -->
+                    <div class="max-h-[400px] overflow-auto">
+                        <Table>
+                            <!-- Sticky header -->
+                            <TableHeader class="sticky top-0 bg-background z-10 shadow-sm">
+                                <TableRow>
+                                    <TableHead class="w-12 text-center">
+                                        <Checkbox
+                                            :modelValue="headerCheckboxState"
+                                            @update:modelValue="toggleAllUsers"
+                                        />
+                                    </TableHead>
+                                    <TableHead
+                                        v-if="isUserColumnVisible('name')"
+                                        class="cursor-pointer select-none hover:bg-muted/50"
+                                        @click="toggleSort('name')"
+                                    >
+                                        <div class="flex items-center gap-1">
+                                            Name
+                                            <ArrowUp v-if="sortColumn === 'name' && sortDirection === 'asc'" class="size-4" />
+                                            <ArrowDown v-else-if="sortColumn === 'name' && sortDirection === 'desc'" class="size-4" />
+                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
+                                        </div>
+                                    </TableHead>
+                                    <TableHead
+                                        v-if="isUserColumnVisible('email')"
+                                        class="cursor-pointer select-none hover:bg-muted/50"
+                                        @click="toggleSort('email')"
+                                    >
+                                        <div class="flex items-center gap-1">
+                                            Email
+                                            <ArrowUp v-if="sortColumn === 'email' && sortDirection === 'asc'" class="size-4" />
+                                            <ArrowDown v-else-if="sortColumn === 'email' && sortDirection === 'desc'" class="size-4" />
+                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
+                                        </div>
+                                    </TableHead>
+                                    <TableHead
+                                        v-if="isUserColumnVisible('role')"
+                                        class="cursor-pointer select-none hover:bg-muted/50"
+                                        @click="toggleSort('role')"
+                                    >
+                                        <div class="flex items-center gap-1">
+                                            Role
+                                            <ArrowUp v-if="sortColumn === 'role' && sortDirection === 'asc'" class="size-4" />
+                                            <ArrowDown v-else-if="sortColumn === 'role' && sortDirection === 'desc'" class="size-4" />
+                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
+                                        </div>
+                                    </TableHead>
+                                    <TableHead
+                                        v-if="isUserColumnVisible('department')"
+                                        class="cursor-pointer select-none hover:bg-muted/50"
+                                        @click="toggleSort('department')"
+                                    >
+                                        <div class="flex items-center gap-1">
+                                            Department
+                                            <ArrowUp v-if="sortColumn === 'department' && sortDirection === 'asc'" class="size-4" />
+                                            <ArrowDown v-else-if="sortColumn === 'department' && sortDirection === 'desc'" class="size-4" />
+                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
+                                        </div>
+                                    </TableHead>
+                                    <TableHead
+                                        v-if="isUserColumnVisible('status')"
+                                        class="cursor-pointer select-none hover:bg-muted/50"
+                                        @click="toggleSort('status')"
+                                    >
+                                        <div class="flex items-center gap-1">
+                                            Status
+                                            <ArrowUp v-if="sortColumn === 'status' && sortDirection === 'asc'" class="size-4" />
+                                            <ArrowDown v-else-if="sortColumn === 'status' && sortDirection === 'desc'" class="size-4" />
+                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
+                                        </div>
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow
+                                    v-for="user in paginatedUsers"
+                                    :key="user.id"
+                                    :class="selectedUsers.includes(user.id) ? 'bg-yellow-50 dark:bg-yellow-950/30' : ''"
+                                >
+                                    <TableCell class="text-center">
+                                        <Checkbox
+                                            :modelValue="selectedUsers.includes(user.id)"
+                                            @update:modelValue="(checked) => toggleUser(user.id, checked)"
+                                        />
+                                    </TableCell>
+                                    <TableCell v-if="isUserColumnVisible('name')" class="font-medium">{{ user.name }}</TableCell>
+                                    <TableCell v-if="isUserColumnVisible('email')" class="text-muted-foreground">{{ user.email }}</TableCell>
+                                    <TableCell v-if="isUserColumnVisible('role')">
+                                        <Badge variant="outline">{{ user.role }}</Badge>
+                                    </TableCell>
+                                    <TableCell v-if="isUserColumnVisible('department')" class="text-muted-foreground">{{ user.department }}</TableCell>
+                                    <TableCell v-if="isUserColumnVisible('status')">
+                                        <Badge :class="getStatusClass(user.status)">
+                                            {{ user.status }}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
                 <CardFooter class="border-t py-4 px-6 justify-between">
-                    <span class="text-sm text-muted-foreground">Showing 1-5 of {{ allUsers.length }} users</span>
-                    <Pagination v-slot="{ page }" :total="allUsers.length" :items-per-page="5" :default-page="1" class="mx-0 w-auto">
+                    <span class="text-sm text-muted-foreground">
+                        Showing {{ Math.min((currentPage - 1) * itemsPerPage + 1, filteredUsers.length) }}-{{ Math.min(currentPage * itemsPerPage, filteredUsers.length) }} of {{ filteredUsers.length }} users
+                        <template v-if="filteredUsers.length !== allUsers.length">
+                            (filtered from {{ allUsers.length }})
+                        </template>
+                    </span>
+                    <Pagination
+                        v-if="totalPages > 1"
+                        v-slot="{ page }"
+                        v-model:page="currentPage"
+                        :total="filteredUsers.length"
+                        :items-per-page="itemsPerPage"
+                        class="mx-0 w-auto"
+                    >
                         <PaginationContent>
+                            <PaginationFirst />
                             <PaginationPrevious />
-                            <PaginationItem v-for="(item, index) in 3" :key="index" :value="item" as-child>
-                                <Button variant="outline" size="icon-sm" :class="{ 'bg-primary text-primary-foreground': page === item }">
-                                    {{ item }}
-                                </Button>
-                            </PaginationItem>
+                            <template v-for="pageNum in totalPages" :key="pageNum">
+                                <PaginationItem
+                                    v-if="pageNum === 1 || pageNum === totalPages || (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)"
+                                    :value="pageNum"
+                                    as-child
+                                >
+                                    <Button
+                                        variant="outline"
+                                        size="icon-sm"
+                                        :class="{ 'bg-primary text-primary-foreground': page === pageNum }"
+                                    >
+                                        {{ pageNum }}
+                                    </Button>
+                                </PaginationItem>
+                                <PaginationEllipsis
+                                    v-else-if="pageNum === 2 || pageNum === totalPages - 1"
+                                />
+                            </template>
                             <PaginationNext />
+                            <PaginationLast />
                         </PaginationContent>
                     </Pagination>
                 </CardFooter>
@@ -180,7 +278,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -207,26 +305,139 @@ import {
 } from '@/components/ui/pagination';
 import { CustomizeColumns } from '@/components/ui/data-table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Filter, Plus } from 'lucide-vue-next';
+import { Plus, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();
 
-const activeTab = ref('all');
+// ============================================
+// First Table: Scrollable with Fixed Header
+// ============================================
+
+// Generate 100 users dynamically
+const firstNames = ['John', 'Jane', 'Bob', 'Alice', 'Charlie', 'Diana', 'Edward', 'Fiona', 'George', 'Hannah'];
+const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor'];
+const roles = ['Admin', 'Editor', 'User', 'Viewer'];
+const departments = ['Engineering', 'Design', 'Marketing', 'Sales', 'Support', 'HR', 'Finance', 'Operations'];
+const statuses = ['Active', 'Pending', 'Inactive'];
+
+const allUsers = Array.from({ length: 500 }, (_, i) => ({
+    id: i + 1,
+    name: `${firstNames[i % firstNames.length]} ${lastNames[Math.floor(i / firstNames.length) % lastNames.length]}`,
+    email: `user${i + 1}@example.com`,
+    role: roles[i % roles.length],
+    department: departments[i % departments.length],
+    status: statuses[i % statuses.length],
+}));
+
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = 100;
+
+// Sorting state
+type SortDirection = 'asc' | 'desc' | null;
+const sortColumn = ref<string | null>(null);
+const sortDirection = ref<SortDirection>(null);
+
+const toggleSort = (column: string) => {
+    if (sortColumn.value === column) {
+        // Cycle through: asc -> desc -> null
+        if (sortDirection.value === 'asc') {
+            sortDirection.value = 'desc';
+        } else if (sortDirection.value === 'desc') {
+            sortColumn.value = null;
+            sortDirection.value = null;
+        }
+    } else {
+        sortColumn.value = column;
+        sortDirection.value = 'asc';
+    }
+    // Reset to first page when sorting changes
+    currentPage.value = 1;
+};
+
+// Handle sort update from CustomizeColumns (e.g., reset to default)
+const handleSortUpdate = (sort: { column: string | null; direction: SortDirection }) => {
+    sortColumn.value = sort.column;
+    sortDirection.value = sort.direction;
+    currentPage.value = 1;
+};
+
+// Search state
+const userSearch = ref('');
+
+// Column customization
+const userColumnDefs = [
+    { key: 'name', header: 'Name' },
+    { key: 'email', header: 'Email' },
+    { key: 'role', header: 'Role' },
+    { key: 'department', header: 'Department' },
+    { key: 'status', header: 'Status' },
+];
+const defaultUserColumns = ['name', 'email', 'role', 'status'];
+const activeUserColumns = ref([...defaultUserColumns]);
+
+const isUserColumnVisible = (key: string) => activeUserColumns.value.includes(key);
+
+// Filtered users based on search
+const filteredUsers = computed(() => {
+    let result = allUsers;
+
+    // Apply search filter
+    if (userSearch.value.trim()) {
+        const search = userSearch.value.toLowerCase();
+        result = result.filter(user =>
+            user.name.toLowerCase().includes(search) ||
+            user.email.toLowerCase().includes(search) ||
+            user.role.toLowerCase().includes(search) ||
+            user.department.toLowerCase().includes(search) ||
+            user.status.toLowerCase().includes(search)
+        );
+    }
+
+    // Apply sorting
+    if (sortColumn.value && sortDirection.value) {
+        const col = sortColumn.value as keyof typeof allUsers[0];
+        const dir = sortDirection.value === 'asc' ? 1 : -1;
+        result = [...result].sort((a, b) => {
+            const aVal = String(a[col]).toLowerCase();
+            const bVal = String(b[col]).toLowerCase();
+            return aVal.localeCompare(bVal) * dir;
+        });
+    }
+
+    return result;
+});
+
+// Reset to first page when search changes
+watch(userSearch, () => {
+    currentPage.value = 1;
+});
+
+// Paginated users for display
+const paginatedUsers = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredUsers.value.slice(start, end);
+});
+
+// Total pages
+const totalPages = computed(() => Math.ceil(filteredUsers.value.length / itemsPerPage));
+
+// Selection state
 const selectedUsers = ref<number[]>([]);
 
 const headerCheckboxState = computed(() => {
     if (selectedUsers.value.length === 0) return false;
-    if (selectedUsers.value.length === paginatedUsers.length) return true;
+    if (selectedUsers.value.length === filteredUsers.value.length) return true;
     return 'indeterminate' as const;
 });
 
 const toggleAllUsers = () => {
-    // If any are selected, deselect all. Otherwise, select all.
     if (selectedUsers.value.length > 0) {
         selectedUsers.value = [];
     } else {
-        selectedUsers.value = paginatedUsers.map(u => u.id);
+        selectedUsers.value = filteredUsers.value.map(u => u.id);
     }
 };
 
@@ -238,22 +449,18 @@ const toggleUser = (id: number, checked: boolean | 'indeterminate') => {
     }
 };
 
+// ============================================
+// Second Table: Tabs Filter
+// ============================================
+
+const activeTab = ref('all');
+
 const statusTabs = [
     { label: 'All', value: 'all', count: 24 },
     { label: 'Completed', value: 'completed', count: 12 },
     { label: 'Pending', value: 'pending', count: 8 },
     { label: 'Cancelled', value: 'cancelled', count: 4 },
 ];
-
-const allUsers = [
-    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Editor', status: 'Active' },
-    { id: 3, name: 'Bob Wilson', email: 'bob@example.com', role: 'User', status: 'Pending' },
-    { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Editor', status: 'Active' },
-    { id: 5, name: 'Charlie Davis', email: 'charlie@example.com', role: 'User', status: 'Inactive' },
-];
-
-const paginatedUsers = allUsers.slice(0, 5);
 
 const orders = [
     { id: '#ORD-001', customer: 'John Doe', date: 'Dec 20, 2024', status: 'Completed', amount: '$250.00' },
