@@ -243,6 +243,55 @@ php artisan queue:restart
 
 ---
 
+## Server-Side Rendering (SSR)
+
+SSR is enabled by default for improved SEO and faster initial page loads. Pages are rendered on the server before being sent to the browser, making content immediately available to search engine crawlers.
+
+**Configuration:**
+
+SSR settings are in `config/inertia.php`:
+
+```php
+'ssr' => [
+    'enabled' => env('INERTIA_SSR_ENABLED', true),
+    'url' => env('INERTIA_SSR_URL', 'http://127.0.0.1:13714'),
+],
+```
+
+**Build Commands:**
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Build client-side only |
+| `npm run build-ssr` | Build both client and SSR bundles |
+
+**Running SSR in Production:**
+
+```bash
+# Build SSR bundle
+npm run build-ssr
+
+# Start SSR server
+php artisan inertia:start-ssr
+
+# Stop SSR server (when redeploying)
+php artisan inertia:stop-ssr
+```
+
+**SSR-Safe Code:**
+
+When accessing browser APIs (`window`, `document`), use the `isClient` guard:
+
+```typescript
+import { isClient } from '@/utils';
+
+if (isClient) {
+    // Safe to use window, document, localStorage, etc.
+}
+```
+
+---
+
 ## SEO & Social Sharing
 
 Layouts include built-in support for SEO meta tags and social sharing (Open Graph + Twitter Cards). Tags are rendered server-side via SSR for optimal crawler indexing.
