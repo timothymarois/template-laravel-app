@@ -96,23 +96,23 @@ Linting is used on both PHP and JS side to keep all collaborators using the same
 
 | Command                | Description                                       |
 |------------------------|---------------------------------------------------|
-| `npm run lint`         | Run ESLint on JS/Vue files                        |
-| `npm run lint:fix`     | Run ESLint and auto-fix issues                    |
-| `npm run lint:css`     | Run Stylelint on CSS files                        |
-| `npm run lint:css:fix` | Run Stylelint and auto-fix CSS issues             |
-| `npm run test`         | Run JS unit tests (Vitest)                        |
-| `npm run check:php`    | Run PHP checks (Pint, Larastan, Pest)             |
-| `npm run check:js`     | Run JS checks (ESLint, Stylelint, Vitest, Build)  |
-| `npm run check`        | Run all checks (PHP + JS)                         |
+| `pnpm lint`         | Run ESLint on JS/Vue files                        |
+| `pnpm lint:fix`     | Run ESLint and auto-fix issues                    |
+| `pnpm lint:css`     | Run Stylelint on CSS files                        |
+| `pnpm lint:css:fix` | Run Stylelint and auto-fix CSS issues             |
+| `pnpm test`         | Run JS unit tests (Vitest)                        |
+| `pnpm check:php`    | Run PHP checks (Pint, Larastan, Pest)             |
+| `pnpm check:js`     | Run JS checks (ESLint, Stylelint, Vitest, Build)  |
+| `pnpm check`        | Run all checks (PHP + JS)                         |
 
 **Individual Tools:**
 
 - ✅ [Pest](https://pestphp.com/) - `composer test` or `./vendor/bin/pest`
-- ✅ [Vitest](https://vitest.dev/) - `npm run test` or `npm run test:watch`
+- ✅ [Vitest](https://vitest.dev/) - `pnpm test` or `pnpm test:watch`
 - ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
 - ✅ [Laravel Pint](https://laravel.com/docs/12.x/pint) - `./vendor/bin/pint`
-- ✅ [Vue ESLint](https://eslint.vuejs.org/) - `npm run lint` or `npm run lint:fix`
-- ✅ [Stylelint](https://stylelint.io/) - `npm run lint:css` or `npm run lint:css:fix`
+- ✅ [Vue ESLint](https://eslint.vuejs.org/) - `pnpm lint` or `pnpm lint:fix`
+- ✅ [Stylelint](https://stylelint.io/) - `pnpm lint:css` or `pnpm lint:css:fix`
 
 ---
 
@@ -137,7 +137,7 @@ These simple steps allow you to install this project on your local env. For prod
 <summary>Install client-side</summary>
 
 ```bash
-npm install
+pnpm install
 ```
 </details>
 
@@ -163,7 +163,7 @@ php artisan migrate
 <summary>Run local Dev</summary>
 
 ```bash
-npm run dev
+pnpm dev
 ```
 </details>
 
@@ -187,7 +187,7 @@ composer install
 **(2) Install package deps**
 
 ```bash
-npm ci
+pnpm install --frozen-lockfile
 ```
 
 **(3) Database migrations:**
@@ -199,7 +199,7 @@ php artisan migrate --force
 **(4) Build Client-side (non-SSR):**
 
 ```bash
-npm run build
+pnpm build
 ```
 
 **(4) Build (with SSR):**
@@ -207,7 +207,7 @@ npm run build
 [Learn more about SSR](https://inertiajs.com/server-side-rendering)
 
 ```bash
-npm run build-ssr
+pnpm build-ssr
 ```
 
 **(5) Run (with SSR):**
@@ -262,14 +262,14 @@ SSR settings are in `config/inertia.php`:
 
 | Command | Description |
 |---------|-------------|
-| `npm run build` | Build client-side only |
-| `npm run build-ssr` | Build both client and SSR bundles |
+| `pnpm build` | Build client-side only |
+| `pnpm build-ssr` | Build both client and SSR bundles |
 
 **Running SSR in Production:**
 
 ```bash
 # Build SSR bundle
-npm run build-ssr
+pnpm build-ssr
 
 # Start SSR server
 php artisan inertia:start-ssr

@@ -296,18 +296,18 @@ Run these commands before committing changes:
 
 ### Quick Commands
 ```bash
-npm run check        # Run ALL checks (PHP + JS)
-npm run check:php    # Run PHP checks only (Pint, Larastan, Pest)
-npm run check:js     # Run JS checks only (ESLint, Stylelint, Vitest, Build)
+pnpm check        # Run ALL checks (PHP + JS)
+pnpm check:php    # Run PHP checks only (Pint, Larastan, Pest)
+pnpm check:js     # Run JS checks only (ESLint, Stylelint, Vitest, Build)
 ```
 
 ### Linting & Testing
 ```bash
-npm run lint         # Check ESLint issues (JS/Vue)
-npm run lint:fix     # Auto-fix ESLint issues
-npm run lint:css     # Check Stylelint issues (CSS)
-npm run lint:css:fix # Auto-fix Stylelint issues
-npm run test         # Run JS unit tests (Vitest)
+pnpm lint         # Check ESLint issues (JS/Vue)
+pnpm lint:fix     # Auto-fix ESLint issues
+pnpm lint:css     # Check Stylelint issues (CSS)
+pnpm lint:css:fix # Auto-fix Stylelint issues
+pnpm test         # Run JS unit tests (Vitest)
 ```
 
 ### Individual Tools (if needed)
@@ -315,7 +315,7 @@ npm run test         # Run JS unit tests (Vitest)
 ./vendor/bin/pint            # PHP code style
 ./vendor/bin/phpstan analyse # Static analysis
 ./vendor/bin/pest            # PHP tests (or: composer test)
-npm run test                 # JS tests (Vitest)
+pnpm test                    # JS tests (Vitest)
 ```
 
 All checks must pass before committing.
