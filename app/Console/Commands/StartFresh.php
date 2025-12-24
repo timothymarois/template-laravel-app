@@ -21,12 +21,12 @@ class StartFresh extends Command
             return Command::FAILURE;
         }
 
-        // Cache::flush();
-        // Artisan::call('horizon:clear');
-        // Artisan::call('cache:clear');
-        // Artisan::call('config:clear');
-        // Artisan::call('route:clear');
-        // Artisan::call('view:clear');
+        Cache::flush();
+        Artisan::call('horizon:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
 
         $this->info('Application cache has been cleared.');
 
