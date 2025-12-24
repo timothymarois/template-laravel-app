@@ -1,5 +1,7 @@
 # Laravel Vue Inertia Template
 
+[![Automated Checks](https://github.com/timothymarois/template-laravel-app/actions/workflows/checks.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/checks.yml)
+
 This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web-based applications; **allowing you to focus solely on your application requirements**.
 
 ---
