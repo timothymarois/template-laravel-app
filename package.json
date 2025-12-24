@@ -15,7 +15,7 @@
     "lint:css:fix": "stylelint \"resources/css/**/*.css\" --fix",
     "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse && ./vendor/bin/pest",
     "check:js": "pnpm lint && pnpm lint:css && pnpm test && pnpm build",
-    "check": "pnpm check:php && pnpm check:js"
+    "check": "pnpm check:php && pnpm check:js && pnpm exec vite build --ssr"
   },
   "devDependencies": {
     "@inertiajs/vue3": "^2.0.0",

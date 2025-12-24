@@ -296,9 +296,9 @@ Run these commands before committing changes:
 
 ### Quick Commands
 ```bash
-pnpm check        # Run ALL checks (PHP + JS)
+pnpm check        # Run ALL checks (PHP + JS + SSR build) - use before committing
 pnpm check:php    # Run PHP checks only (Pint, Larastan, Pest)
-pnpm check:js     # Run JS checks only (ESLint, Stylelint, Vitest, Build)
+pnpm check:js     # Run JS checks only (ESLint, Stylelint, Vitest, client build)
 ```
 
 ### Linting & Testing

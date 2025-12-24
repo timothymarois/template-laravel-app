@@ -94,16 +94,16 @@ Linting is used on both PHP and JS side to keep all collaborators using the same
 
 **Main Commands:**
 
-| Command                | Description                                       |
-|------------------------|---------------------------------------------------|
-| `pnpm lint`         | Run ESLint on JS/Vue files                        |
-| `pnpm lint:fix`     | Run ESLint and auto-fix issues                    |
-| `pnpm lint:css`     | Run Stylelint on CSS files                        |
-| `pnpm lint:css:fix` | Run Stylelint and auto-fix CSS issues             |
-| `pnpm test`         | Run JS unit tests (Vitest)                        |
-| `pnpm check:php`    | Run PHP checks (Pint, Larastan, Pest)             |
-| `pnpm check:js`     | Run JS checks (ESLint, Stylelint, Vitest, Build)  |
-| `pnpm check`        | Run all checks (PHP + JS)                         |
+| Command             | Description                                                   |
+|---------------------|---------------------------------------------------------------|
+| `pnpm lint`         | Run ESLint on JS/Vue files                                    |
+| `pnpm lint:fix`     | Run ESLint and auto-fix issues                                |
+| `pnpm lint:css`     | Run Stylelint on CSS files                                    |
+| `pnpm lint:css:fix` | Run Stylelint and auto-fix CSS issues                         |
+| `pnpm test`         | Run JS unit tests (Vitest)                                    |
+| `pnpm check:php`    | Run PHP checks (Pint, Larastan, Pest)                         |
+| `pnpm check:js`     | Run JS checks (ESLint, Stylelint, Vitest, client build)       |
+| `pnpm check`        | Run all checks (PHP + JS + SSR build) - use before committing |
 
 **Individual Tools:**
 
@@ -126,6 +126,18 @@ Pre-installed monitoring packages allow you to view logs, worker jobs, and debug
 **External Services:**
 
 - ✅ [Sentry.io](https://sentry.io/) | [Docs](https://docs.sentry.io/platforms/php/guides/laravel/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
+
+---
+
+## Solo (Dev Runner)
+
+[Solo](https://github.com/soloterm/solo) is a terminal UI for running multiple Laravel processes simultaneously during development. Pre-configured commands are available in `config/solo.php`.
+
+```bash
+php artisan solo
+```
+
+**Configured commands:** SSR server, Queue worker, Scheduler, JS/PHP checks, Migrations, and more.
 
 ---
 
@@ -169,19 +181,19 @@ pnpm dev
 
 ---
 
-## Deployment:
+## Production Deployment
 
-For deployment you will need to run a series of commands before and after new code release.
+Commands for deploying to production servers. Do not use these for local development.
 
 <details>
-<summary>Before release</summary>
+<summary>Build steps</summary>
 
-*These commands should run BEFORE new code is deployed.*
+*Run these commands during your CI/CD pipeline or before deploying new code.*
 
 **(1) Install composer deps:**
 
 ```bash
-composer install
+composer install --optimize-autoloader --no-dev
 ```
 
 **(2) Install package deps**
@@ -229,14 +241,14 @@ php artisan inertia:stop-ssr
 </details>
 
 <details>
-<summary>After release</summary>
+<summary>Post-deployment optimization</summary>
 
-*These commands should run AFTER new code is deployed.*
+*Run these commands after new code is live to cache assets and restart workers.*
 
 ```bash
-php artisan config:cache
-php artisan route:cache
-php artisan queue:restart
+php artisan optimize          # Cache config, routes, and events
+php artisan view:cache        # Compile all Blade views
+php artisan horizon:terminate # Gracefully restart Horizon workers
 ```
 
 </details>
