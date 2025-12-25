@@ -6,6 +6,7 @@ import { ListboxRoot, useFilter, useForwardPropsEmits } from "reka-ui";
 import { computed, reactive, ref, watch } from "vue";
 import { cn } from '@/utils';
 import { provideCommandContext } from ".";
+import { filterCommandItems } from "./filterCommandItems";
 
 interface Props extends ListboxRootProps {
     class?: HTMLAttributes["class"];
@@ -46,48 +47,21 @@ const filterState = reactive({
 });
 
 function filterItems() {
-    // Skip filtering if disabled (for async/server-side search)
-    if (props.disableFilter) {
-        // Mark all items as visible when filtering is disabled
-        filterState.filtered.count = allItems.value.size;
-        for (const [id] of allItems.value) {
-            filterState.filtered.items.set(id, 1);
-        }
-        for (const [groupId] of allGroups.value) {
-            filterState.filtered.groups.add(groupId);
-        }
-        return;
-    }
+    const result = filterCommandItems({
+        allItems: allItems.value,
+        allGroups: allGroups.value,
+        search: filterState.search,
+        disableFilter: props.disableFilter,
+        contains,
+        previous: {
+            items: filterState.filtered.items,
+            groups: filterState.filtered.groups,
+        },
+    });
 
-    if (!filterState.search) {
-        filterState.filtered.count = allItems.value.size;
-        // Do nothing, each item will know to show itself because search is empty
-        return;
-    }
-
-    // Reset the groups
-    filterState.filtered.groups = new Set();
-    let itemCount = 0;
-
-    // Check which items should be included
-    for (const [id, value] of allItems.value) {
-        const score = contains(value, filterState.search);
-        filterState.filtered.items.set(id, score ? 1 : 0);
-        if (score)
-            itemCount++;
-    }
-
-    // Check which groups have at least 1 item shown
-    for (const [groupId, group] of allGroups.value) {
-        for (const itemId of group) {
-            if (filterState.filtered.items.get(itemId)! > 0) {
-                filterState.filtered.groups.add(groupId);
-                break;
-            }
-        }
-    }
-
-    filterState.filtered.count = itemCount;
+    filterState.filtered.count = result.count;
+    filterState.filtered.items = result.items;
+    filterState.filtered.groups = result.groups;
 }
 
 watch(() => filterState.search, (newSearch) => {
