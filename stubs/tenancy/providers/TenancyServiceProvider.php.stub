@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Providers;
+
+use App\Models\Tenant;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+use Stancl\JobPipeline\JobPipeline;
+use Stancl\Tenancy\Events;
+use Stancl\Tenancy\Jobs;
+use Stancl\Tenancy\Middleware;
+
+class TenancyServiceProvider extends ServiceProvider
+{
+    /**
+     * Tenant lifecycle events and their listeners.
+     *
+     * @var array<class-string, array<int, mixed>>
+     */
+    public static array $tenantEvents = [];
+
+    /**
+     * Register services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
+    {
+        $this->bootEvents();
+        $this->bootRoutes();
+        $this->configureMiddleware();
+    }
+
+    /**
+     * Register tenant lifecycle events.
+     */
+    protected function bootEvents(): void
+    {
+        // Configure tenant events
+        static::$tenantEvents = [
+            Events\TenantCreated::class => [
+                JobPipeline::make([
+                    Jobs\CreateDatabase::class,
+                    Jobs\MigrateDatabase::class,
+                    // Jobs\SeedDatabase::class,
+                ])->send(function (Events\TenantCreated $event) {
+                    return $event->tenant;
+                })->shouldBeQueued(config('tenancy.queue_tenant_creation', false)),
+            ],
+            Events\TenantDeleted::class => [
+                JobPipeline::make([
+                    Jobs\DeleteDatabase::class,
+                ])->send(function (Events\TenantDeleted $event) {
+                    return $event->tenant;
+                })->shouldBeQueued(config('tenancy.queue_tenant_deletion', false)),
+            ],
+        ];
+
+        foreach (static::$tenantEvents as $event => $listeners) {
+            foreach ((array) $listeners as $listener) {
+                Event::listen($event, $listener);
+            }
+        }
+    }
+
+    /**
+     * Register tenant routes.
+     */
+    protected function bootRoutes(): void
+    {
+        if (file_exists(base_path('routes/tenant.php'))) {
+            Route::middleware(['web'])
+                ->group(base_path('routes/tenant.php'));
+        }
+    }
+
+    /**
+     * Configure tenancy middleware.
+     */
+    protected function configureMiddleware(): void
+    {
+        // Handle failed tenant identification
+        Middleware\InitializeTenancyByDomain::$onFail = function ($exception, $request, $next) {
+            return redirect(config('app.url'));
+        };
+
+        Middleware\InitializeTenancyBySubdomain::$onFail = function ($exception, $request, $next) {
+            return redirect(config('app.url'));
+        };
+
+        Middleware\InitializeTenancyByDomainOrSubdomain::$onFail = function ($exception, $request, $next) {
+            return redirect(config('app.url'));
+        };
+    }
+}

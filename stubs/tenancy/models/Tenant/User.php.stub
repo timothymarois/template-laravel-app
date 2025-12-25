@@ -1,0 +1,127 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models\Tenant;
+
+use App\Models\CentralUser;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+/**
+ * Tenant-specific user model.
+ *
+ * This model exists in each tenant's database and is linked to a CentralUser
+ * via the central_user_id foreign key. It contains tenant-specific user data
+ * like roles and permissions within that tenant.
+ *
+ * @property int $id
+ * @property int|null $central_user_id
+ * @property string $name
+ * @property string $email
+ * @property string|null $role
+ * @property bool $is_active
+ * @property string|null $timezone
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property \Illuminate\Support\Carbon|null $last_seen_at
+ * @property string|null $last_ip_address
+ * @property string|null $last_user_agent
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read CentralUser|null $centralUser
+ */
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'central_user_id',
+        'name',
+        'email',
+        'password',
+        'role',
+        'is_active',
+        'timezone',
+        'last_seen_at',
+        'last_ip_address',
+        'last_user_agent',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
+            'last_seen_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    /**
+     * Check if the user is currently online (seen within last 5 minutes).
+     */
+    public function isOnline(): bool
+    {
+        /** @var \Illuminate\Support\Carbon|null $lastSeen */
+        $lastSeen = $this->last_seen_at;
+
+        return $lastSeen !== null && $lastSeen->greaterThan(now()->subMinutes(5));
+    }
+
+    /**
+     * Get the central user that this tenant user is linked to.
+     */
+    public function centralUser(): BelongsTo
+    {
+        return $this->belongsTo(CentralUser::class, 'central_user_id');
+    }
+
+    /**
+     * Check if this user has a specific role.
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * Check if this user is the tenant owner.
+     */
+    public function isOwner(): bool
+    {
+        return $this->hasRole('owner');
+    }
+
+    /**
+     * Check if this user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin') || $this->isOwner();
+    }
+}

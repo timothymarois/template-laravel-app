@@ -1,0 +1,69 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Http\Middleware\TenantIsReady;
+use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomainOrSubdomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+
+/*
+|--------------------------------------------------------------------------
+| Tenant Routes
+|--------------------------------------------------------------------------
+|
+| These routes are loaded by the TenancyServiceProvider and are scoped
+| to tenant domains. They use the InitializeTenancyByDomainOrSubdomain
+| middleware to identify and initialize the correct tenant context.
+|
+*/
+
+Route::middleware([
+    'web',
+    InitializeTenancyByDomainOrSubdomain::class,
+    PreventAccessFromCentralDomains::class,
+    TenantIsReady::class,
+])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Public Tenant Routes
+    |--------------------------------------------------------------------------
+    |
+    | Routes that don't require authentication within the tenant context.
+    | Examples: tenant landing pages, invite acceptance, public webhooks.
+    |
+    */
+
+    Route::get('/', function () {
+        return view('tenant.welcome', [
+            'tenant' => tenant(),
+        ]);
+    })->name('tenant.home');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authenticated Tenant Routes
+    |--------------------------------------------------------------------------
+    |
+    | Routes that require the user to be authenticated within the tenant.
+    |
+    */
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+
+        Route::get('/dashboard', function () {
+            return view('tenant.dashboard', [
+                'tenant' => tenant(),
+                'user' => auth()->user(),
+            ]);
+        })->name('tenant.dashboard');
+
+        // Add your tenant-specific authenticated routes here
+        // Example:
+        // Route::resource('projects', ProjectController::class);
+        // Route::resource('tasks', TaskController::class);
+
+    });
+
+});

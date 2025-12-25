@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Middleware to check if the current tenant is ready for use.
+ *
+ * This middleware checks the tenant's 'ready' flag to determine if the tenant's
+ * database has been fully provisioned and seeded. If not ready, it redirects
+ * to a "tenant provisioning" page.
+ */
+class TenantIsReady
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        $tenant = tenant();
+
+        // If no tenant context or tenant is ready, proceed
+        if (! $tenant || $tenant->ready) {
+            return $next($request);
+        }
+
+        // Tenant is not ready - show provisioning page or redirect
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Tenant is being provisioned. Please try again shortly.',
+                'status' => 'provisioning',
+            ], 503);
+        }
+
+        // For web requests, you can render a provisioning page
+        // return Inertia::render('tenant/provisioning')->toResponse($request);
+
+        // Or redirect to a waiting page
+        return response()->view('tenant.provisioning', [
+            'tenant' => $tenant,
+        ], 503);
+    }
+}
