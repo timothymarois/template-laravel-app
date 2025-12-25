@@ -82,7 +82,6 @@ export const useShowcaseNav = () => {
                 { label: 'Select', href: '/admin/components/forms/select' },
                 { label: 'Slider', href: '/admin/components/forms/slider' },
                 { label: 'Switch', href: '/admin/components/forms/switch' },
-                { label: 'Tags Input', href: '/admin/components/forms/tags-input' },
                 { label: 'Textarea', href: '/admin/components/forms/textarea' },
                 { label: 'Upload', href: '/admin/components/forms/upload' },
             ],
@@ -151,7 +150,6 @@ export const useShowcaseNav = () => {
         { title: 'Select', href: '/admin/components/forms/select' },
         { title: 'Slider', href: '/admin/components/forms/slider' },
         { title: 'Switch', href: '/admin/components/forms/switch' },
-        { title: 'Tags Input', href: '/admin/components/forms/tags-input' },
         { title: 'Textarea', href: '/admin/components/forms/textarea' },
         { title: 'Upload', href: '/admin/components/forms/upload' },
     ];

@@ -1,7 +1,8 @@
 <template>
     <LayoutApp
         title="Components - Tags Input"
-        pageTitle="Tags Input"
+        pageTitle="Input"
+        :pageTabs="pageTabs"
         :pageSidebarItems="sidebarItems"
         pageSidebarTitle="Components"
     >
@@ -302,10 +303,16 @@ import {
     TagsInputItemDelete,
     TagsInputItemText,
 } from '@/components/ui/tags-input';
-import { useShowcaseNav } from '../_composables/useShowcaseNav';
+import { useShowcaseNav } from '../../_composables/useShowcaseNav';
 import { toast } from 'vue-sonner';
 
 const { sidebarItems } = useShowcaseNav();
+
+const pageTabs = [
+    { href: '/admin/components/forms/input', title: 'Input' },
+    { href: '/admin/components/forms/input/masks', title: 'Mask Input' },
+    { href: '/admin/components/forms/input/tags', title: 'Tags Input' },
+];
 
 // Basic examples
 const emptyTags = ref<string[]>([]);

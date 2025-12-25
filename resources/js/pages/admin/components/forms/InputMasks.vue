@@ -500,7 +500,8 @@ const { sidebarItems } = useShowcaseNav();
 
 const pageTabs = [
     { href: '/admin/components/forms/input', title: 'Input' },
-    { href: '/admin/components/forms/input/masks', title: 'Input Masks' },
+    { href: '/admin/components/forms/input/masks', title: 'Mask Input' },
+    { href: '/admin/components/forms/input/tags', title: 'Tags Input' },
 ];
 
 // Input States

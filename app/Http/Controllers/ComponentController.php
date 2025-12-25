@@ -89,9 +89,9 @@ class ComponentController extends Controller
         return $this->inertia->render('admin/components/forms/Upload');
     }
 
-    public function formsTagsInput(): Response
+    public function formsInputTags(): Response
     {
-        return $this->inertia->render('admin/components/forms/TagsInput');
+        return $this->inertia->render('admin/components/forms/input/Tags');
     }
 
     // Actions

@@ -20,7 +20,7 @@ Route::get('/forms/calendar/date-input', [ComponentController::class, 'formsCale
 Route::get('/forms/calendar/date-range-input', [ComponentController::class, 'formsCalendarDateRangeInput'])->name('forms.calendar.date-range-input');
 Route::get('/forms/editor', [ComponentController::class, 'formsEditor'])->name('forms.editor');
 Route::get('/forms/upload', [ComponentController::class, 'formsUpload'])->name('forms.upload');
-Route::get('/forms/tags-input', [ComponentController::class, 'formsTagsInput'])->name('forms.tags-input');
+Route::get('/forms/input/tags', [ComponentController::class, 'formsInputTags'])->name('forms.input.tags');
 
 // Actions
 Route::get('/actions', [ComponentController::class, 'actionsIndex'])->name('actions');
