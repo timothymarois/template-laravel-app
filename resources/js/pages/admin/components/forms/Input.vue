@@ -2,6 +2,7 @@
     <LayoutApp
         title="Components - Input"
         pageTitle="Input"
+        :pageTabs="pageTabs"
         :pageSidebarItems="sidebarItems"
         pageSidebarTitle="Components"
     >
@@ -220,6 +221,11 @@ import { Search, Mail, User, Lock } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();
+
+const pageTabs = [
+    { href: '/admin/components/forms/input', title: 'Input' },
+    { href: '/admin/components/forms/input/masks', title: 'Input Masks' },
+];
 
 // Input states
 const inputValue = ref('Hello world');

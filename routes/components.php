@@ -8,6 +8,7 @@ Route::get('/', [ComponentController::class, 'index'])->name('index');
 // Forms
 Route::get('/forms', [ComponentController::class, 'formsIndex'])->name('forms');
 Route::get('/forms/input', [ComponentController::class, 'formsInput'])->name('forms.input');
+Route::get('/forms/input/masks', [ComponentController::class, 'formsInputMasks'])->name('forms.input.masks');
 Route::get('/forms/textarea', [ComponentController::class, 'formsTextarea'])->name('forms.textarea');
 Route::get('/forms/select', [ComponentController::class, 'formsSelect'])->name('forms.select');
 Route::get('/forms/checkbox', [ComponentController::class, 'formsCheckbox'])->name('forms.checkbox');

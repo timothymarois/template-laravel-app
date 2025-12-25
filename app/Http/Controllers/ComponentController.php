@@ -29,6 +29,11 @@ class ComponentController extends Controller
         return $this->inertia->render('admin/components/forms/Input');
     }
 
+    public function formsInputMasks(): Response
+    {
+        return $this->inertia->render('admin/components/forms/InputMasks');
+    }
+
     public function formsTextarea(): Response
     {
         return $this->inertia->render('admin/components/forms/Textarea');
