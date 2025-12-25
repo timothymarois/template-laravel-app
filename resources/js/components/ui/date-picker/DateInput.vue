@@ -54,8 +54,8 @@ import { Input } from '@/components/ui/input';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Calendar as CalendarIcon, X } from 'lucide-vue-next';
-import { CalendarDate } from '@internationalized/date';
 import { formatDateValue } from '@/utils/format';
+import { formatDateInput, parseDateInput } from './dateInput';
 
 interface Props {
     modelValue?: DateValue;
@@ -106,49 +106,13 @@ watch(() => props.modelValue, (newVal) => {
     }
 });
 
-// Parse and validate date string (MM/DD/YYYY)
-function parseDate(str: string): DateValue | null {
-    const cleaned = str.replace(/[^\d/]/g, '');
-    const parts = cleaned.split('/');
-
-    if (parts.length !== 3) return null;
-
-    const month = parseInt(parts[0], 10);
-    const day = parseInt(parts[1], 10);
-    const year = parseInt(parts[2], 10);
-
-    if (isNaN(month) || isNaN(day) || isNaN(year)) return null;
-    if (month < 1 || month > 12) return null;
-    if (day < 1 || day > 31) return null;
-    if (year < 1900 || year > 2100) return null;
-
-    const daysInMonth = new Date(year, month, 0).getDate();
-    if (day > daysInMonth) return null;
-
-    try {
-        return new CalendarDate(year, month, day);
-    } catch {
-        return null;
-    }
-}
-
-// Format input with auto-slashes (max 10 chars: MM/DD/YYYY)
-function formatInput(value: string): string {
-    const digits = value.replace(/\D/g, '');
-    const limited = digits.slice(0, 8);
-
-    if (limited.length <= 2) return limited;
-    if (limited.length <= 4) return `${limited.slice(0, 2)}/${limited.slice(2)}`;
-    return `${limited.slice(0, 2)}/${limited.slice(2, 4)}/${limited.slice(4)}`;
-}
-
 function onInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    const formatted = formatInput(target.value);
+    const formatted = formatDateInput(target.value);
     inputValue.value = formatted;
 
     if (formatted.length === 10) {
-        const parsed = parseDate(formatted);
+        const parsed = parseDateInput(formatted);
         if (parsed) {
             // Check if date is disabled
             if (props.isDateDisabled?.(parsed)) {
@@ -174,7 +138,7 @@ function onBlur() {
     if (inputValue.value.length > 0 && inputValue.value.length < 10) {
         isValid.value = false;
     } else if (inputValue.value.length === 10) {
-        const parsed = parseDate(inputValue.value);
+        const parsed = parseDateInput(inputValue.value);
         if (parsed && props.isDateDisabled?.(parsed)) {
             isValid.value = false;
         } else {
