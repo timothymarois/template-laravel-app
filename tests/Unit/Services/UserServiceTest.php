@@ -16,7 +16,10 @@ it('searches users by name and email', function () {
         'email' => 'jane@example.com',
     ]);
 
-    User::factory()->create();
+    User::factory()->create([
+        'name' => 'Alex Smith',
+        'email' => 'alex@example.com',
+    ]);
 
     $service = app(UserService::class);
 
