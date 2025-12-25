@@ -45,6 +45,11 @@ class SetupTenancy extends Command
     protected string $stubPath;
 
     /**
+     * The backup directory path.
+     */
+    protected string $backupPath;
+
+    /**
      * Create a new command instance.
      */
     public function __construct(Filesystem $files)
@@ -53,6 +58,7 @@ class SetupTenancy extends Command
 
         $this->files = $files;
         $this->stubPath = base_path('stubs/tenancy');
+        $this->backupPath = storage_path('tenancy-backups');
     }
 
     /**
@@ -98,6 +104,7 @@ class SetupTenancy extends Command
         $steps = [
             'installPackage' => 'Installing stancl/tenancy package',
             'createDirectories' => 'Creating directories',
+            'backupOriginalFiles' => 'Backing up original files',
             'publishModels' => 'Publishing models',
             'publishServices' => 'Publishing services',
             'publishJobs' => 'Publishing jobs',
@@ -105,12 +112,15 @@ class SetupTenancy extends Command
             'publishProvider' => 'Publishing service provider',
             'publishConfig' => 'Publishing configuration',
             'publishMiddleware' => 'Publishing middleware',
-            'publishRoutes' => 'Publishing routes',
+            'publishRoutes' => 'Publishing tenant routes',
+            'publishTenantsRoutes' => 'Publishing tenant selection routes',
             'publishPages' => 'Publishing Vue pages',
             'publishController' => 'Publishing TenantController',
             'updateBootstrapProviders' => 'Updating bootstrap providers',
+            'updateBootstrapApp' => 'Updating bootstrap/app.php for routes',
             'updateDatabaseConfig' => 'Updating database configuration',
             'convertUserModel' => 'Converting User model to CentralUser',
+            'updateRegisterController' => 'Updating RegisterController for tenancy',
             'updateEnvExample' => 'Updating .env.example',
         ];
 
@@ -210,11 +220,35 @@ class SetupTenancy extends Command
             database_path('migrations/tenant'),
             resource_path('js/pages/tenant'),
             resource_path('js/pages/tenants'),
+            $this->backupPath,
         ];
 
         foreach ($directories as $directory) {
             if (! $this->files->isDirectory($directory)) {
                 $this->files->makeDirectory($directory, 0755, true);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Backup original files before modification.
+     */
+    protected function backupOriginalFiles(): bool
+    {
+        $filesToBackup = [
+            app_path('Models/User.php') => 'User.php.bak',
+            app_path('Http/Controllers/Auth/RegisterController.php') => 'RegisterController.php.bak',
+            base_path('bootstrap/providers.php') => 'providers.php.bak',
+            base_path('bootstrap/app.php') => 'app.php.bak',
+            config_path('database.php') => 'database.php.bak',
+            base_path('.env.example') => 'env.example.bak',
+        ];
+
+        foreach ($filesToBackup as $source => $backupName) {
+            if ($this->files->exists($source)) {
+                $this->files->copy($source, "{$this->backupPath}/{$backupName}");
             }
         }
 
@@ -335,13 +369,24 @@ class SetupTenancy extends Command
     }
 
     /**
-     * Publish the tenant routes file.
+     * Publish the tenant routes file (for subdomain routes).
      */
     protected function publishRoutes(): bool
     {
         return $this->publishStub(
             'routes/tenant.php.stub',
             base_path('routes/tenant.php')
+        );
+    }
+
+    /**
+     * Publish the tenant selection routes file (for central domain).
+     */
+    protected function publishTenantsRoutes(): bool
+    {
+        return $this->publishStub(
+            'routes/tenants.php.stub',
+            base_path('routes/tenants.php')
         );
     }
 
@@ -412,7 +457,7 @@ PHP;
     }
 
     /**
-     * Update bootstrap/app.php to load tenant routes.
+     * Update bootstrap/app.php to load tenancy routes.
      */
     protected function updateBootstrapApp(): bool
     {
@@ -441,8 +486,25 @@ PHP;
 
             // Check if 'then:' callback already exists
             if (! Str::contains($routingContent, 'then:')) {
-                // Add then callback for tenant routes
-                $newRoutingContent = rtrim($routingContent, ", \n\t").",\n        then: function () {\n            // Load tenant routes when tenancy is configured\n            if (file_exists(config_path('tenancy.php')) && file_exists(base_path('routes/tenant.php'))) {\n                Route::middleware(['web'])->group(base_path('routes/tenant.php'));\n            }\n        },\n    ";
+                // Add then callback for tenancy routes
+                $thenCallback = <<<'CALLBACK'
+,
+        then: function () {
+            // Load tenancy routes when tenancy is configured
+            if (file_exists(config_path('tenancy.php'))) {
+                // Central domain tenant selection routes
+                if (file_exists(base_path('routes/tenants.php'))) {
+                    require base_path('routes/tenants.php');
+                }
+                // Subdomain tenant routes
+                if (file_exists(base_path('routes/tenant.php'))) {
+                    Route::middleware(['web'])->group(base_path('routes/tenant.php'));
+                }
+            }
+        },
+
+CALLBACK;
+                $newRoutingContent = rtrim($routingContent, ", \n\t").$thenCallback;
 
                 $content = str_replace($routingContent, $newRoutingContent, $content);
             }
@@ -543,6 +605,17 @@ PHP;
         $this->files->put($userPath, $userContent);
 
         return true;
+    }
+
+    /**
+     * Update RegisterController for tenancy support.
+     */
+    protected function updateRegisterController(): bool
+    {
+        return $this->publishStub(
+            'controllers/RegisterController.php.stub',
+            app_path('Http/Controllers/Auth/RegisterController.php')
+        );
     }
 
     /**
@@ -669,10 +742,14 @@ ENV;
             'removePages' => 'Removing Vue pages',
             'removeController' => 'Removing TenantController',
             'restoreBootstrapProviders' => 'Restoring bootstrap providers',
-            'removeDatabaseConfig' => 'Removing tenant database config',
+            'restoreBootstrapApp' => 'Restoring bootstrap app',
+            'removeDatabaseConfig' => 'Restoring database config',
             'restoreUserModel' => 'Restoring User model',
-            'removeEnvVariables' => 'Removing env variables',
+            'restoreRegisterController' => 'Restoring RegisterController',
+            'removeEnvVariables' => 'Restoring env variables',
+            'removeComposerPackage' => 'Removing tenancy package',
             'resetDatabase' => 'Resetting database',
+            'cleanupBackups' => 'Cleaning up backup files',
         ];
 
         $currentStep = 0;
@@ -824,13 +901,19 @@ ENV;
     }
 
     /**
-     * Remove tenant routes file.
+     * Remove tenant routes files.
      */
     protected function removeRoutes(): bool
     {
-        $path = base_path('routes/tenant.php');
-        if ($this->files->exists($path)) {
-            $this->files->delete($path);
+        $files = [
+            base_path('routes/tenant.php'),
+            base_path('routes/tenants.php'),
+        ];
+
+        foreach ($files as $path) {
+            if ($this->files->exists($path)) {
+                $this->files->delete($path);
+            }
         }
 
         return true;
@@ -869,154 +952,135 @@ ENV;
     }
 
     /**
-     * Restore bootstrap/providers.php to original state.
+     * Restore bootstrap/providers.php from backup.
      */
     protected function restoreBootstrapProviders(): bool
     {
         $path = base_path('bootstrap/providers.php');
+        $backupPath = "{$this->backupPath}/providers.php.bak";
 
-        $originalContent = <<<'PHP'
-<?php
-
-return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-];
-
-PHP;
-
-        $this->files->put($path, $originalContent);
+        if ($this->files->exists($backupPath)) {
+            $this->files->copy($backupPath, $path);
+        }
 
         return true;
     }
 
     /**
-     * Remove tenant connection from database config.
+     * Restore bootstrap/app.php from backup.
+     */
+    protected function restoreBootstrapApp(): bool
+    {
+        $path = base_path('bootstrap/app.php');
+        $backupPath = "{$this->backupPath}/app.php.bak";
+
+        if ($this->files->exists($backupPath)) {
+            $this->files->copy($backupPath, $path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Restore database config from backup.
      */
     protected function removeDatabaseConfig(): bool
     {
         $path = config_path('database.php');
-        $content = $this->files->get($path);
+        $backupPath = "{$this->backupPath}/database.php.bak";
 
-        // Remove the tenant connection block
-        $pattern = "/\s*'tenant'\s*=>\s*\[[^\]]+\],/s";
-        $content = preg_replace($pattern, '', $content);
-
-        $this->files->put($path, $content);
+        if ($this->files->exists($backupPath)) {
+            $this->files->copy($backupPath, $path);
+        }
 
         return true;
     }
 
     /**
-     * Restore User model to standalone class.
+     * Restore User model from backup.
      */
     protected function restoreUserModel(): bool
     {
         $userPath = app_path('Models/User.php');
+        $backupPath = "{$this->backupPath}/User.php.bak";
 
-        // Restore original User model from stub
-        $stubPath = base_path('stubs/default/models/User.php.stub');
-
-        if ($this->files->exists($stubPath)) {
-            $this->files->copy($stubPath, $userPath);
-        } else {
-            // Create a basic User model
-            $userContent = <<<'PHP'
-<?php
-
-declare(strict_types=1);
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable
-{
-    use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'timezone',
-        'is_active',
-        'last_seen_at',
-        'last_ip_address',
-        'last_user_agent',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'is_active' => 'boolean',
-            'last_seen_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    /**
-     * Check if the user is currently online (seen within last 5 minutes).
-     */
-    public function isOnline(): bool
-    {
-        /** @var \Illuminate\Support\Carbon|null $lastSeen */
-        $lastSeen = $this->last_seen_at;
-
-        return $lastSeen !== null && $lastSeen->greaterThan(now()->subMinutes(5));
-    }
-}
-
-PHP;
-
-            $this->files->put($userPath, $userContent);
+        if ($this->files->exists($backupPath)) {
+            $this->files->copy($backupPath, $userPath);
         }
 
         return true;
     }
 
     /**
-     * Remove tenancy variables from .env.example.
+     * Restore .env.example from backup.
      */
     protected function removeEnvVariables(): bool
     {
         $path = base_path('.env.example');
+        $backupPath = "{$this->backupPath}/env.example.bak";
 
-        if (! $this->files->exists($path)) {
+        if ($this->files->exists($backupPath)) {
+            $this->files->copy($backupPath, $path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Restore the original RegisterController from backup.
+     */
+    protected function restoreRegisterController(): bool
+    {
+        $path = app_path('Http/Controllers/Auth/RegisterController.php');
+        $backupPath = "{$this->backupPath}/RegisterController.php.bak";
+
+        if ($this->files->exists($backupPath)) {
+            $this->files->copy($backupPath, $path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove the tenancy composer package.
+     */
+    protected function removeComposerPackage(): bool
+    {
+        // Check if package is installed
+        $composerJson = json_decode($this->files->get(base_path('composer.json')), true);
+        $packages = array_merge(
+            $composerJson['require'] ?? [],
+            $composerJson['require-dev'] ?? []
+        );
+
+        if (! isset($packages['stancl/tenancy'])) {
             return true;
         }
 
-        $content = $this->files->get($path);
+        // Remove the package
+        $process = proc_open(
+            'composer remove stancl/tenancy',
+            [
+                0 => ['pipe', 'r'],
+                1 => ['pipe', 'w'],
+                2 => ['pipe', 'w'],
+            ],
+            $pipes,
+            base_path()
+        );
 
-        // Remove the tenancy section
-        $content = preg_replace('/\n*# Multi-Tenancy\nTENANCY_ENABLED=.*\nAPP_DOMAIN=.*\nTENANCY_DB_PREFIX=.*\nTENANCY_QUEUE_CREATION=.*\nTENANCY_QUEUE_DELETION=.*/s', '', $content);
+        if (is_resource($process)) {
+            fclose($pipes[0]);
+            stream_get_contents($pipes[1]);
+            stream_get_contents($pipes[2]);
+            fclose($pipes[1]);
+            fclose($pipes[2]);
+            $exitCode = proc_close($process);
 
-        $this->files->put($path, $content);
+            return $exitCode === 0;
+        }
 
-        return true;
+        return false;
     }
 
     /**
@@ -1025,6 +1089,18 @@ PHP;
     protected function resetDatabase(): bool
     {
         $this->call('start:fresh', ['--non-interactive' => true]);
+
+        return true;
+    }
+
+    /**
+     * Clean up backup files after successful rollback.
+     */
+    protected function cleanupBackups(): bool
+    {
+        if ($this->files->isDirectory($this->backupPath)) {
+            $this->files->deleteDirectory($this->backupPath);
+        }
 
         return true;
     }

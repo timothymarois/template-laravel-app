@@ -35,6 +35,7 @@ _ide_helper_models.php
 !.vscode/*.code-snippets
 
 /storage/truncated_code.txt
+/storage/tenancy-backups
 
 # Intellij idea
 *.iml
