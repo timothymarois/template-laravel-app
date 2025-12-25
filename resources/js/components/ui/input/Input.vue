@@ -6,12 +6,13 @@
         >
             <slot name="icon" />
         </span>
-        <Input
+        <InputBase
             ref="inputRef"
             :type="type"
             :modelValue="displayValue"
             :placeholder="placeholder"
             :disabled="disabled"
+            :maxlength="computedMaxLength"
             :class="[
                 fluid ? 'w-full' : '',
                 invalid ? 'border-destructive focus-visible:ring-destructive' : '',
@@ -22,8 +23,6 @@
             ]"
             v-bind="$attrs"
             @update:modelValue="handleInput"
-            @focus="handleFocus"
-            @blur="handleBlur"
         />
         <button
             v-if="clearable && modelValue"
@@ -38,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { InputBase as Input } from '@/components/ui/input';
+import { InputBase } from '@/components/ui/input';
 import { X } from 'lucide-vue-next';
 import type { InputFormatter } from '@/utils';
 
@@ -56,14 +55,13 @@ interface Props {
     clearable?: boolean;
     size?: 'small' | 'large' | 'default';
     class?: string;
+    maxlength?: number | string;
     /**
-     * Input formatter for visual formatting.
-     * Formats the value on blur, shows raw value on focus for easy editing.
+     * Custom input formatter for text transformations.
      *
      * @example
      * ```vue
-     * <Input v-model="price" :formatter="currencyFormatter()" />
-     * <!-- Blurred: 1,234.00 | Focused: 1234.00 | v-model: 1234.00 -->
+     * <Input v-model="code" :formatter="uppercaseFormatter()" />
      * ```
      */
     formatter?: InputFormatter;
@@ -78,54 +76,38 @@ const emit = defineEmits<{
     'update:modelValue': [value: string | number | null];
 }>();
 
-const inputRef = ref<InstanceType<typeof Input> | null>(null);
-const isFocused = ref(false);
+const inputRef = ref<InstanceType<typeof InputBase> | null>(null);
 
 /**
- * Display value logic:
- * - When focused: show raw value for easy editing
- * - When blurred: show formatted value
+ * Compute maxlength from formatter if available.
  */
-const displayValue = computed(() => {
-    if (!props.formatter) {
-        return props.modelValue;
+const computedMaxLength = computed(() => {
+    if (props.formatter && props.formatter.maxLength !== Infinity) {
+        return props.formatter.maxLength;
     }
-
-    // When focused, show raw value for editing
-    if (isFocused.value) {
-        return props.modelValue ?? '';
-    }
-
-    // When blurred, show formatted value
-    return props.formatter.format(props.modelValue);
+    return props.maxlength;
 });
 
 /**
- * Handle input - parse value when formatter is present.
+ * Display value - apply formatter if provided.
+ */
+const displayValue = computed(() => {
+    if (props.formatter) {
+        return props.formatter.format(props.modelValue);
+    }
+    return props.modelValue ?? '';
+});
+
+/**
+ * Handle input - parse with formatter if provided.
  */
 const handleInput = (value: string | number) => {
     if (!props.formatter) {
         emit('update:modelValue', value);
         return;
     }
-
-    // Parse the input to get the raw value
     const rawValue = props.formatter.parse(String(value));
     emit('update:modelValue', rawValue);
-};
-
-/**
- * Handle focus - switch to raw value display.
- */
-const handleFocus = () => {
-    isFocused.value = true;
-};
-
-/**
- * Handle blur - switch to formatted value display.
- */
-const handleBlur = () => {
-    isFocused.value = false;
 };
 
 /**
@@ -142,7 +124,7 @@ const computedSizeClass = computed(() => {
 });
 
 /**
- * Expose the input element for external access (e.g., focus).
+ * Expose the input element for external access.
  */
 defineExpose({
     inputRef,
