@@ -25,6 +25,9 @@
                 <Calendar
                     :model-value="modelValue"
                     :isDateDisabled="isDateDisabled"
+                    :quick-navigation="quickNavigation"
+                    :min-year="minYear"
+                    :max-year="maxYear"
                     @update:model-value="onSelect"
                 />
             </PopoverContent>
@@ -60,6 +63,12 @@ interface Props {
     fluid?: boolean;
     align?: 'start' | 'center' | 'end';
     isDateDisabled?: (date: DateValue) => boolean;
+    /** Enable month/year dropdown navigation for quick jumping to dates */
+    quickNavigation?: boolean;
+    /** Minimum year for quick navigation dropdown */
+    minYear?: number;
+    /** Maximum year for quick navigation dropdown */
+    maxYear?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -69,6 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
     invalid: false,
     fluid: false,
     align: 'start',
+    quickNavigation: false,
 });
 
 const emit = defineEmits<{

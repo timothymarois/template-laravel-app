@@ -69,9 +69,14 @@ class ComponentController extends Controller
         return $this->inertia->render('admin/components/forms/Fields');
     }
 
-    public function formsCalendar(): Response
+    public function formsCalendarDateInput(): Response
     {
-        return $this->inertia->render('admin/components/forms/Calendar');
+        return $this->inertia->render('admin/components/forms/calendar/DateInput');
+    }
+
+    public function formsCalendarDateRangeInput(): Response
+    {
+        return $this->inertia->render('admin/components/forms/calendar/DateRangeInput');
     }
 
     public function formsEditor(): Response

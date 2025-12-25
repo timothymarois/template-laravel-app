@@ -60,6 +60,9 @@
                             :model-value="internalValue"
                             :isDateDisabled="isDateDisabled"
                             :numberOfMonths="numberOfMonths"
+                            :quick-navigation="quickNavigation"
+                            :min-year="minYear"
+                            :max-year="maxYear"
                             @update:model-value="onCalendarSelect"
                         />
 
@@ -132,6 +135,12 @@ interface Props {
      * Useful when you want users to confirm their selection before applying.
      */
     confirmMode?: boolean;
+    /** Enable month/year dropdown navigation for quick jumping to dates */
+    quickNavigation?: boolean;
+    /** Minimum year for quick navigation dropdown */
+    minYear?: number;
+    /** Maximum year for quick navigation dropdown */
+    maxYear?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -144,6 +153,7 @@ const props = withDefaults(defineProps<Props>(), {
     numberOfMonths: 2,
     presets: false,
     confirmMode: false,
+    quickNavigation: false,
 });
 
 const emit = defineEmits<{

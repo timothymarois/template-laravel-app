@@ -73,7 +73,7 @@ export const useShowcaseNav = () => {
             icon: FormInput,
             children: [
                 { label: 'Overview', href: '/admin/components/forms' },
-                { label: 'Calendar', href: '/admin/components/forms/calendar' },
+                { label: 'Calendar', href: '/admin/components/forms/calendar/date-input', parent: '/admin/components/forms/calendar' },
                 { label: 'Checkbox', href: '/admin/components/forms/checkbox' },
                 { label: 'Combobox', href: '/admin/components/forms/combobox' },
                 { label: 'Editor', href: '/admin/components/forms/editor' },
@@ -142,7 +142,7 @@ export const useShowcaseNav = () => {
 
     const formsTabs = [
         { title: 'Overview', href: '/admin/components/forms' },
-        { title: 'Calendar', href: '/admin/components/forms/calendar' },
+        { title: 'Calendar', href: '/admin/components/forms/calendar/date-input', parent: '/admin/components/forms/calendar' },
         { title: 'Checkbox', href: '/admin/components/forms/checkbox' },
         { title: 'Combobox', href: '/admin/components/forms/combobox' },
         { title: 'Editor', href: '/admin/components/forms/editor' },

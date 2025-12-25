@@ -16,7 +16,8 @@ Route::get('/forms/combobox', [ComponentController::class, 'formsCombobox'])->na
 Route::get('/forms/switch', [ComponentController::class, 'formsSwitch'])->name('forms.switch');
 Route::get('/forms/slider', [ComponentController::class, 'formsSlider'])->name('forms.slider');
 Route::get('/forms/fields', [ComponentController::class, 'formsFields'])->name('forms.fields');
-Route::get('/forms/calendar', [ComponentController::class, 'formsCalendar'])->name('forms.calendar');
+Route::get('/forms/calendar/date-input', [ComponentController::class, 'formsCalendarDateInput'])->name('forms.calendar.date-input');
+Route::get('/forms/calendar/date-range-input', [ComponentController::class, 'formsCalendarDateRangeInput'])->name('forms.calendar.date-range-input');
 Route::get('/forms/editor', [ComponentController::class, 'formsEditor'])->name('forms.editor');
 Route::get('/forms/upload', [ComponentController::class, 'formsUpload'])->name('forms.upload');
 Route::get('/forms/tags-input', [ComponentController::class, 'formsTagsInput'])->name('forms.tags-input');
