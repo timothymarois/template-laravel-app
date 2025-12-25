@@ -4,7 +4,7 @@ import {
     lowercaseFormatter,
     createFormatter,
     type InputFormatter,
-} from '@/utils/format/inputFormatters';
+} from '@/components/ui/input/formatters';
 
 // ============================================
 // UPPERCASE FORMATTER

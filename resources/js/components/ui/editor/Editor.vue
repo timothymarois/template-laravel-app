@@ -26,6 +26,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import EditorToolbar from './Toolbar.vue';
 import { computed, watch } from 'vue';
+import { resolveExtensions } from './resolveExtensions';
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -106,40 +107,35 @@ const props = defineProps({
 
 // Build the extensions array based on props
 const resolvedExtensions = computed(() => {
-    // If replacing all extensions, use only what's provided
-    if (props.replaceExtensions && props.extensions) {
-        return props.extensions;
-    }
+    const textOnlyDefaults = [
+        Document,
+        Paragraph,
+        Text,
+        HardBreak,
+        Placeholder.configure({
+            placeholder: props.placeholder,
+        }),
+    ];
 
-    // Default extensions based on textOnly mode
-    const defaultExtensions = props.textOnly
-        ? [
-            Document,
-            Paragraph,
-            Text,
-            HardBreak,
-            Placeholder.configure({
-                placeholder: props.placeholder,
-            }),
-        ]
-        : [
-            StarterKit.configure({
-                link: {
-                    openOnClick: false,
-                    defaultProtocol: 'https',
-                },
-            }),
-            Placeholder.configure({
-                placeholder: props.placeholder,
-            }),
-        ];
+    const fullDefaults = [
+        StarterKit.configure({
+            link: {
+                openOnClick: false,
+                defaultProtocol: 'https',
+            },
+        }),
+        Placeholder.configure({
+            placeholder: props.placeholder,
+        }),
+    ];
 
-    // Merge with custom extensions if provided
-    if (props.extensions && props.extensions.length > 0) {
-        return [...defaultExtensions, ...props.extensions];
-    }
-
-    return defaultExtensions;
+    return resolveExtensions({
+        customExtensions: props.extensions,
+        replaceDefaults: props.replaceExtensions,
+        textOnlyDefaults,
+        fullDefaults,
+        textOnly: props.textOnly,
+    });
 });
 
 const editorInstance = useEditor({

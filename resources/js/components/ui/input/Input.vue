@@ -39,7 +39,7 @@
 import { computed, ref } from 'vue';
 import { InputBase } from '@/components/ui/input';
 import { X } from 'lucide-vue-next';
-import type { InputFormatter } from '@/utils';
+import type { InputFormatter } from './formatters';
 
 defineOptions({
     inheritAttrs: false,

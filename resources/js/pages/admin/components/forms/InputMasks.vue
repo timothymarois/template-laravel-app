@@ -485,15 +485,16 @@ const slugFormatter = createFormatter(
 import { ref } from 'vue';
 import { AppLayout as LayoutApp } from '@/components/app';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Input, MaskInput } from '@/components/ui/input';
-import { LabelField } from '@/components/ui/label';
-import { CreditCard, Calendar, Clock, Phone } from 'lucide-vue-next';
-import { useShowcaseNav } from '../_composables/useShowcaseNav';
 import {
+    Input,
+    MaskInput,
     uppercaseFormatter,
     lowercaseFormatter,
     createFormatter,
-} from '@/utils';
+} from '@/components/ui/input';
+import { LabelField } from '@/components/ui/label';
+import { CreditCard, Calendar, Clock, Phone } from 'lucide-vue-next';
+import { useShowcaseNav } from '../_composables/useShowcaseNav';
 
 const { sidebarItems } = useShowcaseNav();
 
