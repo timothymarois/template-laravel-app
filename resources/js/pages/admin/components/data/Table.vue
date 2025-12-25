@@ -48,62 +48,15 @@
                                         />
                                     </TableHead>
                                     <TableHead
-                                        v-if="isUserColumnVisible('name')"
+                                        v-for="column in visibleUserColumns"
+                                        :key="column.key"
                                         class="cursor-pointer select-none hover:bg-muted/50"
-                                        @click="toggleSort('name')"
+                                        @click="toggleSort(column.key)"
                                     >
                                         <div class="flex items-center gap-1">
-                                            Name
-                                            <ArrowUp v-if="sortColumn === 'name' && sortDirection === 'asc'" class="size-4" />
-                                            <ArrowDown v-else-if="sortColumn === 'name' && sortDirection === 'desc'" class="size-4" />
-                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
-                                        </div>
-                                    </TableHead>
-                                    <TableHead
-                                        v-if="isUserColumnVisible('email')"
-                                        class="cursor-pointer select-none hover:bg-muted/50"
-                                        @click="toggleSort('email')"
-                                    >
-                                        <div class="flex items-center gap-1">
-                                            Email
-                                            <ArrowUp v-if="sortColumn === 'email' && sortDirection === 'asc'" class="size-4" />
-                                            <ArrowDown v-else-if="sortColumn === 'email' && sortDirection === 'desc'" class="size-4" />
-                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
-                                        </div>
-                                    </TableHead>
-                                    <TableHead
-                                        v-if="isUserColumnVisible('role')"
-                                        class="cursor-pointer select-none hover:bg-muted/50"
-                                        @click="toggleSort('role')"
-                                    >
-                                        <div class="flex items-center gap-1">
-                                            Role
-                                            <ArrowUp v-if="sortColumn === 'role' && sortDirection === 'asc'" class="size-4" />
-                                            <ArrowDown v-else-if="sortColumn === 'role' && sortDirection === 'desc'" class="size-4" />
-                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
-                                        </div>
-                                    </TableHead>
-                                    <TableHead
-                                        v-if="isUserColumnVisible('department')"
-                                        class="cursor-pointer select-none hover:bg-muted/50"
-                                        @click="toggleSort('department')"
-                                    >
-                                        <div class="flex items-center gap-1">
-                                            Department
-                                            <ArrowUp v-if="sortColumn === 'department' && sortDirection === 'asc'" class="size-4" />
-                                            <ArrowDown v-else-if="sortColumn === 'department' && sortDirection === 'desc'" class="size-4" />
-                                            <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
-                                        </div>
-                                    </TableHead>
-                                    <TableHead
-                                        v-if="isUserColumnVisible('status')"
-                                        class="cursor-pointer select-none hover:bg-muted/50"
-                                        @click="toggleSort('status')"
-                                    >
-                                        <div class="flex items-center gap-1">
-                                            Status
-                                            <ArrowUp v-if="sortColumn === 'status' && sortDirection === 'asc'" class="size-4" />
-                                            <ArrowDown v-else-if="sortColumn === 'status' && sortDirection === 'desc'" class="size-4" />
+                                            {{ column.header }}
+                                            <ArrowUp v-if="sortColumn === column.key && sortDirection === 'asc'" class="size-4" />
+                                            <ArrowDown v-else-if="sortColumn === column.key && sortDirection === 'desc'" class="size-4" />
                                             <ArrowUpDown v-else class="size-4 text-muted-foreground/50" />
                                         </div>
                                     </TableHead>
@@ -121,16 +74,22 @@
                                             @update:modelValue="(checked) => toggleUser(user.id, checked)"
                                         />
                                     </TableCell>
-                                    <TableCell v-if="isUserColumnVisible('name')" class="font-medium">{{ user.name }}</TableCell>
-                                    <TableCell v-if="isUserColumnVisible('email')" class="text-muted-foreground">{{ user.email }}</TableCell>
-                                    <TableCell v-if="isUserColumnVisible('role')">
-                                        <Badge variant="outline">{{ user.role }}</Badge>
-                                    </TableCell>
-                                    <TableCell v-if="isUserColumnVisible('department')" class="text-muted-foreground">{{ user.department }}</TableCell>
-                                    <TableCell v-if="isUserColumnVisible('status')">
-                                        <Badge :class="getStatusClass(user.status)">
-                                            {{ user.status }}
-                                        </Badge>
+                                    <TableCell
+                                        v-for="column in visibleUserColumns"
+                                        :key="column.key"
+                                        :class="userColumnCellClasses[column.key] || ''"
+                                    >
+                                        <template v-if="column.key === 'role'">
+                                            <Badge variant="outline">{{ user.role }}</Badge>
+                                        </template>
+                                        <template v-else-if="column.key === 'status'">
+                                            <Badge :class="getStatusClass(user.status)">
+                                                {{ user.status }}
+                                            </Badge>
+                                        </template>
+                                        <template v-else>
+                                            {{ user[column.key] }}
+                                        </template>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -209,24 +168,34 @@
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead v-if="isColumnVisible('order')" class="pl-6">Order</TableHead>
-                                    <TableHead v-if="isColumnVisible('customer')">Customer</TableHead>
-                                    <TableHead v-if="isColumnVisible('date')">Date</TableHead>
-                                    <TableHead v-if="isColumnVisible('status')">Status</TableHead>
-                                    <TableHead v-if="isColumnVisible('amount')" class="text-right pr-6">Amount</TableHead>
+                                    <TableHead
+                                        v-for="column in visibleOrderColumns"
+                                        :key="column.key"
+                                        :class="orderHeaderClasses[column.key] || ''"
+                                    >
+                                        {{ column.header }}
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 <TableRow v-for="order in orders" :key="order.id">
-                                    <TableCell v-if="isColumnVisible('order')" class="pl-6 font-medium">{{ order.id }}</TableCell>
-                                    <TableCell v-if="isColumnVisible('customer')">{{ order.customer }}</TableCell>
-                                    <TableCell v-if="isColumnVisible('date')" class="text-muted-foreground">{{ order.date }}</TableCell>
-                                    <TableCell v-if="isColumnVisible('status')">
-                                        <Badge :class="getOrderStatusClass(order.status)">
-                                            {{ order.status }}
-                                        </Badge>
+                                    <TableCell
+                                        v-for="column in visibleOrderColumns"
+                                        :key="column.key"
+                                        :class="orderCellClasses[column.key] || ''"
+                                    >
+                                        <template v-if="column.key === 'status'">
+                                            <Badge :class="getOrderStatusClass(order.status)">
+                                                {{ order.status }}
+                                            </Badge>
+                                        </template>
+                                        <template v-else-if="column.key === 'order'">
+                                            {{ order.id }}
+                                        </template>
+                                        <template v-else>
+                                            {{ order[column.key] }}
+                                        </template>
                                     </TableCell>
-                                    <TableCell v-if="isColumnVisible('amount')" class="text-right pr-6 font-medium">{{ order.amount }}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
@@ -379,10 +348,21 @@ const userColumnDefs = [
     { key: 'department', header: 'Department' },
     { key: 'status', header: 'Status' },
 ];
+type UserColumnDef = (typeof userColumnDefs)[number];
 const defaultUserColumns = ['name', 'email', 'role', 'status'];
 const activeUserColumns = ref([...defaultUserColumns]);
 
-const isUserColumnVisible = (key: string) => activeUserColumns.value.includes(key);
+const visibleUserColumns = computed(() =>
+    activeUserColumns.value
+        .map(key => userColumnDefs.find(column => column.key === key))
+        .filter((column): column is UserColumnDef => Boolean(column))
+);
+
+const userColumnCellClasses: Record<string, string> = {
+    name: 'font-medium',
+    email: 'text-muted-foreground',
+    department: 'text-muted-foreground',
+};
 
 // Filtered users based on search
 const filteredUsers = computed(() => {
@@ -482,11 +462,27 @@ const orderColumnDefs = [
     { key: 'status', header: 'Status' },
     { key: 'amount', header: 'Amount' },
 ];
+type OrderColumnDef = (typeof orderColumnDefs)[number];
 
 const defaultOrderColumns = ['order', 'customer', 'date', 'status', 'amount'];
 const activeOrderColumns = ref([...defaultOrderColumns]);
 
-const isColumnVisible = (key: string) => activeOrderColumns.value.includes(key);
+const visibleOrderColumns = computed(() =>
+    activeOrderColumns.value
+        .map(key => orderColumnDefs.find(column => column.key === key))
+        .filter((column): column is OrderColumnDef => Boolean(column))
+);
+
+const orderHeaderClasses: Record<string, string> = {
+    order: 'pl-6',
+    amount: 'text-right pr-6',
+};
+
+const orderCellClasses: Record<string, string> = {
+    order: 'pl-6 font-medium',
+    date: 'text-muted-foreground',
+    amount: 'text-right pr-6 font-medium',
+};
 
 const activities = [
     { id: 1, action: 'Created new project', user: 'John Doe', time: '2 min ago', color: 'bg-green-500' },

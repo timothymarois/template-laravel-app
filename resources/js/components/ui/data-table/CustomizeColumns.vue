@@ -31,7 +31,7 @@
                         Visible
                     </div>
                     <draggable
-                        v-model="selectedColumns"
+                        v-model="draggableColumns"
                         item-key="key"
                         group="columns"
                         class="p-2 px-4"
@@ -43,7 +43,7 @@
                     >
                         <template #item="{ element: column }">
                             <div
-                                v-if="!column?.hidden && column.header.toLowerCase().includes(searchColumns.toLowerCase())"
+                                v-if="column.header.toLowerCase().includes(searchColumns.toLowerCase())"
                                 class="flex items-center w-full hover:bg-accent rounded p-1 cursor-pointer text-sm"
                                 :class="{ 'cursor-not-allowed opacity-50': column.locked }"
                                 @click="!column.locked && toggleColumn(column.key)"
@@ -156,6 +156,7 @@ import { Button } from '@/components/ui/button';
 import { Input as InputText } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useScroll } from '@/composables';
+import { buildColumnSelectionState, filterUnselectedColumnGroups, isDefaultColumnSelection } from './dataTableUtils';
 
 interface SortState {
     column: string | null;
@@ -195,23 +196,38 @@ const searchColumns = ref('');
 const activeColumns = ref<Record<string, boolean>>({});
 const selectedColumns = ref<Column[]>([]);
 
+const draggableColumns = computed({
+    get: () => selectedColumns.value.filter(column => !column.hidden),
+    set: (nextColumns: Column[]) => {
+        const hiddenColumns = selectedColumns.value
+            .map((column, index) => column.hidden ? { column, index } : null)
+            .filter((entry): entry is { column: Column; index: number } => Boolean(entry));
+
+        const totalLength = nextColumns.length + hiddenColumns.length;
+        const hiddenByIndex = new Map(hiddenColumns.map(entry => [entry.index, entry.column]));
+        const reordered: Column[] = [];
+        let visibleIndex = 0;
+
+        for (let index = 0; index < totalLength; index += 1) {
+            const hiddenColumn = hiddenByIndex.get(index);
+            if (hiddenColumn) {
+                reordered.push(hiddenColumn);
+            } else {
+                reordered.push(nextColumns[visibleIndex]);
+                visibleIndex += 1;
+            }
+        }
+
+        selectedColumns.value = reordered;
+    },
+});
+
 const applyColumns = (columnsList: string[]) => {
-    const map: Record<string, boolean> = {};
-    const selected: Column[] = [];
+    const { activeColumns: nextActiveColumns, selectedColumns: nextSelectedColumns } =
+        buildColumnSelectionState(props.columns, columnsList);
 
-    // Build map for all columns
-    for (const column of props.columns) {
-        map[column.key] = columnsList.includes(column.key);
-    }
-
-    // Build selected list in the order of columnsList
-    for (const key of columnsList) {
-        const column = props.columns.find(col => col.key === key);
-        if (column) selected.push(column);
-    }
-
-    activeColumns.value = map;
-    selectedColumns.value = selected;
+    activeColumns.value = nextActiveColumns;
+    selectedColumns.value = nextSelectedColumns;
 };
 
 const applyInitColumns = () => {
@@ -232,18 +248,9 @@ const toggleColumn = (key: string) => {
     }
 };
 
-const filteredUnselectedColumnGroups = computed(() => {
-    const list = props.columns.filter(col =>
-        !activeColumns.value[col.key] &&
-        col.header.toLowerCase().includes(searchColumns.value.toLowerCase())
-    );
-
-    return list.reduce((groups: Record<string, Column[]>, column) => {
-        const group = column.group || '';
-        (groups[group] ||= []).push(column);
-        return groups;
-    }, {});
-});
+const filteredUnselectedColumnGroups = computed(() =>
+    filterUnselectedColumnGroups(props.columns, activeColumns.value, searchColumns.value)
+);
 
 const showSearch = computed(() => props.columns.length > 10);
 
@@ -253,14 +260,9 @@ const isSortDefault = computed(() => {
     return currentSort.column === defaultSort.column && currentSort.direction === defaultSort.direction;
 });
 
-const isColumnsDefault = computed(() => {
-    const defaultKeys = props.defaultColumns.filter(key =>
-        props.columns.some(col => col.key === key)
-    );
-
-    return defaultKeys.length === selectedColumns.value.length &&
-        defaultKeys.every((key, i) => selectedColumns.value[i]?.key === key);
-});
+const isColumnsDefault = computed(() =>
+    isDefaultColumnSelection(props.defaultColumns, selectedColumns.value, props.columns)
+);
 
 const isDefault = computed(() => isColumnsDefault.value && isSortDefault.value);
 

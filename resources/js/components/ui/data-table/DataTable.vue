@@ -108,6 +108,7 @@ import {
 import { ScrollFrame } from '@/components/ui/scroll-frame';
 import { ArrowUpDown, ArrowUp, ArrowDown, ChevronDown } from 'lucide-vue-next';
 import { formatNumber } from '@/utils';
+import { getSelectionState, isItemSelected, resolveTableColumns } from './dataTableUtils';
 
 interface Column {
     key: string;
@@ -186,28 +187,19 @@ const computedScrollOffset = computed(() => {
 });
 
 const tableColumns = computed(() =>
-    props.activeColumnList
-        .map(key => props.columns.find(col => col.key === key))
-        .filter(Boolean) as Column[]
+    resolveTableColumns(props.columns, props.activeColumnList)
 );
 
-const isAllSelected = computed(() => {
-    if (props.selectAll) return true;
-    if (!props.selected?.length) return false;
-    return props.selected.length === props.items.length;
-});
+const selectionState = computed(() =>
+    getSelectionState(props.items, props.selected, props.selectAll)
+);
 
-const isSomeSelected = computed(() => {
-    if (!props.selected?.length) return false;
-    return props.selected.length > 0 && props.selected.length < props.items.length;
-});
+const isAllSelected = computed(() => selectionState.value.isAllSelected);
 
-const isRowSelected = (item: any): boolean => {
-    if (props.selectAll) return true;
-    if (!props.selected || !Array.isArray(props.selected) || props.selected.length === 0) return false;
-    const key = props.dataKey!;
-    return props.selected.some(s => s[key] === item[key]);
-};
+const isSomeSelected = computed(() => selectionState.value.isSomeSelected);
+
+const isRowSelected = (item: any): boolean =>
+    isItemSelected(item, props.selected, props.dataKey!, props.selectAll);
 
 const toggleSelectAll = (value: boolean | 'indeterminate') => {
     if (value === true) {
