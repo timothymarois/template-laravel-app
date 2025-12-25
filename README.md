@@ -1,179 +1,364 @@
-# Laravel Vue Inertia Template
+# Laravel Vue Inertia Starter
 
 [![Automated Checks](https://github.com/timothymarois/template-laravel-app/actions/workflows/checks.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/checks.yml)
 
-This starter kit is designed for any project, providing a quick playground that gets you up and running within 5 minutes of setup. The goal is to offer an ideal starting point, eliminating the need to reinvent the wheel or re-implement foundational systems for each project. It addresses all common use-cases when building web-based applications; **allowing you to focus solely on your application requirements**.
+Production-grade applications require more than just code—they need authentication, real-time updates, background jobs, testing, monitoring, security hardening, SEO, and deployment pipelines. Setting all of this up correctly takes weeks.
 
-## Table of Contents
+**This starter kit handles all of it.** Every layer has been considered, implemented, and wired together so you can focus entirely on your application logic. Up and running in 5 minutes.
 
-- [Tech Stack](#tech-stack)
-- [Component Architecture](#component-architecture)
-- [Tests and Linting](#tests-and-linting)
-- [Monitoring](#monitoring)
-- [WebSockets (Reverb)](#websockets-reverb)
-- [Solo (Dev Runner)](#solo-dev-runner)
-- [Local Installation](#local-installation)
-- [Production Deployment](#production-deployment)
-- [Server-Side Rendering (SSR)](#server-side-rendering-ssr)
-- [SEO & Social Sharing](#seo--social-sharing)
-- [Security](#security)
-- [Features](#features)
+---
+
+## Everything You Need
+
+**Core Stack**
+
+- ✅ Laravel 12 + Vue 3 + Inertia 2 — SPA experience without API complexity
+- ✅ Tailwind 4 + shadcn-vue — beautiful, accessible components you own and customize
+- ✅ 50+ UI components — production-grade, fully customizable, ready out of the box
+
+**Production Ready**
+
+- ✅ SSR enabled by default — SEO-friendly, fast first paint
+- ✅ Security headers, CORS, rate limiting — hardened out of the box
+- ✅ Sanctum authentication — session-based auth with CSRF protection
+
+**Real-Time & Background Jobs**
+
+- ✅ Reverb WebSockets + Echo — real-time events, zero external dependencies
+- ✅ Horizon queues — Redis-powered job processing with dashboard
+
+**Developer Experience**
+
+- ✅ Solo dev runner — all processes in one terminal
+- ✅ Ziggy routes — use Laravel named routes directly in Vue
+- ✅ Hot reload — instant feedback during development
+
+**Testing & Code Quality**
+
+- ✅ Pest + Vitest — full test coverage, backend and frontend
+- ✅ Larastan + ESLint + Stylelint + Pint — static analysis on both stacks
+- ✅ Single command checks — `pnpm check` runs everything before you commit
+
+**Monitoring & Debugging**
+
+- ✅ Log Viewer — browse application logs in the browser
+- ✅ Horizon dashboard — monitor queues and failed jobs
+- ✅ Sentry-ready — error tracking integration configured
+- ✅ Health check endpoint — load balancer and uptime monitoring
+
+**SEO & Social**
+
+- ✅ Open Graph + Twitter Cards — social sharing just works
+- ✅ Sitemap generation — auto-generates from your routes
+- ✅ Meta tag management — per-page title, description, images
+
+---
+
+## Quick Start
+
+We recommend [Laravel Herd](https://herd.laravel.com/) for local development—it provides PHP, nginx, and database services with zero configuration.
+
+```bash
+# Clone and install
+git clone <repo-url> my-app && cd my-app
+pnpm install
+composer install
+
+# Configure environment
+cp .env.example .env
+php artisan key:generate
+
+# Run migrations and start
+php artisan migrate
+pnpm dev
+```
+
+---
+
+## Documentation
+
+### Setup & Development
+- [Tech Stack](#tech-stack) — Core technologies and why they're chosen
+- [Component Architecture](#component-architecture) — How components are organized
+- [Development Tools](#development-tools) — Testing, linting, and dev runner
+
+### Production
+- [Deployment](#deployment) — Build commands and production setup
+- [SSR](#server-side-rendering) — Server-side rendering configuration
+- [Security](#security) — Headers, rate limiting, CORS
+
+### Reference
+- [WebSockets](#websockets) — Real-time with Reverb and Echo
+- [SEO & Social](#seo--social-sharing) — Meta tags and sitemaps
+- [Patterns](#patterns) — Routes, notifications, icons, API requests
 
 ---
 
 ## Tech Stack
 
-#### Core
+### Core
 
-This template uses **Laravel** (PHP) as your backend and **Vuejs** (JavaScript) as your frontend. Inertia is implemented so that both can communicate seamlessly. Inertia can save you a monumental amount of time when trying to handle client-side state management.
+**Laravel** (PHP) handles the backend, **Vue 3** (JavaScript) powers the frontend, and **Inertia** bridges them seamlessly—giving you SPA behavior without building a separate API.
 
-- ✅ Laravel v12 – [Documentation](https://laravel.com/docs/12.x)
-- ✅ Vuejs v3 – [Documentation](https://vuejs.org/guide/introduction.html)
-- ✅ Inertiajs v2 – [Documentation](https://inertiajs.com/) | [Why Inertia?](https://inertiajs.com/who-is-it-for)
+| Package | Version | Purpose |
+|---------|---------|---------|
+| [Laravel](https://laravel.com/docs/12.x) | 12 | Backend framework |
+| [Vue.js](https://vuejs.org/guide/introduction.html) | 3 | Frontend framework |
+| [Inertia.js](https://inertiajs.com/) | 2 | SPA without API complexity |
 
-> Inertia empowers you to build a modern, JavaScript-based single-page application without the tiresome complexity.
+### Design
 
-#### Design
+Components are fully customizable. shadcn-vue installs components directly into your project—you own the code.
 
-For the design side, we want to focus on customization, theming, and utility components. shadcn-vue provides beautifully designed, accessible components built on Radix Vue primitives. Components are copied into your project, giving you full control over styling and behavior.
+| Package | Purpose |
+|---------|---------|
+| [Tailwind CSS 4](https://tailwindcss.com/docs/installation) | Utility-first styling |
+| [shadcn-vue](https://www.shadcn-vue.com/) | Accessible component primitives |
+| [Lucide Icons](https://lucide.dev/) | Icon library |
 
-- ✅ Tailwind v4 – [Documentation](https://tailwindcss.com/docs/installation)
-- ✅ shadcn-vue – [Documentation](https://www.shadcn-vue.com/)
-- ✅ Lucide Icons – [Documentation](https://lucide.dev/)
-
-**Adding new shadcn components:**
+<details>
+<summary><strong>Adding shadcn components</strong></summary>
 
 ```bash
 pnpm dlx shadcn-vue@latest add button
 pnpm dlx shadcn-vue@latest add dialog
 ```
 
-Components are installed to `resources/js/components/ui/`.
+Components install to `resources/js/components/ui/`.
 
-**Theming:**
+**Theming:** Modify CSS custom properties in `resources/css/theme.css` under `:root` and `.dark` selectors.
 
-Theme variables are defined in `resources/css/theme.css` using CSS custom properties. Modify the `:root` and `.dark` selectors to customize colors. The `base.css` file contains framework utilities and rarely needs modification.
+</details>
 
 ---
 
 ## Component Architecture
 
-Components are organized in a simple 2-layer architecture:
+Components follow a 2-layer structure:
 
 ```
 components/
-├── ui/              # Base components (shadcn + custom enhanced)
-├── app/             # Application components (authenticated app)
-└── site/            # Website components (public marketing pages)
+├── ui/     # Base components (shadcn + custom)
+├── app/    # Authenticated application components
+└── site/   # Public marketing page components
 ```
 
-**Base Components (`ui/`):**
-- All base UI components live here
-- shadcn primitives (`ButtonBase`, `CardBase`) + enhanced versions (`Button`, `Card`)
-- Stateless and reusable across contexts
-
-**App Components (`app/`):**
-- Layouts, navigation, modals for your application
-- May use Inertia, routes, and authentication
-- For authenticated application functionality
-
-**Site Components (`site/`):**
-- Layouts and components for public-facing website pages
-- May use Inertia and routes
-- For marketing pages, landing pages, unauthenticated flows
-
-**Import examples:**
+| Layer | Purpose | Example |
+|-------|---------|---------|
+| `ui/` | Stateless, reusable primitives | `Button`, `Card`, `DataTable` |
+| `app/` | App layouts, navigation, modals | `AppLayout`, `Sidebar` |
+| `site/` | Public pages, marketing | `SiteLayout`, `Hero` |
 
 ```typescript
-// Base components
-import { Button, Card, DataTable } from '@/components/ui';
-
-// Application-specific
-import { AppLayout, Sidebar } from '@/components/app';
-
-// Website-specific
+import { Button, Card } from '@/components/ui';
+import { AppLayout } from '@/components/app';
 import { SiteLayout } from '@/components/site';
 ```
 
-See `AGENTS.md` for detailed component guidelines and decision trees.
+See `AGENTS.md` for detailed component guidelines.
 
 ---
 
-## Tests and Linting
+## Development Tools
 
-Pre-installed code-linting and automated test services to help keep your CI pipeline protected from lower code quality and breaking changes.
+**Code style:** 4-space indentation across all files (JS, Vue, CSS, PHP).
 
-Linting is used on both PHP and JS side to keep all collaborators using the same format.
+### Commands
 
-**Code Style:** All code uses **4-space indentation** (JS, Vue, CSS, PHP).
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server |
+| `pnpm check` | Run all checks (use before committing) |
+| `php artisan solo` | Run all dev processes in one terminal |
 
-**Main Commands:**
+<details>
+<summary><strong>All available commands</strong></summary>
 
-| Command             | Description                                                   |
-|---------------------|---------------------------------------------------------------|
-| `pnpm lint`         | Run ESLint on JS/Vue files                                    |
-| `pnpm lint:fix`     | Run ESLint and auto-fix issues                                |
-| `pnpm lint:css`     | Run Stylelint on CSS files                                    |
-| `pnpm lint:css:fix` | Run Stylelint and auto-fix CSS issues                         |
-| `pnpm test`         | Run JS unit tests (Vitest)                                    |
-| `pnpm check:php`    | Run PHP checks (Pint, Larastan, Pest)                         |
-| `pnpm check:js`     | Run JS checks (ESLint, Stylelint, Vitest, client build)       |
-| `pnpm check`        | Run all checks (PHP + JS + SSR build) - use before committing |
+| Command | Description |
+|---------|-------------|
+| `pnpm lint` | ESLint on JS/Vue |
+| `pnpm lint:fix` | ESLint with auto-fix |
+| `pnpm lint:css` | Stylelint on CSS |
+| `pnpm lint:css:fix` | Stylelint with auto-fix |
+| `pnpm test` | Run Vitest |
+| `pnpm check:php` | Pint + Larastan + Pest |
+| `pnpm check:js` | ESLint + Stylelint + Vitest + build |
 
-**Individual Tools:**
+**Individual tools:**
+- [Pest](https://pestphp.com/) — `./vendor/bin/pest`
+- [Vitest](https://vitest.dev/) — `pnpm test:watch`
+- [Larastan](https://github.com/larastan/larastan) — `./vendor/bin/phpstan analyse`
+- [Laravel Pint](https://laravel.com/docs/12.x/pint) — `./vendor/bin/pint`
 
-- ✅ [Pest](https://pestphp.com/) - `composer test` or `./vendor/bin/pest`
-- ✅ [Vitest](https://vitest.dev/) - `pnpm test` or `pnpm test:watch`
-- ✅ [Larastan](https://github.com/larastan/larastan) - `./vendor/bin/phpstan analyse`
-- ✅ [Laravel Pint](https://laravel.com/docs/12.x/pint) - `./vendor/bin/pint`
-- ✅ [Vue ESLint](https://eslint.vuejs.org/) - `pnpm lint` or `pnpm lint:fix`
-- ✅ [Stylelint](https://stylelint.io/) - `pnpm lint:css` or `pnpm lint:css:fix`
+</details>
+
+### Monitoring
+
+| Tool | URL | Purpose |
+|------|-----|---------|
+| [Log Viewer](https://github.com/opcodesio/log-viewer) | `/log-viewer` | Browse application logs |
+| [Horizon](https://laravel.com/docs/11.x/horizon) | `/horizon` | Monitor queues and jobs |
+
+For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits.
+
+**Health check:** Laravel provides `/up` for load balancer health checks.
+
+### Solo (Dev Runner)
+
+[Solo](https://github.com/soloterm/solo) runs all development processes in a single terminal UI:
+
+```bash
+php artisan solo
+```
+
+Configured commands: SSR server, queue worker, Reverb, scheduler, and more. See `config/solo.php`.
 
 ---
 
-## Monitoring
+## Deployment
 
-Pre-installed monitoring packages allow you to view logs, worker jobs, and debug effortlessly in real-time.
+### Build
 
-- ✅ [Log Viewer](https://github.com/opcodesio/log-viewer) - `/log-viewer`
-- ✅ [Laravel Horizon](https://laravel.com/docs/11.x/horizon) - `/horizon`
+```bash
+# 1. Install dependencies
+composer install --optimize-autoloader --no-dev
+pnpm install --frozen-lockfile
 
-**External Services:**
+# 2. Run migrations
+php artisan migrate --force
 
-- ✅ [Sentry.io](https://sentry.io/) | [Docs](https://docs.sentry.io/platforms/php/guides/laravel/) - It's recommended to use a service to collect and notify you of ongoing errors. Sentry is a great tool since it connects directly with Jira and the suspecting commits that caused breaking changes.
+# 3. Build frontend
+pnpm build          # Client-side only
+pnpm build-ssr      # Client + SSR (recommended)
+```
 
-**Health Check:**
+### Post-deployment
 
-Laravel provides a built-in health check endpoint at `/up` that returns a 200 status when the application is running. Use this for load balancer health checks and uptime monitoring.
+```bash
+php artisan optimize           # Cache config, routes, events
+php artisan view:cache         # Compile Blade views
+php artisan sitemap:generate   # Regenerate sitemap
+php artisan horizon:terminate  # Restart queue workers
+php artisan reverb:restart     # Restart WebSocket server
+```
+
+<details>
+<summary><strong>Running Reverb in production</strong></summary>
+
+Run Reverb as a daemon via [Supervisor](http://supervisord.org/):
+
+```ini
+[program:reverb]
+command=php /path/to/artisan reverb:start --host=0.0.0.0 --port=8080
+user=www-data
+autostart=true
+autorestart=true
+```
+
+Configure your reverse proxy (Nginx) to handle WebSocket connections on port 443 and proxy to Reverb. See [Reverb docs](https://laravel.com/docs/12.x/reverb#production).
+
+</details>
 
 ---
 
-## WebSockets (Reverb)
+## Server-Side Rendering
 
-[Laravel Reverb](https://laravel.com/docs/12.x/reverb) provides real-time WebSocket communication. Pre-configured with [Laravel Echo](https://laravel.com/docs/12.x/broadcasting#client-side-installation) on the frontend.
+SSR is enabled by default for better SEO and faster initial loads.
+
+### Configuration
+
+Settings in `config/inertia.php`:
+
+```php
+'ssr' => [
+    'enabled' => env('INERTIA_SSR_ENABLED', true),
+    'url' => env('INERTIA_SSR_URL', 'http://127.0.0.1:13714'),
+],
+```
+
+### Running SSR
+
+```bash
+pnpm build-ssr              # Build SSR bundle
+php artisan inertia:start-ssr   # Start SSR server
+php artisan inertia:stop-ssr    # Stop (when redeploying)
+```
+
+### SSR-Safe Code
+
+Guard browser APIs with `isClient`:
+
+```typescript
+import { isClient } from '@/utils';
+
+if (isClient) {
+    // Safe: window, document, localStorage
+}
+```
+
+---
+
+## Security
+
+### Security Headers
+
+The `SecurityHeaders` middleware adds:
+- `X-Frame-Options: SAMEORIGIN` — Prevents clickjacking
+- `X-Content-Type-Options: nosniff` — Prevents MIME sniffing
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy` — Restricts camera, microphone, geolocation
+- `Strict-Transport-Security` — Forces HTTPS in production
+
+### Rate Limiting
+
+Pre-configured in `AppServiceProvider`:
+
+| Limiter | Limit | Use case |
+|---------|-------|----------|
+| `api` | 60/min per user | General API |
+| `auth` | 5/min per IP | Login, registration |
+| `uploads` | 10/min per user | File uploads |
+
+Apply to routes: `Route::middleware('throttle:auth')->post('/login', ...)`
+
+### CORS
+
+Set allowed origins in production:
+
+```env
+CORS_ALLOWED_ORIGINS=https://example.com,https://api.example.com
+```
+
+### Authentication
+
+Sanctum provides session-based SPA auth with CSRF protection, rate-limited login attempts, and session regeneration.
+
+---
+
+## WebSockets
+
+[Laravel Reverb](https://laravel.com/docs/12.x/reverb) provides real-time WebSocket communication, pre-configured with [Laravel Echo](https://laravel.com/docs/12.x/broadcasting#client-side-installation).
 
 ```bash
 php artisan reverb:start
 ```
 
-**Vue composables (recommended):**
+### Vue Composables
 
 ```js
 import { useChannel, usePrivateChannel, useListen } from '@/composables/useEcho';
 
-// Public channel with auto-cleanup on unmount
+// Public channel (auto-cleanup on unmount)
 const { channel } = useChannel('orders');
 channel.value.listen('OrderShipped', (e) => console.log(e));
 
-// Private channel (requires auth)
-const { channel: privateChannel } = usePrivateChannel('user.1');
-
-// Simplified listener (auto-subscribes and cleans up)
+// Simplified listener
 useListen('orders', 'OrderShipped', (e) => console.log(e.order));
 useListen('user.1', 'MessageSent', (e) => console.log(e), { private: true });
 ```
 
-**Creating broadcast events (Laravel):**
+<details>
+<summary><strong>Creating broadcast events (Laravel)</strong></summary>
 
 ```bash
 php artisan make:event OrderShipped
@@ -195,9 +380,12 @@ class OrderShipped implements ShouldBroadcast
 // Dispatch: event(new OrderShipped($order));
 ```
 
-**Configure `.env`:**
+</details>
 
-```
+<details>
+<summary><strong>Environment configuration</strong></summary>
+
+```env
 REVERB_APP_ID=local
 REVERB_APP_KEY=local
 REVERB_APP_SECRET=local
@@ -205,275 +393,55 @@ REVERB_HOST=localhost
 REVERB_PORT=8080
 ```
 
----
-
-## Solo (Dev Runner)
-
-[Solo](https://github.com/soloterm/solo) is a terminal UI for running multiple Laravel processes simultaneously during development. Pre-configured commands are available in `config/solo.php`.
-
-```bash
-php artisan solo
-```
-
-**Configured commands:** SSR server, Queue worker, Reverb WebSockets, Scheduler, JS/PHP checks, Migrations, and more.
-
----
-
-## Local Installation
-
-These simple steps allow you to install this project on your local env. For production, you should follow the #deployment section
-
-<details>
-<summary>Install client-side</summary>
-
-```bash
-pnpm install
-```
 </details>
-
-<details>
-<summary>Install server-side</summary>
-
-*(should do this through the docker container)*
-
-```bash
-composer install
-```
-</details>
-
-<details>
-<summary>Run database migrations</summary>
-
-```bash
-php artisan migrate
-```
-</details>
-
-<details>
-<summary>Run local Dev</summary>
-
-```bash
-pnpm dev
-```
-</details>
-
----
-
-## Production Deployment
-
-Commands for deploying to production servers. Do not use these for local development.
-
-<details>
-<summary>Build steps</summary>
-
-*Run these commands during your CI/CD pipeline or before deploying new code.*
-
-**(1) Install composer deps:**
-
-```bash
-composer install --optimize-autoloader --no-dev
-```
-
-**(2) Install package deps**
-
-```bash
-pnpm install --frozen-lockfile
-```
-
-**(3) Database migrations:**
-
-```bash
-php artisan migrate --force
-```
-
-**(4) Build Client-side (non-SSR):**
-
-```bash
-pnpm build
-```
-
-**(4) Build (with SSR):**
-
-[Learn more about SSR](https://inertiajs.com/server-side-rendering)
-
-```bash
-pnpm build-ssr
-```
-
-**(5) Run (with SSR):**
-
-[Learn more about SSR](https://inertiajs.com/server-side-rendering)
-
-```bash
-php artisan inertia:start-ssr
-```
-
-**(6) Restart SSR server:**
-
-You only need to do this if you are running SSR.
-
-```bash
-php artisan inertia:stop-ssr
-```
-
-</details>
-
-<details>
-<summary>Post-deployment optimization</summary>
-
-*Run these commands after new code is live to cache assets and restart workers.*
-
-```bash
-php artisan optimize          # Cache config, routes, and events
-php artisan view:cache        # Compile all Blade views
-php artisan sitemap:generate  # Regenerate sitemap with public pages
-php artisan horizon:terminate # Gracefully restart Horizon workers
-php artisan reverb:restart    # Gracefully restart Reverb WebSocket server
-```
-
-</details>
-
-<details>
-<summary>Running Reverb in production</summary>
-
-Reverb should run as a daemon process via [Supervisor](http://supervisord.org/). Example config:
-
-```ini
-[program:reverb]
-command=php /path/to/artisan reverb:start --host=0.0.0.0 --port=8080
-user=www-data
-autostart=true
-autorestart=true
-```
-
-For production, configure your reverse proxy (Nginx) to handle WebSocket connections on port 443 and proxy to Reverb. See [Reverb docs](https://laravel.com/docs/12.x/reverb#production) for full setup.
-
-</details>
-
----
-
-## Server-Side Rendering (SSR)
-
-SSR is enabled by default for improved SEO and faster initial page loads. Pages are rendered on the server before being sent to the browser, making content immediately available to search engine crawlers.
-
-**Configuration:**
-
-SSR settings are in `config/inertia.php`:
-
-```php
-'ssr' => [
-    'enabled' => env('INERTIA_SSR_ENABLED', true),
-    'url' => env('INERTIA_SSR_URL', 'http://127.0.0.1:13714'),
-],
-```
-
-**Build Commands:**
-
-| Command          | Description                       |
-|------------------|-----------------------------------|
-| `pnpm build`     | Build client-side only            |
-| `pnpm build-ssr` | Build both client and SSR bundles |
-
-**Running SSR in Production:**
-
-```bash
-# Build SSR bundle
-pnpm build-ssr
-
-# Start SSR server
-php artisan inertia:start-ssr
-
-# Stop SSR server (when redeploying)
-php artisan inertia:stop-ssr
-```
-
-**SSR-Safe Code:**
-
-When accessing browser APIs (`window`, `document`), use the `isClient` guard:
-
-```typescript
-import { isClient } from '@/utils';
-
-if (isClient) {
-    // Safe to use window, document, localStorage, etc.
-}
-```
 
 ---
 
 ## SEO & Social Sharing
 
-Layouts include built-in support for SEO meta tags and social sharing (Open Graph + Twitter Cards). Tags are rendered server-side via SSR for optimal crawler indexing.
+Layouts include built-in meta tags for SEO and social sharing (Open Graph + Twitter Cards), rendered server-side for optimal indexing.
 
-**Usage:**
+### Usage
 
 ```vue
 <SiteLayout
     title="Product Page"
     description="Discover our amazing product features"
     ogImage="/images/product-og.jpg"
-    ogImageAlt="Product screenshot"
-    siteName="My App"
 >
     <!-- content -->
 </SiteLayout>
 ```
 
-**Available props (all optional):**
+| Prop | Description |
+|------|-------------|
+| `title` | Page title (`<title>` and og:title) |
+| `description` | Meta description |
+| `ogImage` | Social sharing image (1200x630px recommended) |
+| `ogImageAlt` | Alt text for social image |
+| `siteName` | Site name for og:site_name |
 
-| Prop          | Description                                            |
-|---------------|--------------------------------------------------------|
-| `title`       | Page title (used in `<title>` and og:title)            |
-| `description` | Meta description (og:description, twitter:description) |
-| `ogImage`     | Social sharing image URL (absolute or relative)        |
-| `ogImageAlt`  | Alt text for social image                              |
-| `siteName`    | Site name for og:site_name                             |
-
-**Supported platforms:**
-- Facebook, LinkedIn, Slack, Discord (Open Graph)
-- Twitter/X (Twitter Cards with `summary_large_image`)
-- iMessage, WhatsApp, and other link previews
-
-**Image recommendations:**
-- Minimum size: 1200x630px for best display
-- Format: JPG or PNG
-- Relative paths are automatically converted to absolute URLs
-
-**Sitemap Generation:**
-
-Generate a sitemap with only public pages (excludes admin, auth, API routes):
+### Sitemap
 
 ```bash
 php artisan sitemap:generate
 ```
 
-This creates `public/sitemap.xml`. The command automatically:
-- Includes only GET routes without authentication
-- Excludes admin, auth, API, and internal routes
-- Sets homepage priority to 1.0, other pages to 0.8
+Creates `public/sitemap.xml` with public routes only (excludes admin, auth, API).
 
-**Adding dynamic pages:** Edit `addDynamicPages()` in `GenerateSitemap.php`:
+<details>
+<summary><strong>Adding dynamic pages to sitemap</strong></summary>
+
+Edit `addDynamicPages()` in `GenerateSitemap.php`:
 
 ```php
 protected function addDynamicPages(Sitemap $sitemap): void
 {
-    // Add all published products
     Product::where('published', true)->each(function ($product) use ($sitemap) {
         $sitemap->add(
             Url::create(route('products.show', $product))
                 ->setLastModificationDate($product->updated_at)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
                 ->setPriority(0.8)
-        );
-    });
-
-    // Add blog posts by slug
-    Post::published()->each(function ($post) use ($sitemap) {
-        $sitemap->add(
-            Url::create(route('blog.show', $post->slug))
-                ->setLastModificationDate($post->updated_at)
-                ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                ->setPriority(0.7)
         );
     });
 }
@@ -484,98 +452,31 @@ For production, uncomment the sitemap line in `public/robots.txt`:
 Sitemap: https://yourdomain.com/sitemap.xml
 ```
 
-Add sitemap generation to your deployment pipeline to keep it updated.
-
----
-
-## Security
-
-Pre-configured security features to protect your application.
-
-**Security Headers:**
-
-The `SecurityHeaders` middleware automatically adds security headers to all responses:
-- `X-Frame-Options: SAMEORIGIN` - Prevents clickjacking
-- `X-Content-Type-Options: nosniff` - Prevents MIME sniffing
-- `Referrer-Policy: strict-origin-when-cross-origin` - Controls referrer information
-- `Permissions-Policy` - Restricts browser features (camera, microphone, geolocation)
-- `Strict-Transport-Security` - Forces HTTPS in production (HSTS)
-
-**Rate Limiting:**
-
-Pre-configured rate limiters in `AppServiceProvider`:
-- `api` - 60 requests/minute per user (or IP if unauthenticated)
-- `auth` - 5 requests/minute per IP (for login/registration)
-- `uploads` - 10 requests/minute per user
-
-Apply to routes: `Route::middleware('throttle:auth')->post('/login', ...)`
-
-**CORS Configuration:**
-
-For production, set allowed origins via environment variable:
-```
-CORS_ALLOWED_ORIGINS=https://example.com,https://api.example.com
-```
-
-**Authentication:**
-
-Sanctum provides API token and SPA authentication. Features:
-- Session-based auth for SPA
-- CSRF protection
-- Rate-limited login attempts
-- Session regeneration on login
-
----
-
-## Features:
-
-### Routes (by Ziggy)
-
-The ability to grab the routes in Vue based on the laravel route names. You can control what routes are visible to end-users by modifying `/config/ziggy.php`.
-
-- ✅ [Named routes](https://github.com/tighten/ziggy)
-
-Note: If you are trying to use `route()` inside your vue `<template>` use `$route()`
-
-<details>
-<summary>Show example</summary><br>
-
-You can use `php artisan route:list` to get the full named routes that are available.
-
-To get the path of a named route
-
-```js
-const path = route('login')
-// http://localhost/api/login
-```
-
-or you can do links in templates based on @click
-
-```js
-$inertia.visit(route('posts.create'))
-```
-
-Using model id in routes ([learn more](https://github.com/tighten/ziggy?tab=readme-ov-file#parameters))
-
-```js
-route('posts.show', 123);
-// http://localhost/posts/123'
-```
-
-Using multiple models in routes ([learn more](https://github.com/tighten/ziggy?tab=readme-ov-file#parameters))
-
-```js
-route('accounts.posts.show', [1, 123]);
-// http://localhost/accounts/1/posts/123'
-```
-
 </details>
 
 ---
 
-### Rendering Pages (Inertia)
+## Patterns
 
-Controllers use dependency injection for rendering Inertia pages:
+### Named Routes (Ziggy)
+
+Access Laravel routes in Vue via [Ziggy](https://github.com/tighten/ziggy). Control visibility in `/config/ziggy.php`.
+
+```js
+// Get route path
+route('login')  // http://localhost/login
+
+// With parameters
+route('posts.show', 123)  // http://localhost/posts/123
+route('accounts.posts.show', [1, 123])  // http://localhost/accounts/1/posts/123
+
+// Navigate
+$inertia.visit(route('posts.create'))
+```
+
+Use `$route()` in templates, `route()` in script.
+
+### Rendering Pages (Inertia)
 
 ```php
 use Inertia\ResponseFactory;
@@ -593,123 +494,54 @@ class UserController extends Controller
 }
 ```
 
----
+### API Requests
 
-### Router & API requests (by Inertia & Axois)
-
-You can use the built-in methods to fetch data or make manual visits
-
-- ✅ [Router requests](https://inertiajs.com/manual-visits)
-- ✅ [Axois requests](https://axios-http.com/docs/example)
-
-<details>
-<summary>Show example</summary>
-
-Use Inertia built-in `router` to visit routes and modify browser histoty.
-
-*Note: `router` should respond with an inertia response. Use `Axois` for API JSON responses.*
+**Inertia Router** — For page visits with browser history:
 
 ```js
-// best to use replace = true to avoid browser history from being added
 router.get(route('users'), { search: 'John' }, { replace: true })
-
-// all available methods
-router.get(url, data, options)
 router.post(url, data, options)
-router.put(url, data, options)
-router.patch(url, data, options)
 router.delete(url, options)
-router.reload(options)
-
-// events
-router.get(url, data, {
-  onBefore: (visit) => {},
-  onStart: (visit) => {},
-  onProgress: (progress) => {},
-  onSuccess: (page) => {},
-  onError: (errors) => {},
-  onCancel: () => {},
-  onFinish: visit => {},
-})
 ```
 
-Using the Axois for background fetching of data without modifying routes.
-
-These are useful if you want to maintain current page state and load external data in components.
-
-By default, running a axois request, should return json response.
+**Axios** — For background data fetching without navigation:
 
 ```js
 axios.get(url)
-.then(function (response) {
-    // handle success
-})
-.catch(function (error) {
-    // handle error
-})
-.finally(function () {
-
-});
+    .then((response) => { /* handle success */ })
+    .catch((error) => { /* handle error */ })
 ```
-</details>
 
----
-
-### Toast Notifications (by Sonner)
-
-You can dispatch global toast notifications using Sonner.
-
-- ✅ Toast Notifications
-
-<details>
-<summary>Show example</summary>
+### Toast Notifications (Sonner)
 
 ```js
 import { toast } from 'vue-sonner'
 
-// success
 toast.success('User saved successfully')
-
-// error
 toast.error('Something went wrong')
 ```
-</details>
-
----
 
 ### Icons
 
-Easily add svg/imported icons that can change size and color.
-
-- ✅ [Lucide Icons](https://lucide.dev/) *(recommended)*
-- ✅ [Tabler Icons](https://tabler.io/icons)
-
-<details>
-<summary>Show example</summary>
-
-
-**From Lucide**
-
 ```vue
-<template>
-    <Settings class="text-gray-800 size-6" />
-</template>
-
 <script setup>
+// Lucide (recommended)
 import { Settings, Trash2, Plus } from 'lucide-vue-next';
-</script>
-```
 
-**From Tabler**
-
-```vue
-<template>
-    <IconHome class="text-gray-800 size-6" />
-</template>
-
-<script setup>
+// Tabler
 import { IconHome } from '@tabler/icons-vue';
 </script>
+
+<template>
+    <Settings class="text-gray-800 size-6" />
+    <IconHome class="text-gray-800 size-6" />
+</template>
 ```
 
-</details>
+Browse icons: [Lucide](https://lucide.dev/) | [Tabler](https://tabler.io/icons)
+
+---
+
+## License
+
+[MIT](LICENSE)
