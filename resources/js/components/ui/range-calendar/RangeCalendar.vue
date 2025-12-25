@@ -74,20 +74,24 @@ function formatMonthHeading(date: DateValue): string {
     return `${monthNames[date.month - 1]} ${date.year}`;
 }
 
-// Handle month change for a specific grid
-function onGridMonthChange(currentPlaceholder: DateValue, gridDate: DateValue, newMonth: string) {
-    const monthDiff = parseInt(newMonth) - gridDate.month;
-    const newDate = currentPlaceholder.add({ months: monthDiff });
-    internalPlaceholder.value = newDate;
-    emits('update:placeholder', newDate);
+// Handle month change for a specific grid position
+// gridIndex: 0 = left calendar, 1 = right calendar, etc.
+function onGridMonthChange(gridDate: DateValue, gridIndex: number, newMonth: string) {
+    // Set the grid to show the selected month by adjusting placeholder
+    // placeholder shows at grid[0], so subtract gridIndex months
+    const targetDate = gridDate.set({ month: parseInt(newMonth) });
+    const newPlaceholder = targetDate.subtract({ months: gridIndex });
+    internalPlaceholder.value = newPlaceholder;
+    emits('update:placeholder', newPlaceholder);
 }
 
-// Handle year change for a specific grid
-function onGridYearChange(currentPlaceholder: DateValue, gridDate: DateValue, newYear: string) {
-    const yearDiff = parseInt(newYear) - gridDate.year;
-    const newDate = currentPlaceholder.add({ years: yearDiff });
-    internalPlaceholder.value = newDate;
-    emits('update:placeholder', newDate);
+// Handle year change for a specific grid position
+function onGridYearChange(gridDate: DateValue, gridIndex: number, newYear: string) {
+    // Set the grid to show the selected year by adjusting placeholder
+    const targetDate = gridDate.set({ year: parseInt(newYear) });
+    const newPlaceholder = targetDate.subtract({ months: gridIndex });
+    internalPlaceholder.value = newPlaceholder;
+    emits('update:placeholder', newPlaceholder);
 }
 </script>
 
@@ -112,7 +116,7 @@ function onGridYearChange(currentPlaceholder: DateValue, gridDate: DateValue, ne
                                 :clearable="false"
                                 placeholder=""
                                 class="h-7 w-auto gap-1 border-0 bg-transparent px-2 py-0 text-sm font-medium opacity-80 hover:opacity-100 focus:opacity-100 hover:bg-accent"
-                                @update:model-value="(val) => onGridMonthChange(date, month.value, val)"
+                                @update:model-value="(val) => onGridMonthChange(month.value, index, val)"
                             />
                             <Select
                                 :model-value="String(month.value.year)"
@@ -123,7 +127,7 @@ function onGridYearChange(currentPlaceholder: DateValue, gridDate: DateValue, ne
                                 search-placeholder="Search year..."
                                 class="h-7 w-auto gap-1 border-0 bg-transparent px-2 py-0 text-sm font-medium opacity-80 hover:opacity-100 focus:opacity-100 hover:bg-accent"
                                 content-class="w-[140px]"
-                                @update:model-value="(val) => onGridYearChange(date, month.value, val)"
+                                @update:model-value="(val) => onGridYearChange(month.value, index, val)"
                             />
                         </template>
                         <span v-else class="text-sm font-medium">

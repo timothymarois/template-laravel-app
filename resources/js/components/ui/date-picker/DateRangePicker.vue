@@ -31,7 +31,11 @@
                     <ChevronDown class="h-4 w-4 opacity-50 shrink-0 ml-2" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent class="w-auto p-0" :align="align">
+            <PopoverContent
+                class="w-auto p-0"
+                :align="align"
+                @focus-outside="(e) => { if (quickNavigation) e.preventDefault(); }"
+            >
                 <div class="flex">
                     <!-- Presets Sidebar -->
                     <div
