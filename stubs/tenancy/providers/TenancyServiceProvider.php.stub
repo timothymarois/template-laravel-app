@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Jobs\MarkTenantReady;
 use App\Models\Tenant;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ use Illuminate\Support\ServiceProvider;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
+use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
 
 class TenancyServiceProvider extends ServiceProvider
@@ -47,21 +49,33 @@ class TenancyServiceProvider extends ServiceProvider
     {
         // Configure tenant events
         static::$tenantEvents = [
+            // Tenancy initialization events - CRITICAL for database switching
+            Events\TenancyInitialized::class => [
+                Listeners\BootstrapTenancy::class,
+            ],
+            Events\TenancyEnded::class => [
+                Listeners\RevertToCentralContext::class,
+            ],
+
+            // Tenant lifecycle events
             Events\TenantCreated::class => [
                 JobPipeline::make([
                     Jobs\CreateDatabase::class,
                     Jobs\MigrateDatabase::class,
                     // Jobs\SeedDatabase::class,
+                    MarkTenantReady::class,
                 ])->send(function (Events\TenantCreated $event) {
                     return $event->tenant;
-                })->shouldBeQueued(config('tenancy.queue_tenant_creation', false)),
+                })->shouldBeQueued(config('tenancy.queue_tenant_creation', false))
+                ->toListener(),
             ],
             Events\TenantDeleted::class => [
                 JobPipeline::make([
                     Jobs\DeleteDatabase::class,
                 ])->send(function (Events\TenantDeleted $event) {
                     return $event->tenant;
-                })->shouldBeQueued(config('tenancy.queue_tenant_deletion', false)),
+                })->shouldBeQueued(config('tenancy.queue_tenant_deletion', false))
+                ->toListener(),
             ],
         ];
 
@@ -74,13 +88,24 @@ class TenancyServiceProvider extends ServiceProvider
 
     /**
      * Register tenant routes.
+     *
+     * Tenant routes are loaded with a subdomain pattern that excludes
+     * the central domain, preventing conflicts with central routes.
      */
     protected function bootRoutes(): void
     {
-        if (file_exists(base_path('routes/tenant.php'))) {
-            Route::middleware(['web'])
-                ->group(base_path('routes/tenant.php'));
+        if (! file_exists(base_path('routes/tenant.php'))) {
+            return;
         }
+
+        $centralDomains = config('tenancy.central_domains', []);
+        $appDomain = $centralDomains[0] ?? env('APP_DOMAIN', 'localhost');
+
+        // Use subdomain pattern: {tenant}.app-domain.test
+        // This ensures tenant routes only match for subdomains, not the central domain
+        Route::domain('{tenant}.'.$appDomain)
+            ->middleware(['web'])
+            ->group(base_path('routes/tenant.php'));
     }
 
     /**
@@ -94,10 +119,6 @@ class TenancyServiceProvider extends ServiceProvider
         };
 
         Middleware\InitializeTenancyBySubdomain::$onFail = function ($exception, $request, $next) {
-            return redirect(config('app.url'));
-        };
-
-        Middleware\InitializeTenancyByDomainOrSubdomain::$onFail = function ($exception, $request, $next) {
             return redirect(config('app.url'));
         };
     }

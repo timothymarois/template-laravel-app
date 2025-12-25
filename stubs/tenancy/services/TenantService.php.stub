@@ -1,0 +1,175 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Models\CentralUser;
+use App\Models\Domain;
+use App\Models\Tenant;
+use Illuminate\Support\Str;
+
+class TenantService
+{
+    /**
+     * Create a new tenant with domain for a user.
+     */
+    public function createForUser(CentralUser $user, array $data = []): Tenant
+    {
+        $companyName = $data['company_name'] ?? $user->name;
+        $timezone = $data['timezone'] ?? config('app.timezone');
+
+        // Create the tenant
+        $tenant = $this->create([
+            'company_name' => $companyName,
+            'owner_user_id' => $user->id,
+            'timezone' => $timezone,
+            'ready' => false,
+        ]);
+
+        // Generate and create domain
+        $subdomain = $data['subdomain'] ?? $this->generateUniqueSubdomain($companyName);
+        $this->createDomain($tenant, $subdomain);
+
+        // Attach user to tenant
+        $this->attachUser($tenant, $user, ['is_active' => true]);
+
+        return $tenant;
+    }
+
+    /**
+     * Create a new tenant.
+     */
+    public function create(array $data): Tenant
+    {
+        return Tenant::create($data);
+    }
+
+    /**
+     * Find a tenant by ID.
+     */
+    public function findById(string $id): ?Tenant
+    {
+        return Tenant::find($id);
+    }
+
+    /**
+     * Find a tenant by ID or fail.
+     */
+    public function findByIdOrFail(string $id): Tenant
+    {
+        return Tenant::findOrFail($id);
+    }
+
+    /**
+     * Create a domain for a tenant.
+     */
+    public function createDomain(Tenant $tenant, string $subdomain): Domain
+    {
+        return $tenant->domains()->create([
+            'domain' => $subdomain,
+        ]);
+    }
+
+    /**
+     * Attach a user to a tenant.
+     */
+    public function attachUser(Tenant $tenant, CentralUser $user, array $pivot = []): void
+    {
+        $tenant->users()->attach($user->id, array_merge([
+            'is_active' => true,
+        ], $pivot));
+    }
+
+    /**
+     * Detach a user from a tenant.
+     */
+    public function detachUser(Tenant $tenant, CentralUser $user): void
+    {
+        $tenant->users()->detach($user->id);
+    }
+
+    /**
+     * Mark a tenant as ready.
+     */
+    public function markAsReady(Tenant $tenant): Tenant
+    {
+        $tenant->update(['ready' => true]);
+
+        return $tenant->fresh();
+    }
+
+    /**
+     * Generate a unique subdomain from a company name.
+     */
+    public function generateUniqueSubdomain(string $companyName): string
+    {
+        $baseSlug = Str::slug($companyName);
+
+        // Handle empty slugs
+        if (empty($baseSlug)) {
+            $baseSlug = 'tenant';
+        }
+
+        $randomSuffix = Str::lower(Str::random(5));
+        $subdomain = "{$baseSlug}-{$randomSuffix}";
+
+        // Ensure uniqueness
+        $attempt = 1;
+        while (Domain::where('domain', $subdomain)->exists()) {
+            $subdomain = "{$baseSlug}-{$randomSuffix}-{$attempt}";
+            $attempt++;
+
+            // Safety limit
+            if ($attempt > 100) {
+                $subdomain = "{$baseSlug}-".Str::uuid()->toString();
+                break;
+            }
+        }
+
+        return $subdomain;
+    }
+
+    /**
+     * Get the full tenant URL.
+     */
+    public function getTenantUrl(Tenant $tenant): ?string
+    {
+        $domain = $tenant->domains()->first();
+
+        if (! $domain) {
+            return null;
+        }
+
+        $appDomain = config('tenancy.central_domains.0', env('APP_DOMAIN', 'localhost'));
+        $protocol = request()?->secure() ? 'https' : 'http';
+
+        return "{$protocol}://{$domain->domain}.{$appDomain}";
+    }
+
+    /**
+     * Get tenants for a user.
+     */
+    public function getTenantsForUser(CentralUser $user): \Illuminate\Database\Eloquent\Collection
+    {
+        return $user->tenants()->with('domains')->get();
+    }
+
+    /**
+     * Check if a user has access to a tenant.
+     */
+    public function userHasAccess(CentralUser $user, Tenant $tenant): bool
+    {
+        return $user->tenants()->where('tenants.id', $tenant->id)->exists();
+    }
+
+    /**
+     * Delete a tenant and its associated data.
+     */
+    public function delete(Tenant $tenant): bool
+    {
+        // The TenancyServiceProvider will handle database deletion
+        // via the TenantDeleted event
+        return $tenant->delete();
+    }
+}

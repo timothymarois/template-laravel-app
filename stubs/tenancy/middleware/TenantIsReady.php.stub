@@ -6,6 +6,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -39,12 +40,13 @@ class TenantIsReady
             ], 503);
         }
 
-        // For web requests, you can render a provisioning page
-        // return Inertia::render('tenant/provisioning')->toResponse($request);
-
-        // Or redirect to a waiting page
-        return response()->view('tenant.provisioning', [
-            'tenant' => $tenant,
-        ], 503);
+        // For web requests, render a provisioning page
+        return Inertia::render('tenant/Provisioning', [
+            'tenant' => [
+                'id' => $tenant->id,
+                'company_name' => $tenant->company_name,
+            ],
+            'centralUrl' => config('app.url'),
+        ])->toResponse($request)->setStatusCode(503);
     }
 }

@@ -24,7 +24,8 @@ class SetupTenancy extends Command
      */
     protected $signature = 'tenancy:setup
                             {--force : Overwrite existing tenancy configuration}
-                            {--skip-composer : Skip installing the tenancy package}';
+                            {--skip-composer : Skip installing the tenancy package}
+                            {--rollback : Remove tenancy and reset the application}';
 
     /**
      * The console command description.
@@ -59,6 +60,18 @@ class SetupTenancy extends Command
      */
     public function handle(): int
     {
+        // Prevent running in production
+        if (app()->isProduction()) {
+            error('This command cannot be run in production!');
+
+            return self::FAILURE;
+        }
+
+        // Handle rollback
+        if ($this->option('rollback')) {
+            return $this->handleRollback();
+        }
+
         $this->newLine();
         info('Setting up multi-tenancy support...');
         $this->newLine();
@@ -86,13 +99,16 @@ class SetupTenancy extends Command
             'installPackage' => 'Installing stancl/tenancy package',
             'createDirectories' => 'Creating directories',
             'publishModels' => 'Publishing models',
+            'publishServices' => 'Publishing services',
+            'publishJobs' => 'Publishing jobs',
             'publishMigrations' => 'Publishing migrations',
             'publishProvider' => 'Publishing service provider',
             'publishConfig' => 'Publishing configuration',
             'publishMiddleware' => 'Publishing middleware',
             'publishRoutes' => 'Publishing routes',
+            'publishPages' => 'Publishing Vue pages',
+            'publishController' => 'Publishing TenantController',
             'updateBootstrapProviders' => 'Updating bootstrap providers',
-            'updateBootstrapApp' => 'Updating bootstrap app',
             'updateDatabaseConfig' => 'Updating database configuration',
             'convertUserModel' => 'Converting User model to CentralUser',
             'updateEnvExample' => 'Updating .env.example',
@@ -192,6 +208,8 @@ class SetupTenancy extends Command
             app_path('Models/Concerns'),
             app_path('Models/Tenant'),
             database_path('migrations/tenant'),
+            resource_path('js/pages/tenant'),
+            resource_path('js/pages/tenants'),
         ];
 
         foreach ($directories as $directory) {
@@ -221,6 +239,28 @@ class SetupTenancy extends Command
         }
 
         return true;
+    }
+
+    /**
+     * Publish service files.
+     */
+    protected function publishServices(): bool
+    {
+        return $this->publishStub(
+            'services/TenantService.php.stub',
+            app_path('Services/TenantService.php')
+        );
+    }
+
+    /**
+     * Publish job files.
+     */
+    protected function publishJobs(): bool
+    {
+        return $this->publishStub(
+            'jobs/MarkTenantReady.php.stub',
+            app_path('Jobs/MarkTenantReady.php')
+        );
     }
 
     /**
@@ -302,6 +342,36 @@ class SetupTenancy extends Command
         return $this->publishStub(
             'routes/tenant.php.stub',
             base_path('routes/tenant.php')
+        );
+    }
+
+    /**
+     * Publish Vue pages for tenancy.
+     */
+    protected function publishPages(): bool
+    {
+        $pages = [
+            'pages/tenant/Welcome.vue.stub' => resource_path('js/pages/tenant/Welcome.vue'),
+            'pages/tenant/Dashboard.vue.stub' => resource_path('js/pages/tenant/Dashboard.vue'),
+            'pages/tenant/Provisioning.vue.stub' => resource_path('js/pages/tenant/Provisioning.vue'),
+            'pages/tenants/Index.vue.stub' => resource_path('js/pages/tenants/Index.vue'),
+        ];
+
+        foreach ($pages as $stub => $destination) {
+            $this->publishStub($stub, $destination);
+        }
+
+        return true;
+    }
+
+    /**
+     * Publish the TenantController.
+     */
+    protected function publishController(): bool
+    {
+        return $this->publishStub(
+            'controllers/TenantController.php.stub',
+            app_path('Http/Controllers/TenantController.php')
         );
     }
 
@@ -433,36 +503,44 @@ PHP;
     }
 
     /**
-     * Convert User.php to CentralUser.php with tenant relationships.
+     * Convert User.php to extend CentralUser for tenant relationships.
      */
     protected function convertUserModel(): bool
     {
         $userPath = app_path('Models/User.php');
         $centralUserPath = app_path('Models/CentralUser.php');
 
-        // If CentralUser already exists, skip
-        if ($this->files->exists($centralUserPath)) {
-            return true;
+        // If CentralUser already exists, skip creating it
+        if (! $this->files->exists($centralUserPath)) {
+            // Publish CentralUser from stub
+            $this->publishStub('models/CentralUser.php.stub', $centralUserPath);
         }
 
-        // Publish CentralUser from stub
-        $this->publishStub('models/CentralUser.php.stub', $centralUserPath);
+        // Update User.php to extend CentralUser (simpler alias approach)
+        $userContent = <<<'PHP'
+<?php
 
-        // Optionally backup and remove User.php
-        // We keep it for backwards compatibility, but add a deprecation notice
-        if ($this->files->exists($userPath)) {
-            $userContent = $this->files->get($userPath);
+declare(strict_types=1);
 
-            // Add deprecation notice if not already there
-            if (! Str::contains($userContent, '@deprecated')) {
-                $userContent = str_replace(
-                    'class User extends Authenticatable',
-                    "/**\n * @deprecated Use CentralUser instead for central database operations.\n * This class is kept for backwards compatibility.\n */\nclass User extends Authenticatable",
-                    $userContent
-                );
-                $this->files->put($userPath, $userContent);
-            }
-        }
+namespace App\Models;
+
+/**
+ * User model alias for CentralUser.
+ *
+ * This class extends CentralUser to maintain backwards compatibility
+ * with existing code that references the User model directly.
+ * For new code, prefer using CentralUser explicitly.
+ *
+ * @mixin CentralUser
+ */
+class User extends CentralUser
+{
+    // All functionality is inherited from CentralUser
+}
+
+PHP;
+
+        $this->files->put($userPath, $userContent);
 
         return true;
     }
@@ -553,5 +631,401 @@ ENV;
         $this->line('  4. Read the documentation:');
         $this->line('     <comment>docs/Tenancy.md</comment>');
         $this->newLine();
+    }
+
+    /**
+     * Handle the rollback operation.
+     */
+    protected function handleRollback(): int
+    {
+        $this->newLine();
+        warning('Rolling back tenancy setup...');
+        $this->newLine();
+
+        if (! $this->isAlreadyConfigured()) {
+            info('Tenancy is not configured. Nothing to rollback.');
+
+            return self::SUCCESS;
+        }
+
+        // Confirm rollback (skip if --force is used)
+        if (! $this->option('force')) {
+            if (! confirm('This will remove all tenancy files and reset the database. Continue?', false)) {
+                info('Rollback cancelled.');
+
+                return self::SUCCESS;
+            }
+        }
+
+        $steps = [
+            'removeConfig' => 'Removing configuration',
+            'removeProvider' => 'Removing service provider',
+            'removeModels' => 'Removing models',
+            'removeServices' => 'Removing services',
+            'removeJobs' => 'Removing jobs',
+            'removeMigrations' => 'Removing migrations',
+            'removeMiddleware' => 'Removing middleware',
+            'removeRoutes' => 'Removing routes',
+            'removePages' => 'Removing Vue pages',
+            'removeController' => 'Removing TenantController',
+            'restoreBootstrapProviders' => 'Restoring bootstrap providers',
+            'removeDatabaseConfig' => 'Removing tenant database config',
+            'restoreUserModel' => 'Restoring User model',
+            'removeEnvVariables' => 'Removing env variables',
+            'resetDatabase' => 'Resetting database',
+        ];
+
+        $currentStep = 0;
+        $totalSteps = count($steps);
+
+        foreach ($steps as $method => $description) {
+            $currentStep++;
+            $prefix = "[{$currentStep}/{$totalSteps}]";
+
+            $result = spin(
+                fn () => $this->{$method}(),
+                "{$prefix} {$description}..."
+            );
+
+            if ($result === false) {
+                error("Failed: {$description}");
+
+                return self::FAILURE;
+            }
+        }
+
+        $this->newLine();
+        info('Tenancy rollback complete! The application has been reset.');
+        $this->newLine();
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Remove the tenancy configuration file.
+     */
+    protected function removeConfig(): bool
+    {
+        $path = config_path('tenancy.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove the TenancyServiceProvider.
+     */
+    protected function removeProvider(): bool
+    {
+        $path = app_path('Providers/TenancyServiceProvider.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove tenancy model files.
+     */
+    protected function removeModels(): bool
+    {
+        $files = [
+            app_path('Models/Tenant.php'),
+            app_path('Models/Domain.php'),
+            app_path('Models/TenantUser.php'),
+            app_path('Models/CentralUser.php'),
+            app_path('Models/Concerns/CentralConnection.php'),
+        ];
+
+        foreach ($files as $file) {
+            if ($this->files->exists($file)) {
+                $this->files->delete($file);
+            }
+        }
+
+        // Remove Tenant directory
+        $tenantDir = app_path('Models/Tenant');
+        if ($this->files->isDirectory($tenantDir)) {
+            $this->files->deleteDirectory($tenantDir);
+        }
+
+        // Remove Concerns directory if empty
+        $concernsDir = app_path('Models/Concerns');
+        if ($this->files->isDirectory($concernsDir) && count($this->files->files($concernsDir)) === 0) {
+            $this->files->deleteDirectory($concernsDir);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove TenantService.
+     */
+    protected function removeServices(): bool
+    {
+        $path = app_path('Services/TenantService.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove tenancy jobs.
+     */
+    protected function removeJobs(): bool
+    {
+        $path = app_path('Jobs/MarkTenantReady.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove tenancy migrations.
+     */
+    protected function removeMigrations(): bool
+    {
+        // Remove tenant migrations directory
+        $tenantMigrationsDir = database_path('migrations/tenant');
+        if ($this->files->isDirectory($tenantMigrationsDir)) {
+            $this->files->deleteDirectory($tenantMigrationsDir);
+        }
+
+        // Remove central tenancy migrations
+        $centralMigrations = $this->files->glob(database_path('migrations/*_create_tenants_table.php'));
+        $centralMigrations = array_merge($centralMigrations, $this->files->glob(database_path('migrations/*_create_domains_table.php')));
+        $centralMigrations = array_merge($centralMigrations, $this->files->glob(database_path('migrations/*_create_tenant_user_table.php')));
+
+        foreach ($centralMigrations as $migration) {
+            $this->files->delete($migration);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove TenantIsReady middleware.
+     */
+    protected function removeMiddleware(): bool
+    {
+        $path = app_path('Http/Middleware/TenantIsReady.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove tenant routes file.
+     */
+    protected function removeRoutes(): bool
+    {
+        $path = base_path('routes/tenant.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove tenancy Vue pages.
+     */
+    protected function removePages(): bool
+    {
+        $directories = [
+            resource_path('js/pages/tenant'),
+            resource_path('js/pages/tenants'),
+        ];
+
+        foreach ($directories as $directory) {
+            if ($this->files->isDirectory($directory)) {
+                $this->files->deleteDirectory($directory);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove TenantController.
+     */
+    protected function removeController(): bool
+    {
+        $path = app_path('Http/Controllers/TenantController.php');
+        if ($this->files->exists($path)) {
+            $this->files->delete($path);
+        }
+
+        return true;
+    }
+
+    /**
+     * Restore bootstrap/providers.php to original state.
+     */
+    protected function restoreBootstrapProviders(): bool
+    {
+        $path = base_path('bootstrap/providers.php');
+
+        $originalContent = <<<'PHP'
+<?php
+
+return [
+    App\Providers\AppServiceProvider::class,
+    App\Providers\HorizonServiceProvider::class,
+];
+
+PHP;
+
+        $this->files->put($path, $originalContent);
+
+        return true;
+    }
+
+    /**
+     * Remove tenant connection from database config.
+     */
+    protected function removeDatabaseConfig(): bool
+    {
+        $path = config_path('database.php');
+        $content = $this->files->get($path);
+
+        // Remove the tenant connection block
+        $pattern = "/\s*'tenant'\s*=>\s*\[[^\]]+\],/s";
+        $content = preg_replace($pattern, '', $content);
+
+        $this->files->put($path, $content);
+
+        return true;
+    }
+
+    /**
+     * Restore User model to standalone class.
+     */
+    protected function restoreUserModel(): bool
+    {
+        $userPath = app_path('Models/User.php');
+
+        // Restore original User model from stub
+        $stubPath = base_path('stubs/default/models/User.php.stub');
+
+        if ($this->files->exists($stubPath)) {
+            $this->files->copy($stubPath, $userPath);
+        } else {
+            // Create a basic User model
+            $userContent = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'timezone',
+        'is_active',
+        'last_seen_at',
+        'last_ip_address',
+        'last_user_agent',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
+            'last_seen_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    /**
+     * Check if the user is currently online (seen within last 5 minutes).
+     */
+    public function isOnline(): bool
+    {
+        /** @var \Illuminate\Support\Carbon|null $lastSeen */
+        $lastSeen = $this->last_seen_at;
+
+        return $lastSeen !== null && $lastSeen->greaterThan(now()->subMinutes(5));
+    }
+}
+
+PHP;
+
+            $this->files->put($userPath, $userContent);
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove tenancy variables from .env.example.
+     */
+    protected function removeEnvVariables(): bool
+    {
+        $path = base_path('.env.example');
+
+        if (! $this->files->exists($path)) {
+            return true;
+        }
+
+        $content = $this->files->get($path);
+
+        // Remove the tenancy section
+        $content = preg_replace('/\n*# Multi-Tenancy\nTENANCY_ENABLED=.*\nAPP_DOMAIN=.*\nTENANCY_DB_PREFIX=.*\nTENANCY_QUEUE_CREATION=.*\nTENANCY_QUEUE_DELETION=.*/s', '', $content);
+
+        $this->files->put($path, $content);
+
+        return true;
+    }
+
+    /**
+     * Reset the database using start:fresh.
+     */
+    protected function resetDatabase(): bool
+    {
+        $this->call('start:fresh', ['--non-interactive' => true]);
+
+        return true;
     }
 }

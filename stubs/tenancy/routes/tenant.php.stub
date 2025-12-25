@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Middleware\TenantIsReady;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomainOrSubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
@@ -36,8 +37,14 @@ Route::middleware([
     */
 
     Route::get('/', function () {
-        return view('tenant.welcome', [
-            'tenant' => tenant(),
+        $tenant = tenant();
+
+        return Inertia::render('tenant/Welcome', [
+            'tenant' => [
+                'id' => $tenant->id,
+                'company_name' => $tenant->company_name,
+            ],
+            'centralUrl' => config('app.url'),
         ]);
     })->name('tenant.home');
 
@@ -53,9 +60,14 @@ Route::middleware([
     Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::get('/dashboard', function () {
-            return view('tenant.dashboard', [
-                'tenant' => tenant(),
-                'user' => auth()->user(),
+            $tenant = tenant();
+
+            return Inertia::render('tenant/Dashboard', [
+                'tenant' => [
+                    'id' => $tenant->id,
+                    'company_name' => $tenant->company_name,
+                ],
+                'centralUrl' => config('app.url'),
             ]);
         })->name('tenant.dashboard');
 
