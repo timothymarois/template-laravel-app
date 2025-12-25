@@ -63,12 +63,14 @@
 
 <script setup lang="ts">
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-vue-next';
-
-interface PaginationLink {
-    url: string | null;
-    label: string;
-    active: boolean;
-}
+import {
+    getPaginationLinkComponent,
+    getPageNumberLabel,
+    isEllipsisLabel,
+    isNextLink,
+    isPreviousLink,
+    type PaginationLink,
+} from '@/components/ui/pagination/paginatorUtils';
 
 interface Props {
     links?: PaginationLink[];
@@ -80,31 +82,18 @@ const props = withDefaults(defineProps<Props>(), {
     linkComponent: 'a',
 });
 
-const getLinkComponent = (link: PaginationLink) => {
-    if (!link.url) return 'span';
-    return props.linkComponent;
-};
+const getLinkComponent = (link: PaginationLink) =>
+    getPaginationLinkComponent(link, props.linkComponent);
 
-const isPrevious = (link: PaginationLink, index: number) => {
-    return index === 0 && (
-        link.label.toLowerCase().includes('previous') ||
-        link.label.includes('&laquo;')
-    );
-};
+const isPrevious = (link: PaginationLink, index: number) =>
+    isPreviousLink(link, index);
 
-const isNext = (link: PaginationLink, index: number) => {
-    return index === props.links.length - 1 && (
-        link.label.toLowerCase().includes('next') ||
-        link.label.includes('&raquo;')
-    );
-};
+const isNext = (link: PaginationLink, index: number) =>
+    isNextLink(link, index, props.links.length);
 
-const isEllipsis = (label: string) => {
-    return label === '...' || label.includes('&hellip;');
-};
+const isEllipsis = (label: string) =>
+    isEllipsisLabel(label);
 
-const getPageNumber = (label: string) => {
-    // Strip any HTML entities and return clean number
-    return label.replace(/&[^;]+;/g, '').trim();
-};
+const getPageNumber = (label: string) =>
+    getPageNumberLabel(label);
 </script>
