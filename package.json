@@ -22,6 +22,8 @@
     "@inertiajs/vue3": "^2.0.0",
     "@stylistic/stylelint-plugin": "^4.0.0",
     "@tailwindcss/typography": "^0.5.16",
+    "@tiptap/core": "^3.14.0",
+    "@tiptap/pm": "^3.14.0",
     "@typescript-eslint/parser": "^8.48.0",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/server-renderer": "^3.5.13",
