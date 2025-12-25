@@ -69,7 +69,8 @@
 import { ref, computed } from 'vue';
 import { Upload, X, File as FileIcon } from 'lucide-vue-next';
 import { formatBytes } from '@/utils/format';
-import { normalizeFiles, validateFileSize, validateFileType } from '@/utils/file';
+import { normalizeFiles } from '@/utils/file';
+import { processDropzoneFiles } from './processDropzoneFiles';
 
 interface Props {
     modelValue?: File | File[] | null;
@@ -100,66 +101,26 @@ const isDragOver = ref(false);
 
 const files = computed<File[]>(() => normalizeFiles(props.modelValue));
 
-const validateFile = (file: File): boolean => {
-    // Check file size
-    if (props.maxSize && !validateFileSize(file, props.maxSize)) {
-        emit('error', {
-            type: 'size',
-            message: `File "${file.name}" exceeds maximum size of ${formatBytes(props.maxSize, 1)}`,
-            file,
-        });
-        return false;
-    }
-
-    // Check file type
-    if (props.accept && !validateFileType(file, props.accept)) {
-        emit('error', {
-            type: 'type',
-            message: `File "${file.name}" is not an accepted file type`,
-            file,
-        });
-        return false;
-    }
-
-    return true;
-};
-
 const processFiles = (newFiles: File[]) => {
     if (props.disabled) return;
+    const { errors, nextValue } = processDropzoneFiles({
+        newFiles,
+        existingFiles: files.value,
+        accept: props.accept,
+        maxSize: props.maxSize,
+        maxFiles: props.maxFiles,
+        multiple: props.multiple,
+    });
 
-    // Filter valid files
-    const validFiles = newFiles.filter(validateFile);
-
-    if (validFiles.length === 0) return;
-
-    // Check max files
-    if (props.maxFiles && props.multiple) {
-        const currentCount = files.value.length;
-        const availableSlots = props.maxFiles - currentCount;
-
-        if (availableSlots <= 0) {
-            emit('error', {
-                type: 'maxFiles',
-                message: `Maximum of ${props.maxFiles} files allowed`,
-            });
-            return;
-        }
-
-        if (validFiles.length > availableSlots) {
-            validFiles.splice(availableSlots);
-        }
+    if (errors.length > 0) {
+        errors.forEach((error) => emit('error', error));
     }
 
-    let result: File | File[] | null;
+    if (nextValue === undefined) return;
 
-    if (props.multiple) {
-        result = [...files.value, ...validFiles];
-    } else {
-        result = validFiles[0];
-    }
-
-    emit('update:modelValue', result);
-    emit('change', Array.isArray(result) ? result : [result]);
+    emit('update:modelValue', nextValue);
+    const emittedFiles = Array.isArray(nextValue) ? nextValue : nextValue ? [nextValue] : [];
+    emit('change', emittedFiles);
 };
 
 const triggerInput = () => {
