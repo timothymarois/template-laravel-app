@@ -260,6 +260,76 @@
                     </div>
                 </CardContent>
             </Card>
+
+            <!-- Date Range Picker with Presets -->
+            <Card>
+                <CardHeader>
+                    <CardTitle>Date Range Picker with Presets</CardTitle>
+                    <CardDescription>Quick selection options for common date ranges</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">With Default Presets</div>
+                            <DateRangePicker v-model="rangeWithPresets" :presets="true" fluid />
+                            <div class="text-xs text-muted-foreground mt-2">
+                                <code class="bg-muted px-1 py-0.5 rounded">:presets="true"</code> - uses built-in presets
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Custom Presets</div>
+                            <DateRangePicker v-model="rangeCustomPresets" :presets="customPresets" fluid />
+                            <div class="text-xs text-muted-foreground mt-2">
+                                <code class="bg-muted px-1 py-0.5 rounded">:presets="[...]"</code> - custom preset array
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">With Confirm Mode</div>
+                            <DateRangePicker v-model="rangeConfirm" :presets="true" confirm-mode fluid />
+                            <div class="text-xs text-muted-foreground mt-2">
+                                <code class="bg-muted px-1 py-0.5 rounded">confirm-mode</code> - requires Apply/Cancel
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-muted-foreground mb-1">Full Featured</div>
+                            <DateRangePicker
+                                v-model="rangeFull"
+                                :presets="true"
+                                confirm-mode
+                                clearable
+                                fluid
+                            />
+                            <div class="text-xs text-muted-foreground mt-2">
+                                All options enabled
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-muted rounded-lg">
+                        <div class="text-xs font-medium mb-2">Custom Presets Example</div>
+                        <pre class="text-xs overflow-x-auto"><code>import { today, getLocalTimeZone } from '@internationalized/date';
+import type { DateRangePreset } from '@/components/ui/date-picker';
+
+const customPresets: DateRangePreset[] = [
+    {
+        label: 'This Week',
+        getValue: () => {
+            const t = today(getLocalTimeZone());
+            const dayOfWeek = t.toDate(getLocalTimeZone()).getDay();
+            return { start: t.subtract({ days: dayOfWeek }), end: t };
+        },
+    },
+    {
+        label: 'Last Quarter',
+        getValue: () => {
+            const t = today(getLocalTimeZone());
+            return { start: t.subtract({ months: 3 }), end: t };
+        },
+    },
+];</code></pre>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     </LayoutApp>
 </template>
@@ -272,7 +342,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { RangeCalendar } from '@/components/ui/range-calendar';
-import { DatePicker, DateInput, DateRangePicker } from '@/components/ui/date-picker';
+import { DatePicker, DateInput, DateRangePicker, type DateRangePreset } from '@/components/ui/date-picker';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';
 import { today, getLocalTimeZone, getDayOfWeek } from '@internationalized/date';
 
@@ -322,6 +392,41 @@ const rangePickerEmpty = ref<DateRange>();
 const rangePickerClearable = ref<DateRange>();
 const rangePickerInvalid = ref<DateRange>();
 const rangePickerNoWeekends = ref<DateRange>();
+
+// Date range picker with presets examples
+const rangeWithPresets = ref<DateRange>();
+const rangeCustomPresets = ref<DateRange>();
+const rangeConfirm = ref<DateRange>();
+const rangeFull = ref<DateRange>();
+
+// Custom presets example
+const customPresets: DateRangePreset[] = [
+    {
+        label: 'This Week',
+        getValue: () => {
+            const t = today(getLocalTimeZone());
+            const dayOfWeek = t.toDate(getLocalTimeZone()).getDay();
+            return { start: t.subtract({ days: dayOfWeek }), end: t };
+        },
+    },
+    {
+        label: 'Last Quarter',
+        getValue: () => {
+            const t = today(getLocalTimeZone());
+            return { start: t.subtract({ months: 3 }), end: t };
+        },
+    },
+    {
+        label: 'Last Year',
+        getValue: () => {
+            const t = today(getLocalTimeZone());
+            return {
+                start: t.subtract({ years: 1 }).set({ month: 1, day: 1 }),
+                end: t.subtract({ years: 1 }).set({ month: 12, day: 31 }),
+            };
+        },
+    },
+];
 
 // Disable functions
 const todayDate = today(getLocalTimeZone());

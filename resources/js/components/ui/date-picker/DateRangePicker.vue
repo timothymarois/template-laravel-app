@@ -9,19 +9,19 @@
                     :class="[
                         fluid ? 'w-full' : '',
                         !fluid && !clearable ? '' : 'flex-1',
-                        !modelValue?.start && 'text-muted-foreground',
-                        modelValue?.start && clearable && 'rounded-r-none border-r-0',
+                        !displayValue?.start && 'text-muted-foreground',
+                        displayValue?.start && clearable && 'rounded-r-none border-r-0',
                         invalid && 'border-destructive focus:ring-destructive'
                     ]"
                 >
                     <span class="flex items-center min-w-0 flex-1">
                         <CalendarIcon class="mr-2 h-4 w-4 shrink-0" />
                         <span class="truncate">
-                            <template v-if="modelValue?.start && modelValue?.end">
-                                {{ formatDateValue(modelValue.start) }} - {{ formatDateValue(modelValue.end) }}
+                            <template v-if="displayValue?.start && displayValue?.end">
+                                {{ formatDateValue(displayValue.start) }} - {{ formatDateValue(displayValue.end) }}
                             </template>
-                            <template v-else-if="modelValue?.start">
-                                {{ formatDateValue(modelValue.start) }} - ...
+                            <template v-else-if="displayValue?.start">
+                                {{ formatDateValue(displayValue.start) }} - ...
                             </template>
                             <template v-else>
                                 {{ placeholder }}
@@ -32,12 +32,59 @@
                 </Button>
             </PopoverTrigger>
             <PopoverContent class="w-auto p-0" :align="align">
-                <RangeCalendar
-                    :model-value="modelValue"
-                    :isDateDisabled="isDateDisabled"
-                    :numberOfMonths="numberOfMonths"
-                    @update:model-value="onSelect"
-                />
+                <div class="flex">
+                    <!-- Presets Sidebar -->
+                    <div
+                        v-if="resolvedPresets.length > 0"
+                        class="w-40 border-r border-border p-3 flex flex-col gap-1"
+                    >
+                        <button
+                            v-for="preset in resolvedPresets"
+                            :key="preset.label"
+                            type="button"
+                            class="text-sm text-left w-full px-2 py-1.5 rounded transition-colors cursor-pointer"
+                            :class="[
+                                isPresetActive(preset)
+                                    ? 'bg-accent text-accent-foreground'
+                                    : 'hover:bg-accent hover:text-accent-foreground'
+                            ]"
+                            @click="onPresetSelect(preset)"
+                        >
+                            {{ preset.label }}
+                        </button>
+                    </div>
+
+                    <!-- Calendar -->
+                    <div>
+                        <RangeCalendar
+                            :model-value="internalValue"
+                            :isDateDisabled="isDateDisabled"
+                            :numberOfMonths="numberOfMonths"
+                            @update:model-value="onCalendarSelect"
+                        />
+
+                        <!-- Confirm Mode Footer -->
+                        <div
+                            v-if="confirmMode"
+                            class="flex justify-end gap-2 p-3 border-t border-border"
+                        >
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                @click="onCancel"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                size="sm"
+                                :disabled="!internalValue?.start || !internalValue?.end"
+                                @click="onApply"
+                            >
+                                Apply
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </PopoverContent>
         </PopoverBase>
         <Button
@@ -54,13 +101,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import type { DateValue, DateRange } from 'reka-ui';
 import { Button } from '@/components/ui/button';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RangeCalendar } from '@/components/ui/range-calendar';
 import { Calendar as CalendarIcon, ChevronDown, X } from 'lucide-vue-next';
 import { formatDateValue } from '@/utils/format';
+import { defaultPresets, type DateRangePreset } from './presets';
 
 interface Props {
     modelValue?: DateRange;
@@ -72,6 +120,18 @@ interface Props {
     align?: 'start' | 'center' | 'end';
     numberOfMonths?: number;
     isDateDisabled?: (date: DateValue) => boolean;
+    /**
+     * Preset options for quick date range selection.
+     * - `true` - use default presets
+     * - `DateRangePreset[]` - use custom presets
+     * - `false` or `undefined` - no presets (default)
+     */
+    presets?: DateRangePreset[] | boolean;
+    /**
+     * When true, requires explicit Apply/Cancel instead of auto-close on selection.
+     * Useful when you want users to confirm their selection before applying.
+     */
+    confirmMode?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -82,6 +142,8 @@ const props = withDefaults(defineProps<Props>(), {
     fluid: false,
     align: 'start',
     numberOfMonths: 2,
+    presets: false,
+    confirmMode: false,
 });
 
 const emit = defineEmits<{
@@ -89,15 +151,89 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = ref(false);
+const internalValue = ref<DateRange | undefined>(props.modelValue);
 
-function onSelect(range: DateRange) {
-    emit('update:modelValue', range);
-    // Close popover when both dates are selected
-    if (range.start && range.end) {
+// Resolve presets based on prop value
+const resolvedPresets = computed<DateRangePreset[]>(() => {
+    if (props.presets === true) {
+        return defaultPresets;
+    }
+    if (Array.isArray(props.presets)) {
+        return props.presets;
+    }
+    return [];
+});
+
+// The value to display in the trigger button
+const displayValue = computed(() => {
+    if (props.confirmMode) {
+        // In confirm mode, always show the committed (modelValue) value
+        return props.modelValue;
+    }
+    return props.modelValue;
+});
+
+// Sync internal value when modelValue changes externally
+watch(() => props.modelValue, (newValue) => {
+    internalValue.value = newValue;
+}, { deep: true });
+
+// Reset internal value when popover opens
+watch(isOpen, (open) => {
+    if (open) {
+        internalValue.value = props.modelValue;
+    }
+});
+
+// Check if a preset matches the current internal selection
+function isPresetActive(preset: DateRangePreset): boolean {
+    if (!internalValue.value?.start || !internalValue.value?.end) {
+        return false;
+    }
+    const presetRange = preset.getValue();
+    return (
+        presetRange.start?.toString() === internalValue.value.start?.toString() &&
+        presetRange.end?.toString() === internalValue.value.end?.toString()
+    );
+}
+
+// Handle preset selection
+function onPresetSelect(preset: DateRangePreset) {
+    const range = preset.getValue();
+    internalValue.value = range;
+
+    if (!props.confirmMode) {
+        emit('update:modelValue', range);
         isOpen.value = false;
     }
 }
 
+// Handle calendar selection
+function onCalendarSelect(range: DateRange) {
+    internalValue.value = range;
+
+    if (!props.confirmMode) {
+        emit('update:modelValue', range);
+        // Close popover when both dates are selected
+        if (range.start && range.end) {
+            isOpen.value = false;
+        }
+    }
+}
+
+// Confirm mode: Apply selection
+function onApply() {
+    emit('update:modelValue', internalValue.value);
+    isOpen.value = false;
+}
+
+// Confirm mode: Cancel and revert
+function onCancel() {
+    internalValue.value = props.modelValue;
+    isOpen.value = false;
+}
+
+// Clear the selection
 function onClear() {
     emit('update:modelValue', undefined);
 }
