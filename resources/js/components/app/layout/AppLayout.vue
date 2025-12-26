@@ -90,7 +90,7 @@
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { IconUser, IconColorFilter, IconHome } from '@tabler/icons-vue';
-import { Building2, CreditCard, Users, LayoutGrid, Settings, Activity, LogOut } from 'lucide-vue-next';
+import { Gauge, ScrollText, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
 import ModeToggle from '../navigation/ModeToggle.vue';
@@ -165,13 +165,8 @@ const absoluteOgImage = computed(() => {
 
 const profileMenuItems = computed(() => [
     { separator: true },
-    { label: 'Company Name', icon: Building2, href: '/' },
-    { separator: true },
-    { label: 'Billing & Plan', icon: CreditCard, href: '/' },
-    { label: 'Manage Access', icon: Users, href: '/' },
-    { label: 'Integrations', icon: LayoutGrid, href: '/' },
-    { label: 'Settings', icon: Settings, href: '/' },
-    { label: 'Status page', icon: Activity, href: 'https://google.com', external: true },
+    { label: 'Horizon', icon: Gauge, href: '/horizon', external: true },
+    { label: 'Log Viewer', icon: ScrollText, href: '/log-viewer', external: true },
     { separator: true },
     { label: 'Logout', icon: LogOut, href: '/logout' }
 ]);
