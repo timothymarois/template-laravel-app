@@ -206,10 +206,23 @@ export class BootManager {
             }
 
             // Step 5: Start Redis (if enabled)
-            if (this.config.services.redis.enabled && this.redisService && !this.config.services.redis.external) {
-                console.log('[Boot] Step 5: Starting Redis...');
-                this.options.onStatusUpdate('Starting Redis...', 35);
-                await this.redisService.start(this.redisPort);
+            if (this.config.services.redis.enabled && this.redisService) {
+                if (this.config.services.redis.external) {
+                    // For external Redis, just verify it's available
+                    console.log('[Boot] Step 5: Checking external Redis...');
+                    this.options.onStatusUpdate('Checking Redis...', 35);
+                    const available = await this.redisService.checkConnection(this.redisPort);
+                    if (available) {
+                        console.log(`[Boot] External Redis available on port ${this.redisPort}`);
+                        this.redisService.isAvailableInDev = true;
+                    } else {
+                        console.warn(`[Boot] External Redis not available on port ${this.redisPort}`);
+                    }
+                } else {
+                    console.log('[Boot] Step 5: Starting Redis...');
+                    this.options.onStatusUpdate('Starting Redis...', 35);
+                    await this.redisService.start(this.redisPort);
+                }
             }
 
             // Step 6: Start Laravel

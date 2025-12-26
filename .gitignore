@@ -38,6 +38,10 @@ _ide_helper_models.php
 /storage/tenancy-backups
 /storage/electron-backups
 
+# Electron
+/electron/dist
+/dist-electron
+
 # Intellij idea
 *.iml
 .idea
