@@ -5,6 +5,10 @@ import * as fs from 'fs';
 import { BootManager } from './boot-manager';
 import { createLoadingWindow, createMainWindow } from './windows';
 
+// Prevent EPIPE errors from crashing the app during shutdown
+process.stdout?.on('error', () => {});
+process.stderr?.on('error', () => {});
+
 // Get bundle ID from package.json or use default
 function getBundleId(): string {
     try {

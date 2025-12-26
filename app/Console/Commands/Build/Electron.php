@@ -617,11 +617,12 @@ README;
 
         // Add electron scripts
         $electronScripts = [
-            'electron:dev' => 'tsc -p electron && NODE_ENV=development electron .',
-            'electron:build' => 'pnpm build && tsc -p electron && electron-builder',
-            'electron:build:mac' => 'pnpm build && tsc -p electron && electron-builder --mac',
-            'electron:build:win' => 'pnpm build && tsc -p electron && electron-builder --win',
-            'electron:build:dir' => 'pnpm build && tsc -p electron && electron-builder --dir',
+            'electron:compile' => "mkdir -p electron/dist && echo '{\"type\":\"commonjs\"}' > electron/dist/package.json && tsc -p electron && cp -r electron/renderer electron/dist/",
+            'electron:dev' => 'pnpm electron:compile && NODE_ENV=development electron .',
+            'electron:build' => 'pnpm build && pnpm electron:compile && electron-builder',
+            'electron:build:mac' => 'pnpm build && pnpm electron:compile && electron-builder --mac',
+            'electron:build:win' => 'pnpm build && pnpm electron:compile && electron-builder --win',
+            'electron:build:dir' => 'pnpm build && pnpm electron:compile && electron-builder --dir',
             'setup:binaries' => './scripts/setup-binaries.sh',
             'setup:binaries:win' => 'powershell -ExecutionPolicy Bypass -File scripts/setup-binaries.ps1',
         ];

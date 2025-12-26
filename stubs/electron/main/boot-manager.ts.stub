@@ -145,7 +145,8 @@ export class BootManager {
                 },
                 redis: {
                     enabled: process.env.ELECTRON_REDIS_ENABLED !== 'false',
-                    external: process.env.ELECTRON_REDIS_EXTERNAL === 'true',
+                    // In dev mode, default to external Redis (use system Redis like Herd)
+                    external: process.env.ELECTRON_REDIS_EXTERNAL === 'true' || (this.options.isDev && process.env.ELECTRON_REDIS_EXTERNAL !== 'false'),
                 },
                 horizon: {
                     enabled: process.env.ELECTRON_HORIZON_ENABLED !== 'false',

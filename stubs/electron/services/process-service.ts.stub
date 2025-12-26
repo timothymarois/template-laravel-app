@@ -38,21 +38,35 @@ export class ProcessService {
             stdio: ['ignore', 'pipe', 'pipe'],
         });
 
+        // Handle stream errors to prevent EPIPE crashes during shutdown
+        child.stdout?.on('error', () => {});
+        child.stderr?.on('error', () => {});
+        process.stdout?.on('error', () => {});
+        process.stderr?.on('error', () => {});
+
         child.stdout?.on('data', (data) => {
-            console.log(`[${name}] ${data.toString().trim()}`);
+            try {
+                console.log(`[${name}] ${data.toString().trim()}`);
+            } catch {}
         });
 
         child.stderr?.on('data', (data) => {
-            console.error(`[${name}] ${data.toString().trim()}`);
+            try {
+                console.error(`[${name}] ${data.toString().trim()}`);
+            } catch {}
         });
 
         child.on('error', (error) => {
-            console.error(`[${name}] Process error:`, error);
-            this.onError(`${name} process error: ${error.message}`);
+            try {
+                console.error(`[${name}] Process error:`, error);
+                this.onError(`${name} process error: ${error.message}`);
+            } catch {}
         });
 
         child.on('exit', (code, signal) => {
-            console.log(`[${name}] Process exited with code ${code}, signal ${signal}`);
+            try {
+                console.log(`[${name}] Process exited with code ${code}, signal ${signal}`);
+            } catch {}
             this.processes.delete(name);
         });
 
