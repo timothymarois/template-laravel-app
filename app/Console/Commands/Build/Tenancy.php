@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Build;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -15,14 +15,14 @@ use function Laravel\Prompts\note;
 use function Laravel\Prompts\spin;
 use function Laravel\Prompts\warning;
 
-class SetupTenancy extends Command
+class Tenancy extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'tenancy:setup
+    protected $signature = 'build:tenancy
                             {--force : Overwrite existing tenancy configuration}
                             {--skip-composer : Skip installing the tenancy package}
                             {--rollback : Remove tenancy and reset the application}';
@@ -100,6 +100,17 @@ class SetupTenancy extends Command
             }
         }
 
+        // Warn about database reset
+        if (! $this->option('force')) {
+            warning('This will reset your database after setup completes.');
+
+            if (! confirm('All existing data will be lost. Continue?', false)) {
+                info('Setup cancelled.');
+
+                return self::SUCCESS;
+            }
+        }
+
         // Run setup steps
         $steps = [
             'installPackage' => 'Installing stancl/tenancy package',
@@ -121,6 +132,7 @@ class SetupTenancy extends Command
             'updateDatabaseConfig' => 'Updating database configuration',
             'convertUserModel' => 'Converting User model to CentralUser',
             'updateRegisterController' => 'Updating RegisterController for tenancy',
+            'resetDatabase' => 'Resetting database',
         ];
 
         $currentStep = 0;
@@ -687,7 +699,9 @@ PHP;
 
         // Confirm rollback (skip if --force is used)
         if (! $this->option('force')) {
-            if (! confirm('This will remove all tenancy files and reset the database. Continue?', false)) {
+            warning('This will remove all tenancy files and reset the database.');
+
+            if (! confirm('All existing data will be lost. Continue?', false)) {
                 info('Rollback cancelled.');
 
                 return self::SUCCESS;

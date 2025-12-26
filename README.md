@@ -91,6 +91,7 @@ pnpm dev
 - [WebSockets](#websockets) — Real-time with Reverb and Echo
 - [SEO & Social](#seo--social-sharing) — Meta tags and sitemaps
 - [Patterns](#patterns) — Routes, notifications, icons, API requests
+- [Multi-Tenancy](#multi-tenancy) — Optional subdomain-based multi-tenancy
 
 ---
 
@@ -539,6 +540,41 @@ import { IconHome } from '@tabler/icons-vue';
 ```
 
 Browse icons: [Lucide](https://lucide.dev/) | [Tabler](https://tabler.io/icons)
+
+---
+
+## Multi-Tenancy
+
+This starter includes optional multi-tenancy support using [stancl/tenancy](https://tenancyforlaravel.com/). Enable it when you need isolated databases per customer/organization.
+
+### Quick Setup
+
+```bash
+# Enable multi-tenancy
+php artisan build:tenancy
+
+# Run migrations
+php artisan migrate
+
+# Rollback (removes tenancy completely)
+php artisan build:tenancy --rollback
+```
+
+### Features
+
+- **Subdomain routing** — Each tenant gets `{subdomain}.yourapp.com`
+- **Separate databases** — Complete data isolation per tenant
+- **Two-tier users** — CentralUser for auth, Tenant User for tenant-specific data
+- **Zero impact when disabled** — Tenancy features only load when configured
+
+### Configuration
+
+```env
+APP_DOMAIN=yourapp.com
+TENANCY_DB_PREFIX=tenant_
+```
+
+For complete documentation, see [docs/Tenancy.md](docs/Tenancy.md).
 
 ---
 

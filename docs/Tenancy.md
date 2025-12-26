@@ -57,15 +57,45 @@ Central Database                    Tenant Databases (per tenant)
 Run the setup command:
 
 ```bash
-php artisan tenancy:setup
+php artisan build:tenancy
 ```
 
 This command will:
 1. Install the `stancl/tenancy` package via Composer
-2. Create necessary models (Tenant, Domain, CentralUser, etc.)
-3. Set up migrations for central and tenant databases
-4. Configure routes and middleware
-5. Update your User model to CentralUser
+2. Back up original files (for rollback capability)
+3. Create necessary models (Tenant, Domain, CentralUser, etc.)
+4. Set up migrations for central and tenant databases
+5. Configure routes and middleware
+6. Update your User model to extend CentralUser
+7. Update RegisterController to create tenant on registration
+8. Reset the database and run migrations
+
+**Warning:** This command will reset your database. All existing data will be lost.
+
+### Disabling Multi-Tenancy (Rollback)
+
+To completely remove tenancy and restore the application to its original state:
+
+```bash
+php artisan build:tenancy --rollback
+```
+
+This command will:
+1. Remove all tenancy configuration and files
+2. Restore original files from backups (User.php, RegisterController.php, etc.)
+3. Remove the `stancl/tenancy` package via Composer
+4. Drop all tenant databases
+5. Reset the central database
+
+**Warning:** This command will reset your database. All existing data will be lost.
+
+**Note:** Neither build nor rollback can be run in production (`APP_ENV=production`).
+
+Use `--force` to skip confirmation prompts:
+
+```bash
+php artisan build:tenancy --rollback --force
+```
 
 ### Post-Setup Steps
 
@@ -74,7 +104,6 @@ This command will:
    Add to your `.env`:
    ```env
    APP_DOMAIN=yourapp.com
-   TENANCY_ENABLED=true
    TENANCY_DB_PREFIX=tenant_
    ```
 
@@ -87,6 +116,10 @@ This command will:
 3. **Configure Database User Permissions**
 
    Ensure your database user has `CREATE DATABASE` privileges for creating tenant databases.
+
+### Detection
+
+Tenancy is enabled/disabled based on the presence of `config/tenancy.php`. If this file exists, the `TenancyServiceProvider` is loaded and tenancy features are active.
 
 ## Configuration
 
@@ -214,16 +247,16 @@ if ($user->hasRole('member')) { ... }
 
 ### Central Routes (`routes/web.php`)
 
-These routes are accessible on your central domain:
+These routes are accessible on your central domain. The original routes remain unchanged when tenancy is enabled.
+
+### Tenant Selection Routes (`routes/tenants.php`)
+
+These routes are loaded conditionally via `bootstrap/app.php` when tenancy is configured:
 
 ```php
-// Landing page, registration, login
-Route::get('/', [PageController::class, 'home']);
-Route::get('/login', [SessionController::class, 'create']);
-
-// Tenant selection (for authenticated users)
-Route::middleware('auth')->group(function () {
-    Route::get('/tenants', [TenantSelectorController::class, 'index']);
+Route::middleware(['web', 'auth:sanctum'])->group(function () {
+    Route::get('tenants', [TenantController::class, 'index'])->name('tenants.index');
+    Route::post('tenants/select', [TenantController::class, 'select'])->name('tenants.select');
 });
 ```
 
@@ -371,17 +404,27 @@ storage/tenant_{tenant_id}/
 
 ## Disabling Tenancy
 
-To temporarily disable tenancy without removing configuration:
+### Temporary Disable
+
+To temporarily disable tenancy without removing files, set in `.env`:
 
 ```env
 TENANCY_ENABLED=false
 ```
 
-To completely remove tenancy:
+### Complete Removal
 
-1. Remove `config/tenancy.php`
-2. Remove tenant-related models and migrations
-3. Rename `CentralUser.php` back to `User.php`
+To completely remove tenancy and restore original files:
+
+```bash
+php artisan build:tenancy --rollback
+```
+
+This is the recommended approach as it:
+- Restores all original files from backups
+- Removes the composer package
+- Drops tenant databases
+- Resets the central database
 
 ## Resources
 
