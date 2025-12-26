@@ -127,16 +127,14 @@ class ElectronSetupTest extends TestCase
         $this->assertFileExists(base_path('electron/renderer/loading.html'));
     }
 
-    public function test_it_creates_build_scripts(): void
+    public function test_build_scripts_already_exist(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
-            ->assertSuccessful();
-
-        $this->assertFileExists(base_path('scripts/setup-binaries.sh'));
-        $this->assertFileExists(base_path('scripts/setup-binaries.ps1'));
+        // Build scripts are part of the codebase in electron/scripts/, not created by build:electron
+        $this->assertFileExists(base_path('electron/scripts/setup-binaries.sh'));
+        $this->assertFileExists(base_path('electron/scripts/setup-binaries.ps1'));
 
         // Verify shell script is executable
-        $this->assertTrue(is_executable(base_path('scripts/setup-binaries.sh')));
+        $this->assertTrue(is_executable(base_path('electron/scripts/setup-binaries.sh')));
     }
 
     public function test_tsconfig_already_exists(): void

@@ -135,7 +135,6 @@ class Electron extends Command
             'backupOriginalFiles' => 'Backing up original files',
             'publishElectronConfig' => 'Publishing configuration',
             'publishServiceProvider' => 'Publishing service provider',
-            'publishBuildScripts' => 'Publishing build scripts',
             'publishBuilderConfig' => 'Publishing electron-builder config',
             'updatePackageJson' => 'Updating package.json',
             'updateBootstrapProviders' => 'Updating bootstrap providers',
@@ -322,16 +321,9 @@ class Electron extends Command
     protected function createDirectories(): bool
     {
         // electron/ directory already exists in the codebase
-        // Only create scripts/ and backup directories
-        $directories = [
-            base_path('scripts'),
-            $this->backupPath,
-        ];
-
-        foreach ($directories as $directory) {
-            if (! $this->files->isDirectory($directory)) {
-                $this->files->makeDirectory($directory, 0755, true);
-            }
+        // Only create backup directory
+        if (! $this->files->isDirectory($this->backupPath)) {
+            $this->files->makeDirectory($this->backupPath, 0755, true);
         }
 
         return true;
@@ -419,27 +411,6 @@ class Electron extends Command
     }
 
     /**
-     * Publish binary setup scripts.
-     */
-    protected function publishBuildScripts(): bool
-    {
-        $this->publishStub(
-            'scripts/setup-binaries.sh.stub',
-            base_path('scripts/setup-binaries.sh')
-        );
-
-        // Make script executable
-        chmod(base_path('scripts/setup-binaries.sh'), 0755);
-
-        $this->publishStub(
-            'scripts/setup-binaries.ps1.stub',
-            base_path('scripts/setup-binaries.ps1')
-        );
-
-        return true;
-    }
-
-    /**
      * Publish electron-builder configuration.
      */
     protected function publishBuilderConfig(): bool
@@ -469,8 +440,8 @@ class Electron extends Command
             'electron:build:mac' => 'pnpm build && pnpm electron:compile && electron-builder --mac',
             'electron:build:win' => 'pnpm build && pnpm electron:compile && electron-builder --win',
             'electron:build:dir' => 'pnpm build && pnpm electron:compile && electron-builder --dir',
-            'setup:binaries' => './scripts/setup-binaries.sh',
-            'setup:binaries:win' => 'powershell -ExecutionPolicy Bypass -File scripts/setup-binaries.ps1',
+            'setup:binaries' => './electron/scripts/setup-binaries.sh',
+            'setup:binaries:win' => 'powershell -ExecutionPolicy Bypass -File electron/scripts/setup-binaries.ps1',
         ];
 
         $packageJson['scripts'] = array_merge($packageJson['scripts'] ?? [], $electronScripts);
@@ -691,7 +662,6 @@ ENV;
         $steps = [
             'removeConfig' => 'Removing configuration',
             'removeProvider' => 'Removing service provider',
-            'removeScripts' => 'Removing build scripts',
             'removeEnvProduction' => 'Removing .env.production',
             'removeBuilderConfig' => 'Removing electron-builder config',
             'restorePackageJson' => 'Restoring package.json',
@@ -748,31 +718,6 @@ ENV;
         $path = app_path('Providers/ElectronServiceProvider.php');
         if ($this->files->exists($path)) {
             $this->files->delete($path);
-        }
-
-        return true;
-    }
-
-    /**
-     * Remove build scripts.
-     */
-    protected function removeScripts(): bool
-    {
-        $files = [
-            base_path('scripts/setup-binaries.sh'),
-            base_path('scripts/setup-binaries.ps1'),
-        ];
-
-        foreach ($files as $path) {
-            if ($this->files->exists($path)) {
-                $this->files->delete($path);
-            }
-        }
-
-        // Remove scripts directory if empty
-        $scriptsDir = base_path('scripts');
-        if ($this->files->isDirectory($scriptsDir) && count($this->files->files($scriptsDir)) === 0) {
-            $this->files->deleteDirectory($scriptsDir);
         }
 
         return true;

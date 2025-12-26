@@ -99,15 +99,18 @@ class ElectronRollbackTest extends TestCase
         $this->assertFileDoesNotExist(base_path('electron-builder.json'));
     }
 
-    public function test_it_removes_build_scripts(): void
+    public function test_it_preserves_build_scripts(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
-        $this->assertFileExists(base_path('scripts/setup-binaries.sh'));
+        // Build scripts are part of the codebase in electron/scripts/, not created by build:electron
+        $this->assertFileExists(base_path('electron/scripts/setup-binaries.sh'));
+        $this->assertFileExists(base_path('electron/scripts/setup-binaries.ps1'));
 
+        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
         $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
 
-        $this->assertFileDoesNotExist(base_path('scripts/setup-binaries.sh'));
-        $this->assertFileDoesNotExist(base_path('scripts/setup-binaries.ps1'));
+        // Build scripts should still exist after rollback
+        $this->assertFileExists(base_path('electron/scripts/setup-binaries.sh'));
+        $this->assertFileExists(base_path('electron/scripts/setup-binaries.ps1'));
     }
 
     public function test_it_cleans_up_backups(): void
