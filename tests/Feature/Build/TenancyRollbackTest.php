@@ -35,13 +35,27 @@ class TenancyRollbackTest extends TestCase
 
     protected function forceCleanup(): void
     {
+        // Remove files that setup creates
         @unlink(app_path('Providers/TenancyServiceProvider.php'));
         @unlink(config_path('tenancy.php'));
 
         try {
             $this->artisan('build:tenancy', ['--rollback' => true, '--force' => true]);
         } catch (\Throwable $e) {
-            // Ignore errors during cleanup
+            // If artisan fails, manually restore files from git
+            $this->manualCleanup();
+        }
+    }
+
+    protected function manualCleanup(): void
+    {
+        // Restore modified files using git
+        exec('git restore app/Models/User.php app/Http/Controllers/Auth/RegisterController.php bootstrap/providers.php bootstrap/app.php config/database.php 2>/dev/null');
+
+        // Remove backup directory if exists
+        $backupPath = storage_path('tenancy-backups');
+        if (is_dir($backupPath)) {
+            $this->files->deleteDirectory($backupPath);
         }
     }
 

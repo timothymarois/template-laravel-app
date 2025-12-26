@@ -35,13 +35,29 @@ class ElectronTypeScriptTest extends TestCase
 
     protected function forceCleanup(): void
     {
+        // Remove files that setup creates
         @unlink(app_path('Providers/ElectronServiceProvider.php'));
         @unlink(config_path('electron.php'));
+        @unlink(base_path('electron-builder.json'));
+        @unlink(base_path('.env.production'));
 
         try {
             $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
         } catch (\Throwable $e) {
-            // Ignore errors during cleanup
+            // If artisan fails, manually restore files from git
+            $this->manualCleanup();
+        }
+    }
+
+    protected function manualCleanup(): void
+    {
+        // Restore modified files using git
+        exec('git restore .env.example bootstrap/providers.php package.json 2>/dev/null');
+
+        // Remove backup directory if exists
+        $backupPath = storage_path('electron-backups');
+        if (is_dir($backupPath)) {
+            $this->files->deleteDirectory($backupPath);
         }
     }
 
