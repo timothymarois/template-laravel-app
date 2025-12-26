@@ -21,12 +21,27 @@ class ElectronIdempotencyTest extends TestCase
         }
 
         $this->files = new Filesystem;
+
+        // Ensure clean state before each test
+        $this->forceCleanup();
     }
 
     protected function tearDown(): void
     {
-        $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
+        $this->forceCleanup();
         parent::tearDown();
+    }
+
+    protected function forceCleanup(): void
+    {
+        @unlink(app_path('Providers/ElectronServiceProvider.php'));
+        @unlink(config_path('electron.php'));
+
+        try {
+            $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
+        } catch (\Throwable $e) {
+            // Ignore errors during cleanup
+        }
     }
 
     public function test_running_setup_twice_with_force_succeeds(): void

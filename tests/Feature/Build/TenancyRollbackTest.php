@@ -21,13 +21,28 @@ class TenancyRollbackTest extends TestCase
         }
 
         $this->files = new Filesystem;
+
+        // Ensure clean state before each test
+        $this->forceCleanup();
     }
 
     protected function tearDown(): void
     {
         // Always cleanup after tests
-        $this->artisan('build:tenancy', ['--rollback' => true, '--force' => true]);
+        $this->forceCleanup();
         parent::tearDown();
+    }
+
+    protected function forceCleanup(): void
+    {
+        @unlink(app_path('Providers/TenancyServiceProvider.php'));
+        @unlink(config_path('tenancy.php'));
+
+        try {
+            $this->artisan('build:tenancy', ['--rollback' => true, '--force' => true]);
+        } catch (\Throwable $e) {
+            // Ignore errors during cleanup
+        }
     }
 
     public function test_it_removes_configuration_file(): void

@@ -538,9 +538,8 @@ CALLBACK;
             return true;
         }
 
-        // Find the connections array and add tenant connection after mysql
+        // Tenant connection to insert (goes between mysql and mariadb)
         $tenantConnection = <<<'PHP'
-
         'tenant' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),
@@ -560,12 +559,13 @@ CALLBACK;
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+
 PHP;
 
-        // Insert after mysql connection
-        $content = preg_replace(
-            "/('mysql'\s*=>\s*\[[^\]]+\]),/s",
-            "$1,{$tenantConnection}",
+        // Insert before mariadb connection (comes after mysql in Laravel's default config)
+        $content = str_replace(
+            "'mariadb' => [",
+            $tenantConnection."'mariadb' => [",
             $content
         );
 

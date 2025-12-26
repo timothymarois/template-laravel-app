@@ -23,20 +23,26 @@ class ElectronSetupTest extends TestCase
         $this->files = new Filesystem;
 
         // Ensure clean state before each test
-        $this->cleanupElectron();
+        $this->forceCleanup();
     }
 
     protected function tearDown(): void
     {
-        // Always rollback after tests
-        $this->cleanupElectron();
+        // Always cleanup after tests
+        $this->forceCleanup();
         parent::tearDown();
     }
 
-    protected function cleanupElectron(): void
+    protected function forceCleanup(): void
     {
-        // Silently run rollback to clean up
-        $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
+        @unlink(app_path('Providers/ElectronServiceProvider.php'));
+        @unlink(config_path('electron.php'));
+
+        try {
+            $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
+        } catch (\Throwable $e) {
+            // Ignore errors during cleanup
+        }
     }
 
     public function test_electron_directory_structure_already_exists(): void

@@ -22,21 +22,93 @@ class TenancySetupTest extends TestCase
 
         $this->files = new Filesystem;
 
-        // Ensure clean state before each test
-        $this->cleanupTenancy();
+        // Ensure clean state before each test - manual cleanup in case artisan fails
+        $this->forceCleanup();
     }
 
     protected function tearDown(): void
     {
-        // Always rollback after tests
-        $this->cleanupTenancy();
+        // Always cleanup after tests
+        $this->forceCleanup();
         parent::tearDown();
     }
 
-    protected function cleanupTenancy(): void
+    /**
+     * Force cleanup of tenancy files without relying on artisan command.
+     */
+    protected function forceCleanup(): void
     {
-        // Silently run rollback to clean up
-        $this->artisan('build:tenancy', ['--rollback' => true, '--force' => true]);
+        // Remove files that might prevent artisan from running
+        @unlink(app_path('Providers/TenancyServiceProvider.php'));
+        @unlink(config_path('tenancy.php'));
+
+        // Now try the artisan rollback (it should work now)
+        try {
+            $this->artisan('build:tenancy', ['--rollback' => true, '--force' => true]);
+        } catch (\Throwable $e) {
+            // If artisan fails, manually clean up remaining files
+            $this->manualCleanup();
+        }
+    }
+
+    /**
+     * Manual cleanup when artisan command fails.
+     */
+    protected function manualCleanup(): void
+    {
+        // Models
+        @unlink(app_path('Models/Tenant.php'));
+        @unlink(app_path('Models/Domain.php'));
+        @unlink(app_path('Models/TenantUser.php'));
+        @unlink(app_path('Models/CentralUser.php'));
+        @unlink(app_path('Models/Concerns/CentralConnection.php'));
+        @$this->files->deleteDirectory(app_path('Models/Tenant'));
+        @$this->files->deleteDirectory(app_path('Models/Concerns'));
+
+        // Services, Jobs, Middleware, Controllers
+        @unlink(app_path('Services/TenantService.php'));
+        @unlink(app_path('Jobs/MarkTenantReady.php'));
+        @unlink(app_path('Http/Middleware/TenantIsReady.php'));
+        @unlink(app_path('Http/Controllers/TenantController.php'));
+
+        // Routes
+        @unlink(base_path('routes/tenant.php'));
+        @unlink(base_path('routes/tenants.php'));
+
+        // Vue pages
+        @$this->files->deleteDirectory(resource_path('js/pages/tenant'));
+        @$this->files->deleteDirectory(resource_path('js/pages/tenants'));
+
+        // Migrations
+        @$this->files->deleteDirectory(database_path('migrations/tenant'));
+        foreach (glob(database_path('migrations/*_create_tenants_table.php')) as $file) {
+            @unlink($file);
+        }
+        foreach (glob(database_path('migrations/*_create_domains_table.php')) as $file) {
+            @unlink($file);
+        }
+        foreach (glob(database_path('migrations/*_create_tenant_user_table.php')) as $file) {
+            @unlink($file);
+        }
+
+        // Restore backups if they exist
+        $backupPath = storage_path('tenancy-backups');
+        if ($this->files->isDirectory($backupPath)) {
+            foreach (['User.php.bak', 'providers.php.bak', 'app.php.bak', 'database.php.bak', 'RegisterController.php.bak'] as $backup) {
+                $backupFile = "{$backupPath}/{$backup}";
+                if ($this->files->exists($backupFile)) {
+                    $original = match ($backup) {
+                        'User.php.bak' => app_path('Models/User.php'),
+                        'providers.php.bak' => base_path('bootstrap/providers.php'),
+                        'app.php.bak' => base_path('bootstrap/app.php'),
+                        'database.php.bak' => config_path('database.php'),
+                        'RegisterController.php.bak' => app_path('Http/Controllers/Auth/RegisterController.php'),
+                    };
+                    @$this->files->copy($backupFile, $original);
+                }
+            }
+            @$this->files->deleteDirectory($backupPath);
+        }
     }
 
     public function test_it_publishes_configuration_file(): void
