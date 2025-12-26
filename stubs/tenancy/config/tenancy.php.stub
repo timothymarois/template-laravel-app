@@ -8,17 +8,6 @@ use Stancl\Tenancy\Database\Models;
 return [
     /*
     |--------------------------------------------------------------------------
-    | Tenancy Enabled
-    |--------------------------------------------------------------------------
-    |
-    | This option controls whether tenancy features are enabled. Set to false
-    | to disable all tenancy functionality without removing configuration.
-    |
-    */
-    'enabled' => env('TENANCY_ENABLED', true),
-
-    /*
-    |--------------------------------------------------------------------------
     | Tenant Model
     |--------------------------------------------------------------------------
     |

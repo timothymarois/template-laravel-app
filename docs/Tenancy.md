@@ -7,6 +7,7 @@ This starter kit includes optional multi-tenancy support using the [stancl/tenan
 - [Overview](#overview)
 - [Architecture](#architecture)
 - [Setup](#setup)
+- [Rollback](#rollback)
 - [Configuration](#configuration)
 - [Creating Tenants](#creating-tenants)
 - [User Management](#user-management)
@@ -52,6 +53,8 @@ Central Database                    Tenant Databases (per tenant)
 
 ## Setup
 
+**Important:** Multi-tenancy should only be enabled on a **new project**. Do not enable this feature on an existing project with data, as it fundamentally changes the database structure and user model. The setup process resets the database and will not migrate existing data.
+
 ### Enabling Multi-Tenancy
 
 Run the setup command:
@@ -71,31 +74,6 @@ This command will:
 8. Reset the database and run migrations
 
 **Warning:** This command will reset your database. All existing data will be lost.
-
-### Disabling Multi-Tenancy (Rollback)
-
-To completely remove tenancy and restore the application to its original state:
-
-```bash
-php artisan build:tenancy --rollback
-```
-
-This command will:
-1. Remove all tenancy configuration and files
-2. Restore original files from backups (User.php, RegisterController.php, etc.)
-3. Remove the `stancl/tenancy` package via Composer
-4. Drop all tenant databases
-5. Reset the central database
-
-**Warning:** This command will reset your database. All existing data will be lost.
-
-**Note:** Neither build nor rollback can be run in production (`APP_ENV=production`).
-
-Use `--force` to skip confirmation prompts:
-
-```bash
-php artisan build:tenancy --rollback --force
-```
 
 ### Post-Setup Steps
 
@@ -120,6 +98,33 @@ php artisan build:tenancy --rollback --force
 ### Detection
 
 Tenancy is enabled/disabled based on the presence of `config/tenancy.php`. If this file exists, the `TenancyServiceProvider` is loaded and tenancy features are active.
+
+## Rollback
+
+**Important:** Rollback is intended for development and testing on **new projects** only. Do not attempt to rollback an existing project with data, as all databases will be reset and data will be permanently lost.
+
+To completely remove tenancy and restore the application to its original state:
+
+```bash
+php artisan build:tenancy --rollback
+```
+
+This command will:
+1. Remove all tenancy configuration and files
+2. Restore original files from backups (User.php, RegisterController.php, etc.)
+3. Remove the `stancl/tenancy` package via Composer
+4. Drop all tenant databases
+5. Reset the central database
+
+**Warning:** This command will reset your database. All existing data will be lost.
+
+**Note:** Neither build nor rollback can be run in production (`APP_ENV=production`).
+
+Use `--force` to skip confirmation prompts:
+
+```bash
+php artisan build:tenancy --rollback --force
+```
 
 ## Configuration
 
@@ -401,30 +406,6 @@ The `FilesystemTenancyBootstrapper` creates tenant-specific storage directories:
 ```
 storage/tenant_{tenant_id}/
 ```
-
-## Disabling Tenancy
-
-### Temporary Disable
-
-To temporarily disable tenancy without removing files, set in `.env`:
-
-```env
-TENANCY_ENABLED=false
-```
-
-### Complete Removal
-
-To completely remove tenancy and restore original files:
-
-```bash
-php artisan build:tenancy --rollback
-```
-
-This is the recommended approach as it:
-- Restores all original files from backups
-- Removes the composer package
-- Drops tenant databases
-- Resets the central database
 
 ## Resources
 

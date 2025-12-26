@@ -547,6 +547,8 @@ Browse icons: [Lucide](https://lucide.dev/) | [Tabler](https://tabler.io/icons)
 
 This starter includes optional multi-tenancy support using [stancl/tenancy](https://tenancyforlaravel.com/). Enable it when you need isolated databases per customer/organization.
 
+**Important:** Only enable multi-tenancy on a **new project**. This feature resets the database and cannot migrate existing data.
+
 ### Quick Setup
 
 ```bash
