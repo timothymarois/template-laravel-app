@@ -121,7 +121,6 @@ class SetupTenancy extends Command
             'updateDatabaseConfig' => 'Updating database configuration',
             'convertUserModel' => 'Converting User model to CentralUser',
             'updateRegisterController' => 'Updating RegisterController for tenancy',
-            'updateEnvExample' => 'Updating .env.example',
         ];
 
         $currentStep = 0;
@@ -243,7 +242,6 @@ class SetupTenancy extends Command
             base_path('bootstrap/providers.php') => 'providers.php.bak',
             base_path('bootstrap/app.php') => 'app.php.bak',
             config_path('database.php') => 'database.php.bak',
-            base_path('.env.example') => 'env.example.bak',
         ];
 
         foreach ($filesToBackup as $source => $backupName) {
@@ -619,40 +617,6 @@ PHP;
     }
 
     /**
-     * Update .env.example with tenancy variables.
-     */
-    protected function updateEnvExample(): bool
-    {
-        $path = base_path('.env.example');
-
-        if (! $this->files->exists($path)) {
-            return true;
-        }
-
-        $content = $this->files->get($path);
-
-        // Check if already has tenancy variables
-        if (Str::contains($content, 'TENANCY_ENABLED')) {
-            return true;
-        }
-
-        $tenancyVars = <<<'ENV'
-
-# Multi-Tenancy
-TENANCY_ENABLED=true
-APP_DOMAIN=localhost
-TENANCY_DB_PREFIX=tenant_
-TENANCY_QUEUE_CREATION=false
-TENANCY_QUEUE_DELETION=false
-ENV;
-
-        $content .= $tenancyVars;
-        $this->files->put($path, $content);
-
-        return true;
-    }
-
-    /**
      * Publish a stub file to a destination.
      */
     protected function publishStub(string $stub, string $destination): bool
@@ -746,7 +710,6 @@ ENV;
             'removeDatabaseConfig' => 'Restoring database config',
             'restoreUserModel' => 'Restoring User model',
             'restoreRegisterController' => 'Restoring RegisterController',
-            'removeEnvVariables' => 'Restoring env variables',
             'removeComposerPackage' => 'Removing tenancy package',
             'resetDatabase' => 'Resetting database',
             'cleanupBackups' => 'Cleaning up backup files',
@@ -1006,21 +969,6 @@ ENV;
 
         if ($this->files->exists($backupPath)) {
             $this->files->copy($backupPath, $userPath);
-        }
-
-        return true;
-    }
-
-    /**
-     * Restore .env.example from backup.
-     */
-    protected function removeEnvVariables(): bool
-    {
-        $path = base_path('.env.example');
-        $backupPath = "{$this->backupPath}/env.example.bak";
-
-        if ($this->files->exists($backupPath)) {
-            $this->files->copy($backupPath, $path);
         }
 
         return true;
