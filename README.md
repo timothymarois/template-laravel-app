@@ -92,6 +92,7 @@ pnpm dev
 - [SEO & Social](#seo--social-sharing) — Meta tags and sitemaps
 - [Patterns](#patterns) — Routes, notifications, icons, API requests
 - [Multi-Tenancy](#multi-tenancy) — Optional subdomain-based multi-tenancy
+- [Desktop App](#desktop-app) — Optional Electron desktop build
 
 ---
 
@@ -577,6 +578,52 @@ TENANCY_DB_PREFIX=tenant_
 ```
 
 For complete documentation, see [docs/Tenancy.md](docs/Tenancy.md).
+
+---
+
+## Desktop App
+
+This starter includes optional Electron support for building native desktop applications. Package your Laravel app as a standalone macOS or Windows application with bundled PHP, Redis, and all services.
+
+**Important:** Only enable Electron build on a **new project**. This feature modifies project structure and configuration.
+
+### Quick Setup
+
+```bash
+# Enable Electron build
+php artisan build:electron
+
+# Development mode
+pnpm electron:dev
+
+# Build for distribution
+pnpm electron:build:mac    # macOS
+pnpm electron:build:win    # Windows
+
+# Rollback (removes Electron completely)
+php artisan build:electron --rollback
+```
+
+### Features
+
+- **Self-contained** — Bundles PHP, Redis, and your entire Laravel app
+- **Cross-platform** — Builds for macOS (arm64/x64) and Windows (x64)
+- **Configurable services** — Enable/disable Redis, Horizon, Reverb, Scheduler
+- **SQLite or MySQL** — Use bundled SQLite or connect to external MySQL
+- **Zero impact when disabled** — Electron features only load when configured
+
+### Configuration
+
+```env
+ELECTRON_APP_NAME="${APP_NAME}"
+ELECTRON_BUNDLE_ID=com.example.app
+ELECTRON_REDIS_ENABLED=true
+ELECTRON_HORIZON_ENABLED=true
+ELECTRON_REVERB_ENABLED=false
+ELECTRON_SCHEDULER_ENABLED=false
+```
+
+For complete documentation, see [docs/Electron.md](docs/Electron.md).
 
 ---
 
