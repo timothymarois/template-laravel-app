@@ -41,14 +41,17 @@ class TenancyIdempotencyTest extends TestCase
         try {
             $this->artisan('build:tenancy', ['--rollback' => true, '--force' => true]);
         } catch (\Throwable $e) {
-            // If artisan fails, manually restore files from git
-            $this->manualCleanup();
+            // Ignore artisan errors
         }
+
+        // Always restore files using git as final cleanup
+        // This handles cases where rollback succeeds but backups didn't exist
+        $this->restoreFilesFromGit();
     }
 
-    protected function manualCleanup(): void
+    protected function restoreFilesFromGit(): void
     {
-        // Restore modified files using git
+        // Restore modified files using git (must match files modified by Tenancy.php)
         exec('git restore app/Models/User.php app/Http/Controllers/Auth/RegisterController.php bootstrap/providers.php bootstrap/app.php config/database.php 2>/dev/null');
 
         // Remove backup directory if exists

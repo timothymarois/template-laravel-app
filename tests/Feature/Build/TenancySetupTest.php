@@ -49,6 +49,16 @@ class TenancySetupTest extends TestCase
             // If artisan fails, manually clean up remaining files
             $this->manualCleanup();
         }
+
+        // Always restore files using git as final cleanup
+        // This handles cases where rollback succeeds but backups didn't exist
+        $this->restoreFilesFromGit();
+    }
+
+    protected function restoreFilesFromGit(): void
+    {
+        // Restore modified files using git (must match files modified by Tenancy.php)
+        exec('git restore app/Models/User.php app/Http/Controllers/Auth/RegisterController.php bootstrap/providers.php bootstrap/app.php config/database.php 2>/dev/null');
     }
 
     /**
