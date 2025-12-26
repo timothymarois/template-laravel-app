@@ -1,0 +1,326 @@
+import { app, BrowserWindow, ipcMain, shell, dialog, Menu } from 'electron';
+import * as path from 'path';
+import * as os from 'os';
+import * as fs from 'fs';
+import { BootManager } from './boot-manager';
+import { createLoadingWindow, createMainWindow } from './windows';
+
+// Get bundle ID from package.json or use default
+function getBundleId(): string {
+    try {
+        const packageJson = JSON.parse(
+            fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf-8')
+        );
+        return packageJson.build?.appId || 'com.example.app';
+    } catch {
+        return 'com.example.app';
+    }
+}
+
+// Set userData path to use bundle ID format for proper Application Support location
+if (app.isPackaged) {
+    const bundleId = getBundleId();
+    const userDataPath = path.join(os.homedir(), 'Library', 'Application Support', bundleId);
+    app.setPath('userData', userDataPath);
+    console.log(`[Main] Using userData path: ${userDataPath}`);
+}
+
+let mainWindow: BrowserWindow | null = null;
+let loadingWindow: BrowserWindow | null = null;
+let bootManager: BootManager | null = null;
+
+// Use app.isPackaged for reliable production detection
+const isDev = !app.isPackaged;
+
+// Build the application menu
+function buildAppMenu(): void {
+    const template: Electron.MenuItemConstructorOptions[] = [
+        {
+            label: app.name,
+            submenu: [
+                { role: 'about' },
+                { type: 'separator' },
+                { role: 'services' },
+                { type: 'separator' },
+                { role: 'hide' },
+                { role: 'hideOthers' },
+                { role: 'unhide' },
+                { type: 'separator' },
+                { role: 'quit' },
+            ],
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                { role: 'undo' },
+                { role: 'redo' },
+                { type: 'separator' },
+                { role: 'cut' },
+                { role: 'copy' },
+                { role: 'paste' },
+                { role: 'selectAll' },
+            ],
+        },
+        {
+            label: 'View',
+            submenu: [
+                // Dev tools only in development mode
+                ...(isDev ? [
+                    { role: 'reload' as const },
+                    { role: 'forceReload' as const },
+                    { role: 'toggleDevTools' as const },
+                    { type: 'separator' as const },
+                ] : []),
+                { role: 'resetZoom' },
+                { role: 'zoomIn' },
+                { role: 'zoomOut' },
+                { type: 'separator' },
+                { role: 'togglefullscreen' },
+            ],
+        },
+        {
+            label: 'Window',
+            submenu: [
+                { role: 'minimize' },
+                { role: 'zoom' },
+                { type: 'separator' },
+                { role: 'front' },
+            ],
+        },
+    ];
+
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+}
+
+async function createWindows(): Promise<void> {
+    // Show loading window first
+    loadingWindow = createLoadingWindow();
+
+    // Wait for loading window to be ready before starting boot
+    await new Promise<void>((resolve) => {
+        if (loadingWindow) {
+            loadingWindow.webContents.once('did-finish-load', () => {
+                console.log('[Main] Loading window ready');
+                resolve();
+            });
+        } else {
+            resolve();
+        }
+    });
+
+    // Initialize boot manager
+    bootManager = new BootManager({
+        isDev,
+        onStatusUpdate: (status: string, progress: number) => {
+            console.log(`[Main] Status update: ${status} (${progress}%)`);
+            if (loadingWindow && !loadingWindow.isDestroyed()) {
+                loadingWindow.webContents.send('boot-status', { status, progress });
+            }
+        },
+        onError: (error: string) => {
+            console.log(`[Main] Error: ${error}`);
+            if (loadingWindow && !loadingWindow.isDestroyed()) {
+                loadingWindow.webContents.send('boot-error', { error });
+            }
+        },
+    });
+
+    try {
+        // Start boot sequence
+        const laravelUrl = await bootManager.boot();
+
+        console.log('[Main] Boot complete, closing loading window...');
+
+        // Close loading window and open main window
+        if (loadingWindow && !loadingWindow.isDestroyed()) {
+            loadingWindow.close();
+            loadingWindow = null;
+        }
+
+        console.log('[Main] Creating main window...');
+        mainWindow = createMainWindow(laravelUrl);
+
+        mainWindow.on('closed', () => {
+            mainWindow = null;
+        });
+    } catch (error) {
+        console.error('[Main] Boot failed:', error);
+        // Loading window will show error state via boot-error event
+    }
+}
+
+// App lifecycle
+app.whenReady().then(() => {
+    // Build menu first
+    buildAppMenu();
+
+    // Create windows
+    createWindows();
+});
+
+// Track if we're already shutting down to avoid double cleanup
+let isShuttingDown = false;
+let cleanupStarted = false;
+
+function hideAllWindows(): void {
+    const allWindows = BrowserWindow.getAllWindows();
+    for (const win of allWindows) {
+        if (!win.isDestroyed()) {
+            win.hide();
+        }
+    }
+}
+
+function destroyAllWindows(): void {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.destroy();
+        mainWindow = null;
+    }
+    if (loadingWindow && !loadingWindow.isDestroyed()) {
+        loadingWindow.destroy();
+        loadingWindow = null;
+    }
+}
+
+function startBackgroundCleanup(): void {
+    if (cleanupStarted) return;
+    cleanupStarted = true;
+
+    console.log('[Main] Starting background cleanup...');
+
+    if (bootManager) {
+        bootManager.shutdown()
+            .then(() => console.log('[Main] Background cleanup complete.'))
+            .catch((err) => console.error('[Main] Background cleanup error:', err))
+            .finally(() => {
+                destroyAllWindows();
+                app.quit();
+            });
+    } else {
+        destroyAllWindows();
+        app.quit();
+    }
+}
+
+// Handle before-quit for Cmd+Q and menu quit
+app.on('before-quit', (event) => {
+    if (!isShuttingDown) {
+        event.preventDefault();
+        isShuttingDown = true;
+        hideAllWindows();
+        startBackgroundCleanup();
+    }
+});
+
+app.on('window-all-closed', () => {
+    if (!isShuttingDown) {
+        isShuttingDown = true;
+        startBackgroundCleanup();
+    }
+});
+
+// Handle external kill signals
+process.on('SIGTERM', () => {
+    console.log('[Main] Received SIGTERM, shutting down...');
+    if (!isShuttingDown) {
+        isShuttingDown = true;
+        hideAllWindows();
+        startBackgroundCleanup();
+    }
+});
+
+process.on('SIGINT', () => {
+    console.log('[Main] Received SIGINT, shutting down...');
+    if (!isShuttingDown) {
+        isShuttingDown = true;
+        hideAllWindows();
+        startBackgroundCleanup();
+    }
+});
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindows();
+    }
+});
+
+// IPC Handlers for loading window
+ipcMain.handle('retry-boot', async () => {
+    if (bootManager) {
+        try {
+            const laravelUrl = await bootManager.boot();
+
+            if (loadingWindow && !loadingWindow.isDestroyed()) {
+                loadingWindow.close();
+                loadingWindow = null;
+            }
+
+            mainWindow = createMainWindow(laravelUrl);
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: String(error) };
+        }
+    }
+    return { success: false, error: 'Boot manager not initialized' };
+});
+
+// Use 'on' instead of 'handle' for fire-and-forget quit
+ipcMain.on('quit-app', () => {
+    hideAllWindows();
+    app.quit();
+});
+
+// IPC Handlers for main window
+ipcMain.handle('shell:openExternal', async (_event, url: string) => {
+    await shell.openExternal(url);
+});
+
+ipcMain.handle('shell:showItemInFolder', async (_event, fullPath: string) => {
+    shell.showItemInFolder(fullPath);
+});
+
+ipcMain.handle('dialog:openFile', async (_event, options: Electron.OpenDialogOptions) => {
+    const result = await dialog.showOpenDialog(options);
+    return result;
+});
+
+ipcMain.handle('dialog:openDirectory', async (_event, options: Electron.OpenDialogOptions) => {
+    const result = await dialog.showOpenDialog({
+        ...options,
+        properties: ['openDirectory'],
+    });
+    return result;
+});
+
+ipcMain.handle('dialog:saveFile', async (_event, options: Electron.SaveDialogOptions) => {
+    const result = await dialog.showSaveDialog(options);
+    return result;
+});
+
+ipcMain.handle('app:getInfo', () => {
+    return {
+        name: app.getName(),
+        version: app.getVersion(),
+        isPackaged: app.isPackaged,
+        paths: {
+            home: app.getPath('home'),
+            appData: app.getPath('appData'),
+            userData: app.getPath('userData'),
+            documents: app.getPath('documents'),
+            downloads: app.getPath('downloads'),
+        },
+    };
+});
+
+ipcMain.handle('app:getPath', (_event, name: string) => {
+    try {
+        return app.getPath(name as Parameters<typeof app.getPath>[0]);
+    } catch {
+        return null;
+    }
+});
+
+ipcMain.handle('path:join', (_event, ...segments: string[]) => {
+    return path.join(...segments);
+});

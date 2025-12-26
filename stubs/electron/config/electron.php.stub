@@ -1,0 +1,100 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Electron Application Settings
+    |--------------------------------------------------------------------------
+    |
+    | These settings control the identity and branding of your Electron app.
+    |
+    */
+
+    'app' => [
+        'name' => env('ELECTRON_APP_NAME', env('APP_NAME', 'Laravel')),
+        'bundle_id' => env('ELECTRON_BUNDLE_ID', 'com.example.app'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Services Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Enable or disable optional services for the desktop build.
+    | Each service can be toggled independently. Services that are disabled
+    | will not be started when the Electron app boots.
+    |
+    */
+
+    'services' => [
+        // Database configuration
+        // 'sqlite' = bundled SQLite database (self-contained)
+        // 'mysql' = external MySQL server (requires separate installation)
+        'database' => [
+            'driver' => env('ELECTRON_DB_DRIVER', 'sqlite'),
+            'external' => env('ELECTRON_DB_EXTERNAL', false),
+        ],
+
+        // Redis for caching and queues
+        // When enabled, a bundled Redis server will be started
+        // Set 'external' to true to use an existing Redis server
+        'redis' => [
+            'enabled' => env('ELECTRON_REDIS_ENABLED', true),
+            'external' => env('ELECTRON_REDIS_EXTERNAL', false),
+        ],
+
+        // Horizon queue worker
+        // Requires Redis to be enabled
+        'horizon' => [
+            'enabled' => env('ELECTRON_HORIZON_ENABLED', true),
+        ],
+
+        // Reverb WebSocket server
+        // For real-time broadcasting features
+        'reverb' => [
+            'enabled' => env('ELECTRON_REVERB_ENABLED', false),
+        ],
+
+        // Laravel scheduler
+        // For running scheduled tasks in production
+        'scheduler' => [
+            'enabled' => env('ELECTRON_SCHEDULER_ENABLED', false),
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Ports
+    |--------------------------------------------------------------------------
+    |
+    | Default ports for each service. If a port is already in use,
+    | the boot manager will automatically find an available port.
+    |
+    */
+
+    'ports' => [
+        'laravel' => env('ELECTRON_PORT_LARAVEL', 48000),
+        'redis' => env('ELECTRON_PORT_REDIS', 6379),
+        'reverb' => env('ELECTRON_PORT_REVERB', 48080),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Build Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Settings for the build process.
+    |
+    */
+
+    'build' => [
+        // Supported platforms for binary bundling
+        'platforms' => ['darwin-arm64', 'darwin-x64', 'win32-x64'],
+
+        // PHP version to bundle
+        'php_version' => '8.4',
+
+        // Redis version to bundle
+        'redis_version' => '8.0',
+    ],
+];
