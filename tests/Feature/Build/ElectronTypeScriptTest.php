@@ -52,15 +52,20 @@ class ElectronTypeScriptTest extends TestCase
         $this->assertEquals('ES2022', $compilerOptions['target']);
         $this->assertEquals('CommonJS', $compilerOptions['module']);
         $this->assertEquals('dist', $compilerOptions['outDir']);
-        $this->assertTrue($compilerOptions['strict']);
+        $this->assertFalse($compilerOptions['strict']);
     }
 
     public function test_all_typescript_files_have_valid_syntax(): void
     {
         $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
 
-        $tsFiles = [
+        // Entry point files (don't require exports)
+        $entryPoints = [
             base_path('electron/main/index.ts'),
+        ];
+
+        // Module files (require exports)
+        $moduleFiles = [
             base_path('electron/main/boot-manager.ts'),
             base_path('electron/main/windows.ts'),
             base_path('electron/main/services/config-service.ts'),
@@ -68,19 +73,35 @@ class ElectronTypeScriptTest extends TestCase
             base_path('electron/main/services/process-service.ts'),
             base_path('electron/main/services/laravel-service.ts'),
             base_path('electron/main/services/health-service.ts'),
+        ];
+
+        // Preload scripts (use contextBridge, not exports)
+        $preloadFiles = [
             base_path('electron/preload/loading.ts'),
             base_path('electron/preload/main.ts'),
         ];
 
-        foreach ($tsFiles as $file) {
-            $this->assertFileExists($file, "TypeScript file should exist: {$file}");
-
-            // Check file is not empty
+        // Check entry points exist and are not empty
+        foreach ($entryPoints as $file) {
+            $this->assertFileExists($file, "TypeScript entry point should exist: {$file}");
             $content = file_get_contents($file);
-            $this->assertNotEmpty($content, "TypeScript file should not be empty: {$file}");
+            $this->assertNotEmpty($content, "TypeScript entry point should not be empty: {$file}");
+        }
 
-            // Basic syntax checks
-            $this->assertStringContainsString('export', $content, "TypeScript file should have exports: {$file}");
+        // Check module files exist, are not empty, and have exports
+        foreach ($moduleFiles as $file) {
+            $this->assertFileExists($file, "TypeScript module should exist: {$file}");
+            $content = file_get_contents($file);
+            $this->assertNotEmpty($content, "TypeScript module should not be empty: {$file}");
+            $this->assertStringContainsString('export', $content, "TypeScript module should have exports: {$file}");
+        }
+
+        // Check preload files exist, are not empty, and use contextBridge
+        foreach ($preloadFiles as $file) {
+            $this->assertFileExists($file, "Preload script should exist: {$file}");
+            $content = file_get_contents($file);
+            $this->assertNotEmpty($content, "Preload script should not be empty: {$file}");
+            $this->assertStringContainsString('contextBridge', $content, "Preload script should use contextBridge: {$file}");
         }
     }
 

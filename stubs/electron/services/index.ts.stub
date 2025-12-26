@@ -5,11 +5,15 @@ export { ProcessService } from './process-service';
 export { LaravelService } from './laravel-service';
 export { HealthService } from './health-service';
 
-// Optional services (included based on config)
-export { RedisService } from './redis-service';
-export { HorizonService } from './horizon-service';
-export { ReverbService } from './reverb-service';
-export { SchedulerService } from './scheduler-service';
+// Optional services are NOT exported here to avoid compile-time dependencies.
+// They are loaded dynamically by boot-manager.ts using require() with try-catch.
+// See: boot-manager.ts for how optional services are conditionally loaded.
+//
+// Optional service files (when enabled):
+// - redis-service.ts (RedisService)
+// - horizon-service.ts (HorizonService)
+// - reverb-service.ts (ReverbService)
+// - scheduler-service.ts (SchedulerService)
 
 // Types
 export interface PidFileData {

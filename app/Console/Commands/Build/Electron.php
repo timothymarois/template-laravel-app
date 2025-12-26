@@ -283,6 +283,8 @@ class Electron extends Command
         $dependencies = [
             'electron' => '^33.0.0',
             'electron-builder' => '^25.0.0',
+            'typescript' => '^5.0.0',
+            '@types/node' => '^22.0.0',
         ];
 
         $devDeps = implode(' ', array_map(

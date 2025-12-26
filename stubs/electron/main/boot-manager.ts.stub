@@ -8,16 +8,18 @@ import {
     HealthService,
 } from './services';
 
-// Optional services - imported conditionally based on config
-let RedisService: typeof import('./services').RedisService | undefined;
-let HorizonService: typeof import('./services').HorizonService | undefined;
-let ReverbService: typeof import('./services').ReverbService | undefined;
-let SchedulerService: typeof import('./services').SchedulerService | undefined;
+// Optional services - imported conditionally at runtime
+// These files may not exist depending on build:electron configuration
+// Using 'any' type to avoid compile-time dependency on optional service files
+let RedisService: any;
+let HorizonService: any;
+let ReverbService: any;
+let SchedulerService: any;
 
-try { RedisService = require('./services').RedisService; } catch {}
-try { HorizonService = require('./services').HorizonService; } catch {}
-try { ReverbService = require('./services').ReverbService; } catch {}
-try { SchedulerService = require('./services').SchedulerService; } catch {}
+try { RedisService = require('./services/redis-service').RedisService; } catch {}
+try { HorizonService = require('./services/horizon-service').HorizonService; } catch {}
+try { ReverbService = require('./services/reverb-service').ReverbService; } catch {}
+try { SchedulerService = require('./services/scheduler-service').SchedulerService; } catch {}
 
 interface BootManagerOptions {
     isDev: boolean;
@@ -50,10 +52,11 @@ export class BootManager {
     private processService: ProcessService;
     private laravelService: LaravelService;
     private healthService: HealthService;
-    private redisService?: InstanceType<typeof import('./services').RedisService>;
-    private horizonService?: InstanceType<typeof import('./services').HorizonService>;
-    private reverbService?: InstanceType<typeof import('./services').ReverbService>;
-    private schedulerService?: InstanceType<typeof import('./services').SchedulerService>;
+    // Optional services use 'any' to avoid compile-time dependency on optional service files
+    private redisService?: any;
+    private horizonService?: any;
+    private reverbService?: any;
+    private schedulerService?: any;
 
     // Ports
     private laravelPort: number;
