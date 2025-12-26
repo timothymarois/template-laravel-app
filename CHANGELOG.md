@@ -6,18 +6,60 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
-## v4.0.0 - 12/22/2025
+## v4.0.0 - 12/26/2025
 
-Major UI overhaul replacing PrimeVue with shadcn-vue and adding comprehensive testing setup.
+Major overhaul with new UI framework, comprehensive testing, real-time features, and optional multi-tenancy.
 
-- Replaced PrimeVue components with shadcn-vue (Radix Vue primitives)
-- Updated to Tailwind CSS v4
-- Complete design system refresh with new CSS theme variables
+### UI Framework
+- Replaced PrimeVue with shadcn-vue (Radix Vue primitives)
+- Updated to Tailwind CSS v4 with new CSS theme variables
+- Added 50+ production-ready UI components
+- Added Stylelint for CSS linting (`pnpm lint:css`)
+
+### New Components
+- Combobox, Command palette, TagsInput, MaskInput, NumberInput
+- Tiptap rich text editor with customizable tools
+- Charts (Area, Bar, Line, Pie, Donut, Radar)
+- Carousel, Resizable panels, Context menus
+- Dropzone file uploads, Loading states, Alerts
+
+### Multi-Tenancy (Optional)
+- Added optional multi-tenancy via `stancl/tenancy` package
+- Setup command: `php artisan build:tenancy`
+- Rollback command: `php artisan build:tenancy --rollback`
+- Subdomain routing with separate databases per tenant
+- Two-tier user system (CentralUser + Tenant User)
+- See [docs/Tenancy.md](docs/Tenancy.md) for full documentation
+
+### Real-Time & WebSockets
+- Added Laravel Reverb WebSocket support
+- Added Echo composables (`useChannel`, `usePrivateChannel`, `useListen`)
+- Optional WebSocket via `VITE_REVERB_ENABLED` env variable
+
+### Security
+- Added SecurityHeaders middleware (X-Frame-Options, CSP, HSTS, etc.)
+- Added custom rate limiting (API, auth, uploads)
+- Added Horizon access control via allowed emails config
+- Added custom error pages (403, 404, 500, 503)
+- Added password rules enforcement
+
+### Testing & Code Quality
 - Added Pest PHP testing framework (`composer test`)
-- Added Vitest for JS/Vue unit testing (`npm run test`)
-- New npm scripts: `check`, `check:php`, `check:js`, `lint`, `lint:fix`
+- Added Vitest for JS/Vue unit testing (`pnpm test`)
+- Added GitHub Actions workflow for automated checks
+- New pnpm scripts: `check`, `check:php`, `check:js`, `lint`, `lint:fix`
 - Converted all existing PHP tests to Pest syntax
-- Updated AGENTS.md and README.md with new commands
+
+### SEO & Production
+- Added SSR support with documentation
+- Added SEO/social meta tags (Open Graph, Twitter Cards)
+- Added sitemap generation command (`php artisan sitemap:generate`)
+- Added user last seen tracking middleware
+- Added user activation status and enforcement
+
+### Developer Experience
+- Switched from npm to pnpm for package management
+- Updated AGENTS.md and README.md with comprehensive docs
 - Removed atlas-ui dependency
 
 ## v3.1.0 - 08/11/2025
