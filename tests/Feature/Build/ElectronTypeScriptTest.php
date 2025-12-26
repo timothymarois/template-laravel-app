@@ -26,8 +26,7 @@ class ElectronTypeScriptTest extends TestCase
 
     public function test_tsconfig_is_valid_json(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
-
+        // tsconfig.json is part of the codebase, no need to run build:electron
         $tsconfig = json_decode(
             file_get_contents(base_path('electron/tsconfig.json')),
             true
@@ -40,8 +39,7 @@ class ElectronTypeScriptTest extends TestCase
 
     public function test_tsconfig_has_correct_compiler_options(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
-
+        // tsconfig.json is part of the codebase, no need to run build:electron
         $tsconfig = json_decode(
             file_get_contents(base_path('electron/tsconfig.json')),
             true
@@ -57,7 +55,7 @@ class ElectronTypeScriptTest extends TestCase
 
     public function test_all_typescript_files_have_valid_syntax(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
+        // All TypeScript files are part of the codebase, no need to run build:electron
 
         // Entry point files (don't require exports)
         $entryPoints = [
@@ -107,8 +105,7 @@ class ElectronTypeScriptTest extends TestCase
 
     public function test_main_entry_point_imports_boot_manager(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
-
+        // index.ts is part of the codebase, no need to run build:electron
         $indexContent = file_get_contents(base_path('electron/main/index.ts'));
 
         $this->assertStringContainsString('import { BootManager }', $indexContent);
@@ -117,8 +114,7 @@ class ElectronTypeScriptTest extends TestCase
 
     public function test_boot_manager_imports_services(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
-
+        // boot-manager.ts is part of the codebase, no need to run build:electron
         $bootManagerContent = file_get_contents(base_path('electron/main/boot-manager.ts'));
 
         $this->assertStringContainsString('ConfigService', $bootManagerContent);
@@ -129,8 +125,7 @@ class ElectronTypeScriptTest extends TestCase
 
     public function test_preload_scripts_use_context_bridge(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
-
+        // Preload scripts are part of the codebase, no need to run build:electron
         $loadingPreload = file_get_contents(base_path('electron/preload/loading.ts'));
         $mainPreload = file_get_contents(base_path('electron/preload/main.ts'));
 
@@ -145,15 +140,23 @@ class ElectronTypeScriptTest extends TestCase
      */
     public function test_typescript_files_compile_without_errors(): void
     {
-        $this->artisan('build:electron', ['--force' => true]);
-
         // Check if TypeScript is available
         $tscCheck = Process::run('npx tsc --version');
         if (! $tscCheck->successful()) {
             $this->markTestSkipped('TypeScript not available');
         }
 
+        // Check if electron is installed (required for type checking)
+        $packageJson = json_decode(file_get_contents(base_path('package.json')), true);
+        $hasElectron = isset($packageJson['devDependencies']['electron'])
+            || isset($packageJson['dependencies']['electron']);
+
+        if (! $hasElectron) {
+            $this->markTestSkipped('Electron not installed - run build:electron first');
+        }
+
         // Run TypeScript compilation (type-check only)
+        // The electron directory is part of the codebase, no need to run build:electron
         $result = Process::path(base_path())
             ->timeout(120)
             ->run('npx tsc -p electron --noEmit');

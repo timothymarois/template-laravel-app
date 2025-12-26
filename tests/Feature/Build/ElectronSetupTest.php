@@ -33,11 +33,9 @@ class ElectronSetupTest extends TestCase
         $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
     }
 
-    public function test_it_creates_electron_directory_structure(): void
+    public function test_electron_directory_structure_already_exists(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
-            ->assertSuccessful();
-
+        // The electron directory is part of the codebase, not created by build:electron
         $this->assertDirectoryExists(base_path('electron/main'));
         $this->assertDirectoryExists(base_path('electron/preload'));
         $this->assertDirectoryExists(base_path('electron/renderer'));
@@ -97,11 +95,9 @@ class ElectronSetupTest extends TestCase
         $this->assertArrayHasKey('appId', $config);
     }
 
-    public function test_it_publishes_all_typescript_files(): void
+    public function test_typescript_files_already_exist(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
-            ->assertSuccessful();
-
+        // TypeScript files are part of the codebase, not created by build:electron
         $this->assertFileExists(base_path('electron/main/index.ts'));
         $this->assertFileExists(base_path('electron/main/boot-manager.ts'));
         $this->assertFileExists(base_path('electron/main/windows.ts'));
@@ -118,20 +114,16 @@ class ElectronSetupTest extends TestCase
         $this->assertFileExists(storage_path('electron-backups/package.json.bak'));
     }
 
-    public function test_it_creates_preload_scripts(): void
+    public function test_preload_scripts_already_exist(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
-            ->assertSuccessful();
-
+        // Preload scripts are part of the codebase, not created by build:electron
         $this->assertFileExists(base_path('electron/preload/loading.ts'));
         $this->assertFileExists(base_path('electron/preload/main.ts'));
     }
 
-    public function test_it_creates_loading_screen(): void
+    public function test_loading_screen_already_exists(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
-            ->assertSuccessful();
-
+        // Loading screen is part of the codebase, not created by build:electron
         $this->assertFileExists(base_path('electron/renderer/loading.html'));
     }
 
@@ -147,11 +139,9 @@ class ElectronSetupTest extends TestCase
         $this->assertTrue(is_executable(base_path('scripts/setup-binaries.sh')));
     }
 
-    public function test_it_creates_tsconfig(): void
+    public function test_tsconfig_already_exists(): void
     {
-        $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
-            ->assertSuccessful();
-
+        // tsconfig.json is part of the codebase, not created by build:electron
         $this->assertFileExists(base_path('electron/tsconfig.json'));
 
         // Verify it's valid JSON

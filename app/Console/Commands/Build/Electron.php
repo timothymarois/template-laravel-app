@@ -126,6 +126,8 @@ class Electron extends Command
         }
 
         // Run setup steps
+        // Note: electron/ directory already exists with TypeScript source code
+        // We only need to publish config files and update package.json
         $steps = [
             'promptServiceSelection' => 'Configuring services',
             'installNpmDependencies' => 'Installing npm dependencies',
@@ -133,14 +135,8 @@ class Electron extends Command
             'backupOriginalFiles' => 'Backing up original files',
             'publishElectronConfig' => 'Publishing configuration',
             'publishServiceProvider' => 'Publishing service provider',
-            'publishMainProcess' => 'Publishing Electron main process',
-            'publishServices' => 'Publishing service files',
-            'publishPreload' => 'Publishing preload scripts',
-            'publishRenderer' => 'Publishing loading screen',
-            'publishResources' => 'Publishing resources',
             'publishBuildScripts' => 'Publishing build scripts',
             'publishBuilderConfig' => 'Publishing electron-builder config',
-            'publishTsConfig' => 'Publishing TypeScript config',
             'updatePackageJson' => 'Updating package.json',
             'updateBootstrapProviders' => 'Updating bootstrap providers',
             'updateEnvExample' => 'Updating .env.example',
@@ -211,8 +207,8 @@ class Electron extends Command
      */
     protected function isAlreadyConfigured(): bool
     {
-        return $this->files->exists(config_path('electron.php'))
-            || $this->files->isDirectory(base_path('electron'));
+        // Only check for config file - electron/ directory is part of the codebase
+        return $this->files->exists(config_path('electron.php'));
     }
 
     /**
@@ -325,13 +321,9 @@ class Electron extends Command
      */
     protected function createDirectories(): bool
     {
+        // electron/ directory already exists in the codebase
+        // Only create scripts/ and backup directories
         $directories = [
-            base_path('electron/main/services'),
-            base_path('electron/preload'),
-            base_path('electron/renderer'),
-            base_path('electron/resources/bin/darwin-arm64'),
-            base_path('electron/resources/bin/darwin-x64'),
-            base_path('electron/resources/bin/win32-x64'),
             base_path('scripts'),
             $this->backupPath,
         ];
@@ -339,20 +331,6 @@ class Electron extends Command
         foreach ($directories as $directory) {
             if (! $this->files->isDirectory($directory)) {
                 $this->files->makeDirectory($directory, 0755, true);
-            }
-        }
-
-        // Create .gitkeep files for bin directories
-        $binDirs = [
-            base_path('electron/resources/bin/darwin-arm64'),
-            base_path('electron/resources/bin/darwin-x64'),
-            base_path('electron/resources/bin/win32-x64'),
-        ];
-
-        foreach ($binDirs as $binDir) {
-            $gitkeep = "{$binDir}/.gitkeep";
-            if (! $this->files->exists($gitkeep)) {
-                $this->files->put($gitkeep, '');
             }
         }
 
@@ -441,127 +419,6 @@ class Electron extends Command
     }
 
     /**
-     * Publish the Electron main process files.
-     */
-    protected function publishMainProcess(): bool
-    {
-        $files = [
-            'main/index.ts.stub' => base_path('electron/main/index.ts'),
-            'main/boot-manager.ts.stub' => base_path('electron/main/boot-manager.ts'),
-            'main/windows.ts.stub' => base_path('electron/main/windows.ts'),
-        ];
-
-        foreach ($files as $stub => $destination) {
-            $this->publishStub($stub, $destination);
-        }
-
-        return true;
-    }
-
-    /**
-     * Publish service files.
-     */
-    protected function publishServices(): bool
-    {
-        $services = [
-            'services/index.ts.stub' => base_path('electron/main/services/index.ts'),
-            'services/config-service.ts.stub' => base_path('electron/main/services/config-service.ts'),
-            'services/port-service.ts.stub' => base_path('electron/main/services/port-service.ts'),
-            'services/process-service.ts.stub' => base_path('electron/main/services/process-service.ts'),
-            'services/laravel-service.ts.stub' => base_path('electron/main/services/laravel-service.ts'),
-            'services/health-service.ts.stub' => base_path('electron/main/services/health-service.ts'),
-        ];
-
-        // Add optional services based on selection
-        if ($this->services['redis'] ?? true) {
-            $services['services/redis-service.ts.stub'] = base_path('electron/main/services/redis-service.ts');
-        }
-
-        if ($this->services['horizon'] ?? true) {
-            $services['services/horizon-service.ts.stub'] = base_path('electron/main/services/horizon-service.ts');
-        }
-
-        if ($this->services['reverb'] ?? false) {
-            $services['services/reverb-service.ts.stub'] = base_path('electron/main/services/reverb-service.ts');
-        }
-
-        if ($this->services['scheduler'] ?? false) {
-            $services['services/scheduler-service.ts.stub'] = base_path('electron/main/services/scheduler-service.ts');
-        }
-
-        foreach ($services as $stub => $destination) {
-            $this->publishStub($stub, $destination);
-        }
-
-        return true;
-    }
-
-    /**
-     * Publish preload scripts.
-     */
-    protected function publishPreload(): bool
-    {
-        $files = [
-            'preload/loading.ts.stub' => base_path('electron/preload/loading.ts'),
-            'preload/main.ts.stub' => base_path('electron/preload/main.ts'),
-        ];
-
-        foreach ($files as $stub => $destination) {
-            $this->publishStub($stub, $destination);
-        }
-
-        return true;
-    }
-
-    /**
-     * Publish the loading screen renderer.
-     */
-    protected function publishRenderer(): bool
-    {
-        return $this->publishStub(
-            'renderer/loading.html.stub',
-            base_path('electron/renderer/loading.html')
-        );
-    }
-
-    /**
-     * Publish resource files (icons, entitlements).
-     */
-    protected function publishResources(): bool
-    {
-        $files = [
-            'resources/entitlements.mac.plist.stub' => base_path('electron/resources/entitlements.mac.plist'),
-        ];
-
-        foreach ($files as $stub => $destination) {
-            $this->publishStub($stub, $destination);
-        }
-
-        // Create placeholder for icons with instructions
-        $iconReadme = <<<'README'
-# Application Icons
-
-Place your application icons here:
-
-- `icon.icns` - macOS icon (512x512 or larger, ICNS format)
-- `icon.ico` - Windows icon (256x256 or larger, ICO format)
-- `icon.png` - PNG icon for Linux (512x512 or larger)
-
-## Creating Icons
-
-You can use tools like:
-- https://iconifier.net/ - Online icon generator
-- `iconutil` on macOS to create .icns from .iconset
-- ImageMagick to convert between formats
-
-README;
-
-        $this->files->put(base_path('electron/resources/README.md'), $iconReadme);
-
-        return true;
-    }
-
-    /**
      * Publish binary setup scripts.
      */
     protected function publishBuildScripts(): bool
@@ -590,17 +447,6 @@ README;
         return $this->publishStub(
             'electron-builder.json.stub',
             base_path('electron-builder.json')
-        );
-    }
-
-    /**
-     * Publish TypeScript configuration.
-     */
-    protected function publishTsConfig(): bool
-    {
-        return $this->publishStub(
-            'tsconfig.json.stub',
-            base_path('electron/tsconfig.json')
         );
     }
 
@@ -788,26 +634,22 @@ ENV;
         note('Next steps:');
         $this->newLine();
 
-        $this->line('  1. Download platform binaries:');
+        $this->line('  1. Run in development mode:');
+        $this->line('     <comment>pnpm electron:dev</comment>');
+        $this->newLine();
+
+        $this->line('  2. For production builds, download platform binaries:');
         $this->line('     <comment>pnpm setup:binaries</comment>');
         $this->newLine();
 
-        $this->line('  2. Add your application icons:');
+        $this->line('  3. Add your application icons:');
         $this->line('     <comment>electron/resources/icon.icns</comment> (macOS)');
         $this->line('     <comment>electron/resources/icon.ico</comment> (Windows)');
-        $this->newLine();
-
-        $this->line('  3. Run in development mode:');
-        $this->line('     <comment>pnpm electron:dev</comment>');
         $this->newLine();
 
         $this->line('  4. Build for distribution:');
         $this->line('     <comment>pnpm electron:build:mac</comment> (macOS)');
         $this->line('     <comment>pnpm electron:build:win</comment> (Windows)');
-        $this->newLine();
-
-        $this->line('  5. Read the documentation:');
-        $this->line('     <comment>docs/Electron.md</comment>');
         $this->newLine();
     }
 
@@ -845,10 +687,10 @@ ENV;
             }
         }
 
+        // Note: electron/ directory is NOT removed - it's part of the codebase
         $steps = [
             'removeConfig' => 'Removing configuration',
             'removeProvider' => 'Removing service provider',
-            'removeElectronDirectory' => 'Removing electron directory',
             'removeScripts' => 'Removing build scripts',
             'removeEnvProduction' => 'Removing .env.production',
             'removeBuilderConfig' => 'Removing electron-builder config',
@@ -906,19 +748,6 @@ ENV;
         $path = app_path('Providers/ElectronServiceProvider.php');
         if ($this->files->exists($path)) {
             $this->files->delete($path);
-        }
-
-        return true;
-    }
-
-    /**
-     * Remove the entire electron directory.
-     */
-    protected function removeElectronDirectory(): bool
-    {
-        $path = base_path('electron');
-        if ($this->files->isDirectory($path)) {
-            $this->files->deleteDirectory($path);
         }
 
         return true;

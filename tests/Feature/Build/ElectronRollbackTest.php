@@ -24,7 +24,7 @@ class ElectronRollbackTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_it_removes_electron_directory(): void
+    public function test_it_preserves_electron_directory(): void
     {
         // Setup first
         $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true]);
@@ -33,7 +33,8 @@ class ElectronRollbackTest extends TestCase
         // Rollback
         $this->artisan('build:electron', ['--rollback' => true, '--force' => true]);
 
-        $this->assertDirectoryDoesNotExist(base_path('electron'));
+        // The electron directory should still exist - it's part of the codebase
+        $this->assertDirectoryExists(base_path('electron'));
     }
 
     public function test_it_removes_configuration_file(): void

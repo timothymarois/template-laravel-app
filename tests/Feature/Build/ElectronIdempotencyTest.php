@@ -64,13 +64,15 @@ class ElectronIdempotencyTest extends TestCase
             $this->artisan('build:electron', ['--force' => true, '--skip-npm' => true])
                 ->assertSuccessful();
             $this->assertFileExists(config_path('electron.php'));
+            // electron/ directory is always present - it's part of the codebase
             $this->assertDirectoryExists(base_path('electron'));
 
             // Rollback
             $this->artisan('build:electron', ['--rollback' => true, '--force' => true])
                 ->assertSuccessful();
             $this->assertFileDoesNotExist(config_path('electron.php'));
-            $this->assertDirectoryDoesNotExist(base_path('electron'));
+            // electron/ directory should still exist after rollback
+            $this->assertDirectoryExists(base_path('electron'));
         }
     }
 
