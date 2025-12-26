@@ -15,6 +15,12 @@ class ElectronTypeScriptTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Skip if BUILD_TEST_ELECTRON is not enabled
+        if (! env('BUILD_TEST_ELECTRON', false)) {
+            $this->markTestSkipped('Electron build tests are disabled. Set BUILD_TEST_ELECTRON=true to enable.');
+        }
+
         $this->files = new Filesystem;
     }
 

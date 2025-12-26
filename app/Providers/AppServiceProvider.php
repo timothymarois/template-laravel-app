@@ -36,10 +36,10 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureLogViewer(): void
     {
-        // Allow access in local/dev mode, require auth in production
+        // Allow access in local/dev mode, require authentication in production
         LogViewer::auth(function (Request $request) {
             return app()->environment('local', 'development')
-                || $request->user()?->is_admin;
+                || $request->user() !== null;
         });
     }
 
