@@ -283,8 +283,6 @@ class Electron extends Command
         $dependencies = [
             'electron' => '^33.0.0',
             'electron-builder' => '^25.0.0',
-            'typescript' => '^5.0.0',
-            '@types/node' => '^22.0.0',
         ];
 
         $devDeps = implode(' ', array_map(
@@ -372,8 +370,12 @@ class Electron extends Command
         ];
 
         foreach ($filesToBackup as $source => $backupName) {
-            if ($this->files->exists($source)) {
-                $this->files->copy($source, "{$this->backupPath}/{$backupName}");
+            $backupPath = "{$this->backupPath}/{$backupName}";
+
+            // Only create backup if it doesn't already exist
+            // This preserves the original files across multiple setup/rollback cycles
+            if ($this->files->exists($source) && ! $this->files->exists($backupPath)) {
+                $this->files->copy($source, $backupPath);
             }
         }
 
@@ -818,6 +820,14 @@ ENV;
         $this->newLine();
 
         if (! $this->isAlreadyConfigured()) {
+            // Even if electron isn't configured, restore from backups if they exist
+            // This handles cases where a previous rollback was interrupted
+            if ($this->files->isDirectory($this->backupPath)) {
+                $this->restorePackageJson();
+                $this->restoreBootstrapProviders();
+                $this->cleanupBackups();
+            }
+
             info('Electron is not configured. Nothing to rollback.');
 
             return self::SUCCESS;

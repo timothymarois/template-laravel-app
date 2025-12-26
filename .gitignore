@@ -36,6 +36,7 @@ _ide_helper_models.php
 
 /storage/truncated_code.txt
 /storage/tenancy-backups
+/storage/electron-backups
 
 # Intellij idea
 *.iml

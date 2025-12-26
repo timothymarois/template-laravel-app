@@ -24,6 +24,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tiptap/core": "^3.14.0",
     "@tiptap/pm": "^3.14.0",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/parser": "^8.48.0",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/server-renderer": "^3.5.13",
@@ -40,6 +41,7 @@
     "lodash": "^4.17.21",
     "stylelint": "^16.26.1",
     "stylelint-config-standard": "^39.0.1",
+    "typescript": "^5.9.3",
     "unplugin-auto-import": "^0.17.6",
     "vite": "^7.3.0",
     "vitest": "^4.0.16"
