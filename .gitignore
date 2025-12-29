@@ -35,12 +35,6 @@ _ide_helper_models.php
 !.vscode/*.code-snippets
 
 /storage/truncated_code.txt
-/storage/tenancy-backups
-/storage/electron-backups
-
-# Electron
-/electron/dist
-/dist-electron
 
 # Intellij idea
 *.iml
