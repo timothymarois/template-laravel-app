@@ -23,14 +23,6 @@ Major overhaul with new UI framework, comprehensive testing, real-time features,
 - Carousel, Resizable panels, Context menus
 - Dropzone file uploads, Loading states, Alerts
 
-### Multi-Tenancy (Optional)
-- Added optional multi-tenancy via `stancl/tenancy` package
-- Setup command: `php artisan build:tenancy`
-- Rollback command: `php artisan build:tenancy --rollback`
-- Subdomain routing with separate databases per tenant
-- Two-tier user system (CentralUser + Tenant User)
-- See [docs/Tenancy.md](docs/Tenancy.md) for full documentation
-
 ### Real-Time & WebSockets
 - Added Laravel Reverb WebSocket support
 - Added Echo composables (`useChannel`, `usePrivateChannel`, `useListen`)
