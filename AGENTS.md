@@ -21,7 +21,7 @@ The application is a unified system composed of **Laravel**, **Vue 3 + Inertia**
 
 ### Backend
 
-* Laravel 12+ (PHP 8.4+)
+* Laravel 12+ (PHP 8.3+)
 * Redis (queue + cache via Horizon)
 * Inertia server adapter
 
@@ -235,6 +235,8 @@ The application includes a comprehensive component showcase at `resources/js/pag
 ```
 
 **This ensures consistency across the application and prevents reinventing patterns that already exist.**
+
+> **Note:** The component showcase pages at `/admin/components/` are reference examples for development. They demonstrate correct usage patterns and are safe to delete once you understand the patterns, or keep them as internal documentation.
 
 ### Layer Overview
 

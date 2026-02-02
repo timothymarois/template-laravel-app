@@ -97,7 +97,7 @@ function onGridYearChange(gridDate: DateValue, gridIndex: number, newYear: strin
 
 <template>
     <RangeCalendarRoot
-        v-slot="{ grid, weekDays, date }"
+        v-slot="{ grid, weekDays }"
         :class="cn('p-3', props.class)"
         :placeholder="internalPlaceholder"
         v-bind="forwarded"

@@ -594,8 +594,7 @@ const submitForm = () => {
     // Simulate upload
     setTimeout(() => {
         isSubmitting.value = false;
-        alert('Form submitted! Check console for data.');
-        console.log('Form data:', form.value);
+        alert('Form submitted!');
     }, 2000);
 };
 

@@ -79,7 +79,6 @@ const fullTableActions = [
 ];
 
 const handleAction = (action: string) => {
-    console.log('Action:', action);
     if (action === 'clear') {
         selectedCount.value = 1;
     }

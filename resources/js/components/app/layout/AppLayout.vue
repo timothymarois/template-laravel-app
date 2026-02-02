@@ -30,7 +30,7 @@
         :sideBarItems="sideBarItems"
         :topBarItems="topBarItems"
         :linkComponent="'Link'"
-        sideBarActiveClass="!bg-white !text-black"
+        sideBarActiveClass="!bg-white !text-black dark:!bg-zinc-800 dark:!text-white"
         :noScroll="noScroll"
         :containerClass="containerClass"
         widthClass="w-full"

@@ -261,8 +261,7 @@ const { sidebarItems } = useShowcaseNav();
 
 const showCommandDialog = ref(false);
 
-const handleSelect = (value: string) => {
-    console.log('Selected:', value);
+const handleSelect = (_value: string) => {
     showCommandDialog.value = false;
 };
 

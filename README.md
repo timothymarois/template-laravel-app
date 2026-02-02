@@ -73,6 +73,8 @@ php artisan migrate
 pnpm dev
 ```
 
+Visit `http://localhost:8000` (or your Herd domain) to see the app. Register a new account to access `/admin`. The component showcase is at `/admin/components`.
+
 ---
 
 ## Documentation
