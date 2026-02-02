@@ -4,7 +4,7 @@ Get up and running in 5 minutes.
 
 ## Prerequisites
 
-- PHP 8.3+
+- PHP 8.4+
 - Node.js 20+
 - pnpm
 - Composer

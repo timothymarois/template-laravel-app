@@ -21,7 +21,7 @@ The application is a unified system composed of **Laravel**, **Vue 3 + Inertia**
 
 ### Backend
 
-* Laravel 12+ (PHP 8.3+)
+* Laravel 12+ (PHP 8.4+)
 * Redis (queue + cache via Horizon)
 * Inertia server adapter
 

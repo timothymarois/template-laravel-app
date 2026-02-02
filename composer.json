@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "archtechx/enums": "^1.1",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/cashier": "*",
