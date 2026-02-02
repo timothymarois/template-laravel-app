@@ -6,7 +6,7 @@
         pageSidebarTitle="Components"
     >
         <div class="grid grid-cols-2 gap-4">
-            <Link :href="$route('admin.components.forms.calendar')">
+            <Link :href="$route('admin.components.forms.calendar.date-input')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                     <CardHeader>
                         <div class="flex items-center gap-3">
@@ -132,7 +132,7 @@
                 </Card>
             </Link>
 
-            <Link :href="$route('admin.components.forms.tags-input')">
+            <Link :href="$route('admin.components.forms.input.tags')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
                     <CardHeader>
                         <div class="flex items-center gap-3">

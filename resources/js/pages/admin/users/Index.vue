@@ -59,7 +59,7 @@
                         </div>
                     </template>
                     <template #name="{ data }">
-                        <Link class="hover:underline text-black font-medium" :href="$route('admin.users.show', data.id)">
+                        <Link class="hover:underline font-medium" :href="$route('admin.users.show', data.id)">
                             {{ data.name }}
                         </Link>
                     </template>
