@@ -10,10 +10,10 @@ The application is a unified system composed of **Laravel**, **Vue 3 + Inertia**
 
 **Agents must follow these rules:**
 
-* PRDs override all assumptions. All PRDs live in `/docs/prd/`.
-* No contributor may implement behavior not defined in PRDs or unless explicitly asked by the user.
+* Documentation lives in `/docs/` and is built with VitePress.
+* Review related documentation in `/docs/` before making changes.
+* Architecture and guidelines are defined in the docs—follow them.
 * If clarity is missing, request clarification before committing code.
-* Review existing documentation before making changes.
 
 ---
 

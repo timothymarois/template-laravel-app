@@ -1,0 +1,26 @@
+{
+    "name": "laravel-starter-docs",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vitepress dev",
+        "build": "vitepress build",
+        "preview": "vitepress preview",
+        "lint": "eslint \".vitepress/**/*.{js,ts,mts}\" --ignore-pattern \".vitepress/cache/**\" --ignore-pattern \".vitepress/dist/**\"",
+        "lint:fix": "eslint \".vitepress/**/*.{js,ts,mts}\" --ignore-pattern \".vitepress/cache/**\" --ignore-pattern \".vitepress/dist/**\" --fix",
+        "lint:css": "stylelint \".vitepress/theme/**/*.css\"",
+        "lint:css:fix": "stylelint \".vitepress/theme/**/*.css\" --fix",
+        "check": "pnpm lint && pnpm lint:css && pnpm build"
+    },
+    "devDependencies": {
+        "@stylistic/stylelint-plugin": "^4.0.0",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
+        "@typescript-eslint/parser": "^8.0.0",
+        "eslint": "^9.0.0",
+        "stylelint": "^16.0.0",
+        "stylelint-config-standard": "^39.0.0",
+        "vitepress": "^1.5.0",
+        "vue": "^3.5.0"
+    }
+}

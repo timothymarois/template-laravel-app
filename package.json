@@ -14,9 +14,18 @@
     "lint:css": "stylelint \"resources/css/**/*.css\"",
     "lint:css:fix": "stylelint \"resources/css/**/*.css\" --fix",
     "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse && ./vendor/bin/pest",
-    "check:js": "pnpm lint && pnpm lint:css && pnpm test && pnpm build",
-    "check": "pnpm check:php && pnpm check:js && pnpm exec vite build --ssr",
-    "prepare": "husky"
+    "check:js": "pnpm lint && pnpm lint:css && pnpm test",
+    "check:docs": "pnpm docs:lint && pnpm docs:lint:css",
+    "check:build": "pnpm build && pnpm exec vite build --ssr && pnpm docs:build",
+    "check": "concurrently -g \"pnpm:check:php\" \"pnpm:check:js\" \"pnpm:check:docs\" && pnpm check:build",
+    "prepare": "husky",
+    "docs:dev": "cd docs && pnpm dev",
+    "docs:build": "cd docs && pnpm build",
+    "docs:lint": "cd docs && pnpm lint",
+    "docs:lint:fix": "cd docs && pnpm lint:fix",
+    "docs:lint:css": "cd docs && pnpm lint:css",
+    "docs:lint:css:fix": "cd docs && pnpm lint:css:fix",
+    "docs:check": "cd docs && pnpm check"
   },
   "devDependencies": {
     "@inertiajs/vue3": "^2.0.0",
@@ -32,6 +41,7 @@
     "@vueuse/core": "^14.1.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.6.4",
+    "concurrently": "^9.2.1",
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^10.6.2",
     "happy-dom": "^20.0.11",
@@ -92,6 +102,12 @@
     ],
     "resources/css/**/*.css": [
       "stylelint --fix"
+    ],
+    "docs/.vitepress/**/*.{js,ts,mts}": [
+      "cd docs && eslint --fix"
+    ],
+    "docs/.vitepress/**/*.css": [
+      "cd docs && stylelint --fix"
     ],
     "**/*.php": [
       "./vendor/bin/pint"

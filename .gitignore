@@ -54,3 +54,8 @@ components.d.ts
 auto-imports.d.ts
 
 /resources/old-presets
+
+# VitePress
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/node_modules/

@@ -6,6 +6,18 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v4.1.0 - 02/01/2026
+
+### Documentation
+- Added VitePress documentation site in `/docs/`
+- New docs: Getting Started, Architecture, and Guidelines sections
+- Commands: `pnpm docs:dev`, `pnpm docs:build`
+
+### Code Quality
+- Added ESLint and Stylelint to docs with 4-space indentation
+- Parallelized `pnpm check` using `concurrently` for faster CI
+- Updated AGENTS.md to reference VitePress docs instead of PRDs
+
 ## v4.0.0 - 12/26/2025
 
 Major overhaul with new UI framework, comprehensive testing, real-time features, and optional multi-tenancy.

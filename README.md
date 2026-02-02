@@ -77,20 +77,25 @@ pnpm dev
 
 ## Documentation
 
-### Setup & Development
+This starter includes built-in documentation powered by VitePress.
+
+```bash
+pnpm docs:dev       # Start docs dev server at http://localhost:5173
+pnpm docs:build     # Build docs for production
+```
+
+View the docs for:
+- Architecture overview and tech stack
+- Component guidelines (ui/, app/, site/ layers)
+- Laravel and Vue coding standards
+- Testing requirements
+
+### Quick Links
 - [Tech Stack](#tech-stack) — Core technologies and why they're chosen
 - [Component Architecture](#component-architecture) — How components are organized
 - [Development Tools](#development-tools) — Testing, linting, and dev runner
-
-### Production
 - [Deployment](#deployment) — Build commands and production setup
-- [SSR](#server-side-rendering) — Server-side rendering configuration
 - [Security](#security) — Headers, rate limiting, CORS
-
-### Reference
-- [WebSockets](#websockets) — Real-time with Reverb and Echo
-- [SEO & Social](#seo--social-sharing) — Meta tags and sitemaps
-- [Patterns](#patterns) — Routes, notifications, icons, API requests
 
 ---
 
