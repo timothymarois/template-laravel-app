@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp title="Users" :pageTitle="`Users (${userTotal})`" containerClass="p-0" :noScroll="true">
+    <AppLayout title="Users" :pageTitle="`Users (${userTotal})`" containerClass="p-0" :noScroll="true">
         <template v-if="(selectAll ? userTotal : selected?.length) > 0" #headerTitle>
             <TableActions
                 :selectedCount="selectAll ? userTotal : selected?.length"
@@ -80,13 +80,13 @@
         <template #footerAction>
             <LinkPaginator :links="users.links" :linkComponent="'Link'" />
         </template>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Input as InputText, Button, Select, Paginator as LinkPaginator, DataTable as Table, ButtonMenu, TableActions, CustomizeColumns } from '@/components/ui';
 import { useModal } from '@/composables';
 import { useDataTableOptions } from '@/composables/inertia';

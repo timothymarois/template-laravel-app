@@ -102,11 +102,12 @@ site/
 // Base components
 import { Button, Card, DataTable } from '@/components/ui';
 
-// Application-specific
-import { AppLayout, Sidebar } from '@/components/app';
+// Application-specific (direct imports, no barrels)
+import AppLayout from '@/components/app/layout/AppLayout.vue';
+import Sidebar from '@/components/app/navigation/Sidebar.vue';
 
-// Website-specific
-import { SiteLayout } from '@/components/site';
+// Website-specific (direct imports, no barrels)
+import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 ```
 
 ## Decision Tree

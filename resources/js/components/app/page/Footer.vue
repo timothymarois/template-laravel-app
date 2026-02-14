@@ -18,25 +18,27 @@
     </div>
 </template>
 
-<script setup lang="ts">
-import { useSlots, computed, inject, type Ref } from 'vue';
+<script setup>
+import { useSlots, computed, inject } from 'vue';
 import { hasSlotContent } from '@/utils';
 
-interface Props {
-    leftOffset?: number;
-    widthClass?: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    leftOffset: 0,
-    widthClass: 'max-w-screen-2xl',
+const props = defineProps({
+    leftOffset: {
+        type: Number,
+        default: 0,
+    },
+    widthClass: {
+        type: String,
+        default: 'max-w-screen-2xl',
+    },
 });
+
 const slots = useSlots();
 
 const hasAction = computed(() => hasSlotContent(slots.action));
 
 // Inject scroll-to-bottom state from table (if available)
-const isScrolledToBottom = inject<Ref<boolean>>('isScrolledToBottom', null);
+const isScrolledToBottom = inject('isScrolledToBottom', null);
 
 const showShadow = computed(() => {
     // Show shadow if we don't know scroll state or if not scrolled to bottom

@@ -56,7 +56,7 @@
                                     <span v-else-if="item.icon" :class="item.icon" class="mr-2" />
                                     <span>{{ item.label }}</span>
                                 </div>
-                                <IconArrowUpRight
+                                <ArrowUpRight
                                     v-if="item.external"
                                     class="ml-2 w-4 h-4 opacity-50"
                                 />
@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { IconArrowUpRight } from '@tabler/icons-vue';
+import { ArrowUpRight } from 'lucide-vue-next';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
     DropdownMenu,

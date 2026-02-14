@@ -4,15 +4,16 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from 'vue';
 import { cn } from '@/utils';
 
-interface Props {
-    class?: string;
-}
-
-const props = defineProps<Props>();
+const props = defineProps({
+    class: {
+        type: String,
+        default: '',
+    },
+});
 
 const className = computed(() => props.class || '');
 </script>

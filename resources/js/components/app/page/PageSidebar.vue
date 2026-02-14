@@ -70,7 +70,7 @@
     </SidebarProvider>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ChevronRight } from 'lucide-vue-next';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -88,31 +88,27 @@ import {
 } from '@/components/ui/sidebar';
 import { isPageActive } from '@/utils/vue/inertia';
 
-interface NavItem {
-    label: string;
-    href?: string;
-    parent?: string;
-    icon?: any;
-    children?: NavItem[];
-}
-
-interface Props {
-    items?: NavItem[];
-    title?: string;
-    linkComponent?: string | object;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    items: () => [],
-    linkComponent: 'a',
+const props = defineProps({
+    items: {
+        type: Array,
+        default: () => [],
+    },
+    title: {
+        type: String,
+        default: undefined,
+    },
+    linkComponent: {
+        type: [String, Object],
+        default: 'a',
+    },
 });
 
-const isActive = (item: NavItem) => {
+const isActive = (item) => {
     if (!item.href) return false;
     return item.parent ? isPageActive(item.parent) : isPageActive(item.href, undefined, true);
 };
 
-const isGroupActive = (item: NavItem) => {
+const isGroupActive = (item) => {
     if (!item.children?.length) return false;
     return item.children.some(child => isActive(child));
 };

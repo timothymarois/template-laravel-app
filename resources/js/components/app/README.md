@@ -11,9 +11,11 @@ Application-specific components for authenticated app functionality.
 
 ## Usage
 
-```typescript
-import { AppLayout, Sidebar, ProfileMenu } from '@/components/app';
-import { EditUserModal } from '@/components/app/modals';
+```js
+import AppLayout from '@/components/app/layout/AppLayout.vue';
+import Sidebar from '@/components/app/navigation/Sidebar.vue';
+import ProfileMenu from '@/components/app/navigation/ProfileMenu.vue';
+import EditUserModal from '@/components/app/modals/EditUserModal.vue';
 ```
 
 ## Adding Modals

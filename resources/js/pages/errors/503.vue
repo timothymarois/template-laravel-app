@@ -11,5 +11,5 @@
 </template>
 
 <script setup>
-import { SiteLayout } from '@/components/site';
+import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp
+    <AppLayout
         title="Components - Badge"
         pageTitle="Badge"
         :pageSidebarItems="sidebarItems"
@@ -157,11 +157,11 @@
                 </CardContent>
             </Card>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

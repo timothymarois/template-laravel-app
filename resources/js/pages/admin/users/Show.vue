@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp title="User">
+    <AppLayout title="User">
         <template #headerTitle>
             <div class="pr-2">
                 <Link :href="$route('admin.users.index')">
@@ -37,12 +37,12 @@
         <template #footerAction>
             [actions]
         </template> -->
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Button } from '@/components/ui';
 import { useModal } from '@/composables';
 import { ArrowLeft } from 'lucide-vue-next';

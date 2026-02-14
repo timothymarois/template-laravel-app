@@ -89,8 +89,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import { IconUser, IconColorFilter, IconHome } from '@tabler/icons-vue';
-import { Gauge, ScrollText, LogOut } from 'lucide-vue-next';
+import { House, User, Palette, Gauge, ScrollText, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
 import ModeToggle from '../navigation/ModeToggle.vue';
@@ -196,9 +195,9 @@ const topBarItems = computed(() => [
 const sideBarItems = computed(() => [
     {
         children: [
-            { label: 'Home', href: '/admin', exact: true, icon: IconHome, activeIcon: IconHome },
-            { label: 'Users', href: '/admin/users', parent: null, icon: IconUser, activeIcon: IconUser },
-            { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: IconColorFilter, activeIcon: IconColorFilter, count: 24 }
+            { label: 'Home', href: '/admin', exact: true, icon: House, activeIcon: House },
+            { label: 'Users', href: '/admin/users', parent: null, icon: User, activeIcon: User },
+            { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: Palette, activeIcon: Palette, count: 24 }
         ],
     },
 ]);

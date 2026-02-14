@@ -24,7 +24,7 @@
     </DropdownMenu>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { useColorMode } from '@vueuse/core';
 import { Button } from '@/components/ui/button';
 import {

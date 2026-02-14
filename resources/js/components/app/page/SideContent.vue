@@ -4,6 +4,6 @@
     </ScrollFrame>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ScrollFrame } from '@/components/ui';
 </script>

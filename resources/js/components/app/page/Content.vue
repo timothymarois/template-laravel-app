@@ -14,24 +14,31 @@
     </ScrollFrame>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed, useAttrs } from 'vue';
 import { ScrollFrame } from '@/components/ui';
 
-interface Props {
-    offset?: number | null;
-    footerHeight?: number;
-    widthClass?: string;
-    containerClass?: string;
-    scrollable?: boolean;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    offset: null,
-    footerHeight: 0,
-    widthClass: 'max-w-screen-2xl',
-    containerClass: 'mx-auto p-4',
-    scrollable: true,
+const props = defineProps({
+    offset: {
+        type: Number,
+        default: null,
+    },
+    footerHeight: {
+        type: Number,
+        default: 0,
+    },
+    widthClass: {
+        type: String,
+        default: 'max-w-screen-2xl',
+    },
+    containerClass: {
+        type: String,
+        default: 'mx-auto p-4',
+    },
+    scrollable: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const attrs = useAttrs();

@@ -33,7 +33,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import { AppShell } from '@/components/app/layout';
+import AppShell from '@/components/app/layout/AppShell.vue';
 
 const page = usePage();
 

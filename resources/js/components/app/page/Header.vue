@@ -22,19 +22,7 @@
                                                 >
                                                     {{ nav.title }}
                                                 </component>
-                                                <svg
-                                                    aria-hidden="true"
-                                                    class="w-6 h-6 text-gray-400"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
+                                                <ChevronRight class="w-5 h-5 text-gray-400" />
                                             </div>
                                         </li>
                                         <li class="text-gray-900 dark:text-gray-100 font-semibold">
@@ -75,7 +63,7 @@
                                                     ]
                                             ]"
                                         >
-                                            <IconLock v-if="tab.disabled" size="16" />
+                                            <Lock v-if="tab.disabled" :size="16" />
                                             <span>{{ tab.title }}</span>
                                         </component>
                                     </li>
@@ -92,48 +80,45 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed, useSlots, toRefs } from 'vue';
-import { IconLock } from '@tabler/icons-vue';
+import { Lock, ChevronRight } from 'lucide-vue-next';
 import { useScroll } from '@/composables';
 import { hasSlotContent } from '@/utils';
 import { isPageActive } from '@/utils/vue/inertia';
 
-interface Breadcrumb {
-    href: string;
-    title: string;
-}
-
-interface Tab {
-    href: string;
-    title: string;
-    disabled?: boolean;
-    parent?: string;
-}
-
-interface Props {
-    breadcrumbs?: Breadcrumb[];
-    tabs?: Tab[];
-    title?: string;
-    linkComponent?: string | object;
-    widthClass?: string;
-    hideTitle?: boolean;
-}
-
 const slots = useSlots();
 
-const props = withDefaults(defineProps<Props>(), {
-    breadcrumbs: () => [],
-    tabs: () => [],
-    title: '',
-    linkComponent: 'a',
-    widthClass: 'max-w-screen-2xl',
-    hideTitle: false,
+const props = defineProps({
+    breadcrumbs: {
+        type: Array,
+        default: () => [],
+    },
+    tabs: {
+        type: Array,
+        default: () => [],
+    },
+    title: {
+        type: String,
+        default: '',
+    },
+    linkComponent: {
+        type: [String, Object],
+        default: 'a',
+    },
+    widthClass: {
+        type: String,
+        default: 'max-w-screen-2xl',
+    },
+    hideTitle: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const { breadcrumbs, tabs, title, linkComponent, widthClass, hideTitle } = toRefs(props);
 
-const isActiveTab = (tab: Tab) =>
+const isActiveTab = (tab) =>
     tab.parent ? isPageActive(tab.parent) : isPageActive(tab.href, undefined, true);
 
 const hasAction = computed(() => hasSlotContent(slots.action));

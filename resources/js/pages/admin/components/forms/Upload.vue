@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp
+    <AppLayout
         title="Components - Upload"
         pageTitle="Upload"
         :pageSidebarItems="sidebarItems"
@@ -498,12 +498,12 @@ const submit = () => {
                 </CardContent>
             </Card>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select-popover';

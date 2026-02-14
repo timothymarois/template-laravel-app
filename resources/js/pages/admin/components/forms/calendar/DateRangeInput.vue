@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp
+    <AppLayout
         title="Components - Calendar"
         pageTitle="Calendar"
         :pageTabs="pageTabs"
@@ -238,13 +238,13 @@ const customPresets: DateRangePreset[] = [
                 </CardContent>
             </Card>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { DateValue, DateRange } from 'reka-ui';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { RangeCalendar } from '@/components/ui/range-calendar';
 import { DateRangePicker, type DateRangePreset } from '@/components/ui/date-picker';

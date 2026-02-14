@@ -158,8 +158,8 @@ components/
 
 ```typescript
 import { Button, Card } from '@/components/ui';
-import { AppLayout } from '@/components/app';
-import { SiteLayout } from '@/components/site';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
+import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 ```
 
 See `AGENTS.md` for detailed component guidelines.

@@ -126,7 +126,7 @@
     </TooltipProvider>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, useSlots, watch, provide, defineAsyncComponent } from 'vue';
 import { hasSlotContent } from '@/utils';
 import PageHeader from '../page/Header.vue';
@@ -143,52 +143,95 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 const Toaster = defineAsyncComponent(() => import('@/components/ui/sonner/Sonner.vue'));
 const NavTopbar = defineAsyncComponent(() => import('../navigation/Topbar.vue'));
 
-interface Props {
-    pageUrl?: string;
-    isSideNav?: boolean;
-    hasToast?: boolean;
-    toastPosition?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
-    toastCloseButton?: boolean;
-    title?: string;
-    pageTitle?: string;
-    pageTabs?: any[];
-    pageNavItems?: any[];
-    pageSidebarItems?: any[];
-    pageSidebarTitle?: string;
-    sideBarItems?: any[];
-    topBarItems?: any[];
-    linkComponent?: string | object;
-    breadcrumbs?: any[];
-    widthClass?: string;
-    containerClass?: string;
-    noScroll?: boolean;
-    sideBarBackgroundClass?: string;
-    sideBarActiveClass?: string;
-    topBarBackgroundClass?: string;
-    topBarActiveClass?: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    isSideNav: true,
-    hasToast: true,
-    toastPosition: 'bottom-left',
-    toastCloseButton: true,
-    pageTitle: 'Home',
-    pageTabs: () => [],
-    pageNavItems: () => [],
-    pageSidebarItems: () => [],
-    pageSidebarTitle: '',
-    sideBarItems: () => [],
-    topBarItems: () => [],
-    linkComponent: 'a',
-    breadcrumbs: () => [],
-    widthClass: 'max-w-screen-2xl',
-    containerClass: 'mx-auto p-4',
-    noScroll: false,
-    sideBarBackgroundClass: '',
-    sideBarActiveClass: '',
-    topBarBackgroundClass: '',
-    topBarActiveClass: '',
+const props = defineProps({
+    pageUrl: {
+        type: String,
+        default: undefined,
+    },
+    isSideNav: {
+        type: Boolean,
+        default: true,
+    },
+    hasToast: {
+        type: Boolean,
+        default: true,
+    },
+    toastPosition: {
+        type: String,
+        default: 'bottom-left',
+    },
+    toastCloseButton: {
+        type: Boolean,
+        default: true,
+    },
+    title: {
+        type: String,
+        default: undefined,
+    },
+    pageTitle: {
+        type: String,
+        default: 'Home',
+    },
+    pageTabs: {
+        type: Array,
+        default: () => [],
+    },
+    pageNavItems: {
+        type: Array,
+        default: () => [],
+    },
+    pageSidebarItems: {
+        type: Array,
+        default: () => [],
+    },
+    pageSidebarTitle: {
+        type: String,
+        default: '',
+    },
+    sideBarItems: {
+        type: Array,
+        default: () => [],
+    },
+    topBarItems: {
+        type: Array,
+        default: () => [],
+    },
+    linkComponent: {
+        type: [String, Object],
+        default: 'a',
+    },
+    breadcrumbs: {
+        type: Array,
+        default: () => [],
+    },
+    widthClass: {
+        type: String,
+        default: 'max-w-screen-2xl',
+    },
+    containerClass: {
+        type: String,
+        default: 'mx-auto p-4',
+    },
+    noScroll: {
+        type: Boolean,
+        default: false,
+    },
+    sideBarBackgroundClass: {
+        type: String,
+        default: '',
+    },
+    sideBarActiveClass: {
+        type: String,
+        default: '',
+    },
+    topBarBackgroundClass: {
+        type: String,
+        default: '',
+    },
+    topBarActiveClass: {
+        type: String,
+        default: '',
+    },
 });
 
 const slots = useSlots();
@@ -196,9 +239,9 @@ const slots = useSlots();
 const sideNavRef = ref(null);
 const pageSideNavRef = ref(null);
 const footerRef = ref(null);
-const sideContentRef = ref<HTMLElement | null>(null);
+const sideContentRef = ref(null);
 
-let resizeObserver: ResizeObserver | null = null;
+let resizeObserver = null;
 
 const footerHeight = ref(0);
 const footerLeftOffset = ref(0);
@@ -208,15 +251,15 @@ const isScrolledToBottom = ref(false);
 provide('layoutFooterHeight', footerHeight);
 // Provide scroll state and setter for child components to update
 provide('isScrolledToBottom', isScrolledToBottom);
-provide('setScrolledToBottom', (value: boolean) => {
+provide('setScrolledToBottom', (value) => {
     isScrolledToBottom.value = value;
 });
 
 const calculateFooterMetrics = () => {
-    const sideNavWidth = (sideNavRef.value as any)?.$el?.offsetWidth || 0;
-    const pageSideNavWidth = (pageSideNavRef.value as any)?.$el?.offsetWidth || 0;
+    const sideNavWidth = sideNavRef.value?.$el?.offsetWidth || 0;
+    const pageSideNavWidth = pageSideNavRef.value?.$el?.offsetWidth || 0;
     const sideContentWidth = sideContentRef.value?.offsetWidth || 0;
-    const footerEl = (footerRef.value as any)?.$el;
+    const footerEl = footerRef.value?.$el;
 
     footerLeftOffset.value = sideNavWidth + pageSideNavWidth + sideContentWidth;
     footerHeight.value = footerEl?.offsetHeight || 0;
@@ -240,13 +283,13 @@ const observeElements = () => {
         calculateFooterMetrics();
     });
 
-    const sideNavEl = (sideNavRef.value as any)?.$el;
-    const pageSideNavEl = (pageSideNavRef.value as any)?.$el;
+    const sideNavEl = sideNavRef.value?.$el;
+    const pageSideNavEl = pageSideNavRef.value?.$el;
     const sideContentEl = sideContentRef.value;
 
     [sideNavEl, pageSideNavEl, sideContentEl].forEach((el) => {
         if (el instanceof Element) {
-            resizeObserver!.observe(el);
+            resizeObserver.observe(el);
         }
     });
 };

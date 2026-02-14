@@ -1,11 +1,11 @@
 <template>
-    <LayoutApp title="Home" pageTitle="Home">
+    <AppLayout title="Home" pageTitle="Home">
         <div>
             This is an example home page.
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup>
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 </script>

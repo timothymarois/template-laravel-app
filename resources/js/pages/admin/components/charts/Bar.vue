@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp
+    <AppLayout
         title="Components - Bar Charts"
         pageTitle="Bar Charts"
         :pageSidebarItems="sidebarItems"
@@ -271,11 +271,11 @@
                 </Card>
             </div>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { VisXYContainer, VisGroupedBar, VisStackedBar, VisAxis, VisCrosshair, VisTooltip } from '@unovis/vue';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';

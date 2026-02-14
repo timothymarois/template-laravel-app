@@ -1,5 +1,5 @@
 <template>
-    <LayoutDefault title="Login">
+    <SiteLayout title="Login">
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <Card>
                 <template #header>
@@ -38,12 +38,12 @@
                 </template>
             </Card>
         </div>
-    </LayoutDefault>
+    </SiteLayout>
 </template>
 
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3';
-import { SiteLayout as LayoutDefault } from '@/components/site';
+import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 import { Card, LabelField, Input as InputText, FormErrors, Button } from '@/components/ui';
 import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();

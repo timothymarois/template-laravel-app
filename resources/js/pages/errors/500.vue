@@ -15,6 +15,6 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import { SiteLayout } from '@/components/site';
+import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 import { Button } from '@/components/ui';
 </script>

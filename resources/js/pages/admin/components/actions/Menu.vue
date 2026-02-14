@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp
+    <AppLayout
         title="Components - Menu"
         pageTitle="Menu"
         :pageSidebarItems="sidebarItems"
@@ -394,12 +394,12 @@
                 </CardContent>
             </Card>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button, ButtonMenu } from '@/components/ui/button';
 import {

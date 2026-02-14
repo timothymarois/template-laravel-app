@@ -29,7 +29,7 @@
                                         <Tooltip v-if="child.disabled && child.lockTooltipText">
                                             <TooltipTrigger as-child>
                                                 <span class="ml-auto pl-2 pointer-events-auto">
-                                                    <IconLock size="16" />
+                                                    <Lock :size="16" />
                                                 </span>
                                             </TooltipTrigger>
                                             <TooltipContent side="right">
@@ -59,7 +59,7 @@
                             <Tooltip v-if="item.disabled && item.lockTooltipText">
                                 <TooltipTrigger as-child>
                                     <span class="ml-auto pl-2 pointer-events-auto">
-                                        <IconLock size="16" />
+                                        <Lock :size="16" />
                                     </span>
                                 </TooltipTrigger>
                                 <TooltipContent side="right">
@@ -74,9 +74,9 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ScrollFrame } from '@/components/ui';
-import { IconLock } from '@tabler/icons-vue';
+import { Lock } from 'lucide-vue-next';
 import { isPageActive } from '@/utils/vue/inertia';
 import {
     Tooltip,
@@ -84,27 +84,19 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-interface NavItem {
-    label: string;
-    href: string;
-    parent?: string;
-    children?: NavItem[];
-    disabled?: boolean;
-    lockTooltipText?: string;
-}
-
-interface Props {
-    items?: NavItem[];
-    linkComponent?: string | object;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    items: () => [],
-    linkComponent: 'a',
+const props = defineProps({
+    items: {
+        type: Array,
+        default: () => [],
+    },
+    linkComponent: {
+        type: [String, Object],
+        default: 'a',
+    },
 });
 
 const { items, linkComponent } = props;
 
-const isActive = (item: NavItem) =>
+const isActive = (item) =>
     item.parent ? isPageActive(item.parent) : isPageActive(item.href, undefined, true);
 </script>

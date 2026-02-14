@@ -11,8 +11,8 @@ Components for the public website (marketing pages, landing pages, unauthenticat
 
 ## Usage
 
-```typescript
-import { SiteLayout } from '@/components/site';
+```js
+import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 ```
 
 ## Distinction from App

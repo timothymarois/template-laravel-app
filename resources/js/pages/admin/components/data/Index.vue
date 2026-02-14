@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp
+    <AppLayout
         title="Components - Data"
         pageTitle="Data"
         :pageSidebarItems="sidebarItems"
@@ -48,12 +48,12 @@
                 </Card>
             </Link>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ChevronLeft, MousePointerClick, Table2 } from 'lucide-vue-next';
 import { useShowcaseNav } from '../_composables/useShowcaseNav';

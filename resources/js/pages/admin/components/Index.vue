@@ -1,5 +1,5 @@
 <template>
-    <LayoutApp title="Components" pageTitle="Components" :pageSidebarItems="sidebarItems" pageSidebarTitle="Components">
+    <AppLayout title="Components" pageTitle="Components" :pageSidebarItems="sidebarItems" pageSidebarTitle="Components">
         <div class="grid grid-cols-2 gap-4">
             <Link :href="$route('admin.components.actions')">
                 <Card class="hover:border-primary/50 transition-colors cursor-pointer h-full">
@@ -91,12 +91,12 @@
                 </Card>
             </Link>
         </div>
-    </LayoutApp>
+    </AppLayout>
 </template>
 
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { AppLayout as LayoutApp } from '@/components/app';
+import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { BarChart3, LayoutGrid, MousePointerClick, Table2, TextCursorInput } from 'lucide-vue-next';
 import { useShowcaseNav } from './_composables/useShowcaseNav';
