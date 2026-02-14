@@ -18,7 +18,6 @@
     "check:docs": "pnpm docs:lint && pnpm docs:lint:css",
     "check:build": "pnpm build && pnpm exec vite build --ssr && pnpm docs:build",
     "check": "concurrently -g \"pnpm:check:php\" \"pnpm:check:js\" \"pnpm:check:docs\" && pnpm check:build",
-    "prepare": "husky",
     "docs:dev": "cd docs && pnpm dev",
     "docs:build": "cd docs && pnpm build",
     "docs:lint": "cd docs && pnpm lint",
@@ -45,9 +44,7 @@
     "eslint": "^9.39.2",
     "eslint-plugin-vue": "^10.7.0",
     "happy-dom": "^20.4.0",
-    "husky": "^9.1.7",
     "laravel-vite-plugin": "^2.1.0",
-    "lint-staged": "^16.2.7",
     "lodash": "^4.17.23",
     "stylelint": "^16.26.1",
     "stylelint-config-standard": "^39.0.1",
@@ -94,23 +91,6 @@
       "esbuild",
       "vue-demi",
       "maplibre-gl"
-    ]
-  },
-  "lint-staged": {
-    "resources/js/**/*.{js,vue}": [
-      "eslint --fix"
-    ],
-    "resources/css/**/*.css": [
-      "stylelint --fix"
-    ],
-    "docs/.vitepress/**/*.{js,ts,mts}": [
-      "cd docs && eslint --fix"
-    ],
-    "docs/.vitepress/**/*.css": [
-      "cd docs && stylelint --fix"
-    ],
-    "**/*.php": [
-      "./vendor/bin/pint"
     ]
   }
 }
