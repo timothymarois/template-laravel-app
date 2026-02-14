@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
@@ -23,7 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/', [PageController::class, 'index'])->name('index');
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('users/table', [UserController::class, 'simpleTable'])->name('users.table');
         Route::resource('users', UserController::class);
         Route::post('/users/filters', [UserController::class, 'prepareIndexFilters'])->name('users.index.filters');

@@ -17,9 +17,4 @@ class PageController extends Controller
     {
         return $this->inertia->render('Index');
     }
-
-    public function index(): Response
-    {
-        return $this->inertia->render('admin/Index');
-    }
 }

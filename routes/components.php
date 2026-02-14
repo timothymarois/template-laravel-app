@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ComponentController;
+use App\Http\Controllers\Admin\ComponentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ComponentController::class, 'index'])->name('index');
