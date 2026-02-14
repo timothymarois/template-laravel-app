@@ -6,6 +6,15 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v4.2.0 - 02/14/2026
+
+### Convention Compliance
+- Replaced Tabler icons with Lucide in all `app/` components (AppLayout, ProfileMenu, Header, SideNav)
+- Removed `lang="ts"` from 9 `app/` components — converted to plain JS with runtime `defineProps`
+- Replaced barrel imports with direct file imports across ~55 consumer files
+- Deleted 7 barrel `index.ts` files from `app/` and `site/` directories
+- Replaced inline SVG breadcrumb chevron in Header with Lucide `ChevronRight`
+
 ## v4.1.0 - 02/01/2026
 
 ### Documentation
