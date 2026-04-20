@@ -6,6 +6,30 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v4.3.0 - 04/20/2026
+
+Deployment and CI reliability — new storage bootstrap command, removal of composer scripts that broke `composer install --no-dev`, and a PHPStan memory fix so `pnpm check:php` passes consistently.
+
+### New
+- `app:ensure-storage` Artisan command — idempotently creates missing `storage/` subdirectories and writes the standard Laravel `.gitignore` file inside each. Safe to run on every deploy.
+- Passport OAuth key generation is gated behind a string-based `class_exists` check, so the command works whether or not `laravel/passport` is installed — and produces no IDE or static-analysis errors when absent.
+- Feature tests covering directory creation, idempotency, partial-tree recovery, `.gitignore` restoration, and the Passport-skip path.
+
+### Changed
+- Bumped PHPStan's memory limit to `512M` in both `composer.json` (`analyse` script) and `package.json` (`check:php` script). The default 128M was intermittently crashing PHPStan's parallel worker on this codebase.
+
+### Removed
+- `post-install-cmd` from `composer.json` — it ran `ide-helper:generate`, which fails under `composer install --no-dev` (since `barryvdh/laravel-ide-helper` is a dev dependency). This was the common "had to use `--no-scripts` on deploy" failure.
+- `post-update-cmd` from `composer.json` — it ran the same `ide-helper:generate` plus a stale `vendor:publish --tag=laravel-assets` (no package in this stack publishes under that tag).
+
+### Migration
+- Copy `app/Console/Commands/EnsureStorage.php` and `tests/Feature/EnsureStorageTest.php` into your project.
+- In your `composer.json`, delete the `post-install-cmd` and `post-update-cmd` entries if they still contain `ide-helper:generate` or `vendor:publish --tag=laravel-assets`. Keep `post-autoload-dump`, `post-root-package-install`, `post-create-project-cmd`, and the named scripts.
+- In your `composer.json`, change the `analyse` script to `"phpstan analyse --memory-limit=512M"`.
+- In your `package.json`, change the `check:php` script's `phpstan analyse` invocation to `phpstan analyse --memory-limit=512M`.
+- Run `composer update --lock` to refresh the lock file's content hash.
+- (Optional but recommended) Add `php artisan app:ensure-storage` to your deploy script — idempotent, safe to run every time. Developers who want IDE helper files can still run `php artisan ide-helper:generate` manually.
+
 ## v4.2.0 - 02/14/2026
 
 ### Convention Compliance

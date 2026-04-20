@@ -13,7 +13,7 @@
     "lint:fix": "eslint \"resources/js/**/*.{js,vue}\" --fix",
     "lint:css": "stylelint \"resources/css/**/*.css\"",
     "lint:css:fix": "stylelint \"resources/css/**/*.css\" --fix",
-    "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse && ./vendor/bin/pest",
+    "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && ./vendor/bin/pest",
     "check:js": "pnpm lint && pnpm lint:css && pnpm test",
     "check:docs": "pnpm docs:lint && pnpm docs:lint:css",
     "check:build": "pnpm build && pnpm exec vite build --ssr && pnpm docs:build",
