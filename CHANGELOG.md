@@ -8,19 +8,21 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 ## v4.4.0 - 04/26/2026
 
-Optional Google Analytics (gtag.js) scaffold. Gated on a config value so empty environments stay snippet-free; forks fill in their own measurement id (or hard-code one as the `env()` default).
+Optional Google Analytics (gtag.js) scaffold and a `template-version.json` lineage marker so every fork can declare which template version it's currently aligned with — regardless of whether the fork keeps its own product `CHANGELOG.md` (e.g. rundesk-web-app uses product semver for end users; this file tracks template lineage separately).
 
 ### New
 - `services.google_analytics.measurement_id` config block reading `GOOGLE_ANALYTICS_ID`.
 - `@if ($gaId = config('services.google_analytics.measurement_id'))` block in `resources/views/app.blade.php` that emits the standard gtag.js loader + init snippet only when the id is set.
 - `tests/Feature/GoogleAnalyticsTest.php` — verifies the snippet is emitted when configured and omitted when empty.
 - `GOOGLE_ANALYTICS_ID=` placeholder in `.env.example` with usage notes.
+- `template-version.json` at the repo root with four fields: `template` (always `template-laravel-app`), `repo` (canonical template URL), `version` (the highest template version whose changes are fully applied), `updated` (ISO date of the last bump).
 
 ### Migration
 - Copy `tests/Feature/GoogleAnalyticsTest.php` into your project.
 - In `config/services.php`, add the `google_analytics` block reading `env('GOOGLE_ANALYTICS_ID')` (or hard-code your property as the `env()` default if you want the snippet to render without any env wiring).
 - In `resources/views/app.blade.php`, paste the `@if ($gaId = config('services.google_analytics.measurement_id')) ... @endif` block immediately after `@inertiaHead` and before the closing `</head>` tag.
 - Add `GOOGLE_ANALYTICS_ID=` to your `.env.example`. To activate without env, default the config: `env('GOOGLE_ANALYTICS_ID', 'G-XXXXXXXXXX')`.
+- Copy `template-version.json` into your project. Set `version` to the highest template version whose migration has been *fully* applied in your codebase. When you next apply a template migration, bump `version` to that release and refresh `updated`. A surveyor can run `jq -r .version */template-version.json` (or similar) to see every fork's template version at a glance.
 
 ## v4.3.0 - 04/20/2026
 
