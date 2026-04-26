@@ -6,6 +6,22 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v4.4.0 - 04/26/2026
+
+Optional Google Analytics (gtag.js) scaffold. Gated on a config value so empty environments stay snippet-free; forks fill in their own measurement id (or hard-code one as the `env()` default).
+
+### New
+- `services.google_analytics.measurement_id` config block reading `GOOGLE_ANALYTICS_ID`.
+- `@if ($gaId = config('services.google_analytics.measurement_id'))` block in `resources/views/app.blade.php` that emits the standard gtag.js loader + init snippet only when the id is set.
+- `tests/Feature/GoogleAnalyticsTest.php` — verifies the snippet is emitted when configured and omitted when empty.
+- `GOOGLE_ANALYTICS_ID=` placeholder in `.env.example` with usage notes.
+
+### Migration
+- Copy `tests/Feature/GoogleAnalyticsTest.php` into your project.
+- In `config/services.php`, add the `google_analytics` block reading `env('GOOGLE_ANALYTICS_ID')` (or hard-code your property as the `env()` default if you want the snippet to render without any env wiring).
+- In `resources/views/app.blade.php`, paste the `@if ($gaId = config('services.google_analytics.measurement_id')) ... @endif` block immediately after `@inertiaHead` and before the closing `</head>` tag.
+- Add `GOOGLE_ANALYTICS_ID=` to your `.env.example`. To activate without env, default the config: `env('GOOGLE_ANALYTICS_ID', 'G-XXXXXXXXXX')`.
+
 ## v4.3.0 - 04/20/2026
 
 Deployment and CI reliability — new storage bootstrap command, removal of composer scripts that broke `composer install --no-dev`, and a PHPStan memory fix so `pnpm check:php` passes consistently.

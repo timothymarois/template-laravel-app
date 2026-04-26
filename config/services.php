@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'google_analytics' => [
+        // The gtag.js snippet in resources/views/app.blade.php is gated on
+        // this value being non-empty. Set GOOGLE_ANALYTICS_ID to your GA4
+        // measurement id (e.g. `G-XXXXXXXXXX`) to enable. Forks may instead
+        // hard-code their property as a `env()` default.
+        'measurement_id' => env('GOOGLE_ANALYTICS_ID'),
+    ],
+
 ];
