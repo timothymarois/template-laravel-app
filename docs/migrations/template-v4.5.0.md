@@ -90,6 +90,8 @@ Work top-down, one group at a time, and run `pnpm check` (or at least the most r
   3. If a generated `resources/js/ziggy.js` is currently committed in the fork, untrack it: `git rm --cached resources/js/ziggy.js`. (Don't physically delete — `pnpm dev` will regenerate.) **Land the `.gitignore` line, the `git rm --cached`, and the rest of this group's edits (composer.json / package.json / setup.js / plugin) in the SAME commit** — otherwise `git status` will show the file as deleted-but-staged until the gitignore catches up. Working tree is preserved either way.
   4. In `composer.json`, append `"@php artisan ziggy:generate --ansi"` to the `post-autoload-dump` array.
   5. In `package.json`, prepend `php artisan ziggy:generate &&` to `dev`, `build`, and `build-ssr` script values. **Do NOT touch other flags or scripts** — if your fork has documented intentional drift (e.g. `pest --parallel`, `--memory-limit=1G`, a `build:watch` script), preserve it. The ONLY change is the ziggy-generate prefix. Apply the prefix to `build:watch` too if it exists.
+
+  **⚠️ CI workflow update (likely required):** `pnpm build` now needs PHP + composer-installed vendor (for `ziggy:generate`) AND a generated `resources/js/ziggy.js` (for vite to import). Any JS-only CI workflow that runs `pnpm build` without first installing PHP and composer deps will break with `Failed to open stream: vendor/autoload.php`. Fix: add a `Setup PHP` + `composer install --no-interaction --prefer-dist --no-dev` step to the JS workflow, right after `pnpm install`. Composer's `post-autoload-dump` will generate `resources/js/ziggy.js` automatically. See the template's `.github/workflows/js-checks.yml` for the exact pattern.
   6. Replace `resources/js/plugins/inertia/ziggy.js` with the v4.5.0 version (uses `import { route as ziggyRoute } from 'ziggy'` and wires globalThis/inject/$route to `(name, params, absolute=false, config) => ziggyRoute(name, params, absolute, config ?? globalThis.Ziggy)`). **aprillaneart-site:** already ships this shape — verify content matches, do not overwrite working code (only difference is code comments).
   7. In `resources/js/setup.js`, **insert immediately after the last `import` statement and before any executable code** (e.g. Sentry initialization, plugin setup):
      ```js
@@ -363,6 +365,30 @@ Work top-down, one group at a time, and run `pnpm check` (or at least the most r
   **Per-fork ProfileMenu patterns** (different shapes; pick the one matching your fork):
   - **Template / aprillaneart-site:** `ProfileMenu.vue` supports an `item.method` field. Fix is one line: `{ label: 'Logout', icon: LogOut, href: '/logout', method: 'post' }` (or `href: route('auth.logout')`) in the items array (aprillaneart's lives in `AppLayout.vue`'s `profileMenuItems`).
   - **rundesk-web-app:** `ProfileMenu.vue` uses an `item.action` callback pattern via `useProfileMenu()` composable. Logout is dispatched as `router.post(route('auth.logout'))` from the composable — verify the call site is POST; no item-shape change required.
+
+### Group I — VitePress docs (only if your fork has a `docs/` VitePress site)
+
+`pnpm check` runs `pnpm docs:build`. If your fork's VitePress docs use ` ```env ` code fences (e.g. for `.env` snippets in installation / configuration pages), Shiki emits `The language 'env' is not loaded, falling back to 'txt' for syntax highlighting.` warnings. These break the "no warnings" CI bar.
+
+- [ ] Replace ` ```env ` fences with ` ```bash ` — `.env` syntax (`KEY=value` + `#` comments) highlights cleanly under bash and Shiki ships the bash grammar.
+
+  Find:
+  ```bash
+  grep -rln '^```env' docs/
+  ```
+
+  Verify (must return zero after fixing):
+  ```bash
+  grep -rn '^```env' docs/ 2>/dev/null | wc -l
+  ```
+
+If your fork doesn't have a VitePress `docs/` directory (or its docs don't use `env` fences), skip this group.
+
+### Update CI workflows
+
+- [ ] **JS workflow PHP dependency.** If your fork has a separate JS-only CI workflow (e.g. `.github/workflows/js-checks.yml`) that runs `pnpm build` without installing PHP and composer, it will fail with `Failed to open stream: vendor/autoload.php` once v4.5.0 lands — because the new `pnpm build` runs `php artisan ziggy:generate` first, and the bundled vite import needs a generated `resources/js/ziggy.js`.
+
+  Add a Setup PHP step + `composer install --no-interaction --prefer-dist --no-dev` right after the `pnpm install` step. Composer's `post-autoload-dump` generates `resources/js/ziggy.js` automatically. See the template's `.github/workflows/js-checks.yml` for the exact step layout (Setup PHP → cache composer dir → install composer deps).
 
 ## Finalize
 

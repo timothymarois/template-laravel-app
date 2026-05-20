@@ -15,7 +15,7 @@ php artisan key:generate
 
 ### Application
 
-```env
+```bash
 APP_NAME="My Application"
 APP_ENV=local
 APP_DEBUG=true
@@ -24,7 +24,7 @@ APP_URL=http://my-app.test
 
 ### Database
 
-```env
+```bash
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -37,7 +37,7 @@ DB_PASSWORD=
 
 Required for queues and caching:
 
-```env
+```bash
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
@@ -45,7 +45,7 @@ REDIS_PORT=6379
 
 ### Queue
 
-```env
+```bash
 QUEUE_CONNECTION=redis
 ```
 
@@ -53,14 +53,14 @@ QUEUE_CONNECTION=redis
 
 SSR is enabled by default for better SEO and faster initial loads.
 
-```env
+```bash
 INERTIA_SSR_ENABLED=true
 INERTIA_SSR_URL=http://127.0.0.1:13714
 ```
 
 To disable SSR:
 
-```env
+```bash
 INERTIA_SSR_ENABLED=false
 ```
 
@@ -68,7 +68,7 @@ INERTIA_SSR_ENABLED=false
 
 Configure real-time communication:
 
-```env
+```bash
 REVERB_APP_ID=local
 REVERB_APP_KEY=local
 REVERB_APP_SECRET=local
@@ -82,13 +82,13 @@ REVERB_PORT=8080
 
 Set allowed origins for production:
 
-```env
+```bash
 CORS_ALLOWED_ORIGINS=https://example.com,https://api.example.com
 ```
 
 ### Session
 
-```env
+```bash
 SESSION_DRIVER=redis
 SESSION_LIFETIME=120
 ```
@@ -97,7 +97,7 @@ SESSION_LIFETIME=120
 
 For production deployments, ensure:
 
-```env
+```bash
 APP_ENV=production
 APP_DEBUG=false
 ```
