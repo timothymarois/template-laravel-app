@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class TrackLastSeen
     /**
      * Update the user's last seen timestamp and request info.
      */
-    protected function updateLastSeen(Request $request, $user): void
+    protected function updateLastSeen(Request $request, User $user): void
     {
         $cacheKey = "user-last-seen-{$user->id}";
 

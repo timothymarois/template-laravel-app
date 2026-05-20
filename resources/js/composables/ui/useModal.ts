@@ -1,4 +1,4 @@
-import { reactive, computed, ComputedRef, type Ref } from 'vue';
+import { reactive, computed, onUnmounted, getCurrentInstance, type WritableComputedRef, type ComputedRef } from 'vue';
 
 type ModalData = unknown;
 
@@ -12,6 +12,22 @@ type ModalCallback = (data: ModalData) => void;
 const modals = reactive(new Map<string, ModalState>());
 const openListeners = new Map<string, ModalCallback[]>();
 const closeListeners = new Map<string, ModalCallback[]>();
+
+// Schedule removal of `callback` from `map[name]` when the calling component
+// unmounts. Safe to call outside a setup context — the `getCurrentInstance`
+// check makes it a no-op there.
+function registerCleanup(map: Map<string, ModalCallback[]>, name: string, callback: ModalCallback): void {
+    if (!getCurrentInstance()) return;
+
+    onUnmounted(() => {
+        const list = map.get(name);
+        if (!list) return;
+
+        const idx = list.indexOf(callback);
+        if (idx !== -1) list.splice(idx, 1);
+        if (list.length === 0) map.delete(name);
+    });
+}
 
 export function useModal() {
     const open = (name: string, data: ModalData = null): void => {
@@ -35,7 +51,7 @@ export function useModal() {
         }
     };
 
-    const activeState = (name: string): Ref<boolean> => computed({
+    const activeState = (name: string): WritableComputedRef<boolean> => computed({
         get: () => modals.get(name)?.open === true,
         set: (value: boolean) => {
             value ? open(name) : close(name);
@@ -56,6 +72,7 @@ export function useModal() {
             openListeners.set(name, []);
         }
         openListeners.get(name)!.push(callback);
+        registerCleanup(openListeners, name, callback);
     };
 
     const onClose = (name: string, callback: ModalCallback): void => {
@@ -63,6 +80,7 @@ export function useModal() {
             closeListeners.set(name, []);
         }
         closeListeners.get(name)!.push(callback);
+        registerCleanup(closeListeners, name, callback);
     };
 
     return {

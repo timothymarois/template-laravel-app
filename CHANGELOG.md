@@ -6,6 +6,67 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v4.5.0 - 05/20/2026
+
+Scaffold correctness pass — bug fixes to template-shipped scaffolding (data-table state, real-time / SSR plumbing, shadcn-vue components, base service, auth middleware, tooling) plus one infrastructure improvement (Ziggy generation moved to the build pipeline so `route()` works identically in browser AND SSR). Most items are drop-in. One behavior change: logout now goes through POST.
+
+### New
+
+- **Ziggy generation moved to the build pipeline.** `resources/js/ziggy.js` is now gitignored and produced by `php artisan ziggy:generate` automatically on:
+  - `composer install` / `composer dump-autoload` (via `post-autoload-dump`)
+  - `pnpm dev`, `pnpm build`, `pnpm build-ssr`
+
+  `setup.js` imports the generated config and assigns it to `globalThis.Ziggy`, which the Ziggy library reads. The new `plugins/inertia/ziggy.js` uses `import { route as ziggyRoute } from 'ziggy'` to wire `route()` through the bundled library — meaning server-rendered `route()` calls produce **real URLs** in the SSR HTML instead of empty placeholders. Better SEO for server-rendered links, fewer hydration-flicker scenarios. Adds `qs-esm@^8.0.1` as a runtime dep (Ziggy library requirement).
+
+### Fixed
+
+- **`useDataTableOptions` selection state leaked across pages.** Module-scoped `reactive()` is now per-instance. Same composable also captures the `router.on('before')` unsubscribe (was leaking a listener per mount) and uses an SSR-safe `URL` base. Cross-confirmed in two forks.
+- **`useEcho` channels never released.** `echo.leave(channelName)` (no `private-` / `presence-` prefix — Echo strips them internally). `useListen` cleanup now also calls `channel.stopListening`.
+- **`useModal` leaked open/close listeners.** `onUnmounted` cleanup, guarded by `getCurrentInstance()` so it's safe outside setup.
+- **`broadcast(...)->toOthers()` included the sender.** Added an axios interceptor in `bootstrap.js` that sends `X-Socket-Id` from `window.Echo.socketId()`.
+- **Bare `route(...)` calls threw `ReferenceError` under SSR.** Ziggy plugin now wires `globalThis.route` to the bundled Ziggy library on both client and SSR (see "New" above) — `route()` now returns real URLs in SSR, not just no-ops.
+- **`DropdownMenuItem` dropped `@select` events.** Forward emits via `useForwardPropsEmits`.
+- **`AccordionContent` flashed open on mount and snapped closed.** Replaced `setTimeout(200)` with `transitionend` + double-`rAF`; added `hasMounted` gate.
+- **`AccordionItem` was missing `data-state="open|closed"`.** Required for any downstream `[data-state=open]:` Tailwind variants.
+- **`TabsTrigger` was missing `data-state` attribute.** Now emits `active|inactive`.
+- **`DropdownMenuSubTrigger` / `ContextMenuSubTrigger` had unsized leading icons.** Added `gap-2 [&>svg:first-child]:size-4 [&>svg:first-child]:shrink-0`.
+- **`DialogConfirmation` had no `<slot />`.** Callers can now render arbitrary children between header and footer.
+- **`ScrollFrame` over-counted height on mobile.** `100vh` → `100dvh`; new `--mobile-nav-offset` CSS variable (default `0px`) lets forks subtract a fixed bottom nav.
+- **`Caster::castToJson` crashed on non-string scalars.** Added an `is_string` guard before `json_decode`.
+- **`ModelService::listPaginated` returned flickering pages on tied sort values.** Stable `orderBy('id', 'asc')` tiebreaker. Also accepts an optional `$options['page']` override so non-HTTP callers (commands, jobs, MCP tools) can drive pagination directly.
+- **`ModelService` lacked reusable search/with helpers.** Added `applySearch()` (with grouped `where`, so the OR-chain doesn't leak across filters) and `applyWith()`. `UserService` updated to use the helper.
+- **`LoginRequest::authenticate` revealed account existence via timing.** Dropped the `User::where('email')->first()` pre-flight; calls `Auth::attempt(...)` directly.
+- **`EnsureUserIsActive` crashed on sessionless requests.** Returns `403` for `expectsJson()` or `api/*` instead of invalidating a non-existent session.
+- **`TrackLastSeen::updateLastSeen` had untyped `$user` parameter.** Now `User $user` — PHPStan / IDE win.
+- **`StartFresh` `Laravel\Prompts\info()` crashed under non-TTY runs.** Switched to `$this->info(...)`.
+- **`pest` ran with PHP's 128M default and OOM'd on parallel workers.** `check:php` now invokes pest with `php -d memory_limit=512M` (matches v4.3.0's PHPStan bump).
+- **`eslint` linted generated Ziggy output.** Added `resources/js/ziggy.js` to ESLint ignores.
+- **`vite build` printed a 500 kB chunk advisory.** Bumped `chunkSizeWarningLimit` to 600 — shadcn-vue's bundled primitives exceed the default.
+- **`<html>` was missing `lang` attribute.** Added `lang="en"`.
+- **Dark-mode FOUC on first paint.** Synchronous inline script in `app.blade.php` reads the VueUse `vueuse-color-scheme` storage key and adds `.dark` to `<html>` before Vite mounts.
+- **Error pages and Header used hardcoded `text-gray-*` / `text-slate-*`.** Replaced with `text-foreground` / `text-muted-foreground` tokens; added `min-w-0` to `Header.vue`'s flex grow container so long titles truncate.
+- **`Login.vue` / `Register.vue` / `Index.vue` used hardcoded paths.** Now `$route('login')` / `$route('register')` / `$route('auth.logout')`.
+
+### Changed (action required)
+
+- **`Route::get('logout', ...)` → `Route::post('logout', ...)`.** CSRF hardening: a destructive auth action no longer accepts GET. Template's `Index.vue` and `AppLayout.vue` are updated. `ProfileMenu.vue` now passes an optional `item.method`/`as="button"` through to the Inertia `<Link>`, so menu items can opt into POST by adding `method: 'post'` to their item config. Any fork frontend code using `<a href="/logout">` or `<Link href="/logout">` must move to a POST form or `useForm().post(route('auth.logout'))`.
+
+  **Deploy note:** if your frontend assets are served with long cache TTLs (CDN, service worker, or aggressive browser caching), deploy the frontend bundle atomically with the route change, or flush the CDN before routing traffic to the new backend. An old client bundle issuing `GET /logout` against the new route will receive `405 Method Not Allowed` until it picks up the new JS.
+
+### Considered but deferred
+
+- `useScroll.ts` rewrite (ref-counted iOS body-pin) — user-visible behavior change, wants its own release.
+- `HandleInertiaRequests.php` user-prop narrowing to `->only([...])` — breaks forks that read user fields beyond `id|name|email`; needs a fork-side audit step.
+- Pest `--parallel` — needs a parallel-safety audit of the template's test suite first.
+
+### Migration
+
+See `docs/migrations/template-v4.5.0.md` for the agent-runnable migration guide with verification `grep` commands for every group.
+
+After applying:
+- Bump the fork's `template-version.json` → `4.5.0`.
+- Run `pnpm check`. It must be green before the bump is considered complete.
+
 ## v4.4.0 - 04/26/2026
 
 Optional Google Analytics (gtag.js) scaffold and a `template-version.json` lineage marker so every fork can declare which template version it's currently aligned with — regardless of whether the fork keeps its own product `CHANGELOG.md` (e.g. rundesk-web-app uses product semver for end users; this file tracks template lineage separately).

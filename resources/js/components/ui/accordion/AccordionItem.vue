@@ -1,12 +1,23 @@
 <script setup lang="ts">
-import { provide } from 'vue';
+import { computed, inject, provide } from 'vue';
+import { cn } from '@/utils';
+
+interface AccordionContext {
+    toggle: (value: string) => void;
+    isOpen: (value: string) => boolean;
+}
 
 interface Props {
     value: string;
     disabled?: boolean;
+    class?: string;
 }
 
 const props = defineProps<Props>();
+
+const accordionContext = inject<AccordionContext>('accordionContext')!;
+
+const isOpen = computed(() => accordionContext.isOpen(props.value));
 
 provide('accordionItemContext', {
     value: props.value,
@@ -16,7 +27,8 @@ provide('accordionItemContext', {
 
 <template>
     <div
-        :data-state="disabled ? 'disabled' : undefined"
+        :class="cn(props.class)"
+        :data-state="disabled ? 'disabled' : isOpen ? 'open' : 'closed'"
         :data-disabled="disabled ? '' : undefined"
     >
         <slot />

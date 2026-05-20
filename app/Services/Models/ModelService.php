@@ -75,6 +75,11 @@ abstract class ModelService
      */
     public function listPaginated(int $perPage = 15, array $options = []): LengthAwarePaginator
     {
+        // Explicit `page` overrides the request-resolver default. Needed for
+        // non-HTTP callers (commands, jobs, MCP tools) that have no `?page=`
+        // query string.
+        $page = isset($options['page']) ? max(1, (int) $options['page']) : null;
+
         /** @var LengthAwarePaginator<int, TModel> */
         return $this->buildQuery($options)
             ->when($options['sortField'] ?? false, function ($q) use ($options) {
@@ -82,7 +87,12 @@ abstract class ModelService
 
                 return $q->orderBy($options['sortField'], $direction);
             })
-            ->paginate($perPage)
+            // Stable tiebreaker. Without this, rows whose sortField values
+            // tie come back in whatever order the database planner picks,
+            // which can flip across deploys when index strategy changes.
+            // Anchoring on `id` makes pagination deterministic.
+            ->orderBy('id', 'asc')
+            ->paginate($perPage, ['*'], 'page', $page)
             ->withQueryString();
     }
 
@@ -130,5 +140,54 @@ abstract class ModelService
     public function delete(Model $model): bool
     {
         return (bool) $model->delete();
+    }
+
+    /**
+     * Apply a case-insensitive LIKE search across the given columns when
+     * `$options['search']` is a non-empty string. The first column is matched
+     * with `where`, subsequent columns with `orWhere`, all grouped so the
+     * search scope doesn't leak into other filters.
+     *
+     * @param  Builder<TModel>  $query
+     * @param  array<string, mixed>  $options
+     * @param  list<string>  $columns
+     * @return Builder<TModel>
+     */
+    protected function applySearch(Builder $query, array $options, array $columns): Builder
+    {
+        /** @var string|null $term */
+        $term = $options['search'] ?? null;
+
+        if (! is_string($term) || $term === '' || $columns === []) {
+            return $query;
+        }
+
+        $pattern = '%'.$term.'%';
+
+        return $query->where(function (Builder $q) use ($columns, $pattern): void {
+            foreach ($columns as $i => $column) {
+                $method = $i === 0 ? 'where' : 'orWhere';
+                $q->{$method}($column, 'like', $pattern);
+            }
+        });
+    }
+
+    /**
+     * Apply eager-load relations from `$options['with']` when present.
+     *
+     * @param  Builder<TModel>  $query
+     * @param  array<string, mixed>  $options
+     * @return Builder<TModel>
+     */
+    protected function applyWith(Builder $query, array $options): Builder
+    {
+        /** @var array<int, string>|string|null $relations */
+        $relations = $options['with'] ?? null;
+
+        if ($relations === null || $relations === [] || $relations === '') {
+            return $query;
+        }
+
+        return $query->with($relations);
     }
 }

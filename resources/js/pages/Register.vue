@@ -36,7 +36,7 @@
                             />
                         </div>
                         <div class="text-center">
-                            <Link href="/login" class="hover:underline">
+                            <Link :href="$route('login')" class="cursor-pointer hover:underline">
                                 Already have an account? Login
                             </Link>
                         </div>

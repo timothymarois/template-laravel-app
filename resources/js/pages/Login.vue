@@ -30,7 +30,7 @@
                             />
                         </div>
                         <div class="text-center">
-                            <Link href="/register" class="hover:underline">
+                            <Link :href="$route('register')" class="cursor-pointer hover:underline">
                                 Don't have an account? Register
                             </Link>
                         </div>

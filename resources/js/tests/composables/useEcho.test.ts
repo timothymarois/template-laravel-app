@@ -4,7 +4,10 @@ import { defineComponent, nextTick } from 'vue';
 import { getEcho, useChannel, usePrivateChannel, usePresenceChannel, useListen } from '@/composables/useEcho';
 
 describe('useEcho', () => {
-    let mockChannel: { listen: ReturnType<typeof vi.fn> };
+    let mockChannel: {
+        listen: ReturnType<typeof vi.fn>;
+        stopListening: ReturnType<typeof vi.fn>;
+    };
     let mockEcho: {
         channel: ReturnType<typeof vi.fn>;
         private: ReturnType<typeof vi.fn>;
@@ -15,6 +18,7 @@ describe('useEcho', () => {
     beforeEach(() => {
         mockChannel = {
             listen: vi.fn().mockReturnThis(),
+            stopListening: vi.fn().mockReturnThis(),
         };
 
         mockEcho = {
@@ -128,7 +132,7 @@ describe('useEcho', () => {
             expect(mockEcho.private).toHaveBeenCalledWith('user.1');
         });
 
-        it('leaves private channel on unmount', async () => {
+        it('leaves private channel on unmount (no prefix — Echo strips it internally)', async () => {
             const TestComponent = defineComponent({
                 setup() {
                     usePrivateChannel('user.1');
@@ -142,7 +146,7 @@ describe('useEcho', () => {
 
             wrapper.unmount();
 
-            expect(mockEcho.leave).toHaveBeenCalledWith('private-user.1');
+            expect(mockEcho.leave).toHaveBeenCalledWith('user.1');
         });
     });
 
@@ -162,7 +166,7 @@ describe('useEcho', () => {
             expect(mockEcho.join).toHaveBeenCalledWith('chat.1');
         });
 
-        it('leaves presence channel on unmount', async () => {
+        it('leaves presence channel on unmount (no prefix — Echo strips it internally)', async () => {
             const TestComponent = defineComponent({
                 setup() {
                     usePresenceChannel('chat.1');
@@ -176,7 +180,7 @@ describe('useEcho', () => {
 
             wrapper.unmount();
 
-            expect(mockEcho.leave).toHaveBeenCalledWith('presence-chat.1');
+            expect(mockEcho.leave).toHaveBeenCalledWith('chat.1');
         });
     });
 
@@ -235,10 +239,11 @@ describe('useEcho', () => {
             expect(mockChannel.listen).toHaveBeenCalledWith('MessageSent', callback);
         });
 
-        it('leaves channel on unmount', async () => {
+        it('stops listening and leaves channel on unmount', async () => {
+            const callback = vi.fn();
             const TestComponent = defineComponent({
                 setup() {
-                    useListen('orders', 'OrderShipped', vi.fn());
+                    useListen('orders', 'OrderShipped', callback);
                     return {};
                 },
                 template: '<div></div>',
@@ -249,10 +254,11 @@ describe('useEcho', () => {
 
             wrapper.unmount();
 
+            expect(mockChannel.stopListening).toHaveBeenCalledWith('OrderShipped');
             expect(mockEcho.leave).toHaveBeenCalledWith('orders');
         });
 
-        it('leaves private channel with prefix on unmount', async () => {
+        it('leaves private channel by base name on unmount (no prefix — Echo strips it internally)', async () => {
             const TestComponent = defineComponent({
                 setup() {
                     useListen('orders', 'OrderShipped', vi.fn(), { private: true });
@@ -266,7 +272,7 @@ describe('useEcho', () => {
 
             wrapper.unmount();
 
-            expect(mockEcho.leave).toHaveBeenCalledWith('private-orders');
+            expect(mockEcho.leave).toHaveBeenCalledWith('orders');
         });
     });
 });

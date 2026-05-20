@@ -63,6 +63,7 @@ const selectTab = () => {
         role="tab"
         type="button"
         :aria-selected="isActive"
+        :data-state="isActive ? 'active' : 'inactive'"
         :disabled="disabled"
         :class="cn(triggerClasses, props.class)"
         @click="selectTab"

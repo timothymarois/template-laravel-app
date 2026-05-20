@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html class="h-full" lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title inertia>{{ config('app.name', 'App') }}</title>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        <script>
+            // Apply saved or system color scheme synchronously to avoid FOUC.
+            // Key matches VueUse's useColorMode/useDark default storage key.
+            (function () {
+                try {
+                    var stored = localStorage.getItem('vueuse-color-scheme');
+                    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    var dark = stored === 'dark' || ((stored === 'auto' || !stored) && prefersDark);
+                    if (dark) document.documentElement.classList.add('dark');
+                } catch (e) {}
+            })();
+        </script>
         @vite('resources/js/app.js')
         @inertiaHead
 

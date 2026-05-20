@@ -2,23 +2,27 @@ import { reactive, toRefs, watch, onBeforeUnmount } from 'vue';
 import debounce from 'lodash/debounce';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 
-const internalOptions = reactive({
-    selectAll: false,
-    selected: [],
-});
+// `URL` requires a base when the input is path-only. The base is never read
+// because we only consume `.pathname`, so a constant placeholder works on
+// both client and server.
+const SSR_SAFE_URL_BASE = 'http://localhost';
 
 const resetSelectionOnPathChange = (state) => {
-    if (typeof window === 'undefined') return;
-
     const page = usePage();
-    const currentPath = new URL(page.url, window.location.origin).pathname;
+    const currentPath = new URL(page.url, SSR_SAFE_URL_BASE).pathname;
     let nextPath = null;
 
-    router.on('before', (event) => {
-        nextPath = new URL(event.detail.visit.url, window.location.origin).pathname;
+    // `router.on` returns a deregistration callback. Capture it so we can
+    // unsubscribe in onBeforeUnmount — without this, every component using
+    // useDataTableOptions in a long-lived SPA session leaks a listener.
+    const unsubscribe = router.on('before', (event) => {
+        nextPath = new URL(event.detail.visit.url, SSR_SAFE_URL_BASE).pathname;
     });
 
     onBeforeUnmount(() => {
+        if (typeof unsubscribe === 'function') {
+            unsubscribe();
+        }
         if (nextPath && nextPath !== currentPath) {
             state.selectAll = false;
             state.selected = [];
@@ -42,6 +46,14 @@ const resolveRoute = (routeConfig) => {
 };
 
 export function useDataTableOptions(routeConfig, options = {}, config = {}) {
+
+    // Per-instance selection state. Module-scope state would leak across
+    // every page using this composable, causing a stale `selected` from a
+    // prior page to be submitted on the current one.
+    const internalOptions = reactive({
+        selectAll: false,
+        selected: [],
+    });
 
     const {
         only = [],
@@ -100,7 +112,13 @@ export function useDataTableOptions(routeConfig, options = {}, config = {}) {
         internalOptions.selected = [];
     };
 
-    watch(() => form.search, debouncedUpdate);
+    watch(() => form.search, () => {
+        debouncedUpdate();
+        // Search narrows the visible set; clearing selection prevents a user
+        // who select-all'd before typing from accidentally bulk-acting on a
+        // different scope than what's now displayed.
+        resetSelection();
+    });
     watch(() => [form.perPage, form.sortField, form.sortOrder], fetchData);
     watch(() => form.viewFields, fetchData, { deep: true });
 

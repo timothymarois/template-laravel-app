@@ -44,6 +44,8 @@
                             <component
                                 :is="item.external ? 'a' : linkComponent"
                                 :href="item.href"
+                                :method="!item.external ? item.method : undefined"
+                                :as="!item.external && item.method ? 'button' : undefined"
                                 :target="item.external ? '_blank' : undefined"
                                 class="flex items-center justify-between w-full cursor-pointer"
                             >

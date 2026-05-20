@@ -18,6 +18,9 @@ export default defineConfig({
     build: {
         // Enable source maps only in development
         sourcemap: process.env.NODE_ENV !== 'production',
+        // shadcn-vue's bundled primitives push the main chunk past Vite's
+        // default 500 kB advisory. Bump so a stock build stays clean.
+        chunkSizeWarningLimit: 600,
     },
     resolve: {
         dedupe: ['vue'],

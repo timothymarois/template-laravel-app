@@ -45,6 +45,15 @@ class EnsureStorage extends Command
 
         if (class_exists('Laravel\\Passport\\PassportServiceProvider')
             && ! is_file(storage_path('oauth-private.key'))) {
+            // Pin the key path explicitly so it can't be clobbered by an
+            // earlier `Passport::loadKeysFrom(...)` elsewhere in the process —
+            // matters most for serial test runs that mix tests using the
+            // OAuth server with tests that swap storage paths. Variable-class
+            // form keeps PHPStan from resolving the Passport class (which is
+            // not installed by default in the template).
+            $passportClass = 'Laravel\\Passport\\Passport';
+            $passportClass::loadKeysFrom(storage_path());
+
             $this->line('  generating OAuth signing keys…');
             $this->call('passport:keys');
         }

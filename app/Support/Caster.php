@@ -68,6 +68,10 @@ class Caster
             }
         }
 
+        if (! is_string($value)) {
+            return $value;
+        }
+
         $decoded = json_decode($value, true);
 
         return json_last_error() === JSON_ERROR_NONE ? $decoded : null;

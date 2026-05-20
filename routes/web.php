@@ -20,7 +20,7 @@ Route::middleware(['guest'])->group(function () {
 
 // Authenticated routes
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('logout', [SessionController::class, 'destroy'])->name('auth.logout');
+    Route::post('logout', [SessionController::class, 'destroy'])->name('auth.logout');
 
     // Admin routes
     Route::prefix('admin')->name('admin.')->group(function () {

@@ -60,14 +60,18 @@ export const usePrivateChannel = (channelName) => {
 
     onUnmounted(() => {
         if (echo && channelName) {
-            echo.leave(`private-${channelName}`);
+            // Echo's leave() strips all prefix variants internally — pass the
+            // base name only. Passing `'private-' + channelName` here would
+            // try to leave a channel called `private-private-<name>`, which
+            // doesn't exist, so the real channel never gets released.
+            echo.leave(channelName);
             channel.value = null;
         }
     });
 
     const leave = () => {
         if (echo && channelName) {
-            echo.leave(`private-${channelName}`);
+            echo.leave(channelName);
             channel.value = null;
         }
     };
@@ -92,14 +96,14 @@ export const usePresenceChannel = (channelName) => {
 
     onUnmounted(() => {
         if (echo && channelName) {
-            echo.leave(`presence-${channelName}`);
+            echo.leave(channelName);
             channel.value = null;
         }
     });
 
     const leave = () => {
         if (echo && channelName) {
-            echo.leave(`presence-${channelName}`);
+            echo.leave(channelName);
             channel.value = null;
         }
     };
@@ -115,12 +119,12 @@ export const usePresenceChannel = (channelName) => {
  * @param {{ private?: boolean, presence?: boolean }} options - Channel options
  */
 export const useListen = (channelName, eventName, callback, options = {}) => {
-    const echo = getEcho();
+    let channel = null;
 
     onMounted(() => {
+        const echo = getEcho();
         if (!echo || !channelName) return;
 
-        let channel;
         if (options.presence) {
             channel = echo.join(channelName);
         } else if (options.private) {
@@ -133,9 +137,11 @@ export const useListen = (channelName, eventName, callback, options = {}) => {
     });
 
     onUnmounted(() => {
+        const echo = getEcho();
         if (!echo || !channelName) return;
 
-        const prefix = options.presence ? 'presence-' : options.private ? 'private-' : '';
-        echo.leave(`${prefix}${channelName}`);
+        if (channel) channel.stopListening(eventName);
+        echo.leave(channelName);
+        channel = null;
     });
 };
