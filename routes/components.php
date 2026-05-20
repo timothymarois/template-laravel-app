@@ -21,6 +21,7 @@ Route::get('/forms/calendar/date-range-input', [ComponentController::class, 'for
 Route::get('/forms/editor', [ComponentController::class, 'formsEditor'])->name('forms.editor');
 Route::get('/forms/upload', [ComponentController::class, 'formsUpload'])->name('forms.upload');
 Route::get('/forms/input/tags', [ComponentController::class, 'formsInputTags'])->name('forms.input.tags');
+Route::get('/forms/pin-input', [ComponentController::class, 'formsPinInput'])->name('forms.pin-input');
 
 // Actions
 Route::get('/actions', [ComponentController::class, 'actionsIndex'])->name('actions');
@@ -43,7 +44,9 @@ Route::get('/display/tabs', [ComponentController::class, 'displayTabs'])->name('
 Route::get('/display/accordion', [ComponentController::class, 'displayAccordion'])->name('display.accordion');
 Route::get('/display/toast', [ComponentController::class, 'displayToast'])->name('display.toast');
 Route::get('/display/carousel', [ComponentController::class, 'displayCarousel'])->name('display.carousel');
+Route::get('/display/code-block', [ComponentController::class, 'displayCodeBlock'])->name('display.code-block');
 Route::get('/display/resizable', [ComponentController::class, 'displayResizable'])->name('display.resizable');
+Route::get('/display/view-toggle', [ComponentController::class, 'displayViewToggle'])->name('display.view-toggle');
 
 // Data
 Route::get('/data', [ComponentController::class, 'dataIndex'])->name('data');

@@ -12,6 +12,13 @@ Scaffold correctness pass — bug fixes to template-shipped scaffolding (data-ta
 
 ### New
 
+- **Three reusable UI components promoted from rundesk-web-app:**
+  - **`ViewToggle`** (`components/ui/view-toggle`) — animated grid/list mode switcher with v-model. Use anywhere you have dual-view data surfaces (admin listings, dashboards, file browsers).
+  - **`CodeBlock`** (`components/ui/code-block`) — read-only code/snippet display with **syntax highlighting** via `highlight.js` and a language-picker dropdown. Auto-detects on by default (the trigger shows the detected language directly, e.g. "PHP"); pass `language="php"` (or any registered id) to force, or use `v-model:language` for two-way binding. Bundled languages: bash, css, diff, dockerfile, go, html/xml, ini, javascript, json, markdown, nginx, php, plaintext, python, ruby, shell, sql, typescript, yaml. Syntax theme uses shadcn token variants so dark mode adapts automatically. Hover-revealed copy-to-clipboard button.
+  - **`PinInput`** + `PinInputGroup` / `PinInputSeparator` / `PinInputSlot` (`components/ui/pin-input`) — accessible OTP / passcode input built on `reka-ui` primitives. Auto-advance focus, `autocomplete="one-time-code"`, supports `text` and `number` modes.
+
+  All three ship with showcase pages under `admin/components/display/` (CodeBlock, ViewToggle) and `admin/components/forms/` (PinInput). Adds `highlight.js@^11.11.1` as a runtime dep (CodeBlock); reka-ui and Lucide are already in the template.
+
 - **Ziggy generation moved to the build pipeline.** `resources/js/ziggy.js` is now gitignored and produced by `php artisan ziggy:generate` automatically on:
   - `composer install` / `composer dump-autoload` (via `post-autoload-dump`)
   - `pnpm dev`, `pnpm build`, `pnpm build-ssr`
@@ -32,6 +39,7 @@ Scaffold correctness pass — bug fixes to template-shipped scaffolding (data-ta
 - **`DropdownMenuSubTrigger` / `ContextMenuSubTrigger` had unsized leading icons.** Added `gap-2 [&>svg:first-child]:size-4 [&>svg:first-child]:shrink-0`.
 - **`DialogConfirmation` had no `<slot />`.** Callers can now render arbitrary children between header and footer.
 - **`ScrollFrame` over-counted height on mobile.** `100vh` → `100dvh`; new `--mobile-nav-offset` CSS variable (default `0px`) lets forks subtract a fixed bottom nav.
+- **Horizontal layout shifted when content scrollbar toggled.** New `.scroll-gutter-stable` CSS utility (`scrollbar-gutter: stable`) is applied by `Content.vue` when scrollable. Reserves the gutter so nothing reflows when scrollable content grows/shrinks past the viewport.
 - **`Caster::castToJson` crashed on non-string scalars.** Added an `is_string` guard before `json_decode`.
 - **`ModelService::listPaginated` returned flickering pages on tied sort values.** Stable `orderBy('id', 'asc')` tiebreaker. Also accepts an optional `$options['page']` override so non-HTTP callers (commands, jobs, MCP tools) can drive pagination directly.
 - **`ModelService` lacked reusable search/with helpers.** Added `applySearch()` (with grouped `where`, so the OR-chain doesn't leak across filters) and `applyWith()`. `UserService` updated to use the helper.
