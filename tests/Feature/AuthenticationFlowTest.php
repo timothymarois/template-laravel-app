@@ -87,7 +87,7 @@ it('allows user to logout', function () {
         'password' => 'secret123',
     ]);
 
-    $response = $this->get('/logout');
+    $response = $this->post('/logout');
 
     $response->assertRedirect('/');
 

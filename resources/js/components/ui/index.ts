@@ -25,6 +25,9 @@ export * from './card';
 // Checkbox
 export * from './checkbox';
 
+// Code Block (read-only display + copy)
+export * from './code-block';
+
 // Combobox (autocomplete input)
 export * from './combobox';
 
@@ -55,6 +58,9 @@ export * from './label';
 
 // Pagination
 export * from './pagination';
+
+// Pin Input (OTP / passcode)
+export * from './pin-input';
 
 // Popover
 export * from './popover';
@@ -100,3 +106,6 @@ export * from './tooltip';
 
 // Upload
 export * from './upload';
+
+// View Toggle (grid / list switcher)
+export * from './view-toggle';

@@ -63,6 +63,51 @@
     }
 }
 
+/* Reserve scrollbar space to prevent horizontal layout shift when the
+ * scrollbar appears or disappears (e.g. when content height grows/shrinks
+ * past the viewport). Apply via `class="scroll-gutter-stable"` on the
+ * scrolling container. */
+.scroll-gutter-stable {
+    scrollbar-gutter: stable;
+}
+
+/* highlight.js — syntax token theme for the `CodeBlock` component.
+ * Token classes are emitted by highlight.js (`<span class="hljs-keyword">…`);
+ * colors here are tuned to work in both light and dark via the `.dark`
+ * scope override below. Foreground/background come from shadcn theme tokens
+ * so the block blends with the surrounding card automatically. */
+:root {
+    --hljs-keyword:  #9333ea;
+    --hljs-string:   #16a34a;
+    --hljs-number:   #2563eb;
+    --hljs-title:    #d97706;
+    --hljs-variable: #0891b2;
+    --hljs-tag:      #dc2626;
+    --hljs-regexp:   #db2777;
+}
+.dark {
+    --hljs-keyword:  #c084fc;
+    --hljs-string:   #4ade80;
+    --hljs-number:   #60a5fa;
+    --hljs-title:    #fbbf24;
+    --hljs-variable: #22d3ee;
+    --hljs-tag:      #f87171;
+    --hljs-regexp:   #f472b6;
+}
+
+.hljs { color: hsl(var(--foreground)); background: transparent; }
+.hljs-comment, .hljs-quote, .hljs-meta, .hljs-doctag { color: hsl(var(--muted-foreground)); font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-type, .hljs-section { color: var(--hljs-keyword); }
+.hljs-string, .hljs-attr, .hljs-addition { color: var(--hljs-string); }
+.hljs-number, .hljs-symbol, .hljs-bullet, .hljs-link { color: var(--hljs-number); }
+.hljs-title, .hljs-name, .hljs-selector-id, .hljs-selector-class { color: var(--hljs-title); }
+.hljs-variable, .hljs-template-variable, .hljs-built_in, .hljs-attribute { color: var(--hljs-variable); }
+.hljs-tag { color: var(--hljs-tag); }
+.hljs-regexp, .hljs-deletion { color: var(--hljs-regexp); }
+.hljs-params { color: hsl(var(--foreground)); }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 600; }
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;

@@ -95,6 +95,11 @@ class ComponentController extends Controller
         return $this->inertia->render('admin/components/forms/input/Tags');
     }
 
+    public function formsPinInput(): Response
+    {
+        return $this->inertia->render('admin/components/forms/PinInput');
+    }
+
     // Actions
     public function actionsIndex(): Response
     {
@@ -190,6 +195,16 @@ class ComponentController extends Controller
     public function displayResizable(): Response
     {
         return $this->inertia->render('admin/components/display/Resizable');
+    }
+
+    public function displayCodeBlock(): Response
+    {
+        return $this->inertia->render('admin/components/display/CodeBlock');
+    }
+
+    public function displayViewToggle(): Response
+    {
+        return $this->inertia->render('admin/components/display/ViewToggle');
     }
 
     // Data

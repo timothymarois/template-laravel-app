@@ -167,7 +167,7 @@ const profileMenuItems = computed(() => [
     { label: 'Horizon', icon: Gauge, href: '/horizon', external: true },
     { label: 'Log Viewer', icon: ScrollText, href: '/log-viewer', external: true },
     { separator: true },
-    { label: 'Logout', icon: LogOut, href: '/logout' }
+    { label: 'Logout', icon: LogOut, href: '/logout', method: 'post' }
 ]);
 
 const topBarItems = computed(() => [

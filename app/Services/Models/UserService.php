@@ -22,13 +22,10 @@ class UserService extends ModelService
      */
     public function buildQuery(array $options = []): Builder
     {
-        return parent::buildQuery($options)
-            ->when($options['search'] ?? false, function ($q) use ($options) {
-                $q->where(function ($q) use ($options) {
-                    $q->where('name', 'like', "%{$options['search']}%")
-                        ->orWhere('email', 'like', "%{$options['search']}%");
-                });
-            })
+        $query = parent::buildQuery($options);
+        $query = $this->applySearch($query, $options, ['name', 'email']);
+
+        return $query
             ->when($options['filters']['user_id'] ?? null, function ($q, $userId) {
                 $q->where('id', $userId);
             });

@@ -9,8 +9,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
-use function Laravel\Prompts\info;
-
 class StartFresh extends Command
 {
     protected $signature = 'start:fresh
@@ -32,7 +30,7 @@ class StartFresh extends Command
             return Command::FAILURE;
         }
 
-        info('Database refresh completed successfully!');
+        $this->info('Database refresh completed successfully!');
 
         return Command::SUCCESS;
     }
@@ -54,7 +52,7 @@ class StartFresh extends Command
         Artisan::call('route:clear');
         Artisan::call('view:clear');
 
-        info('Application cache has been cleared.');
+        $this->info('Application cache has been cleared.');
     }
 
     /**
@@ -62,7 +60,7 @@ class StartFresh extends Command
      */
     private function refreshDatabase(): bool
     {
-        info('Refreshing the database...');
+        $this->info('Refreshing the database...');
 
         try {
             $this->call('migrate:fresh', ['--force' => true]);

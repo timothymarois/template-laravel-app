@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, computed, ref, watch, nextTick, onBeforeUnmount } from 'vue';
+import { inject, computed, ref, watch, onMounted } from 'vue';
 import { cn } from '@/utils';
 
 interface AccordionContext {
@@ -25,43 +25,49 @@ const isOpen = computed(() => accordionContext.isOpen(itemContext.value));
 
 const contentRef = ref<HTMLElement | null>(null);
 const height = ref<string>('0px');
-const isAnimating = ref(false);
-let animationTimeout: ReturnType<typeof setTimeout> | null = null;
+const hasMounted = ref(false);
 
-watch(
-    isOpen,
-    async (open) => {
-        // Clear any pending animation timeout
-        if (animationTimeout) {
-            clearTimeout(animationTimeout);
-        }
+onMounted(() => {
+    // If this item opens on first render, skip the 0 → N animation to avoid
+    // a flash of the content expanding on page load.
+    if (isOpen.value) {
+        height.value = 'auto';
+    }
+    hasMounted.value = true;
+});
 
-        isAnimating.value = true;
+function onTransitionEnd(event: TransitionEvent) {
+    if (event.propertyName !== 'height') return;
+    if (isOpen.value) {
+        // Drop to `auto` once expanded so dynamic content (images, nested
+        // components) can grow without re-measurement.
+        height.value = 'auto';
+    }
+}
 
-        if (open) {
-            await nextTick();
-            if (contentRef.value) {
-                height.value = `${contentRef.value.scrollHeight}px`;
-            }
-        } else {
-            height.value = '0px';
-        }
+watch(isOpen, (open) => {
+    if (!hasMounted.value) return;
 
-        animationTimeout = setTimeout(() => {
-            isAnimating.value = false;
-            if (open) {
-                height.value = 'auto';
-            }
-            animationTimeout = null;
-        }, 200);
-    },
-    { immediate: true }
-);
+    const el = contentRef.value;
+    if (!el) return;
 
-onBeforeUnmount(() => {
-    if (animationTimeout) {
-        clearTimeout(animationTimeout);
-        animationTimeout = null;
+    if (open) {
+        // Opening: go from 0 → measured height. `onTransitionEnd` will flip
+        // to `auto` after the transition completes.
+        height.value = `${el.scrollHeight}px`;
+    } else {
+        // Closing: CSS can't animate from `auto`. Pin the current height in
+        // px in one frame, let the browser commit it, then drop to 0 in the
+        // next frame so the height property actually transitions. Vue's
+        // `nextTick` flushes the vdom queue but isn't a guarantee the browser
+        // painted the style — the double-rAF pattern is.
+        height.value = `${el.scrollHeight}px`;
+        requestAnimationFrame(() => {
+            void el.offsetHeight;
+            requestAnimationFrame(() => {
+                height.value = '0px';
+            });
+        });
     }
 });
 </script>
@@ -70,15 +76,19 @@ onBeforeUnmount(() => {
     <div
         ref="contentRef"
         :data-state="isOpen ? 'open' : 'closed'"
-        :class="
-            cn(
-                'overflow-hidden text-sm transition-all duration-200 ease-in-out',
-                props.class
-            )
-        "
-        :style="{ height: isOpen || isAnimating ? height : '0px' }"
+        class="overflow-hidden transition-[height] duration-300 ease-out motion-reduce:transition-none"
+        :style="{ height }"
+        @transitionend="onTransitionEnd"
     >
-        <div class="px-4 pb-4 pt-0">
+        <div
+            :class="
+                cn(
+                    'px-4 pb-4 pt-0 transition-opacity duration-200 ease-out motion-reduce:transition-none',
+                    isOpen ? 'opacity-100' : 'opacity-0',
+                    props.class,
+                )
+            "
+        >
             <slot />
         </div>
     </div>

@@ -20,6 +20,10 @@ class EnsureUserIsActive
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && ! $request->user()->is_active) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                abort(403, 'Your account has been deactivated.');
+            }
+
             Auth::logout();
 
             $request->session()->invalidate();

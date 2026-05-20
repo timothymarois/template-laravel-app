@@ -9,15 +9,15 @@
                         <Link href="/admin">Go to Dashboard</Link>
                     </Button>
                     <Button as-child variant="outline">
-                        <Link href="/logout">Logout</Link>
+                        <Link as="button" method="post" :href="$route('auth.logout')">Logout</Link>
                     </Button>
                 </template>
                 <template v-else>
                     <Button as-child>
-                        <Link href="/login">Login</Link>
+                        <Link :href="$route('login')">Login</Link>
                     </Button>
                     <Button as-child variant="outline">
-                        <Link href="/register">Register</Link>
+                        <Link :href="$route('register')">Register</Link>
                     </Button>
                 </template>
             </div>

@@ -7,6 +7,7 @@
                     {{ message }}
                 </AlertDialogDescription>
             </AlertDialogHeader>
+            <slot />
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction

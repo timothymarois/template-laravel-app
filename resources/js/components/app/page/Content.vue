@@ -7,6 +7,7 @@
             scrollable: scrollable,
             ...attrs
         }"
+        :class="scrollable ? 'scroll-gutter-stable' : ''"
     >
         <div :class="containerClassInternal">
             <slot />

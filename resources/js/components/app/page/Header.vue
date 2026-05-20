@@ -8,24 +8,24 @@
         <div class="flex justify-center w-full">
             <div class="w-full" :class="widthClass">
                 <div class="flex justify-center items-center w-full px-4">
-                    <div class="grow">
+                    <div class="grow min-w-0">
                         <div v-if="hasTitle" class="flex items-center">
                             <slot name="title">
                                 <div class="mr-auto text-xl m-0 p-0 flex items-center">
                                     <ul class="flex items-center pt-4" :class="tabs && tabs.length > 0 ? 'pb-1' : 'pb-4'">
                                         <li v-for="nav in breadcrumbs" :key="nav.href">
-                                            <div class="flex items-center text-slate-700">
+                                            <div class="flex items-center text-muted-foreground">
                                                 <component
                                                     :is="linkComponent"
-                                                    class="hover:underline"
+                                                    class="hover:underline hover:text-foreground"
                                                     :href="nav.href"
                                                 >
                                                     {{ nav.title }}
                                                 </component>
-                                                <ChevronRight class="w-5 h-5 text-gray-400" />
+                                                <ChevronRight class="w-5 h-5 text-muted-foreground/60" />
                                             </div>
                                         </li>
-                                        <li class="text-gray-900 dark:text-gray-100 font-semibold">
+                                        <li class="text-foreground font-semibold">
                                             {{ title }}
                                         </li>
                                     </ul>
@@ -54,7 +54,7 @@
                                             class="text-base inline-flex items-center gap-1 py-2 px-4 border-b-4"
                                             :class="[
                                                 tab?.disabled
-                                                    ? 'text-gray-400 cursor-not-allowed pointer-events-none select-none border-transparent'
+                                                    ? 'text-muted-foreground/60 cursor-not-allowed pointer-events-none select-none border-transparent'
                                                     : [
                                                         'text-muted-foreground hover:text-foreground hover:border-border',
                                                         isActiveTab(tab)

@@ -3,7 +3,7 @@
         ref="frame"
         class="frame-scroll"
         :class="rootClass"
-        :style="scrollable ? { height: `calc(100vh - ${dynamicHeight} - ${addOffset}px)` } : undefined"
+        :style="scrollable ? { height: `calc(100dvh - ${dynamicHeight} - ${addOffset}px - var(--mobile-nav-offset, 0px))` } : undefined"
         @scroll="$emit('scroll', $event)"
     >
         <slot />
