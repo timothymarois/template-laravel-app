@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.4",
         "archtechx/enums": "^1.1",
+        "atlas-php/atlas": "^3.0",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/cashier": "*",
         "laravel/framework": "^13.0",
