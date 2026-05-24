@@ -33,10 +33,14 @@ v5.0.0 adds **optional multi-tenancy scaffolding** via `stancl/tenancy ^3.10`. T
 
 **What stays exactly as-is:**
 - `config/auth.php` — completely untouched. Same as v4.5.0.
-- All existing migrations stay at `database/migrations/` root. `php artisan migrate` runs them identically.
+- `routes/api.php`, `routes/channels.php`, `routes/components.php` — unchanged.
 - `App\Models\User` is still the auth model (the trait makes it central-aware *only when tenancy is enabled*).
-- `routes/web.php`, `routes/api.php`, `routes/channels.php`, `routes/components.php` unchanged.
-- Every existing service, controller, middleware, command, and test unchanged.
+- Every existing service, controller, middleware, command unchanged.
+
+**What changes:**
+- `routes/web.php` — gains a tenancy-gated `/invites/*` block. Inert when `TENANCY_ENABLED=false`.
+- `database/migrations/0001_01_01_000000_create_users_table.php` — gains a `role` string column on the canonical migration. Existing forks must add the column via a one-off migration (see Group D.5) — running `migrate:fresh` against the upgraded fork would re-create from the new base, but most production forks won't `migrate:fresh`.
+- `app/Models/User.php`, `app/Http/Middleware/HandleInertiaRequests.php`, `app/Providers/AppServiceProvider.php`, `bootstrap/providers.php`, `database/factories/UserFactory.php`, `phpunit.xml`, `.env.example`, `composer.json` — each gains additions (no removals).
 
 ## Prerequisites
 
@@ -67,39 +71,74 @@ Work top-down. Run `pnpm check:php` after each group. Bump `template-version.jso
 
 Copy each path verbatim from the template at v5.0.0. If a target directory doesn't exist in the fork, create it.
 
-- [ ] `app/helpers.php`
+**Enums:**
+- [ ] `app/Enums/TenantRole.php` (per-tenant role: Owner/Admin/Member + capability methods)
+- [ ] `app/Enums/UserRole.php` (central role: SuperAdmin/User backed by `'admin'`/`'user'`)
+
+**Models:**
 - [ ] `app/Models/Concerns/CentralConnection.php`
 - [ ] `app/Models/Domain.php`
 - [ ] `app/Models/Tenant.php`
 - [ ] `app/Models/Tenant/User.php`
+- [ ] `app/Models/TenantInvite.php` (pending tenant invitations)
+
+**Services + contracts + tenancy:**
+- [ ] `app/helpers.php`
 - [ ] `app/Tenancy/Contracts/ExistingDataMigrator.php`
 - [ ] `app/Tenancy/NullExistingDataMigrator.php`
 - [ ] `app/Tenancy/Bootstrappers/SignedUrls.php`
+- [ ] `app/Services/Tenancy/TenantInviteService.php` (send/accept/decline/revoke invitations)
+- [ ] `app/Services/Tenancy/TenantMembershipService.php` (switch/leave/remove/changeRole/transferOwnership)
+
+**Providers + commands:**
 - [ ] `app/Providers/TenancyServiceProvider.php`
 - [ ] `app/Console/Commands/Tenancy/EnableCommand.php`
 - [ ] `app/Console/Commands/Tenancy/ProvisionCommand.php`
 - [ ] `app/Console/Commands/Tenancy/MigrateExistingCommand.php`
+
+**HTTP layer:**
+- [ ] `app/Http/Controllers/Tenancy/InviteController.php`
+- [ ] `app/Notifications/Tenancy/TenantInvitationNotification.php` (invite email)
+
+**Config + routes:**
 - [ ] `config/tenancy.php`
 - [ ] `routes/tenant.php`
+
+**Migrations:**
 - [ ] `database/migrations/central/.gitkeep`
 - [ ] `database/migrations/central/2019_09_15_000010_create_tenants_table.php`
 - [ ] `database/migrations/central/2019_09_15_000020_create_domains_table.php`
 - [ ] `database/migrations/central/2026_05_24_000010_create_tenant_user_table.php` (multi-tenant access pivot)
+- [ ] `database/migrations/central/2026_05_24_000020_create_tenant_invites_table.php` (pending invites)
 - [ ] `database/migrations/tenant/.gitkeep`
 - [ ] `database/migrations/tenant/0001_01_01_000000_create_users_table.php`
+
+**Tests:**
 - [ ] `tests/CentralBaseTestCase.php`
 - [ ] `tests/TenantBaseTestCase.php`
 - [ ] `tests/Central/.gitkeep`
-- [ ] `tests/Central/EnabledStateSmokeTest.php` (referenced by the CI workflow below)
+- [ ] `tests/Central/EnabledStateSmokeTest.php`
+- [ ] `tests/Central/MultiTenantAccessTest.php`
+- [ ] `tests/Central/ProvisionCommandTest.php`
+- [ ] `tests/Central/TenantInviteServiceTest.php`
+- [ ] `tests/Central/TenantMembershipServiceTest.php`
+- [ ] `tests/Central/InviteControllerTest.php`
 - [ ] `tests/Tenant/.gitkeep`
 - [ ] `tests/Feature/Tenancy/DisabledStateTest.php`
 - [ ] `tests/Feature/Tenancy/EnableCommandTest.php`
 - [ ] `tests/Feature/Tenancy/MigrateExistingCommandTest.php`
-- [ ] `phpunit.tenancy.xml` (alternate phpunit config used by the tenancy-enabled CI job)
+- [ ] `tests/Unit/Enums/TenantRoleTest.php`
+- [ ] `tests/Unit/Enums/UserRoleTest.php`
+
+**CI + docs:**
+- [ ] `phpunit.tenancy.xml`
 - [ ] `docs/guidelines/tenancy-using.md`
 - [ ] `docs/guidelines/tenancy-migrating.md`
 - [ ] `docs/migrations/template-v5.0.0.md` (this file)
-- [ ] `.github/workflows/tenancy-enabled.yml` (CI job for the enabled state — requires `phpunit.tenancy.xml` above)
+- [ ] `.github/workflows/tenancy-enabled.yml`
+
+**Gitignore update:**
+- [ ] Append `/database/tenant*` to `.gitignore` so per-tenant SQLite files don't leak into git.
 
 Verify all files landed:
 ```bash
@@ -120,21 +159,113 @@ ls app/helpers.php app/Models/{Tenant,Domain}.php app/Models/{Concerns/CentralCo
 
 - [ ] Add the new imports:
   ```php
+  use App\Enums\UserRole;
   use App\Models\Concerns\CentralConnection;
   use Illuminate\Database\Eloquent\Relations\BelongsToMany;
   ```
 - [ ] Add `CentralConnection` to the `use` line inside the class body (alphabetical: `use CentralConnection, HasApiTokens, HasFactory, Notifiable;`).
-- [ ] Add the `tenants()` relationship method (copy the whole method block verbatim from the template's `app/Models/User.php`). This is the central side of the `tenant_user` pivot — `User::tenants()` returns the user's tenants when tenancy is enabled, errors gracefully when disabled (the pivot table doesn't exist; calling the relationship is what triggers the query).
+- [ ] Add `'role'` to the `$fillable` array (alongside `is_active`).
+- [ ] Add `'role' => UserRole::class` to the `casts()` return array (alongside `is_active`).
+- [ ] Add the `tenants()` relationship method (copy the whole method block verbatim from the template's `app/Models/User.php`). This is the central side of the `tenant_user` pivot.
 - [ ] Verify:
   ```bash
-  grep -n 'CentralConnection\|tenants()' app/Models/User.php
+  grep -n "CentralConnection\|tenants()\|'role'\|UserRole" app/Models/User.php
   ```
-  → must show at least 3 matches (the import + the `use` line + the relationship method).
+  → must show at least 5 matches (import + use line + fillable entry + casts entry + relationship method + import of UserRole).
 
   ```bash
   php artisan tinker --execute='echo (new App\Models\User)->getConnectionName() === null ? "OK" : "FAIL";'
   ```
   → must print `OK`. When `TENANCY_ENABLED=false`, the trait returns null — Eloquent default behavior, no query routing change.
+
+### Group D.5 — Schema change: add `role` column to existing `users` tables
+
+v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_table.php` to include a `role` string column (backing `App\Enums\UserRole`). **Fork's own copy of that migration is NOT modified** by this guide — fork migrations are immutable once shipped. Instead, add the column with a one-off migration below.
+
+> **Skipping this group is a hard runtime crash.** Group D adds `'role' => UserRole::class` to `User::casts()`. The first `User` query against a DB without the `role` column will throw `SQLSTATE[42S22]: Column not found`. Don't skip.
+
+> **`migrate:fresh` warning.** Your fork's `migrate:fresh` runs YOUR copy of `0001_01_01_000000_create_users_table.php` (without `role`), then this group's new migration (which adds `role`). Both states converge on the same schema. If you ever want to consolidate the schema, you can manually edit your fork's copy of the base migration to match the template — but only after you've also run `migrate:fresh` in production, which is rarely a good idea.
+
+- [ ] Create the migration:
+  ```bash
+  php artisan make:migration add_role_to_users_table
+  ```
+- [ ] Replace the generated body with:
+  ```php
+  use App\Enums\UserRole;
+  use Illuminate\Database\Migrations\Migration;
+  use Illuminate\Database\Schema\Blueprint;
+  use Illuminate\Support\Facades\Schema;
+
+  return new class extends Migration
+  {
+      public function up(): void
+      {
+          Schema::table('users', function (Blueprint $table): void {
+              $table->string('role')->default(UserRole::User->value)->after('is_active');
+          });
+      }
+
+      public function down(): void
+      {
+          Schema::table('users', function (Blueprint $table): void {
+              $table->dropColumn('role');
+          });
+      }
+  };
+  ```
+- [ ] Run the migration:
+  ```bash
+  php artisan migrate
+  ```
+- [ ] Verify:
+  ```bash
+  php artisan tinker --execute='echo Schema::hasColumn("users", "role") ? "OK" : "FAIL";'
+  ```
+  → must print `OK`.
+
+- [ ] (Optional) Promote any current admins:
+  ```bash
+  php artisan tinker --execute='\App\Models\User::where("email","you@example.com")->update(["role" => \App\Enums\UserRole::SuperAdmin->value]);'
+  ```
+
+- [ ] Update `database/factories/UserFactory.php` to include `role` in the default state (copy from template). Add `use App\Enums\UserRole;` to the imports and `'role' => UserRole::User` to the returned array. Also add the helper:
+  ```php
+  public function admin(): static
+  {
+      return $this->state(fn (array $attributes) => [
+          'role' => UserRole::SuperAdmin,
+      ]);
+  }
+  ```
+  Without this, `User::factory()->make()` (without persisting) returns a model with `role = null`, which breaks any code calling `$user->role->canManageAllTenants()`.
+
+### Group D.7 — Add invite routes to `routes/web.php`
+
+- [ ] At the top of `routes/web.php`, add the controller import:
+  ```php
+  use App\Http\Controllers\Tenancy\InviteController;
+  ```
+- [ ] Append the tenancy-gated invite route block (place it near the public routes section):
+  ```php
+  if (config('tenancy.enabled')) {
+      Route::middleware(['throttle:60,1'])->group(function (): void {
+          Route::get('invites/{token}', [InviteController::class, 'show'])->name('invites.show');
+          Route::post('invites/{token}/accept', [InviteController::class, 'accept'])->name('invites.accept');
+          Route::post('invites/{token}/decline', [InviteController::class, 'decline'])->name('invites.decline');
+      });
+  }
+  ```
+- [ ] Verify:
+  ```bash
+  grep -n 'InviteController\|invites/{token}' routes/web.php
+  ```
+  → must show 4+ matches (1 import + 3 route definitions).
+
+  ```bash
+  php artisan tinker --execute='echo \Illuminate\Support\Facades\Route::has("invites.show") ? "FAIL (route exists in disabled state)" : "OK";'
+  ```
+  → must print `OK`. When tenancy is disabled the routes are not registered.
 
 ### Group E — Modify `app/Http/Middleware/HandleInertiaRequests.php`
 

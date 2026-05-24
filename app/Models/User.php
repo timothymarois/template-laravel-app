@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use App\Models\Concerns\CentralConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -27,6 +28,7 @@ class User extends Authenticatable
         'password',
         'timezone',
         'is_active',
+        'role',
         'last_seen_at',
         'last_ip_address',
         'last_user_agent',
@@ -52,6 +54,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'is_active' => 'boolean',
+            'role' => UserRole::class,
             'last_seen_at' => 'datetime',
             'password' => 'hashed',
         ];

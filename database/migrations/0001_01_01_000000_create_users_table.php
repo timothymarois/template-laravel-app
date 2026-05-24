@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('timezone')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('role')->default(\App\Enums\UserRole::User->value);
             $table->timestamp('last_seen_at')->nullable();
             $table->string('last_ip_address', 45)->nullable();
             $table->text('last_user_agent')->nullable();
