@@ -231,7 +231,7 @@ The S3 source paths were untouched (the import only `copyObject`s, never deletes
 
 - **Billing migration.** If you use Cashier, the `subscriptions` / `invoices` tables stay central — the `billable` relationship still points at `App\Models\User`, which is now central-pinned via the `CentralConnection` trait. No model swap needed; just verify the tables live in the central DB.
 - **OAuth client tenant-scoping.** Pre-tenancy OAuth tokens were `(user_id)`-scoped; in a multi-tenant world they're `(user_id, tenant_id)`-scoped — the `oauth_*` tables need a `tenant_id` column. See the Rundesk Phase 2 PRD for the worked design.
-- **Multi-account UX** (one user ↔ many tenants). The template defaults to one-tenant-per-user during import. If you want multi-account, you build the picker / switcher / invite flow yourself plus a `tenant_users` pivot table on the central side. Rundesk Phase 2 is the reference.
+- **Multi-account UX** (one user ↔ many tenants). The template ships the data side — `tenant_user` pivot table, `User::tenants()` and `Tenant::users()` relationships — so the import command can simply call `$tenant->users()->attach($user->id, ['role' => 'owner'])`. What's **not** shipped: the picker UI, the invite/accept flow, the in-session switcher. See `docs/guidelines/tenancy-using.md` Step 8 for the 5-line login redirect pattern and a picker controller skeleton; the Vue side is fork-specific. Rundesk Phase 2 is the reference for full production multi-account UX.
 
 ## Per-fork applicability
 

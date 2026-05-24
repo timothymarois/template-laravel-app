@@ -7,6 +7,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Concerns\CentralConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -54,6 +55,23 @@ class User extends Authenticatable
             'last_seen_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * The tenants this user can access. Resolves via the central `tenant_user`
+     * pivot table — see database/migrations/central/2026_05_24_000010_create_tenant_user_table.php.
+     *
+     * Always declared, regardless of whether tenancy is enabled. When tenancy
+     * is disabled the table doesn't exist; the method itself is harmless until
+     * something actually calls `->tenants()` or `->tenants` on a User instance.
+     *
+     * Pivot columns: `role` (owner|admin|member, fork-customizable) and `joined_at`.
+     */
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class, 'tenant_user', 'user_id', 'tenant_id')
+            ->withPivot('role', 'joined_at')
+            ->withTimestamps();
     }
 
     /**

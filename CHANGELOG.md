@@ -16,6 +16,7 @@ The core contract: a fork that pulls v5.0.0 and changes nothing in `.env` sees z
 
 - **`stancl/tenancy ^3.10`** composer dependency. Auto-discovered, but every effect is gated by the master switch.
 - **Models:** `App\Models\Tenant`, `App\Models\Domain`, `App\Models\Tenant\User`. The `App\Models\Concerns\CentralConnection` trait is applied to `App\Models\User` and short-circuits to a no-op when tenancy is disabled — so `User` continues to behave identically to v4.5.0 unless the master switch is on. No new auth model and no `AUTH_USER_MODEL` env required.
+- **Multi-tenant access scaffolding.** New `tenant_user` pivot migration in `database/migrations/central/`, plus `User::tenants()` and `Tenant::users()` belongsToMany relationships. Supports both single-tenant-per-user and many-tenants-per-user patterns out of the box. `tenancy:provision --owner=<email>` attaches the user to the new tenant via the pivot (instead of just recording the email).
 - **Tenancy contracts:** `App\Tenancy\Contracts\ExistingDataMigrator` interface + `App\Tenancy\NullExistingDataMigrator` default. Conditionally bound in `AppServiceProvider::register()` only when tenancy is enabled.
 - **`App\Tenancy\Bootstrappers\SignedUrls`** — listed (commented) in `config/tenancy.php` for forks switching to subdomain mode.
 - **`App\Providers\TenancyServiceProvider`** — wraps the package's published provider. The entire `boot()` body is gated on `config('tenancy.enabled')`. When disabled: no event listeners bound, no tenant routes loaded, no middleware priority overrides.

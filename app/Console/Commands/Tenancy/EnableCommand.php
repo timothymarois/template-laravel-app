@@ -67,9 +67,8 @@ class EnableCommand extends Command
         $this->line('       DB_CENTRAL_HOST, DB_CENTRAL_PORT, DB_CENTRAL_DATABASE, DB_CENTRAL_USERNAME, DB_CENTRAL_PASSWORD');
         $this->line('       (The pgsql_central / mysql_central connection blocks already exist in config/database.php');
         $this->line('        and read these env vars — you just need to fill the env values in.)');
-        $this->line('  2. Create the central DB and run migrations:');
+        $this->line('  2. Create the central DB and run migrations (root + central/ auto-discovered):');
         $this->line('       php artisan migrate --database=pgsql_central');
-        $this->line('       php artisan migrate --database=pgsql_central --path=database/migrations/central');
         $this->line('  3. Provision your first tenant:');
         $this->line('       php artisan tenancy:provision acme --owner=you@example.com');
         $this->newLine();

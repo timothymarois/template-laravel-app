@@ -56,3 +56,21 @@ it('registers the path-mode tenant route group', function () {
     );
     expect($hasTenantPrefixedRoute)->toBeTrue();
 });
+
+it('User has a tenants() BelongsToMany relationship', function () {
+    $user = new App\Models\User;
+    expect($user->tenants())
+        ->toBeInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class);
+    expect($user->tenants()->getTable())->toBe('tenant_user');
+    expect($user->tenants()->getRelatedPivotKeyName())->toBe('tenant_id');
+    expect($user->tenants()->getForeignPivotKeyName())->toBe('user_id');
+});
+
+it('Tenant has a users() BelongsToMany relationship', function () {
+    $tenant = new App\Models\Tenant;
+    expect($tenant->users())
+        ->toBeInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class);
+    expect($tenant->users()->getTable())->toBe('tenant_user');
+    expect($tenant->users()->getRelatedPivotKeyName())->toBe('user_id');
+    expect($tenant->users()->getForeignPivotKeyName())->toBe('tenant_id');
+});

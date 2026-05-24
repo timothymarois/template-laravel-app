@@ -8,6 +8,13 @@
          except TENANCY_ENABLED is forced true, and only the Central /
          Tenant suites run. -->
     <testsuites>
+        <!-- Unit is included so pure-PHP tests like TenantRoleTest are exercised
+             under the tenancy-enabled CI pass too. They have no DB dependency
+             and run identically in both states, but covering them here makes
+             the tenancy CI a true superset for tenant-related code. -->
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
         <testsuite name="Central">
             <directory>tests/Central</directory>
         </testsuite>

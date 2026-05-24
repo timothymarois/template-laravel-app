@@ -84,6 +84,7 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `database/migrations/central/.gitkeep`
 - [ ] `database/migrations/central/2019_09_15_000010_create_tenants_table.php`
 - [ ] `database/migrations/central/2019_09_15_000020_create_domains_table.php`
+- [ ] `database/migrations/central/2026_05_24_000010_create_tenant_user_table.php` (multi-tenant access pivot)
 - [ ] `database/migrations/tenant/.gitkeep`
 - [ ] `database/migrations/tenant/0001_01_01_000000_create_users_table.php`
 - [ ] `tests/CentralBaseTestCase.php`
@@ -117,13 +118,18 @@ ls app/helpers.php app/Models/{Tenant,Domain}.php app/Models/{Concerns/CentralCo
 
 ### Group D — Modify `app/Models/User.php`
 
-- [ ] Add `use App\Models\Concerns\CentralConnection;` to the imports.
+- [ ] Add the new imports:
+  ```php
+  use App\Models\Concerns\CentralConnection;
+  use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+  ```
 - [ ] Add `CentralConnection` to the `use` line inside the class body (alphabetical: `use CentralConnection, HasApiTokens, HasFactory, Notifiable;`).
+- [ ] Add the `tenants()` relationship method (copy the whole method block verbatim from the template's `app/Models/User.php`). This is the central side of the `tenant_user` pivot — `User::tenants()` returns the user's tenants when tenancy is enabled, errors gracefully when disabled (the pivot table doesn't exist; calling the relationship is what triggers the query).
 - [ ] Verify:
   ```bash
-  grep -n 'CentralConnection' app/Models/User.php
+  grep -n 'CentralConnection\|tenants()' app/Models/User.php
   ```
-  → must show 2 matches (the import + the `use` line).
+  → must show at least 3 matches (the import + the `use` line + the relationship method).
 
   ```bash
   php artisan tinker --execute='echo (new App\Models\User)->getConnectionName() === null ? "OK" : "FAIL";'

@@ -10,8 +10,31 @@ If your app already has user data, **stop here and read [`tenancy-migrating.md`]
 
 - Authenticate users against a central DB. The existing `App\Models\User` model carries a `CentralConnection` trait that pins it to the central connection **automatically** when tenancy is enabled — no model swap required.
 - Route per-tenant requests to per-tenant databases (DB-per-tenant isolation).
+- Support **multi-tenant access**: one user can belong to many tenants via the `tenant_user` pivot table (`User::tenants()` / `Tenant::users()` relationships ship with the template).
 - Default to **path mode** — tenant URLs are `/t/{tenant}/...` on your existing domain. No wildcard DNS or wildcard SSL needed.
 - Be one env flip away from subdomain mode (`<tenant>.example.com`) when you're ready for it.
+
+## Choose your identification mode
+
+There are two orthogonal axes: **how do you identify the tenant in the request** (path vs subdomain), and **how many tenants can one user belong to** (one vs many). They're independent — pick each separately.
+
+### Path vs subdomain — auth complexity tradeoff
+
+| Mode | URL shape | Auth complexity | Operational cost |
+|---|---|---|---|
+| **Path** (default) | `app.example.com/t/acme/dashboard` | **Low.** Session cookie covers the whole app — same domain, same cookie. No special config. | None — works on any domain you already serve. |
+| **Subdomain** | `acme.example.com/dashboard` | **Higher.** Session cookie must be scoped to `.example.com` (parent domain) so it carries across subdomains. Cross-subdomain CSRF tokens. Signed URLs need host rewriting (the bundled `SignedUrls` bootstrapper handles this — uncomment it in `config/tenancy.php` when you flip the mode). | Wildcard DNS (`*.example.com`) + wildcard SSL cert. |
+
+**Path mode is permanent-viable.** Plenty of large SaaS apps run on it forever; there is no "graduation" requirement. Choose subdomain mode only when you have a marketing reason (vanity URLs, white-labeling) — not for technical reasons. The auth surface is genuinely more complex on subdomains, and the URLs are functionally equivalent.
+
+### Single-tenant-per-user vs multi-tenant-per-user
+
+| Pattern | When to use | What you build |
+|---|---|---|
+| **Single tenant per user** | One personal workspace per signup. No team invites. | Attach the user to their tenant on signup; one row per user in `tenant_user`. Login redirects straight to the tenant. |
+| **Multi-tenant per user** | Users can join multiple workspaces (team invites, agency model, marketplace sellers). | Same pivot table, multiple rows per user. Login routes through a picker when the user has 2+ tenants. |
+
+Both patterns use the same `tenant_user` pivot table that ships in v5.0.0. **You don't choose at install time** — your code decides whether to attach a user to multiple tenants.
 
 ## Prerequisites
 
@@ -77,16 +100,15 @@ php artisan tinker --execute='echo config("database.connections.pgsql_central.da
 
 ```bash
 php artisan migrate --database=pgsql_central
-php artisan migrate --database=pgsql_central --path=database/migrations/central
 ```
 
-The first command runs the four root migrations (`users`, `cache`, `jobs`, `personal_access_tokens`) against the central DB. The second runs the tenancy-specific migrations (`tenants`, `domains`).
+That single command runs both the four root migrations (`users`, `cache`, `jobs`, `personal_access_tokens`) and the three tenancy migrations (`tenants`, `domains`, `tenant_user`) against the central DB. The tenancy migrations are auto-discovered because `App\Providers\TenancyServiceProvider::boot()` calls `loadMigrationsFrom(database_path('migrations/central'))` whenever `TENANCY_ENABLED=true`.
 
 **Verify:**
 ```bash
 php artisan migrate:status --database=pgsql_central
 ```
-→ must show all six migrations as `Ran`.
+→ must show all seven migrations as `Ran` (4 root + 3 central).
 
 ## Step 4 — Provision your first tenant
 
@@ -167,7 +189,104 @@ $url = tenant_url('/dashboard', 'acme');
 
 For URLs **inside** the current tenant request, `route()` and `url()` work as usual — the URL prefix is already part of the request context.
 
-## Step 8 — Tests
+## Step 8 — Multi-tenant access (one user, many tenants)
+
+The template ships a `tenant_user` pivot table and `User::tenants()` / `Tenant::users()` relationships. Use these whether your app is single-tenant-per-user (one row per user) or multi-tenant (many rows per user).
+
+### Attaching a user to a tenant
+
+After the user account exists (created by your registration/signup flow), attach them to a tenant via the pivot:
+
+```php
+$tenant->users()->attach($user->id, [
+    'role' => 'owner',          // owner | admin | member — customize per your fork
+    'joined_at' => now(),
+]);
+```
+
+The `tenancy:provision --owner=<email>` command does this for you when bootstrapping the first tenant.
+
+To detach (remove a member):
+
+```php
+$tenant->users()->detach($user->id);
+```
+
+> **Soft-delete gotcha.** `App\Models\Tenant` uses `SoftDeletes`. Calling `$tenant->delete()` sets `deleted_at` but **does NOT cascade pivot rows** — pivot rows are only removed by the FK cascade on `forceDelete()`. If you soft-delete a tenant and want to revoke member access immediately, detach the users explicitly first: `$tenant->users()->detach()` then `$tenant->delete()`. Conversely, restoring a soft-deleted tenant (`$tenant->restore()`) leaves the membership intact, which is usually what you want.
+
+To list a user's tenants:
+
+```php
+foreach ($user->tenants as $tenant) {
+    echo $tenant->id, ' role=', $tenant->pivot->role, "\n";
+}
+```
+
+### Login routing — pick-a-tenant logic
+
+Add this 5-line pattern to your `SessionController::authenticate()` (or equivalent) after `$request->authenticate()`:
+
+```php
+$tenants = $request->user()->tenants;
+
+if ($tenants->count() === 0) {
+    // No tenants yet — send them to onboarding to create one.
+    return redirect()->route('onboarding');
+}
+
+if ($tenants->count() === 1) {
+    // Single tenant — jump straight in.
+    return redirect()->away(tenant_url('/', $tenants->first()));
+}
+
+// Multi-tenant — let them pick.
+return redirect()->route('tenants.pick');
+```
+
+This is the same pattern Invelo has run in production for two years. The single-tenant fast path keeps the UX trivial for the common case; the picker only loads when needed.
+
+### The picker page
+
+The template doesn't ship a picker UI (Inertia + your design system). The data side is simple:
+
+```php
+// app/Http/Controllers/TenantPickerController.php
+public function index(Request $request): \Inertia\Response
+{
+    return Inertia::render('tenants/Pick', [
+        'tenants' => $request->user()->tenants->map(fn ($t) => [
+            'id' => $t->id,
+            'name' => $t->data['name'] ?? $t->id,
+            'role' => $t->pivot->role,
+            'url' => tenant_url('/', $t),
+        ]),
+    ]);
+}
+```
+
+The Vue side renders the list with one link per tenant pointing at `tenant_url('/', $tenant)`. No tenancy code in the picker route itself — it lives on the central domain.
+
+### Switching tenants
+
+In path mode, "switching" is just navigating to a different `/t/{slug}/`. The session cookie carries the user; the URL identifies the tenant. Put a "Switch workspace" link in your nav that posts back to `route('tenants.pick')`.
+
+In subdomain mode, same idea but the link goes to `https://other-tenant.example.com/`. The cookie scoped to `.example.com` keeps the session alive across subdomains.
+
+### Authorization inside a tenant
+
+After tenancy initializes for a request, you can verify the user actually has access:
+
+```php
+// In a middleware or controller
+$tenant = tenant();
+if (! $tenant || ! $tenant->users()->where('user_id', auth()->id())->exists()) {
+    abort(403);
+}
+```
+
+Forks that want this enforced globally can write a `EnsureUserBelongsToTenant` middleware and attach it to the tenant route group in `routes/tenant.php`. Reference: the Rundesk Phase 1 PRD spells out a production-grade version with pivot caching.
+
+## Step 9 — Tests
 
 For central-side tests (e.g. account picker, billing, OAuth flow):
 ```php
@@ -197,7 +316,7 @@ php artisan test --testsuite=Central
 php artisan test --testsuite=Tenant
 ```
 
-## Step 9 (optional) — Switch to subdomain mode
+## Step 10 (optional) — Switch to subdomain mode
 
 Path mode is the default because it requires no DNS / SSL changes. Switch to subdomain mode when wildcard DNS + SSL are ready.
 

@@ -106,6 +106,12 @@ class TenancyServiceProvider extends ServiceProvider
             return;
         }
 
+        // Register central-side migrations (tenants, domains, tenant_user pivot)
+        // so `php artisan migrate` picks them up automatically when tenancy is
+        // enabled. Forks adding more central migrations just drop them into
+        // database/migrations/central/.
+        $this->loadMigrationsFrom(database_path('migrations/central'));
+
         $this->bootEvents();
         $this->mapRoutes();
         $this->makeTenancyMiddlewareHighestPriority();
