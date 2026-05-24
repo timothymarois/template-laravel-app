@@ -116,8 +116,12 @@ The template uses **none** of the following, so we changed nothing — but **gre
 - [ ] Global events renamed: `invalid` → `httpException`, `exception` → `networkError`.
 - [ ] `hideProgress()` / `revealProgress()` named exports → `progress.hide()` / `progress.reveal()`.
 - [ ] Remove any `future: { ... }` block from `createInertiaApp` (the options are always-on in v3).
-- [ ] Axios is no longer bundled by Inertia core. The template imports `axios` directly for background calls (it stays a dependency) — if your fork relied on Inertia's internal axios instance/interceptors, wire your own.
+- [ ] **Axios** is no longer bundled by Inertia core. The template imports `axios` directly for background calls (it stays a dependency) — if your fork relied on Inertia's internal axios instance/interceptors, wire your own.
+- [ ] **`qs`** is no longer bundled (v3 ships its own query-string handling). The template uses `qs-esm` (its own direct dep), so nothing to do — but if your fork does `import qs from 'qs'` relying on Inertia pulling it in transitively, add it explicitly: `pnpm add qs`.
+- [ ] **`lodash-es`** is no longer bundled (v3 uses `es-toolkit` internally). The template imports `lodash` (its own direct dep), so nothing to do — but if your fork does `import { … } from 'lodash-es'` relying on Inertia's transitive copy, add it explicitly: `pnpm add lodash-es`.
 - [ ] `useForm` now resets `processing`/`progress` in `onFinish` (slightly longer processing window). Behavioral, not breaking.
+- [ ] **Page-object history props are now optional.** `clearHistory` and `encryptHistory` are only present on the page object when `true` (previously always present). The template reads neither client-side — but if your fork checks `page.clearHistory` / `page.encryptHistory` unconditionally, null-check them (`page.clearHistory === true`).
+- [ ] **Build target moved to ES2022** (was ES2020), and all Inertia packages are ESM-only. No action for modern-browser apps (the template targets evergreen browsers via Vite). If your fork must support legacy browsers, add `@vitejs/plugin-legacy`; if anything still `require()`s an Inertia package, convert it to `import`.
 
 ### 2.5 — Verify chunk 2
 
