@@ -202,11 +202,14 @@ return [
      */
     /**
      * The vendor package registers a /tenancy/assets/{path?} route when this is true.
-     * We keep it false in the template — the inert/disabled state must not register
-     * tenancy-specific routes. Forks that enable tenancy can flip this to true if they
-     * actually need tenant asset serving via the vendor controller.
+     *
+     * Tracks the master switch: when tenancy is disabled the route stays
+     * unregistered (preserving the disabled-state contract); when enabled it
+     * registers so that the FilesystemTenancyBootstrapper's tenantAsset URL
+     * macro can resolve. Without this, provisioning a tenant fails with
+     * "Route [stancl.tenancy.asset] not defined" the moment tenancy initializes.
      */
-    'routes' => false,
+    'routes' => filter_var(env('TENANCY_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
 
     /**
      * Parameters used by the tenants:migrate command.
