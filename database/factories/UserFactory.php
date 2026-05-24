@@ -2,12 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -31,7 +33,18 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'timezone' => fake()->timezone(),
             'is_active' => true,
+            'role' => UserRole::User,
         ];
+    }
+
+    /**
+     * Indicate that this user is a central super-admin.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRole::SuperAdmin,
+        ]);
     }
 
     /**

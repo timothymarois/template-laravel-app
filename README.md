@@ -13,7 +13,7 @@ Production-grade applications require more than just code—they need authentica
 
 **Core Stack**
 
-- ✅ Laravel 12 + Vue 3 + Inertia 2 — SPA experience without API complexity
+- ✅ Laravel 13 + Vue 3 + Inertia 3 — SPA experience without API complexity
 - ✅ Tailwind 4 + shadcn-vue — beautiful, accessible components you own and customize
 - ✅ 50+ UI components — production-grade, fully customizable, ready out of the box
 
@@ -27,6 +27,10 @@ Production-grade applications require more than just code—they need authentica
 
 - ✅ Reverb WebSockets + Echo — real-time events, zero external dependencies
 - ✅ Horizon queues — Redis-powered job processing with dashboard
+
+**Multi-Tenancy (Optional)**
+
+- ✅ stancl/tenancy ^3.10 — DB-per-tenant isolation, off by default. Enable with `php artisan tenancy:enable`. See [`docs/guidelines/tenancy-using.md`](docs/guidelines/tenancy-using.md).
 
 **Developer Experience**
 

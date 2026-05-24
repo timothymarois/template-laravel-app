@@ -8,18 +8,19 @@
     "require": {
         "php": "^8.4",
         "archtechx/enums": "^1.1",
-        "inertiajs/inertia-laravel": "^2.0",
+        "inertiajs/inertia-laravel": "^3.0",
         "laravel/cashier": "*",
-        "laravel/framework": "^12.0",
+        "laravel/framework": "^13.0",
         "laravel/horizon": "^5.24",
         "laravel/reverb": "^1.6",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.19",
-        "laravel/tinker": "^2.9",
+        "laravel/tinker": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
         "opcodesio/log-viewer": "^3.10",
         "sentry/sentry-laravel": "^4.7",
         "spatie/laravel-sitemap": "^7.3",
+        "stancl/tenancy": "^3.10",
         "tightenco/ziggy": "^2.3"
     },
     "require-dev": {
@@ -31,14 +32,17 @@
         "nunomaduro/collision": "^8.0",
         "pestphp/pest": "^4",
         "phpunit/phpunit": "^12",
-        "soloterm/solo": "^0.5"
+        "soloterm/solo": "dev-main"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

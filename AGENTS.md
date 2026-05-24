@@ -21,7 +21,7 @@ This document defines the standards and contribution rules for all agents (human
 
 ### Backend
 
-* Laravel 12+ (PHP 8.4+)
+* Laravel 13+ (PHP 8.4+)
 * Redis (queue + cache via Horizon)
 * Inertia server adapter
 
@@ -715,6 +715,28 @@ import Sidebar from '@/components/app/navigation/Sidebar.vue';
 // site/ — direct imports (no barrel)
 import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 ```
+
+---
+
+## Optional multi-tenancy
+
+The template ships `stancl/tenancy` installed but inert by default. The contract: when `TENANCY_ENABLED=false` (the default), **treat tenancy code as nonexistent**:
+
+- Do not import from `App\Models\Tenant` or `App\Models\Domain`.
+- `App\Models\User` is fine to import as usual — the `CentralConnection` trait on it is a no-op when tenancy is disabled, so `User` behaves identically to a non-tenancy app.
+- Do not run the package's `tenancy:install` or any `tenants:*` artisan command. `tenancy:install` republishes the package's stock provider over the template's customized one and dumps fresh migrations into `database/migrations/` root — it would break the disabled-state contract. The `tenants:*` commands assume tenancy is initialized.
+- The only tenancy commands that are safe to run in disabled state are `tenancy:enable` (which the operator runs deliberately when they want to enable tenancy), and `php artisan tenancy:provision --help` / `tenancy:migrate-existing --help` for help text only — actually invoking provision/migrate-existing will fail loudly with "Tenancy is disabled".
+- Do not call `tenant_user()`, `central_user()`, `current_actor()`, `tenant_url()` in user-facing code paths (they all fall back to `auth()->user()` / `url()` when disabled — safe but pointless).
+- Do not add tenant middleware or routes to `routes/web.php` / `routes/api.php`.
+- Do not register listeners for tenancy events.
+
+The guard is `App\Providers\TenancyServiceProvider::boot()` — it short-circuits on `config('tenancy.enabled')`. `tests/Feature/Tenancy/DisabledStateTest.php` enforces this contract; do not weaken those tests.
+
+When `TENANCY_ENABLED=true`:
+- See [`docs/guidelines/tenancy-using.md`](docs/guidelines/tenancy-using.md) for conventions and usage.
+- Never run bare `php artisan test` once tenancy is enabled — use `--testsuite=Central` and `--testsuite=Tenant` separately so the test DBs don't collide.
+
+To enable tenancy for the first time in a fork, see [`docs/guidelines/tenancy-using.md`](docs/guidelines/tenancy-using.md). To adopt tenancy on a fork with existing user data, see [`docs/guidelines/tenancy-migrating.md`](docs/guidelines/tenancy-migrating.md).
 
 ---
 

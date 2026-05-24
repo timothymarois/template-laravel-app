@@ -3,13 +3,30 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
+         defaultTestSuite="default"
 >
     <testsuites>
+        <!-- The default suite runs in disabled-state pnpm check. It excludes
+             Central + Tenant which only run with phpunit.tenancy.xml (the
+             tenancy-enabled CI job). This keeps disabled-state runs free of
+             skipped-test warnings from enabled-state-only tests. -->
+        <testsuite name="default">
+            <directory>tests/Unit</directory>
+            <directory>tests/Feature</directory>
+        </testsuite>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
+        </testsuite>
+        <!-- Central + Tenant suites are populated by forks that enable tenancy.
+             Run via `pnpm check:tenancy` (uses phpunit.tenancy.xml). -->
+        <testsuite name="Central">
+            <directory>tests/Central</directory>
+        </testsuite>
+        <testsuite name="Tenant">
+            <directory>tests/Tenant</directory>
         </testsuite>
     </testsuites>
     <source>
@@ -29,5 +46,9 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
+        <!-- Force the disabled-state contract during the default test run.
+             DisabledStateTest asserts this is false; enabled-state tests
+             (forks' Central/Tenant suites) override this in their own setup. -->
+        <env name="TENANCY_ENABLED" value="false" force="true"/>
     </php>
 </phpunit>

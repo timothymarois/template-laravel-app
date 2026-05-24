@@ -109,6 +109,47 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        // ============================================================
+        // Optional: Central DB connections for multi-tenancy
+        // ============================================================
+        // Both blocks below are loaded but only used when TENANCY_ENABLED=true.
+        // Drive them from the DB_CENTRAL_* env vars (see .env.example).
+        // For forks not using tenancy, the env vars stay empty and nothing
+        // connects to these — they're harmless.
+        //
+        // If you enable tenancy, set DB_CENTRAL_CONNECTION to whichever of
+        // these matches your central DB driver (pgsql_central or mysql_central).
+
+        'pgsql_central' => [
+            'driver' => 'pgsql',
+            'host' => env('DB_CENTRAL_HOST', '127.0.0.1'),
+            'port' => env('DB_CENTRAL_PORT', '5432'),
+            'database' => env('DB_CENTRAL_DATABASE', ''),
+            'username' => env('DB_CENTRAL_USERNAME', ''),
+            'password' => env('DB_CENTRAL_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'mysql_central' => [
+            'driver' => 'mysql',
+            'host' => env('DB_CENTRAL_HOST', '127.0.0.1'),
+            'port' => env('DB_CENTRAL_PORT', '3306'),
+            'database' => env('DB_CENTRAL_DATABASE', ''),
+            'username' => env('DB_CENTRAL_USERNAME', ''),
+            'password' => env('DB_CENTRAL_PASSWORD', ''),
+            'unix_socket' => env('DB_CENTRAL_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+        ],
+
     ],
 
     /*

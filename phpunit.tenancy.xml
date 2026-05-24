@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <!-- Configuration for the tenancy-enabled CI job. Mirrors phpunit.xml
+         except TENANCY_ENABLED is forced true, and only the Central /
+         Tenant suites run. -->
+    <testsuites>
+        <!-- Unit is included so pure-PHP tests like TenantRoleTest are exercised
+             under the tenancy-enabled CI pass too. They have no DB dependency
+             and run identically in both states, but covering them here makes
+             the tenancy CI a true superset for tenant-related code. -->
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Central">
+            <directory>tests/Central</directory>
+        </testsuite>
+        <testsuite name="Tenant">
+            <directory>tests/Tenant</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="CACHE_STORE" value="array"/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="PULSE_ENABLED" value="false"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+
+        <!-- Enable tenancy in this suite, using sqlite as the central connection. -->
+        <env name="TENANCY_ENABLED" value="true" force="true"/>
+        <env name="TENANCY_IDENTIFICATION" value="path" force="true"/>
+        <env name="DB_CENTRAL_CONNECTION" value="sqlite" force="true"/>
+    </php>
+</phpunit>
