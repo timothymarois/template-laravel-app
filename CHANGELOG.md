@@ -24,6 +24,8 @@ The core contract: a fork that pulls v5.0.0 and changes nothing in `.env` sees z
 - **`App\Models\TenantInvite`** + central migration `tenant_invites` table.
 - **`App\Http\Controllers\Tenancy\InviteController`** with `GET /invites/{token}`, `POST /invites/{token}/accept`, `POST /invites/{token}/decline` routes — registered only when tenancy is enabled.
 - **`App\Notifications\Tenancy\TenantInvitationNotification`** — email with acceptance URL.
+- **`App\Http\Middleware\Tenancy\InitializeTenancyBySlug`** — path-mode tenant resolver. Looks up the tenant by domain slug (e.g. `/t/acme/...`) via the `domains` table. Required because the package's stock `InitializeTenancyByPath` only resolves by primary key, which doesn't match human-friendly URL slugs.
+- **`App\Http\Middleware\Tenancy\EnsureUserBelongsToTenant`** — pivot-membership guard. Returns 403 for authenticated non-members; redirects guests to login. Apply to any tenant-scoped routes that require membership.
 - **Tenancy contracts:** `App\Tenancy\Contracts\ExistingDataMigrator` interface + `App\Tenancy\NullExistingDataMigrator` default. Conditionally bound in `AppServiceProvider::register()` only when tenancy is enabled.
 - **`App\Tenancy\Bootstrappers\SignedUrls`** — listed (commented) in `config/tenancy.php` for forks switching to subdomain mode.
 - **`App\Providers\TenancyServiceProvider`** — wraps the package's published provider. The entire `boot()` body is gated on `config('tenancy.enabled')`. When disabled: no event listeners bound, no tenant routes loaded, no middleware priority overrides.

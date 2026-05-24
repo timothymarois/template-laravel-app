@@ -98,6 +98,8 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 
 **HTTP layer:**
 - [ ] `app/Http/Controllers/Tenancy/InviteController.php`
+- [ ] `app/Http/Middleware/Tenancy/InitializeTenancyBySlug.php` (path-mode resolver — looks up tenant by domain slug)
+- [ ] `app/Http/Middleware/Tenancy/EnsureUserBelongsToTenant.php` (403 for non-members; redirect to login for guests)
 - [ ] `app/Notifications/Tenancy/TenantInvitationNotification.php` (invite email)
 
 **Config + routes:**
@@ -124,6 +126,7 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `tests/Central/TenantMembershipServiceTest.php`
 - [ ] `tests/Central/InviteControllerTest.php`
 - [ ] `tests/Central/SignedUrlsBootstrapperTest.php`
+- [ ] `tests/Central/PathModeRoutingTest.php` (integration tests for InitializeTenancyBySlug + EnsureUserBelongsToTenant)
 - [ ] `tests/Tenant/.gitkeep`
 - [ ] `tests/Feature/Tenancy/DisabledStateTest.php`
 - [ ] `tests/Feature/Tenancy/EnableCommandTest.php`

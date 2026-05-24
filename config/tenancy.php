@@ -46,12 +46,14 @@ return [
      */
     'bootstrappers' => [
         Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper::class,
-        // CacheTenancyBootstrapper requires a tag-supporting cache driver
-        // (redis, memcached). Disable it if your cache driver is file,
-        // database, or array — those don't support tags and will throw.
-        Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
         Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class,
         Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class,
+        // CacheTenancyBootstrapper requires a tag-supporting cache driver
+        // (redis, memcached). The template's default cache driver is
+        // `database`, which does NOT support tags — enabling this bootstrapper
+        // with the default driver throws on the first tenant cache read.
+        // Uncomment once your fork is using redis/memcached.
+        // Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
         // Stancl\Tenancy\Bootstrappers\RedisTenancyBootstrapper::class, // Note: phpredis is needed
         // App\Tenancy\Bootstrappers\SignedUrls::class, // Enable when TENANCY_IDENTIFICATION=subdomain
     ],
