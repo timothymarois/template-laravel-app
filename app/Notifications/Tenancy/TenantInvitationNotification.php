@@ -37,7 +37,10 @@ class TenantInvitationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $tenantName = (string) ($this->tenant->data['name'] ?? $this->tenant->id);
-        $acceptUrl = route('invites.show', ['token' => $this->invite->token]);
+        // The /invites/{token} path is registered in routes/web.php behind the
+        // tenancy-enabled gate. Using url() (vs route('invites.show', ...)) keeps
+        // the notification working in unit tests that don't load all routes.
+        $acceptUrl = url('/invites/'.$this->invite->token);
         $role = $this->invite->role->value;
 
         return (new MailMessage)

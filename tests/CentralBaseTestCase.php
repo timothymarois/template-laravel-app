@@ -35,5 +35,10 @@ abstract class CentralBaseTestCase extends TestCase
         if (! config('tenancy.enabled')) {
             $this->markTestSkipped('Central tests require TENANCY_ENABLED=true.');
         }
+
+        // Match the Feature/Unit suite behavior — disable @vite() rendering
+        // so Inertia page renders don't require a built manifest in CI.
+        // The Pest in('Feature','Unit') hook in tests/Pest.php doesn't apply here.
+        $this->withoutVite();
     }
 }
