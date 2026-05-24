@@ -123,12 +123,16 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `tests/Central/TenantInviteServiceTest.php`
 - [ ] `tests/Central/TenantMembershipServiceTest.php`
 - [ ] `tests/Central/InviteControllerTest.php`
+- [ ] `tests/Central/SignedUrlsBootstrapperTest.php`
 - [ ] `tests/Tenant/.gitkeep`
 - [ ] `tests/Feature/Tenancy/DisabledStateTest.php`
 - [ ] `tests/Feature/Tenancy/EnableCommandTest.php`
 - [ ] `tests/Feature/Tenancy/MigrateExistingCommandTest.php`
 - [ ] `tests/Unit/Enums/TenantRoleTest.php`
 - [ ] `tests/Unit/Enums/UserRoleTest.php`
+- [ ] `tests/Unit/Models/TenantInviteTest.php`
+- [ ] `tests/Unit/Notifications/TenantInvitationNotificationTest.php`
+- [ ] `tests/Unit/Tenancy/NullExistingDataMigratorTest.php`
 
 **CI + docs:**
 - [ ] `phpunit.tenancy.xml`
