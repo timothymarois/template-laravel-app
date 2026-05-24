@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\TenantRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->id();
             $table->string('tenant_id');
             $table->string('email');
-            $table->string('role')->default(\App\Enums\TenantRole::Member->value);
+            $table->string('role')->default(TenantRole::Member->value);
             $table->string('token', 64)->unique();
             $table->foreignId('invited_by_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('expires_at');

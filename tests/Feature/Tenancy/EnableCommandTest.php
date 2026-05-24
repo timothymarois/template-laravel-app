@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Console\Commands\Tenancy\EnableCommand;
 use Illuminate\Support\Facades\File;
 
 /*
@@ -32,7 +33,7 @@ afterEach(function () {
 });
 
 it('writeEnvKey appends a new key when missing', function () {
-    $command = new App\Console\Commands\Tenancy\EnableCommand;
+    $command = new EnableCommand;
     $method = new ReflectionMethod($command, 'writeEnvKey');
     $method->invoke($command, $this->envPath, 'TENANCY_ENABLED', 'true');
 
@@ -42,7 +43,7 @@ it('writeEnvKey appends a new key when missing', function () {
 it('writeEnvKey replaces an existing key idempotently', function () {
     File::append($this->envPath, "TENANCY_ENABLED=false\n");
 
-    $command = new App\Console\Commands\Tenancy\EnableCommand;
+    $command = new EnableCommand;
     $method = new ReflectionMethod($command, 'writeEnvKey');
     $method->invoke($command, $this->envPath, 'TENANCY_ENABLED', 'true');
 
@@ -55,7 +56,7 @@ it('writeEnvKey replaces an existing key idempotently', function () {
 it('writeEnvKey preserves values containing dollar signs', function () {
     // Regression: bare preg_replace would interpret `$1` as a backreference.
     // We use preg_replace_callback to avoid this.
-    $command = new App\Console\Commands\Tenancy\EnableCommand;
+    $command = new EnableCommand;
     $method = new ReflectionMethod($command, 'writeEnvKey');
     $method->invoke($command, $this->envPath, 'SOME_SECRET', 'abc$1def');
 
@@ -63,7 +64,7 @@ it('writeEnvKey preserves values containing dollar signs', function () {
 });
 
 it('writeEnvKey quotes values containing spaces', function () {
-    $command = new App\Console\Commands\Tenancy\EnableCommand;
+    $command = new EnableCommand;
     $method = new ReflectionMethod($command, 'writeEnvKey');
     $method->invoke($command, $this->envPath, 'APP_TITLE', 'Hello World');
 
@@ -71,7 +72,7 @@ it('writeEnvKey quotes values containing spaces', function () {
 });
 
 it('writeEnvKey preserves surrounding lines', function () {
-    $command = new App\Console\Commands\Tenancy\EnableCommand;
+    $command = new EnableCommand;
     $method = new ReflectionMethod($command, 'writeEnvKey');
     $method->invoke($command, $this->envPath, 'TENANCY_ENABLED', 'true');
 

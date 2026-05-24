@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Http\Middleware\Tenancy\EnsureTenantReady;
+use App\Http\Middleware\Tenancy\InitializeTenancyBySlug;
+use App\Tenancy\Listeners\ConditionalDeleteTenantDatabase;
+use App\Tenancy\Listeners\MarkTenantReady;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -49,7 +54,7 @@ class TenancyServiceProvider extends ServiceProvider
                 // queued job appended to the JobPipeline array above, so it
                 // only runs after CreateDatabase + MigrateDatabase succeed.
                 // See docs/guidelines/tenancy-using.md (production note).
-                \App\Tenancy\Listeners\MarkTenantReady::class,
+                MarkTenantReady::class,
             ],
             Events\SavingTenant::class => [],
             Events\TenantSaved::class => [],
@@ -61,7 +66,7 @@ class TenancyServiceProvider extends ServiceProvider
                 // Soft delete (the default for $tenant->delete()) leaves the
                 // DB intact so $tenant->restore() works. forceDelete() triggers
                 // the actual cleanup. See ConditionalDeleteTenantDatabase docs.
-                \App\Tenancy\Listeners\ConditionalDeleteTenantDatabase::class,
+                ConditionalDeleteTenantDatabase::class,
             ],
 
             // Domain events
@@ -169,14 +174,14 @@ class TenancyServiceProvider extends ServiceProvider
             // Our custom path-mode resolver (looks up by domain slug). Must run
             // before SubstituteBindings so the {tenant} param is forgotten
             // before model binding tries to resolve it.
-            \App\Http\Middleware\Tenancy\InitializeTenancyBySlug::class,
+            InitializeTenancyBySlug::class,
             // Ready-gate runs after initialization; rejects unready tenants
             // with 503 so users don't hit empty per-tenant DBs.
-            \App\Http\Middleware\Tenancy\EnsureTenantReady::class,
+            EnsureTenantReady::class,
         ];
 
         foreach (array_reverse($tenancyMiddleware) as $middleware) {
-            $this->app[\Illuminate\Contracts\Http\Kernel::class]->prependToMiddlewarePriority($middleware);
+            $this->app[Kernel::class]->prependToMiddlewarePriority($middleware);
         }
     }
 }

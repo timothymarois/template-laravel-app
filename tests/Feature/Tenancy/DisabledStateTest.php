@@ -2,8 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\HandleInertiaRequests;
+use App\Models\Concerns\CentralConnection;
+use App\Models\Domain;
+use App\Models\Tenant;
+use App\Models\User;
+use App\Tenancy\Contracts\ExistingDataMigrator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Events\TenantCreated;
 use Stancl\Tenancy\Events\TenantDeleted;
 
@@ -45,7 +52,7 @@ it('does not register a route at /t/anything', function () {
 });
 
 it('keeps App\\Models\\User as the configured auth provider model', function () {
-    expect(config('auth.providers.users.model'))->toBe(App\Models\User::class);
+    expect(config('auth.providers.users.model'))->toBe(User::class);
 });
 
 it('tenant() returns null when no tenant is initialized', function () {
@@ -56,19 +63,19 @@ it('tenant() returns null when no tenant is initialized', function () {
 });
 
 it('tenant_user() returns the authenticated central user when disabled', function () {
-    $user = App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $this->actingAs($user);
     expect(tenant_user()?->getKey())->toBe($user->id);
 });
 
 it('central_user() returns the authenticated user', function () {
-    $user = App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $this->actingAs($user);
     expect(central_user()?->getKey())->toBe($user->id);
 });
 
 it('current_actor() delegates to tenant_user() when disabled', function () {
-    $user = App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $this->actingAs($user);
     expect(current_actor()?->getKey())->toBe($user->id);
 });
@@ -79,32 +86,32 @@ it('tenant_url() returns the same URL as url() when disabled', function () {
 });
 
 it('config tenant_model points at App\\Models\\Tenant', function () {
-    expect(config('tenancy.tenant_model'))->toBe(App\Models\Tenant::class);
+    expect(config('tenancy.tenant_model'))->toBe(Tenant::class);
 });
 
 it('config domain_model points at App\\Models\\Domain', function () {
-    expect(config('tenancy.domain_model'))->toBe(App\Models\Domain::class);
+    expect(config('tenancy.domain_model'))->toBe(Domain::class);
 });
 
 it('User uses the CentralConnection trait', function () {
-    $traits = class_uses_recursive(App\Models\User::class);
-    expect($traits)->toContain(App\Models\Concerns\CentralConnection::class);
+    $traits = class_uses_recursive(User::class);
+    expect($traits)->toContain(CentralConnection::class);
 });
 
 it('User getConnectionName returns null when tenancy is disabled', function () {
     // Trait short-circuits when tenancy is disabled — Eloquent default behavior.
     // Forks copying this template see identical query routing to non-tenancy apps.
-    $model = new App\Models\User;
+    $model = new User;
     expect($model->getConnectionName())->toBeNull();
 });
 
 it('Tenant model extends the package base and implements TenantWithDatabase', function () {
-    expect(is_subclass_of(App\Models\Tenant::class, Stancl\Tenancy\Database\Models\Tenant::class))->toBeTrue();
-    expect(in_array(Stancl\Tenancy\Contracts\TenantWithDatabase::class, class_implements(App\Models\Tenant::class), true))->toBeTrue();
+    expect(is_subclass_of(Tenant::class, Stancl\Tenancy\Database\Models\Tenant::class))->toBeTrue();
+    expect(in_array(TenantWithDatabase::class, class_implements(Tenant::class), true))->toBeTrue();
 });
 
 it('Domain model extends the package base', function () {
-    expect(is_subclass_of(App\Models\Domain::class, Stancl\Tenancy\Database\Models\Domain::class))->toBeTrue();
+    expect(is_subclass_of(Domain::class, Stancl\Tenancy\Database\Models\Domain::class))->toBeTrue();
 });
 
 it('registers the tenancy:enable artisan command', function () {
@@ -126,11 +133,11 @@ it('tenancy:migrate-existing fails with a helpful message when disabled', functi
 it('does not bind ExistingDataMigrator when tenancy is disabled', function () {
     // The binding only registers in AppServiceProvider when tenancy is enabled,
     // keeping the disabled-state DI container clean.
-    expect(app()->bound(App\Tenancy\Contracts\ExistingDataMigrator::class))->toBeFalse();
+    expect(app()->bound(ExistingDataMigrator::class))->toBeFalse();
 });
 
 it('Inertia shared props do not include currentTenant or tenantUser when disabled', function () {
-    $middleware = app(App\Http\Middleware\HandleInertiaRequests::class);
+    $middleware = app(HandleInertiaRequests::class);
     $shared = $middleware->share(request());
 
     expect($shared)->not->toHaveKey('currentTenant');
@@ -140,7 +147,7 @@ it('Inertia shared props do not include currentTenant or tenantUser when disable
 it('runs only the original four migrations', function () {
     // RefreshDatabase is in effect via Pest.php; the migrations table reflects
     // exactly what Laravel scanned at `database/migrations/` (root, no subdirs).
-    $names = \DB::table('migrations')->pluck('migration')->all();
+    $names = DB::table('migrations')->pluck('migration')->all();
 
     expect($names)->toContain('0001_01_01_000000_create_users_table');
     expect($names)->toContain('0001_01_01_000001_create_cache_table');

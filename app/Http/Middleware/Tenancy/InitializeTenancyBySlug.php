@@ -57,7 +57,9 @@ class InitializeTenancyBySlug
         }
 
         // Remove the {tenant} param so controllers don't receive it as an argument.
-        $route?->forgetParameter('tenant');
+        // $route is guaranteed non-null here: a null route would have made $slug
+        // null above and thrown before reaching this line.
+        $route->forgetParameter('tenant');
 
         $this->tenancy->initialize($tenant);
 

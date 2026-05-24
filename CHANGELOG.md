@@ -8,7 +8,12 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 ## v5.0.0 - 05/24/2026
 
-Adds **optional multi-tenancy** via `stancl/tenancy ^3.10`. Off by default — forks that don't set `TENANCY_ENABLED=true` see zero behavior change vs. v4.5.0. Major version bump signals the new model classes + schema additions, not a breaking change to existing behavior.
+Three bundled upgrades, applied as independent chunks (see Migration below): **Laravel 12 → 13**, **Inertia 2 → 3**, and **optional multi-tenancy** via `stancl/tenancy ^3.10`. Tenancy is off by default — forks that don't set `TENANCY_ENABLED=true` see zero tenancy behavior change vs. v4.5.0. The framework/Inertia bumps apply to every fork; the major version signals those library majors plus the new tenancy model classes + schema additions.
+
+### Framework upgrades (chunks 1 & 2 — required for all forks)
+- **Laravel 12 → 13** (`laravel/framework ^13.0`, `laravel/tinker ^3.0`). No app-level breaking-change touchpoints in the template (verified: no `VerifyCsrfToken`, `Inertia::lazy()`, `->upsert()`, queue-event listeners, or published pagination views). PHP floor is 8.3 (template already on 8.4). Cosmetic at deploy: L13 hyphenates cache-prefix/session-cookie names — flush cache, expect one re-login.
+- **Inertia 2 → 3** (`inertiajs/inertia-laravel ^3.0`, `@inertiajs/vue3 ^3.0`). `config/inertia.php` restructured (page settings nested under `pages`, `testing` simplified, `use_script_element_for_initial_page` removed). `resources/views/app.blade.php` head marker `<title inertia>` → `<title data-inertia>`. Axios stays a direct dependency (template uses it for background calls). No `future` block, `router.cancel()`, or renamed-event usage to migrate in the template.
+- **Pint preset bump** (1.27 → 1.29) now enforces `fully_qualified_strict_types` — reformats many files cosmetically. Two Larastan findings fixed (`InertiaDataTableOptions` dead null-coalesce; `InitializeTenancyBySlug` redundant nullsafe).
 
 ### What you get when enabled
 - DB-per-tenant isolation (path-mode by default at `/t/{slug}/...`, subdomain mode one env-flip away).
@@ -31,16 +36,25 @@ Adds **optional multi-tenancy** via `stancl/tenancy ^3.10`. Off by default — f
 - `users` table gains a `role` string column. Fresh installs get it from the updated base migration; existing forks add it via a one-off migration documented in the migration guide.
 
 ### Dependencies
-- Added `stancl/tenancy: ^3.10` (+ transitive `stancl/jobpipeline`, `stancl/virtualcolumn`, `facade/ignition-contracts`).
+- **Bumped (major):** `laravel/framework ^12 → ^13`, `laravel/tinker ^2.9 → ^3.0`, `inertiajs/inertia-laravel ^2 → ^3`, `@inertiajs/vue3 ^2 → ^3`.
+- **Added:** `stancl/tenancy ^3.10` (+ transitive `stancl/jobpipeline`, `stancl/virtualcolumn`, `facade/ignition-contracts`).
+- **Temporary pin:** `soloterm/solo ^0.5 → dev-main` — its tagged releases cap at Laravel 12; `main` supports L13 but isn't tagged yet. Dev-only tool; revert to a stable tag once one ships.
+- **Held back deliberately:** `phpunit` stays `^12` (Pest 4 requires PHPUnit 12 — do **not** bump to 13). `spatie/laravel-sitemap` stays `^7` (7.4 added L13 support — no v8 needed). JS tooling majors (Vite 8, ESLint 10, TypeScript 6, Stylelint 17, lucide 1.0, unplugin-auto-import 21) intentionally **not** taken in this release.
+- **In-range refresh:** all other composer + npm deps updated to latest patch/minor (Horizon, Reverb, Socialite, Cashier, Sentry, Pest, Pint, Vue, Tailwind, TipTap, reka-ui, Vitest, axios, etc.).
 
 ### Migration
 
-**See [`docs/migrations/template-v5.0.0.md`](docs/migrations/template-v5.0.0.md)** for the full file-by-file walkthrough, schema migration, configuration changes, and verification steps. Four tracks:
+**See [`docs/migrations/template-v5.0.0.md`](docs/migrations/template-v5.0.0.md)** — restructured into **three independent chunks**, each pointing at its official upgrade guide:
 
-- **Track A** — fork doesn't want tenancy. ~10 min of mechanical file copying. Scaffolding installed but inert.
-- **Track B** — new project, tenancy on day one. Track A + `php artisan tenancy:enable`.
-- **Track C** — existing project with user data wants tenancy. Track A + `tenancy:enable` + [`docs/guidelines/tenancy-migrating.md`](docs/guidelines/tenancy-migrating.md).
-- **Track D** — fork already has its own tenancy (e.g., Invelo). Track A only; optional alignment later.
+- **Chunk 1 — Dependencies + Laravel 12 → 13** (required). Read https://laravel.com/docs/13.x/upgrade.
+- **Chunk 2 — Inertia 2 → 3** (required). Read https://inertiajs.com/upgrade-guide (v3).
+- **Chunk 3 — Optional multi-tenancy** (opt-in), with four tracks:
+  - **Track A** — fork doesn't want tenancy. ~10 min of mechanical file copying. Scaffolding installed but inert.
+  - **Track B** — new project, tenancy on day one. Track A + `php artisan tenancy:enable`.
+  - **Track C** — existing project with user data wants tenancy. Track A + `tenancy:enable` + [`docs/guidelines/tenancy-migrating.md`](docs/guidelines/tenancy-migrating.md).
+  - **Track D** — fork already has its own tenancy (e.g., Invelo). Track A only; optional alignment later.
+
+Chunks are independent — land and verify each before the next. Bump `template-version.json` only after `pnpm check` is green for every chunk applied.
 
 ## v4.5.0 - 05/20/2026
 

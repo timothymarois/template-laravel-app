@@ -8,6 +8,7 @@ use App\Enums\UserRole;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Force-deletes soft-deleted tenants older than the configured grace window.
@@ -56,7 +57,7 @@ class PurgeDeletedCommand extends Command
         $cutoff = now()->subHours($hours);
         $dryRun = (bool) $this->option('dry-run');
 
-        /** @var \Illuminate\Database\Eloquent\Collection<int, Tenant> $candidates */
+        /** @var Collection<int, Tenant> $candidates */
         $candidates = Tenant::onlyTrashed()
             ->where('deleted_at', '<=', $cutoff)
             ->get();

@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+use App\Tenancy\Contracts\ExistingDataMigrator;
+use App\Tenancy\NullExistingDataMigrator;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +30,8 @@ it('refuses to run with NullExistingDataMigrator and points at the migration doc
     // their own migrator.
     config(['tenancy.enabled' => true]);
     app()->bind(
-        App\Tenancy\Contracts\ExistingDataMigrator::class,
-        App\Tenancy\NullExistingDataMigrator::class,
+        ExistingDataMigrator::class,
+        NullExistingDataMigrator::class,
     );
 
     $this->artisan('tenancy:migrate-existing')
@@ -44,7 +46,7 @@ it('errors when a concrete migrator is bound but no fork override exists', funct
     // rather than do nothing silently.
     config(['tenancy.enabled' => true]);
 
-    $stub = new class implements App\Tenancy\Contracts\ExistingDataMigrator
+    $stub = new class implements ExistingDataMigrator
     {
         public function tablesToMoveToTenant(): array
         {
@@ -61,7 +63,7 @@ it('errors when a concrete migrator is bound but no fork override exists', funct
             return fn () => [];
         }
     };
-    app()->instance(App\Tenancy\Contracts\ExistingDataMigrator::class, $stub);
+    app()->instance(ExistingDataMigrator::class, $stub);
 
     $this->artisan('tenancy:migrate-existing')
         ->expectsOutputToContain('iteration loop is fork-implemented')

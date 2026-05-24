@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Tenancy\Contracts\ExistingDataMigrator;
+use App\Tenancy\NullExistingDataMigrator;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -24,8 +26,8 @@ class AppServiceProvider extends ServiceProvider
         // own concrete implementation. See docs/guidelines/tenancy-migrating.md.
         if (config('tenancy.enabled')) {
             $this->app->bind(
-                \App\Tenancy\Contracts\ExistingDataMigrator::class,
-                \App\Tenancy\NullExistingDataMigrator::class,
+                ExistingDataMigrator::class,
+                NullExistingDataMigrator::class,
             );
         }
     }

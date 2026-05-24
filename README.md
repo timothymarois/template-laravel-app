@@ -13,7 +13,7 @@ Production-grade applications require more than just code—they need authentica
 
 **Core Stack**
 
-- ✅ Laravel 12 + Vue 3 + Inertia 2 — SPA experience without API complexity
+- ✅ Laravel 13 + Vue 3 + Inertia 3 — SPA experience without API complexity
 - ✅ Tailwind 4 + shadcn-vue — beautiful, accessible components you own and customize
 - ✅ 50+ UI components — production-grade, fully customizable, ready out of the box
 

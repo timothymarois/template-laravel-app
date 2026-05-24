@@ -6,31 +6,28 @@ return [
 
     'ssr' => [
         'enabled' => (bool) env('INERTIA_SSR_ENABLED', true),
+        'runtime' => env('INERTIA_SSR_RUNTIME', 'node'),
+        'ensure_runtime_exists' => (bool) env('INERTIA_SSR_ENSURE_RUNTIME_EXISTS', false),
         'url' => env('INERTIA_SSR_URL', 'http://'.env('INERTIA_SSR_HOST', '127.0.0.1').':'.env('INERTIA_SSR_PORT', '13714')),
         'ensure_bundle_exists' => (bool) env('INERTIA_SSR_ENSURE_BUNDLE_EXISTS', true),
+        'throw_on_error' => (bool) env('INERTIA_SSR_THROW_ON_ERROR', false),
     ],
 
-    'ensure_pages_exist' => false,
-
-    'page_paths' => [
-        resource_path('js/pages'),
-    ],
-
-    'page_extensions' => [
-        'vue',
-    ],
-
-    'use_script_element_for_initial_page' => (bool) env('INERTIA_USE_SCRIPT_ELEMENT_FOR_INITIAL_PAGE', false),
-
-    'testing' => [
-        'ensure_pages_exist' => true,
-        'page_paths' => [
+    'pages' => [
+        'ensure_pages_exist' => false,
+        'paths' => [
             resource_path('js/pages'),
         ],
-        'page_extensions' => [
+        'extensions' => [
             'vue',
         ],
     ],
+
+    'testing' => [
+        'ensure_pages_exist' => true,
+    ],
+
+    'expose_shared_prop_keys' => true,
 
     'history' => [
         'encrypt' => (bool) env('INERTIA_ENCRYPT_HISTORY', false),

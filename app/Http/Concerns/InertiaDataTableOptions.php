@@ -7,6 +7,12 @@ namespace App\Http\Concerns;
 use App\Support\Caster;
 use Illuminate\Http\Request;
 
+/**
+ * Consuming controllers provide these properties:
+ *   - array $filterCasts    (required) — map of filter key => cast type for Caster.
+ *   - array $indexDefaults  (optional) — default search/filters/perPage/sort values.
+ *   - array $sessionStoreKeys (optional) — request keys persisted to the session.
+ */
 trait InertiaDataTableOptions
 {
     /**
@@ -43,11 +49,9 @@ trait InertiaDataTableOptions
         $merged['sortOrder'] = (int) ($merged['sortOrder'] ?? $defaults['sortOrder']);
         $merged['perPage'] = (int) ($merged['perPage'] ?? $defaults['perPage']);
 
-        /** @var array<string, string>|null $filterCasts */
-        $filterCasts = $this->filterCasts ?? null;
-        if ($filterCasts !== null) {
-            $merged['filters'] = Caster::cast($merged['filters'], $filterCasts);
-        }
+        /** @var array<string, string> $filterCasts */
+        $filterCasts = $this->filterCasts;
+        $merged['filters'] = Caster::cast($merged['filters'], $filterCasts);
 
         return $merged;
     }

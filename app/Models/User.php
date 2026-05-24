@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -82,7 +83,7 @@ class User extends Authenticatable
      */
     public function isOnline(): bool
     {
-        /** @var \Illuminate\Support\Carbon|null $lastSeen */
+        /** @var Carbon|null $lastSeen */
         $lastSeen = $this->last_seen_at;
 
         return $lastSeen !== null && $lastSeen->greaterThan(now()->subMinutes(5));

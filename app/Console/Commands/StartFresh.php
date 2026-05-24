@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Horizon\HorizonServiceProvider;
 
 class StartFresh extends Command
 {
@@ -43,7 +44,7 @@ class StartFresh extends Command
         Cache::flush();
 
         // Only call horizon:clear if Horizon is installed
-        if (class_exists(\Laravel\Horizon\HorizonServiceProvider::class)) {
+        if (class_exists(HorizonServiceProvider::class)) {
             Artisan::call('horizon:clear');
         }
 

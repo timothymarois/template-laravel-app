@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title inertia>{{ config('app.name', 'App') }}</title>
+        <title data-inertia>{{ config('app.name', 'App') }}</title>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg">
         <script>
             // Apply saved or system color scheme synchronously to avoid FOUC.

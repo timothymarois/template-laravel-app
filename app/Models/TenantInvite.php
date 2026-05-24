@@ -8,6 +8,7 @@ use App\Enums\TenantRole;
 use App\Models\Concerns\CentralConnection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * A pending invitation for a user to join a tenant. Lives in the central DB
@@ -27,8 +28,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property TenantRole $role
  * @property string $token
  * @property int|null $invited_by_user_id
- * @property \Illuminate\Support\Carbon $expires_at
- * @property \Illuminate\Support\Carbon|null $accepted_at
+ * @property Carbon $expires_at
+ * @property Carbon|null $accepted_at
  */
 class TenantInvite extends Model
 {

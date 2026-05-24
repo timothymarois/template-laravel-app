@@ -2,13 +2,17 @@
 
 declare(strict_types=1);
 
+use App\Enums\UserRole;
 use App\Models\Tenant;
+use App\Models\User;
 use App\Tenancy\Listeners\ConditionalDeleteTenantDatabase;
 use App\Tenancy\Listeners\MarkTenantReady;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Stancl\Tenancy\Events\TenantCreated;
 use Stancl\Tenancy\Events\TenantDeleted;
+use Stancl\Tenancy\Exceptions\DomainOccupiedByOtherTenantException;
 use Tests\CentralBaseTestCase;
 
 /*
@@ -106,7 +110,7 @@ it('soft delete does NOT drop the per-tenant DB (DB stays intact for restore)', 
     // The listener early-returns when trashed && !force-deleting.
     // We assert no exception is thrown (the DeleteDatabase job would error
     // because the per-tenant SQLite file doesn't exist).
-    expect(fn () => (new ConditionalDeleteTenantDatabase)->handle($event))->not->toThrow(\Throwable::class);
+    expect(fn () => (new ConditionalDeleteTenantDatabase)->handle($event))->not->toThrow(Throwable::class);
 });
 
 it('hard delete listener invokes DeleteDatabase when tenant is not soft-trashed', function () {
@@ -148,7 +152,7 @@ it('tenancy:purge-deleted force-deletes tenants past the grace window', function
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Test']);
     $tenant->delete();
     // Backdate deleted_at via raw DB update (VirtualColumn intercepts saveQuietly).
-    \DB::table('tenants')->where('id', $tenant->id)
+    DB::table('tenants')->where('id', $tenant->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72])
@@ -165,7 +169,7 @@ it('tenancy:purge-deleted force-deletes tenants past the grace window', function
 it('tenancy:purge-deleted --dry-run reports without deleting', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Test']);
     $tenant->delete();
-    \DB::table('tenants')->where('id', $tenant->id)
+    DB::table('tenants')->where('id', $tenant->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72, '--dry-run' => true])
@@ -182,88 +186,88 @@ it('tenancy:purge-deleted --dry-run reports without deleting', function () {
 
 it('removes a user left with zero tenants after their only tenant is purged', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Solo']);
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $tenant->users()->attach($user->id, ['role' => 'owner']);
 
     $tenant->delete();
-    \DB::table('tenants')->where('id', $tenant->id)
+    DB::table('tenants')->where('id', $tenant->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72])->assertSuccessful();
 
-    expect(\App\Models\User::find($user->id))->toBeNull();
+    expect(User::find($user->id))->toBeNull();
 });
 
 it('keeps a user who still belongs to another tenant after purge', function () {
     $purged = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Purged']);
     $kept = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Kept']);
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $purged->users()->attach($user->id, ['role' => 'admin']);
     $kept->users()->attach($user->id, ['role' => 'owner']);
 
     $purged->delete();
-    \DB::table('tenants')->where('id', $purged->id)
+    DB::table('tenants')->where('id', $purged->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72])->assertSuccessful();
 
-    expect(\App\Models\User::find($user->id))->not->toBeNull();
+    expect(User::find($user->id))->not->toBeNull();
 });
 
 it('exempts SuperAdmins from the orphan-user sweep', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'AdminOwned']);
-    $admin = \App\Models\User::factory()->create(['role' => \App\Enums\UserRole::SuperAdmin]);
+    $admin = User::factory()->create(['role' => UserRole::SuperAdmin]);
     $tenant->users()->attach($admin->id, ['role' => 'owner']);
 
     $tenant->delete();
-    \DB::table('tenants')->where('id', $tenant->id)
+    DB::table('tenants')->where('id', $tenant->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72])->assertSuccessful();
 
-    expect(\App\Models\User::find($admin->id))->not->toBeNull();
+    expect(User::find($admin->id))->not->toBeNull();
 });
 
 it('does NOT touch users who were never members of the purged tenants', function () {
     $purged = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Purged']);
-    $owner = \App\Models\User::factory()->create();
+    $owner = User::factory()->create();
     $purged->users()->attach($owner->id, ['role' => 'owner']);
     // Bystander: brand-new user with no tenant memberships at all.
-    $bystander = \App\Models\User::factory()->create();
+    $bystander = User::factory()->create();
 
     $purged->delete();
-    \DB::table('tenants')->where('id', $purged->id)
+    DB::table('tenants')->where('id', $purged->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72])->assertSuccessful();
 
     // Owner is removed (was a member, now has zero tenants).
-    expect(\App\Models\User::find($owner->id))->toBeNull();
+    expect(User::find($owner->id))->toBeNull();
     // Bystander is preserved (never a member of the purged tenant).
-    expect(\App\Models\User::find($bystander->id))->not->toBeNull();
+    expect(User::find($bystander->id))->not->toBeNull();
 });
 
 it('--keep-orphan-users skips the orphan sweep', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Solo']);
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $tenant->users()->attach($user->id, ['role' => 'owner']);
 
     $tenant->delete();
-    \DB::table('tenants')->where('id', $tenant->id)
+    DB::table('tenants')->where('id', $tenant->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72, '--keep-orphan-users' => true])->assertSuccessful();
 
-    expect(\App\Models\User::find($user->id))->not->toBeNull();
+    expect(User::find($user->id))->not->toBeNull();
 });
 
 it('--dry-run does not remove orphan users', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Solo']);
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $tenant->users()->attach($user->id, ['role' => 'owner']);
 
     $tenant->delete();
-    \DB::table('tenants')->where('id', $tenant->id)
+    DB::table('tenants')->where('id', $tenant->id)
         ->update(['deleted_at' => now()->subHours(100)]);
 
     $this->artisan('tenancy:purge-deleted', ['--hours' => 72, '--dry-run' => true])->assertSuccessful();
@@ -271,7 +275,7 @@ it('--dry-run does not remove orphan users', function () {
     // Tenant still present (dry-run skipped destruction)
     expect(Tenant::withTrashed()->find($tenant->id))->not->toBeNull();
     // User still present
-    expect(\App\Models\User::find($user->id))->not->toBeNull();
+    expect(User::find($user->id))->not->toBeNull();
 });
 
 // ============================================================================
@@ -280,17 +284,17 @@ it('--dry-run does not remove orphan users', function () {
 
 it('cannot insert two pivot rows for the same (tenant_id, user_id)', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid(), 'name' => 'Test']);
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $tenant->users()->attach($user->id, ['role' => 'member']);
 
     // The unique index on (tenant_id, user_id) prevents duplicates at the DB layer.
-    expect(fn () => \DB::table('tenant_user')->insert([
+    expect(fn () => DB::table('tenant_user')->insert([
         'tenant_id' => $tenant->id,
         'user_id' => $user->id,
         'role' => 'admin',
         'created_at' => now(),
         'updated_at' => now(),
-    ]))->toThrow(\Illuminate\Database\QueryException::class);
+    ]))->toThrow(QueryException::class);
 });
 
 it('cannot create two domains with the same slug', function () {
@@ -302,5 +306,5 @@ it('cannot create two domains with the same slug', function () {
     // The package wraps the DB-level UNIQUE violation into a friendlier
     // DomainOccupiedByOtherTenantException — both signal the same thing.
     expect(fn () => $tenantB->domains()->create(['domain' => 'unique-slug']))
-        ->toThrow(\Stancl\Tenancy\Exceptions\DomainOccupiedByOtherTenantException::class);
+        ->toThrow(DomainOccupiedByOtherTenantException::class);
 });

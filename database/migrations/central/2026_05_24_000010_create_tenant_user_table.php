@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\TenantRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->id();
             $table->string('tenant_id');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('role')->default(\App\Enums\TenantRole::Member->value); // see App\Enums\TenantRole
+            $table->string('role')->default(TenantRole::Member->value); // see App\Enums\TenantRole
             $table->timestamp('joined_at')->nullable();
             $table->timestamps();
 

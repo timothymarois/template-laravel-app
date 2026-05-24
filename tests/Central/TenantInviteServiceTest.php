@@ -270,7 +270,7 @@ it('accept() is idempotent w.r.t. an existing pivot row (no duplicate)', functio
     $this->service->accept($invite, $user);
 
     // No duplicate row + the invite is still marked accepted.
-    expect(\DB::table('tenant_user')->where('tenant_id', $tenant->id)->where('user_id', $user->id)->count())->toBe(1);
+    expect(DB::table('tenant_user')->where('tenant_id', $tenant->id)->where('user_id', $user->id)->count())->toBe(1);
     expect($invite->fresh()->accepted_at)->not->toBeNull();
 });
 
@@ -293,7 +293,7 @@ it('decline() does not affect the tenant_user pivot', function () {
 
     $this->service->decline($invite);
 
-    expect(\DB::table('tenant_user')->where('tenant_id', $tenant->id)->count())->toBe(0);
+    expect(DB::table('tenant_user')->where('tenant_id', $tenant->id)->count())->toBe(0);
 });
 
 // ============================================================================

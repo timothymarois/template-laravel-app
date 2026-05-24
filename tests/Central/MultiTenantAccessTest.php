@@ -125,11 +125,11 @@ it('cascades pivot rows when a tenant is hard-deleted', function () {
     $tenant = Tenant::create(['id' => (string) Str::uuid()]);
     $tenant->users()->attach($user->id, ['role' => TenantRole::Owner->value]);
 
-    expect(\DB::table('tenant_user')->where('tenant_id', $tenant->id)->count())->toBe(1);
+    expect(DB::table('tenant_user')->where('tenant_id', $tenant->id)->count())->toBe(1);
 
     $tenant->forceDelete();
 
-    expect(\DB::table('tenant_user')->where('tenant_id', $tenant->id)->count())->toBe(0);
+    expect(DB::table('tenant_user')->where('tenant_id', $tenant->id)->count())->toBe(0);
 });
 
 it('cascades pivot rows when a user is deleted', function () {
@@ -139,11 +139,11 @@ it('cascades pivot rows when a user is deleted', function () {
     $tenantA->users()->attach($user->id, ['role' => TenantRole::Owner->value]);
     $tenantB->users()->attach($user->id, ['role' => TenantRole::Member->value]);
 
-    expect(\DB::table('tenant_user')->where('user_id', $user->id)->count())->toBe(2);
+    expect(DB::table('tenant_user')->where('user_id', $user->id)->count())->toBe(2);
 
     $user->delete();
 
-    expect(\DB::table('tenant_user')->where('user_id', $user->id)->count())->toBe(0);
+    expect(DB::table('tenant_user')->where('user_id', $user->id)->count())->toBe(0);
 });
 
 it('enforces the unique (tenant_id, user_id) constraint', function () {
@@ -152,7 +152,7 @@ it('enforces the unique (tenant_id, user_id) constraint', function () {
 
     $tenant->users()->attach($user->id, ['role' => TenantRole::Owner->value]);
 
-    expect(fn () => \DB::table('tenant_user')->insert([
+    expect(fn () => DB::table('tenant_user')->insert([
         'tenant_id' => $tenant->id,
         'user_id' => $user->id,
         'role' => TenantRole::Admin->value,

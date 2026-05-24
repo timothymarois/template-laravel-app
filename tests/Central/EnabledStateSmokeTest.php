@@ -2,7 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Models\Tenant;
+use App\Models\User;
+use App\Tenancy\Contracts\ExistingDataMigrator;
+use App\Tenancy\NullExistingDataMigrator;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Events\TenantCreated;
 use Stancl\Tenancy\Events\TenantDeleted;
 use Tests\CentralBaseTestCase;
@@ -30,7 +36,7 @@ it('has tenancy enabled when running under the Central suite', function () {
 });
 
 it('User getConnectionName returns the central connection when enabled', function () {
-    $user = new App\Models\User;
+    $user = new User;
     expect($user->getConnectionName())->toBe(config('tenancy.database.central_connection'));
 });
 
@@ -43,14 +49,14 @@ it('binds the TenantDeleted event pipeline', function () {
 });
 
 it('binds ExistingDataMigrator to NullExistingDataMigrator by default', function () {
-    expect(app()->bound(App\Tenancy\Contracts\ExistingDataMigrator::class))->toBeTrue();
-    expect(app(App\Tenancy\Contracts\ExistingDataMigrator::class))
-        ->toBeInstanceOf(App\Tenancy\NullExistingDataMigrator::class);
+    expect(app()->bound(ExistingDataMigrator::class))->toBeTrue();
+    expect(app(ExistingDataMigrator::class))
+        ->toBeInstanceOf(NullExistingDataMigrator::class);
 });
 
 it('registers the path-mode tenant route group', function () {
     // routes/tenant.php is loaded only when tenancy is enabled.
-    $routes = collect(\Illuminate\Support\Facades\Route::getRoutes()->getRoutes());
+    $routes = collect(Route::getRoutes()->getRoutes());
     $hasTenantPrefixedRoute = $routes->contains(
         fn ($route) => str_starts_with($route->uri(), 't/{tenant}'),
     );
@@ -58,18 +64,18 @@ it('registers the path-mode tenant route group', function () {
 });
 
 it('User has a tenants() BelongsToMany relationship', function () {
-    $user = new App\Models\User;
+    $user = new User;
     expect($user->tenants())
-        ->toBeInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class);
+        ->toBeInstanceOf(BelongsToMany::class);
     expect($user->tenants()->getTable())->toBe('tenant_user');
     expect($user->tenants()->getRelatedPivotKeyName())->toBe('tenant_id');
     expect($user->tenants()->getForeignPivotKeyName())->toBe('user_id');
 });
 
 it('Tenant has a users() BelongsToMany relationship', function () {
-    $tenant = new App\Models\Tenant;
+    $tenant = new Tenant;
     expect($tenant->users())
-        ->toBeInstanceOf(\Illuminate\Database\Eloquent\Relations\BelongsToMany::class);
+        ->toBeInstanceOf(BelongsToMany::class);
     expect($tenant->users()->getTable())->toBe('tenant_user');
     expect($tenant->users()->getRelatedPivotKeyName())->toBe('user_id');
     expect($tenant->users()->getForeignPivotKeyName())->toBe('tenant_id');

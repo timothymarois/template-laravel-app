@@ -1,8 +1,136 @@
 # Migrating a fork to template v5.0.0
 
-This guide walks an agent (or human) through applying v5.0.0 to a fork currently at v4.5.0. Every step has a verification command — do not bump `template-version.json` until every checkbox is verified and `pnpm check` is green.
+v5.0.0 bundles **three independent upgrades**. Apply them as ordered, self-contained chunks — each has its own official upgrade guide to read first, its own steps, and its own verification gate. Do not bump `template-version.json` until every chunk you apply is green under `pnpm check`.
 
-## Overview
+> **For agents:** read the linked official upgrade guide for a chunk **before** touching files. This template's notes tell you what *we* changed; your fork may have added code the official guide covers that we don't. The official guide is the source of truth for anything beyond what's listed here.
+
+## Migration chunks
+
+| # | Chunk | What changes | Read this first | Required? |
+|---|-------|--------------|-----------------|-----------|
+| **1** | [Dependencies + Laravel 12 → 13](#chunk-1-dependency-refresh-laravel-12-13) | composer/npm refresh; `laravel/framework ^13`, `laravel/tinker ^3` | **https://laravel.com/docs/13.x/upgrade** | Yes |
+| **2** | [Inertia 2 → 3](#chunk-2-inertia-2-3) | `inertiajs/inertia-laravel ^3` + `@inertiajs/vue3 ^3`; config + blade restructure | **https://inertiajs.com/upgrade-guide** (select v3) | Yes |
+| **3** | [Optional multi-tenancy](#chunk-3-optional-multi-tenancy) | `stancl/tenancy` scaffolding, inert by default | this guide (below) + `docs/guidelines/tenancy-using.md` | Optional |
+
+Chunks 1 and 2 are framework/library upgrades every fork must take to stay on v5. Chunk 3 is opt-in — a fork that doesn't want tenancy still applies its file copies (Track A) but never enables it. Chunks are independent: you can land 1, verify, commit; land 2, verify, commit; then decide on 3.
+
+## Global prerequisites
+
+- Fork's `template-version.json` is at `4.5.0` (apply earlier migrations first).
+- `pnpm check` is green on the baseline before you start.
+- PHP **8.4+** (Laravel 13 floor is 8.3; this template targets 8.4).
+- You have read-write access to the fork repo and can run `composer`, `pnpm`, `php artisan`.
+
+---
+
+## Chunk 1 — Dependency refresh + Laravel 12 → 13
+
+**Read first:** the official [Laravel 12 → 13 upgrade guide](https://laravel.com/docs/13.x/upgrade).
+
+This chunk refreshes every in-range composer/npm dependency to its latest patch/minor, then bumps the framework from 12 to 13. For **this template** the L13 jump is mechanical — we grepped every documented L13 breaking change and found **zero touchpoints**: no `VerifyCsrfToken`/`PreventRequestForgery` references, no `Inertia::lazy()`, no `->upsert()`, no `JobAttempted`/`QueueBusy` listeners, no published `pagination::` views. **Your fork may differ** — the official guide lists everything; check it against your own code (especially custom cache-serialized classes, queue event listeners, and any `upsert()` calls).
+
+### 1.1 — Bump composer constraints
+
+- [ ] In `composer.json` `require`, set `"laravel/framework": "^13.0"`.
+- [ ] In `composer.json` `require`, set `"laravel/tinker": "^3.0"` (L13 requires Tinker 3).
+- [ ] **`soloterm/solo`** (dev-only terminal multiplexer): its latest tagged release (`v0.5.0`) caps at Laravel 12. Its `main` branch supports L13 but is not yet tagged, so set `"soloterm/solo": "dev-main"` in `require-dev` **as a temporary pin**. Revert to a stable `^0.x` constraint once soloterm tags an L13 release. (Solo gracefully no-ops when absent — `config/solo.php` guards on `class_exists`, so a fork that prefers to simply drop solo until it tags can remove it instead.)
+- [ ] Leave everything else alone — `spatie/laravel-sitemap` (resolves to `^7.4`, which added L13 support — **no v8 major needed**), `phpunit` (**stays `^12`** — Pest 4 requires PHPUnit 12; do **not** bump to 13), `pest ^4`, etc. all update in-range.
+
+### 1.2 — Resolve and reformat
+
+- [ ] Update the lock file, allowing transitive upgrades:
+  ```bash
+  composer update -W
+  ```
+- [ ] **Pint preset shifted** (1.27 → 1.29 now enforces `fully_qualified_strict_types` broadly). Re-format the whole tree:
+  ```bash
+  ./vendor/bin/pint
+  ```
+  This touches many pre-existing files cosmetically — expected, not a regression. Commit it as a formatting pass.
+- [ ] Refresh npm dev tooling in-range (Vitest, ESLint, etc. — no majors here):
+  ```bash
+  pnpm update
+  ```
+
+### 1.3 — Fix Larastan findings in existing code
+
+Larastan got stricter with the framework bump. One pre-existing template file needs editing (your fork may hit others in its own code — fix the underlying cause, never baseline/ignore them):
+
+- [ ] `app/Http/Concerns/InertiaDataTableOptions.php` — `$this->filterCasts ?? null` is dead (`filterCasts` is a non-nullable `array` on the consuming controller). Drop the `?? null` and the now-always-true `if`; cast unconditionally. The template also adds a class-level docblock documenting the consumer-provided properties (`$filterCasts` required, `$indexDefaults`/`$sessionStoreKeys` optional) — copy it if you want the same discoverability; it's inert otherwise.
+
+> The other finding the template fixed — `nullsafe.neverNull` on `$route?->forgetParameter('tenant')` in `app/Http/Middleware/Tenancy/InitializeTenancyBySlug.php` — lives in a **new** tenancy file you only copy in Chunk 3, so it's already fixed in the version you'll copy. No action here.
+
+### 1.4 — Verify chunk 1
+
+- [ ] `pnpm check:php` is green (Pint, Larastan, Pest).
+- [ ] `php artisan --version` prints `Laravel Framework 13.x`.
+- [ ] Optional cosmetic note for deploy: L13 hyphenates cache-prefix and session-cookie names. Flush cache and expect users to re-login once after deploy. No code change required.
+
+---
+
+## Chunk 2 — Inertia 2 → 3
+
+**Read first:** the official [Inertia.js upgrade guide](https://inertiajs.com/upgrade-guide) (select **v3**). It covers both the Laravel server adapter and the Vue client adapter.
+
+Inertia 3 is a coordinated server + client major. v3 requires Laravel 11+ and PHP 8.2+ (satisfied after chunk 1). For **this template** the surface is small and contained; the steps below are exactly what we changed.
+
+### 2.1 — Bump the packages
+
+- [ ] `composer.json` `require`: set `"inertiajs/inertia-laravel": "^3.0"`.
+- [ ] `package.json` `devDependencies`: set `"@inertiajs/vue3": "^3.0.0"`.
+- [ ] Resolve:
+  ```bash
+  composer update -W
+  pnpm install
+  ```
+
+### 2.2 — Restructure `config/inertia.php`
+
+v3 reshapes the config. Easiest path: republish the stock v3 config and re-apply your customizations.
+```bash
+php artisan vendor:publish --provider="Inertia\\ServiceProvider" --force
+```
+Then reconcile against the template's `config/inertia.php`. Key changes from v2:
+
+- [ ] `ensure_pages_exist`, `page_paths`, `page_extensions` move **under a new `pages` key** (as `ensure_pages_exist`, `paths`, `extensions`).
+- [ ] `testing` is simplified to just `ensure_pages_exist`.
+- [ ] **Remove `use_script_element_for_initial_page`** — gone in v3 (initial page data always ships via a `<script type="application/json">` element now).
+- [ ] New keys you can keep at defaults: `ssr.runtime`, `ssr.ensure_runtime_exists`, `ssr.throw_on_error`, `expose_shared_prop_keys`.
+- [ ] Keep the template's customizations: `declare(strict_types=1)`, the `INERTIA_SSR_HOST`/`INERTIA_SSR_PORT`-composed `ssr.url`, vue-only `pages.extensions`, and `history.encrypt`.
+- [ ] If your `.env`/`.env.example` set `INERTIA_USE_SCRIPT_ELEMENT_FOR_INITIAL_PAGE`, delete that key (no longer read).
+
+### 2.3 — Fix the blade head + clear caches
+
+- [ ] `resources/views/app.blade.php`: the head element marker attribute changed. Rename `<title inertia>` → `<title data-inertia>`. (Verified against the installed v3 core: it queries `title:not([data-inertia])`.) Vue `<Head>` components need no change — the library manages their attributes internally.
+- [ ] Clear compiled views + config (the `@inertia` directive output and the config both changed):
+  ```bash
+  php artisan view:clear && php artisan config:clear
+  ```
+
+### 2.4 — Check the v3 client breaking changes against your fork
+
+The template uses **none** of the following, so we changed nothing — but **grep your fork** and migrate any hits (see the official guide for each):
+
+- [ ] `router.cancel()` → `router.cancelAll()`.
+- [ ] Global events renamed: `invalid` → `httpException`, `exception` → `networkError`.
+- [ ] `hideProgress()` / `revealProgress()` named exports → `progress.hide()` / `progress.reveal()`.
+- [ ] Remove any `future: { ... }` block from `createInertiaApp` (the options are always-on in v3).
+- [ ] Axios is no longer bundled by Inertia core. The template imports `axios` directly for background calls (it stays a dependency) — if your fork relied on Inertia's internal axios instance/interceptors, wire your own.
+- [ ] `useForm` now resets `processing`/`progress` in `onFinish` (slightly longer processing window). Behavioral, not breaking.
+
+### 2.5 — Verify chunk 2
+
+- [ ] `pnpm check:js` is green (ESLint, Stylelint, Vitest).
+- [ ] `pnpm build && pnpm exec vite build --ssr` both succeed — the SSR build is the real Inertia 3 integration test.
+- [ ] Inertia feature tests (`assertInertia`) pass under `pnpm check:php`.
+
+---
+
+## Chunk 3 — Optional multi-tenancy
+
+> Chunk 3 is opt-in. A fork that doesn't want tenancy still applies the file copies below (Track A) so it stays structurally aligned with the template, but never runs `tenancy:enable`. Tracks B/C/D are only for forks adopting tenancy. See the [Track summary](#track-summary) at the end.
+
+### 3.0 — Tenancy overview
 
 v5.0.0 adds **optional multi-tenancy scaffolding** via `stancl/tenancy ^3.10`. The scaffolding is shipped but **inert by default** — a fork that pulls v5.0.0 and changes nothing in `.env` sees zero runtime behavior change. Enabling tenancy is a deliberate per-fork action (`php artisan tenancy:enable`), not a side-effect of this upgrade.
 
@@ -42,14 +170,13 @@ v5.0.0 adds **optional multi-tenancy scaffolding** via `stancl/tenancy ^3.10`. T
 - `database/migrations/0001_01_01_000000_create_users_table.php` — gains a `role` string column on the canonical migration. Existing forks must add the column via a one-off migration (see Group D.5) — running `migrate:fresh` against the upgraded fork would re-create from the new base, but most production forks won't `migrate:fresh`.
 - `app/Models/User.php`, `app/Http/Middleware/HandleInertiaRequests.php`, `app/Providers/AppServiceProvider.php`, `bootstrap/providers.php`, `database/factories/UserFactory.php`, `phpunit.xml`, `.env.example`, `composer.json` — each gains additions (no removals).
 
-## Prerequisites
+### 3.1 — Tenancy prerequisites
 
-- Fork's `template-version.json` is currently at `4.5.0` (or earlier — apply prior migrations first).
-- Tests pass on baseline: `pnpm check` is green.
+- Chunks 1 and 2 are applied and green (fork is on Laravel 13 / Inertia 3).
+- `pnpm check` is green on the post-chunk-2 baseline.
 - You have read-write access to the fork repo.
-- Fork is on Laravel 12+ / PHP 8.4+ (`composer.json` requires Laravel `^12.0`).
 
-## Apply order
+### 3.2 — Tenancy apply order
 
 Work top-down. Run `pnpm check:php` after each group. Bump `template-version.json` only after the final verification passes.
 
@@ -185,7 +312,7 @@ ls app/helpers.php app/Models/{Tenant,Domain,TenantInvite}.php app/Models/Concer
   ```bash
   grep -n "CentralConnection\|tenants()\|'role'\|UserRole" app/Models/User.php
   ```
-  → must show at least 5 matches (import + use line + fillable entry + casts entry + relationship method + import of UserRole).
+  → must show at least 6 matches (import + use line + fillable entry + casts entry + relationship method + import of UserRole).
 
   ```bash
   php artisan tinker --execute='echo (new App\Models\User)->getConnectionName() === null ? "OK" : "FAIL";'
@@ -325,6 +452,7 @@ v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_tabl
   TENANCY_ENABLED=false
   TENANCY_IDENTIFICATION=path
   TENANCY_CENTRAL_DOMAINS=
+  TENANCY_PURGE_DELETED_AFTER_HOURS=72
 
   DB_CENTRAL_CONNECTION=pgsql_central
   DB_CENTRAL_HOST=
@@ -337,7 +465,7 @@ v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_tabl
   ```bash
   grep -c '^TENANCY_\|^DB_CENTRAL_' .env.example
   ```
-  → must report `9` (3 TENANCY_* + 6 DB_CENTRAL_*).
+  → must report `10` (4 TENANCY_* + 6 DB_CENTRAL_*).
 
 ### Group H — Modify `config/database.php`
 
@@ -426,7 +554,7 @@ v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_tabl
 
 ## Failure modes & recovery
 
-- **`composer update` reports conflicts.** Fork is likely on Laravel < 12 (the package's v3.9+ requires Laravel 10+; we target 12+). Upgrade Laravel first.
+- **`composer update` reports conflicts.** Apply chunk 1 first — `stancl/tenancy ^3.10` and the rest of the v5 stack assume Laravel 13. A fork still on Laravel 12 should complete chunks 1 and 2 before attempting chunk 3.
 - **`pnpm check` fails on Pint.** Run `./vendor/bin/pint` to auto-fix; re-run.
 - **`pnpm check` fails on phpstan.** Most common cause is missing return types or strict-types declaration on the copied files. Verify each new file has `declare(strict_types=1);` and every method has a return type.
 - **DisabledStateTest fails with "tenancy.enabled is not falsy".** Check phpunit.xml has `<env name="TENANCY_ENABLED" value="false" force="true"/>`; the `force="true"` attribute is required.
@@ -437,7 +565,9 @@ v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_tabl
 
 ## You're done
 
-Tenancy is installed but disabled. Nothing else changes in the fork. If you want to enable tenancy, see [`docs/guidelines/tenancy-using.md`](../guidelines/tenancy-using.md). If you're adopting tenancy on an existing app with user data, see [`docs/guidelines/tenancy-migrating.md`](../guidelines/tenancy-migrating.md).
+With chunks 1 and 2 applied, the fork is on **Laravel 13 + Inertia 3** with all dependencies refreshed. With chunk 3 applied (Track A), tenancy scaffolding is installed but disabled — nothing else changes in the fork. If you want to enable tenancy, see [`docs/guidelines/tenancy-using.md`](../guidelines/tenancy-using.md). If you're adopting tenancy on an existing app with user data, see [`docs/guidelines/tenancy-migrating.md`](../guidelines/tenancy-migrating.md).
+
+Bump `template-version.json` to `5.0.0` only after `pnpm check` is green for every chunk you applied.
 
 ## Track summary
 

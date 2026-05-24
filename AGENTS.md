@@ -21,7 +21,7 @@ This document defines the standards and contribution rules for all agents (human
 
 ### Backend
 
-* Laravel 12+ (PHP 8.4+)
+* Laravel 13+ (PHP 8.4+)
 * Redis (queue + cache via Horizon)
 * Inertia server adapter
 
