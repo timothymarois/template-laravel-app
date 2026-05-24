@@ -107,14 +107,6 @@ it('Domain model extends the package base', function () {
     expect(is_subclass_of(App\Models\Domain::class, Stancl\Tenancy\Database\Models\Domain::class))->toBeTrue();
 });
 
-it('Tenant\\User model exists and does not pin a connection', function () {
-    expect(class_exists(App\Models\Tenant\User::class))->toBeTrue();
-    $model = new App\Models\Tenant\User;
-    // Inherits the default connection; gets swapped to per-tenant DB by the
-    // DatabaseTenancyBootstrapper once tenancy is initialized.
-    expect($model->getConnectionName())->toBeNull();
-});
-
 it('registers the tenancy:enable artisan command', function () {
     $this->artisan('tenancy:enable', ['--help' => true])->assertSuccessful();
 });

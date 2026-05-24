@@ -8,67 +8,39 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 ## v5.0.0 - 05/24/2026
 
-Adds optional multi-tenancy scaffolding via `stancl/tenancy ^3.10`. **Off by default — no behavior change for forks that don't set `TENANCY_ENABLED=true`.** Major version bump signals the new model classes and provider, not a breaking change to existing behavior.
+Adds **optional multi-tenancy** via `stancl/tenancy ^3.10`. Off by default — forks that don't set `TENANCY_ENABLED=true` see zero behavior change vs. v4.5.0. Major version bump signals the new model classes + schema additions, not a breaking change to existing behavior.
 
-The core contract: a fork that pulls v5.0.0 and changes nothing in `.env` sees zero runtime difference. Tenancy is shipped fully installed and registered, but `App\Providers\TenancyServiceProvider::boot()` short-circuits on `config('tenancy.enabled')`, and `tests/Feature/Tenancy/DisabledStateTest.php` guards that contract for all time.
+### What you get when enabled
+- DB-per-tenant isolation (path-mode by default at `/t/{slug}/...`, subdomain mode one env-flip away).
+- Multi-tenant access: one user → many tenants via `tenant_user` pivot. `User::tenants()` / `Tenant::users()` relationships.
+- Tenant role model: `Owner` / `Admin` / `Member` (`App\Enums\TenantRole`) with capability methods.
+- Central super-admin role on the `users.role` column (`App\Enums\UserRole`).
+- Full invite lifecycle: `App\Services\Tenancy\TenantInviteService` (send / accept / decline / revoke) + acceptance routes at `/invites/{token}` + email notification.
+- Membership operations: `App\Services\Tenancy\TenantMembershipService` (switchTo / leave / remove / changeRole / transferOwnership / isMember / roleOf).
+- Tenant provisioning service: `App\Services\Tenancy\TenantProvisioningService` (also wraps the `tenancy:provision` CLI).
+- Access control middleware: `InitializeTenancyBySlug` + `EnsureUserBelongsToTenant` + `EnsureTenantReady` (503 + `Retry-After: 30` for tenants whose provisioning hasn't completed).
+- Tenant lifecycle: `ready` and `failed` flags on `App\Models\Tenant`, `MarkTenantReady` + `ConditionalDeleteTenantDatabase` listeners (soft-delete preserves the per-tenant DB; hard-delete drops it), and `tenancy:purge-deleted` to force-delete soft-deleted tenants past `config('tenancy.purge_deleted_after_hours')` (default 72). Also sweeps users left with zero tenants after purge (SuperAdmins exempt; `--keep-orphan-users` opt-out).
+- Artisan commands: `tenancy:enable`, `tenancy:provision`, `tenancy:migrate-existing`, `tenancy:purge-deleted`.
 
-### New
+### Disabled-state contract
+- `config/auth.php` untouched.
+- `App\Models\User` keeps its v4.5.0 behavior; the new `CentralConnection` trait is a no-op when disabled.
+- `tests/Feature/Tenancy/DisabledStateTest.php` locks in the inert contract.
 
-- **`stancl/tenancy ^3.10`** composer dependency. Auto-discovered, but every effect is gated by the master switch.
-- **Models:** `App\Models\Tenant`, `App\Models\Domain`, `App\Models\Tenant\User`. The `App\Models\Concerns\CentralConnection` trait is applied to `App\Models\User` and short-circuits to a no-op when tenancy is disabled — so `User` continues to behave identically to v4.5.0 unless the master switch is on. No new auth model and no `AUTH_USER_MODEL` env required.
-- **Multi-tenant access scaffolding.** New `tenant_user` pivot migration in `database/migrations/central/`, plus `User::tenants()` and `Tenant::users()` belongsToMany relationships. Supports both single-tenant-per-user and many-tenants-per-user patterns out of the box. `tenancy:provision --owner=<email>` attaches the user to the new tenant via the pivot (instead of just recording the email).
-- **`App\Enums\TenantRole`** — Owner / Admin / Member with capability methods (`canManageMembers`, `canTransferOwnership`, `canBeChangedBy`, `canBeRemovedBy`). Defines the per-tenant permission ladder.
-- **`App\Enums\UserRole`** — SuperAdmin / User (backed by string 'admin' / 'user') stored on the new `users.role` column. Distinguishes central super-admin (system-wide) from per-tenant roles. **Schema change**: adds `role` column to `users` table. The base `0001_01_01_000000_create_users_table.php` migration was updated; existing forks add the column via a one-off migration documented in `docs/migrations/template-v5.0.0.md` Group D.5.
-- **`App\Services\Tenancy\TenantInviteService`** — full lifecycle: `send` (with token + 14d expiry, dispatches `TenantInvitationNotification` email), `findPendingByToken`, `accept` (idempotent attach via pivot), `decline`, `revoke`.
-- **`App\Services\Tenancy\TenantMembershipService`** — `switchTo`, `leave`, `remove`, `changeRole`, `transferOwnership`, `isMember`, `roleOf`. Enforces TenantRole capability rules at the service boundary.
-- **`App\Models\TenantInvite`** + central migration `tenant_invites` table.
-- **`App\Http\Controllers\Tenancy\InviteController`** with `GET /invites/{token}`, `POST /invites/{token}/accept`, `POST /invites/{token}/decline` routes — registered only when tenancy is enabled.
-- **`App\Notifications\Tenancy\TenantInvitationNotification`** — email with acceptance URL.
-- **`App\Http\Middleware\Tenancy\InitializeTenancyBySlug`** — path-mode tenant resolver. Looks up the tenant by domain slug (e.g. `/t/acme/...`) via the `domains` table. Required because the package's stock `InitializeTenancyByPath` only resolves by primary key, which doesn't match human-friendly URL slugs.
-- **`App\Http\Middleware\Tenancy\EnsureUserBelongsToTenant`** — pivot-membership guard. Returns 403 for authenticated non-members; redirects guests to login. Apply to any tenant-scoped routes that require membership.
-- **Tenancy contracts:** `App\Tenancy\Contracts\ExistingDataMigrator` interface + `App\Tenancy\NullExistingDataMigrator` default. Conditionally bound in `AppServiceProvider::register()` only when tenancy is enabled.
-- **`App\Tenancy\Bootstrappers\SignedUrls`** — listed (commented) in `config/tenancy.php` for forks switching to subdomain mode.
-- **`App\Providers\TenancyServiceProvider`** — wraps the package's published provider. The entire `boot()` body is gated on `config('tenancy.enabled')`. When disabled: no event listeners bound, no tenant routes loaded, no middleware priority overrides.
-- **Helpers** in `app/helpers.php`: `tenant_user()`, `central_user()`, `current_actor()`, `tenant_url()`. Every helper has a disabled-mode fallback to the equivalent non-tenancy behavior. (The package's own helpers `tenant()`, `tenancy()`, `tenant_route()`, `tenant_asset()`, `global_asset()`, `global_cache()` are also loaded.)
-- **Artisan commands:**
-  - `php artisan tenancy:enable` — plug-and-play turn-on for new apps. Writes env keys idempotently and prints next steps.
-  - `php artisan tenancy:provision <name> --owner=<email>` — creates a tenant + domain row + fires the package's CreateDatabase → MigrateDatabase pipeline.
-  - `php artisan tenancy:migrate-existing` — skeleton for existing-app data migration. Refuses to run unless a concrete `ExistingDataMigrator` is bound. See `docs/guidelines/tenancy-migrating.md` for the per-fork extension pattern.
-- **`config/tenancy.php`** — env-driven (`TENANCY_ENABLED`, `TENANCY_IDENTIFICATION`, `TENANCY_CENTRAL_DOMAINS`). Points at our models. Disables the package's `/tenancy/assets/*` route by default.
-- **`database/migrations/central/`** and **`database/migrations/tenant/`** folders (empty, gitkeeped). Tenancy migrations (`create_tenants_table`, `create_domains_table`, tenant `create_users_table`) live inside; Laravel does not scan these subdirectories by default, so they're inert when tenancy is disabled.
-- **`routes/tenant.php`** — middleware stack switches on `TENANCY_IDENTIFICATION`: path mode (default) uses `InitializeTenancyByPath` + `/t/{tenant}` prefix; subdomain mode uses `InitializeTenancyByDomain` + `PreventAccessFromCentralDomains`. Loaded only when tenancy is enabled.
-- **Test scaffolding:** `tests/CentralBaseTestCase`, `tests/TenantBaseTestCase` (both auto-skip when disabled), `tests/Feature/Tenancy/DisabledStateTest` (22 assertions guarding the inert contract).
-- **`phpunit.xml`** — adds `Central` and `Tenant` testsuites (empty by default; forks populate) and `TENANCY_ENABLED=false` force-override for the default suite.
-- **Nine new env keys in `.env.example`**, under a clearly-marked OPTIONAL section: `TENANCY_ENABLED`, `TENANCY_IDENTIFICATION`, `TENANCY_CENTRAL_DOMAINS`, plus a `DB_CENTRAL_*` block (`DB_CENTRAL_CONNECTION`, `DB_CENTRAL_HOST`, `DB_CENTRAL_PORT`, `DB_CENTRAL_DATABASE`, `DB_CENTRAL_USERNAME`, `DB_CENTRAL_PASSWORD`).
-- **Documentation:**
-  - `docs/guidelines/tenancy-using.md` — agent-executable runbook for enabling tenancy in a new project.
-  - `docs/guidelines/tenancy-migrating.md` — agent-executable runbook for adopting tenancy on a fork with existing user data.
-  - `docs/migrations/template-v5.0.0.md` — fork-upgrade guide.
-  - `AGENTS.md` gains an **Optional multi-tenancy** section.
-  - `README.md` gains a feature bullet.
-
-### Changed
-
-- **`app/Models/User.php`** — adds the `CentralConnection` trait. The trait returns null when tenancy is disabled (Eloquent default), so the model behaves identically to v4.5.0 unless `TENANCY_ENABLED=true`.
-- **`app/Http/Middleware/HandleInertiaRequests.php`** — adds a `tenancyShared()` branch that emits `currentTenant` / `tenantUser` props only when `tenant()` resolves. Disabled-mode props are identical to v4.5.0.
-- **`bootstrap/providers.php`** — appends `App\Providers\TenancyServiceProvider`.
-- **`app/Providers/AppServiceProvider.php`** — conditionally binds `NullExistingDataMigrator` when tenancy is enabled.
-
-**`config/auth.php` is untouched.** Forks don't modify it during the v5 upgrade.
+### Schema change
+- `users` table gains a `role` string column. Fresh installs get it from the updated base migration; existing forks add it via a one-off migration documented in the migration guide.
 
 ### Dependencies
-
-- Added `stancl/tenancy: ^3.10`.
-- Added `stancl/jobpipeline`, `stancl/virtualcolumn`, `facade/ignition-contracts` (transitive).
+- Added `stancl/tenancy: ^3.10` (+ transitive `stancl/jobpipeline`, `stancl/virtualcolumn`, `facade/ignition-contracts`).
 
 ### Migration
 
-See [`docs/migrations/template-v5.0.0.md`](docs/migrations/template-v5.0.0.md). Four tracks:
+**See [`docs/migrations/template-v5.0.0.md`](docs/migrations/template-v5.0.0.md)** for the full file-by-file walkthrough, schema migration, configuration changes, and verification steps. Four tracks:
 
-- **Track A — fork does not want tenancy.** ~10 minutes of mechanical file copying. No DB changes. No code refactors. End state: scaffolding installed but inert.
-- **Track B — new project wants tenancy from day one.** Track A + `php artisan tenancy:enable`. End state: tenancy live in path mode.
-- **Track C — existing project with user data wants tenancy.** Track A + `php artisan tenancy:enable` + [`docs/guidelines/tenancy-migrating.md`](docs/guidelines/tenancy-migrating.md). End state: each existing user has their own tenant.
-- **Track D — fork already has its own tenancy implementation (Invelo).** Track A only. Optional alignment per the migration guide later.
+- **Track A** — fork doesn't want tenancy. ~10 min of mechanical file copying. Scaffolding installed but inert.
+- **Track B** — new project, tenancy on day one. Track A + `php artisan tenancy:enable`.
+- **Track C** — existing project with user data wants tenancy. Track A + `tenancy:enable` + [`docs/guidelines/tenancy-migrating.md`](docs/guidelines/tenancy-migrating.md).
+- **Track D** — fork already has its own tenancy (e.g., Invelo). Track A only; optional alignment later.
 
 ## v4.5.0 - 05/20/2026
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Middleware\Tenancy\EnsureTenantReady;
 use App\Http\Middleware\Tenancy\EnsureUserBelongsToTenant;
 use App\Http\Middleware\Tenancy\InitializeTenancyBySlug;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ if (config('tenancy.identification', 'path') === 'subdomain') {
         'web',
         InitializeTenancyByDomain::class,
         PreventAccessFromCentralDomains::class,
+        EnsureTenantReady::class,
     ])->group(function (): void {
         Route::get('/', function () {
             return 'This is your multi-tenant application. The id of the current tenant is '.tenant('id');
@@ -55,6 +57,7 @@ if (config('tenancy.identification', 'path') === 'subdomain') {
     Route::middleware([
         'web',
         InitializeTenancyBySlug::class,
+        EnsureTenantReady::class,
     ])->prefix('t/{tenant}')->group(function (): void {
         Route::get('/', function () {
             return 'This is your multi-tenant application. The id of the current tenant is '.tenant('id');

@@ -18,6 +18,17 @@ return [
     'enabled' => filter_var(env('TENANCY_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
 
     /**
+     * Grace period (hours) before soft-deleted tenants get force-deleted by
+     * `php artisan tenancy:purge-deleted`. Default 72 hours — operators can
+     * restore an accidentally-deleted tenant within this window before the
+     * per-tenant DB is permanently dropped.
+     *
+     * Schedule the purge command in app/Console/Kernel.php (Laravel 11+: in
+     * routes/console.php) to run e.g. hourly to enforce the window.
+     */
+    'purge_deleted_after_hours' => (int) env('TENANCY_PURGE_DELETED_AFTER_HOURS', 72),
+
+    /**
      * Tenant identification strategy. Determines which middleware the tenant
      * route group uses. 'path' is the default — tenant routes mount at
      * /t/{tenant}/... on the central domain (no wildcard DNS/SSL needed).

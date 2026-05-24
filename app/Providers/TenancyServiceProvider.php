@@ -34,7 +34,22 @@ class TenancyServiceProvider extends ServiceProvider
 
                 ])->send(function (Events\TenantCreated $event) {
                     return $event->tenant;
-                })->shouldBeQueued(false), // `false` by default, but you probably want to make this `true` for production.
+                })->shouldBeQueued(false), // `false` by default. See note below before flipping to `true`.
+
+                // Flips tenant->ready=true. With shouldBeQueued(false) this
+                // listener runs AFTER the pipeline's jobs complete (the
+                // JobPipeline executes them inline before returning), so the
+                // tenant is correctly marked ready once its DB exists.
+                //
+                // WARNING — if you flip shouldBeQueued(true) for production:
+                // the pipeline DISPATCHES the jobs onto the queue and returns
+                // immediately, so this sibling listener would fire BEFORE the
+                // jobs run, marking the tenant ready before its DB is created.
+                // To go async, MOVE MarkTenantReady's body into a final
+                // queued job appended to the JobPipeline array above, so it
+                // only runs after CreateDatabase + MigrateDatabase succeed.
+                // See docs/guidelines/tenancy-using.md (production note).
+                \App\Tenancy\Listeners\MarkTenantReady::class,
             ],
             Events\SavingTenant::class => [],
             Events\TenantSaved::class => [],
@@ -42,11 +57,11 @@ class TenancyServiceProvider extends ServiceProvider
             Events\TenantUpdated::class => [],
             Events\DeletingTenant::class => [],
             Events\TenantDeleted::class => [
-                JobPipeline::make([
-                    Jobs\DeleteDatabase::class,
-                ])->send(function (Events\TenantDeleted $event) {
-                    return $event->tenant;
-                })->shouldBeQueued(false), // `false` by default, but you probably want to make this `true` for production.
+                // Wrapper that drops the per-tenant DB ONLY on hard delete.
+                // Soft delete (the default for $tenant->delete()) leaves the
+                // DB intact so $tenant->restore() works. forceDelete() triggers
+                // the actual cleanup. See ConditionalDeleteTenantDatabase docs.
+                \App\Tenancy\Listeners\ConditionalDeleteTenantDatabase::class,
             ],
 
             // Domain events
@@ -151,6 +166,13 @@ class TenancyServiceProvider extends ServiceProvider
             Middleware\InitializeTenancyByDomainOrSubdomain::class,
             Middleware\InitializeTenancyByPath::class,
             Middleware\InitializeTenancyByRequestData::class,
+            // Our custom path-mode resolver (looks up by domain slug). Must run
+            // before SubstituteBindings so the {tenant} param is forgotten
+            // before model binding tries to resolve it.
+            \App\Http\Middleware\Tenancy\InitializeTenancyBySlug::class,
+            // Ready-gate runs after initialization; rejects unready tenants
+            // with 503 so users don't hit empty per-tenant DBs.
+            \App\Http\Middleware\Tenancy\EnsureTenantReady::class,
         ];
 
         foreach (array_reverse($tenancyMiddleware) as $middleware) {

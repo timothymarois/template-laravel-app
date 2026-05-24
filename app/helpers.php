@@ -27,12 +27,12 @@ use Stancl\Tenancy\Contracts\Tenant;
 
 if (! function_exists('tenant_user')) {
     /**
-     * The user resolved inside the current tenant context.
-     *
-     * Disabled state: returns the central authenticated user (App\Models\User).
-     * Enabled state: still returns auth()->user() at this commit; will return
-     * the per-tenant App\Models\Tenant\User once Step 4 (models) and Step 5
-     * (EnsureUserBelongsToTenant middleware) land.
+     * The user resolved inside the current tenant context. Equivalent to
+     * auth()->user() — the template stores the auth principal in the central
+     * App\Models\User and uses the `tenant_user` pivot for membership/role,
+     * so there is no separate tenant-side User model to swap to. Kept as a
+     * helper for callers that want to express "the user inside this tenant"
+     * explicitly.
      */
     function tenant_user(): ?Authenticatable
     {

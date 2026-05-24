@@ -82,12 +82,12 @@ it('fails when the subdomain is already taken', function () {
     expect(Tenant::count())->toBe(1); // The existing one, no second tenant created.
 });
 
-it('respects --subdomain override', function () {
+it('respects --slug override', function () {
     User::factory()->create(['email' => 'owner@example.com']);
 
     $this->artisan('tenancy:provision', [
         'name' => 'Acme Corp',
-        '--subdomain' => 'acme-corp-2',
+        '--slug' => 'acme-corp-2',
         '--owner' => 'owner@example.com',
     ])->assertSuccessful();
 

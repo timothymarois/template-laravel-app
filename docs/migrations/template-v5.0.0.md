@@ -10,7 +10,7 @@ v5.0.0 adds **optional multi-tenancy scaffolding** via `stancl/tenancy ^3.10`. T
 
 **What this release adds (additive only):**
 - The `stancl/tenancy ^3.10` composer dependency.
-- New `App\Models\Tenant`, `App\Models\Domain`, `App\Models\Tenant\User`.
+- New `App\Models\Tenant`, `App\Models\Domain`, `App\Models\TenantInvite`.
 - New `App\Models\Concerns\CentralConnection` trait, applied to `App\Models\User` (the trait is a no-op when tenancy is disabled).
 - New `App\Tenancy\Bootstrappers\SignedUrls` (only used in subdomain mode; commented out in config).
 - New `App\Tenancy\Contracts\ExistingDataMigrator` interface + `NullExistingDataMigrator` default.
@@ -79,7 +79,6 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `app/Models/Concerns/CentralConnection.php`
 - [ ] `app/Models/Domain.php`
 - [ ] `app/Models/Tenant.php`
-- [ ] `app/Models/Tenant/User.php`
 - [ ] `app/Models/TenantInvite.php` (pending tenant invitations)
 
 **Services + contracts + tenancy:**
@@ -89,18 +88,25 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `app/Tenancy/Bootstrappers/SignedUrls.php`
 - [ ] `app/Services/Tenancy/TenantInviteService.php` (send/accept/decline/revoke invitations)
 - [ ] `app/Services/Tenancy/TenantMembershipService.php` (switch/leave/remove/changeRole/transferOwnership)
+- [ ] `app/Services/Tenancy/TenantProvisioningService.php` (the actual provisioning logic — `ProvisionCommand` is a thin caller)
 
 **Providers + commands:**
 - [ ] `app/Providers/TenancyServiceProvider.php`
 - [ ] `app/Console/Commands/Tenancy/EnableCommand.php`
 - [ ] `app/Console/Commands/Tenancy/ProvisionCommand.php`
 - [ ] `app/Console/Commands/Tenancy/MigrateExistingCommand.php`
+- [ ] `app/Console/Commands/Tenancy/PurgeDeletedCommand.php` (force-deletes soft-deleted tenants past the grace window)
 
 **HTTP layer:**
 - [ ] `app/Http/Controllers/Tenancy/InviteController.php`
 - [ ] `app/Http/Middleware/Tenancy/InitializeTenancyBySlug.php` (path-mode resolver — looks up tenant by domain slug)
+- [ ] `app/Http/Middleware/Tenancy/EnsureTenantReady.php` (503 for tenants whose provisioning hasn't completed)
 - [ ] `app/Http/Middleware/Tenancy/EnsureUserBelongsToTenant.php` (403 for non-members; redirect to login for guests)
 - [ ] `app/Notifications/Tenancy/TenantInvitationNotification.php` (invite email)
+
+**Listeners** (in `app/Tenancy/Listeners/` — intentionally outside `App\Listeners\` to avoid Laravel 11+ auto-discovery):
+- [ ] `app/Tenancy/Listeners/MarkTenantReady.php` (flips `tenant->ready=true` after the pipeline succeeds)
+- [ ] `app/Tenancy/Listeners/ConditionalDeleteTenantDatabase.php` (drops per-tenant DB on hard delete only — preserves soft-delete recovery)
 
 **Config + routes:**
 - [ ] `config/tenancy.php`
@@ -113,7 +119,6 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `database/migrations/central/2026_05_24_000010_create_tenant_user_table.php` (multi-tenant access pivot)
 - [ ] `database/migrations/central/2026_05_24_000020_create_tenant_invites_table.php` (pending invites)
 - [ ] `database/migrations/tenant/.gitkeep`
-- [ ] `database/migrations/tenant/0001_01_01_000000_create_users_table.php`
 
 **Tests:**
 - [ ] `tests/CentralBaseTestCase.php`
@@ -127,6 +132,8 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `tests/Central/InviteControllerTest.php`
 - [ ] `tests/Central/SignedUrlsBootstrapperTest.php`
 - [ ] `tests/Central/PathModeRoutingTest.php` (integration tests for InitializeTenancyBySlug + EnsureUserBelongsToTenant)
+- [ ] `tests/Central/TenantProvisioningServiceTest.php` (service-level coverage for the extracted provisioning logic)
+- [ ] `tests/Central/TenantLifecycleTest.php` (ready/failed flags, soft vs hard delete, purge-deleted command)
 - [ ] `tests/Tenant/.gitkeep`
 - [ ] `tests/Feature/Tenancy/DisabledStateTest.php`
 - [ ] `tests/Feature/Tenancy/EnableCommandTest.php`
@@ -149,7 +156,7 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 
 Verify all files landed:
 ```bash
-ls app/helpers.php app/Models/{Tenant,Domain}.php app/Models/{Concerns/CentralConnection,Tenant/User}.php app/Tenancy/{Contracts/ExistingDataMigrator,NullExistingDataMigrator}.php app/Tenancy/Bootstrappers/SignedUrls.php app/Providers/TenancyServiceProvider.php app/Console/Commands/Tenancy/{Enable,Provision,MigrateExisting}Command.php config/tenancy.php routes/tenant.php tests/{Central,Tenant}BaseTestCase.php tests/Feature/Tenancy/{DisabledState,EnableCommand,MigrateExistingCommand}Test.php
+ls app/helpers.php app/Models/{Tenant,Domain,TenantInvite}.php app/Models/Concerns/CentralConnection.php app/Tenancy/{Contracts/ExistingDataMigrator,NullExistingDataMigrator}.php app/Tenancy/Bootstrappers/SignedUrls.php app/Tenancy/Listeners/{MarkTenantReady,ConditionalDeleteTenantDatabase}.php app/Providers/TenancyServiceProvider.php app/Services/Tenancy/{TenantProvisioningService,TenantInviteService,TenantMembershipService}.php app/Http/Middleware/Tenancy/{InitializeTenancyBySlug,EnsureTenantReady,EnsureUserBelongsToTenant}.php app/Http/Controllers/Tenancy/InviteController.php app/Notifications/Tenancy/TenantInvitationNotification.php app/Console/Commands/Tenancy/{Enable,Provision,MigrateExisting,PurgeDeleted}Command.php config/tenancy.php routes/tenant.php tests/{Central,Tenant}BaseTestCase.php tests/Feature/Tenancy/{DisabledState,EnableCommand,MigrateExistingCommand}Test.php
 ```
 → no errors; every path exists.
 

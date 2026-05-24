@@ -38,9 +38,12 @@ interface ExistingDataMigrator
 
     /**
      * A closure of shape
-     *     fn(object $legacyUser): array{user: array<string, mixed>, tenant_user: array<string, mixed>}
-     * that maps one row from the legacy users table to (a) the central User
-     * insert payload and (b) the Tenant\User insert payload.
+     *     fn(object $legacyUser): array<string, mixed>
+     * that maps one row from the legacy users table to the central
+     * App\Models\User insert payload. The template stores the auth principal
+     * centrally; tenant-side users are represented purely by the tenant_user
+     * pivot row (created automatically by the import iteration loop using the
+     * tenantProvisioner() output for owner role).
      */
     public function userMapper(): Closure;
 

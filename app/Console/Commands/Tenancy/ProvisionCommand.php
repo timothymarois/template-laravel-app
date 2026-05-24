@@ -4,33 +4,32 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Tenancy;
 
-use App\Enums\TenantRole;
-use App\Models\Domain;
-use App\Models\Tenant;
-use App\Models\User;
+use App\Services\Tenancy\TenantProvisioningService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use RuntimeException;
 
 /**
- * Creates a tenant + its primary domain row, then fires TenantCreated which
- * triggers the package's CreateDatabase → MigrateDatabase → SeedDatabase
- * pipeline.
+ * Thin CLI wrapper around App\Services\Tenancy\TenantProvisioningService.
  *
- * If --owner=<email> is given, the user with that email must already exist in
- * the central `users` table (this command does NOT create users). The user is
- * attached to the new tenant via the `tenant_user` pivot with role=owner.
- *
- * Used by tests and by any fork's own provisioning controller / signup flow.
+ * All business logic — slug validation, owner lookup, transactional row
+ * insertion, pivot attach — lives in the service. This command parses CLI
+ * input, delegates, and renders output. Forks building a registration
+ * controller should inject the same service rather than duplicate the logic.
  */
 class ProvisionCommand extends Command
 {
     protected $signature = 'tenancy:provision
-                            {name : The tenant name (used as the domain slug if --subdomain is omitted)}
+                            {name : The tenant name (used as the URL slug if --slug is omitted)}
                             {--owner= : Email of an existing central user to attach as the tenant owner (optional)}
-                            {--subdomain= : Override the auto-derived subdomain slug}';
+                            {--slug= : Override the auto-derived URL slug. Any unique string works — slugified name (default), UUIDs, custom names, or full hostnames for subdomain mode. Stored as the `domain` value on the Domain row.}';
 
     protected $description = 'Provision a new tenant (creates Tenant + Domain + tenant DB; optionally attaches owner).';
+
+    public function __construct(
+        private readonly TenantProvisioningService $provisioning,
+    ) {
+        parent::__construct();
+    }
 
     public function handle(): int
     {
@@ -40,65 +39,28 @@ class ProvisionCommand extends Command
             return self::FAILURE;
         }
 
-        $name = (string) $this->argument('name');
-        $subdomain = (string) ($this->option('subdomain') ?? Str::slug($name));
-
-        if ($subdomain === '') {
-            $this->error('Could not derive a subdomain from the name. Pass --subdomain=<slug> explicitly.');
-
-            return self::FAILURE;
-        }
-
-        if (Domain::where('domain', $subdomain)->exists()) {
-            $this->error("A tenant with domain '{$subdomain}' already exists.");
+        try {
+            $tenant = $this->provisioning->provision(
+                name: (string) $this->argument('name'),
+                slug: $this->option('slug'),
+                ownerEmail: $this->option('owner'),
+            );
+        } catch (RuntimeException $e) {
+            $this->error($e->getMessage());
 
             return self::FAILURE;
         }
 
-        // Resolve the owner user (if given) BEFORE creating the tenant — better
-        // to fail fast on a missing user than to leave a dangling tenant behind.
-        $owner = null;
+        $primaryDomain = $tenant->domains->first();
+        /** @var string $slug */
+        $slug = $primaryDomain?->getAttribute('domain') ?? '(none)';
+        $this->info("✔ Tenant provisioned. id={$tenant->id} domain={$slug}");
+
         if ($ownerEmail = $this->option('owner')) {
-            $owner = User::where('email', $ownerEmail)->first();
-            if ($owner === null) {
-                $this->error("No user with email '{$ownerEmail}' found in the central DB.");
-                $this->line('  Create the user first (via your registration flow or seeder), then re-run.');
-
-                return self::FAILURE;
-            }
+            $this->line("  Owner attached: {$ownerEmail} (role=owner)");
         }
 
-        // Wrap tenant + domain + pivot in a transaction so a failure mid-way
-        // doesn't leave orphan rows. Note: the package's TenantCreated event
-        // fires from Tenant::create(), but its CreateDatabase/MigrateDatabase
-        // pipeline doesn't write to the central DB — it provisions the per-
-        // tenant DB elsewhere — so it's safe inside this transaction.
-        /** @var Tenant $tenant */
-        $tenant = DB::connection(config('tenancy.database.central_connection'))
-            ->transaction(function () use ($name, $subdomain, $owner): Tenant {
-                $tenant = Tenant::create([
-                    'id' => (string) Str::uuid(),
-                    'data' => ['name' => $name],
-                ]);
-
-                $tenant->domains()->create(['domain' => $subdomain]);
-
-                if ($owner !== null) {
-                    $tenant->users()->attach($owner->id, [
-                        'role' => TenantRole::Owner->value,
-                        'joined_at' => now(),
-                    ]);
-                }
-
-                return $tenant;
-            });
-
-        if ($owner !== null) {
-            $this->line("  Owner attached: {$owner->email} (user_id={$owner->id}, role=".TenantRole::Owner->value.')');
-        }
-
-        $this->info("✔ Tenant provisioned. id={$tenant->id} domain={$subdomain}");
-        $this->line('  URL: '.tenant_url('/', $subdomain));
+        $this->line('  URL: '.tenant_url('/', $slug));
 
         return self::SUCCESS;
     }

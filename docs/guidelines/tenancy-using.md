@@ -110,6 +110,59 @@ php artisan migrate:status --database=pgsql_central
 ```
 → must show all seven migrations as `Ran` (4 root + 3 central).
 
+## Tenant lifecycle — ready, failed, deleted
+
+Tenants have three lifecycle flags accessible via `App\Models\Tenant`:
+
+| Method | What it returns | Set by |
+|---|---|---|
+| `$tenant->isReady()` | `true` once `CreateDatabase` + `MigrateDatabase` have finished | `MarkTenantReady` listener at the end of the `TenantCreated` pipeline |
+| `$tenant->hasFailed()` | `true` if provisioning errored | Fork-side: `$tenant->markFailed($reason)` from a `TenantCreationFailed` listener |
+| `$tenant->trashed()` | `true` after `$tenant->delete()` (soft delete) | Eloquent's `SoftDeletes` |
+
+**Registration UX — loader while provisioning.** If you flip the package's `JobPipeline` to `shouldBeQueued(true)` for production (in `app/Providers/TenancyServiceProvider.php`), the user signing up gets a redirect to their tenant BEFORE the per-tenant DB exists. Pattern:
+
+```php
+// In your RegisterController after creating the tenant:
+$tenant = app(TenantProvisioningService::class)->provision($name, $slug, $email);
+
+return redirect()->away(tenant_url('/', $tenant));
+// → Browser loads /t/{slug}/
+// → InitializeTenancyBySlug resolves tenant
+// → EnsureTenantReady middleware checks isReady()
+// → if false: returns 503 with Retry-After: 30
+// → Vue page shows a loader, retries every 30s
+// → eventually MarkTenantReady fires → isReady() = true → page loads
+```
+
+The `EnsureTenantReady` middleware (in `app/Http/Middleware/Tenancy/`) ships ready. Add it to your tenant route group:
+
+```php
+Route::middleware([
+    'web',
+    InitializeTenancyBySlug::class,
+    EnsureTenantReady::class,         // ← guards against unready tenants
+    'auth',
+    EnsureUserBelongsToTenant::class,
+])->prefix('t/{tenant}')->group(function () { ... });
+```
+
+For the loader page itself, set up a polling Vue page that hits an unauthenticated `/t/{slug}/ready` endpoint returning a JSON status. Fork-specific UI.
+
+## Tenant deletion (soft vs hard)
+
+- `$tenant->delete()` — soft delete. Sets `deleted_at`. Per-tenant DB stays intact. Restorable via `$tenant->restore()`.
+- `$tenant->forceDelete()` — hard delete. Per-tenant DB is dropped permanently (via `ConditionalDeleteTenantDatabase` listener).
+- `php artisan tenancy:purge-deleted` — finds soft-deleted tenants older than `config('tenancy.purge_deleted_after_hours')` (default 72) and force-deletes them. Schedule this in `app/Console/Kernel.php` (or `routes/console.php` for Laravel 11+):
+
+  ```php
+  Schedule::command('tenancy:purge-deleted')->hourly();
+  ```
+
+  The grace window lets operators recover an accidentally-deleted tenant before the per-tenant DB is permanently gone.
+
+  After purging tenants, the command also sweeps **orphan users** — users who were members of the just-purged tenants and now belong to zero tenants. SuperAdmins (`role = admin`) are exempt because they typically manage the system without owning a tenant. Bystander users who were never a member of any purged tenant are NOT touched — purging tenants doesn't garbage-collect strangers. Pass `--keep-orphan-users` to skip the sweep. Use `--dry-run` to preview both tenant deletions and user removals.
+
 ## Step 4 — Provision your first tenant
 
 ```bash
@@ -135,7 +188,9 @@ psql -l | grep '^ tenant_'
 ```
 → must show one database named `tenant_<uuid>`.
 
-> **Production note — async provisioning.** The stock `TenantCreated` pipeline runs synchronously (`shouldBeQueued(false)` in `app/Providers/TenancyServiceProvider.php`). For production, you may want to flip it to `true` so HTTP signup requests don't block on `CreateDatabase` + `MigrateDatabase`. That introduces a window where `tenant()` resolves but its DB is unmigrated — your first-request UX must handle it. Two options: (a) keep provisioning synchronous and accept slower signup, or (b) add a `ready` boolean column to `tenants` + an `EnsureTenantReady` middleware that redirects unready tenants to a "still provisioning..." loading page. Invelo's `app/Http/Middleware/TenantIsReady.php` is the worked example.
+> **Production note — async provisioning.** The stock `TenantCreated` pipeline runs synchronously (`shouldBeQueued(false)` in `app/Providers/TenancyServiceProvider.php`). For production, you may want to flip it to `true` so HTTP signup requests don't block on `CreateDatabase` + `MigrateDatabase`. That introduces a window where `tenant()` resolves but its DB is unmigrated — the template handles this via the `ready` flag on `App\Models\Tenant` and the `App\Http\Middleware\Tenancy\EnsureTenantReady` middleware (returns 503 + `Retry-After: 30` for unready tenants). Two important caveats when flipping `shouldBeQueued(true)`:
+> 1. Add `EnsureTenantReady::class` to your tenant route group so unready tenants are blocked.
+> 2. **Move `MarkTenantReady` into the JobPipeline as the final job**, not as a sibling listener on `TenantCreated`. When the pipeline is async, sibling listeners fire after pipeline *dispatch*, not after *completion*, which would mark tenants ready before their DB exists. Inline pattern: `JobPipeline::make([CreateDatabase::class, MigrateDatabase::class, MarkTenantReadyJob::class])`.
 
 ## Step 5 — Visit the tenant
 
@@ -168,12 +223,12 @@ php artisan tenants:migrate --tenants=<uuid>
 
 ## Step 7 — Using tenancy in code
 
-**Use `tenant_user()` instead of `auth()->user()` for tenant-side user lookups:**
+**`tenant_user()` and `central_user()` both return the central `App\Models\User`:**
 ```php
-$user = tenant_user();  // App\Models\Tenant\User instance when in tenant context
-// or
-$centralUser = central_user();  // App\Models\User instance — always central-pinned via the CentralConnection trait
+$user = tenant_user();   // the authenticated central user (current actor inside the tenant)
+$user = central_user();  // identical — kept for symmetry / explicitness
 ```
+The template stores the auth principal centrally and uses the `tenant_user` pivot for membership and role. Read the per-tenant role via `app(\App\Services\Tenancy\TenantMembershipService::class)->roleOf($user, tenant())`.
 
 **Use `tenant()` to read tenant metadata:**
 ```php

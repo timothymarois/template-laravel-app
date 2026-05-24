@@ -51,10 +51,25 @@ Make the list explicit in a doc you commit to the fork (`docs/tenancy-table-plan
 
 Good news: **`App\Models\User` becomes central-pinned automatically** via the `CentralConnection` trait once tenancy is enabled. Most existing code that imports `User` keeps working without modification — auth lookups, FK joins on central tables, mail notifications all route to the central DB correctly.
 
-The one case that does need attention: **FK columns on tenant-scoped tables**. If a tenant-scoped table like `projects` has a `user_id` column pointing at `users.id`, the FK relationship breaks once `users` moves to the per-tenant DB. You need to either:
+The one case that does need attention: **FK columns on tenant-scoped tables**. If a tenant-scoped table like `projects` has a `user_id` column pointing at `users.id`, that FK constraint won't resolve at the database level because `users` lives in the central DB and `projects` lives in each per-tenant DB.
 
-1. **Mirror via `Tenant\User`** (recommended). Replace `Project::belongsTo(User::class)` with `Project::belongsTo(\App\Models\Tenant\User::class)`. The import step (Step 6) populates each tenant DB's `users` table with a row per central user, so the FK references a same-DB row.
-2. **Denormalize** (simpler for read-mostly data). Drop the FK constraint; store `central_user_id` as a plain bigint; resolve to `User` via a manual query when needed.
+The template's pattern: **denormalize**. Drop the cross-DB FK constraint, keep the column as a plain `unsignedBigInteger` (rename to `central_user_id` for clarity), and resolve to `App\Models\User` via a manual query when needed:
+
+```php
+// Migration (in database/migrations/tenant/):
+$table->unsignedBigInteger('central_user_id')->index();
+// Note: no ->constrained() — that table lives in a different DB.
+
+// Model:
+public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+{
+    // BelongsTo across DBs works as long as the User model is central-pinned
+    // via the CentralConnection trait (which it is in the template).
+    return $this->belongsTo(\App\Models\User::class, 'central_user_id');
+}
+```
+
+This works because the `CentralConnection` trait pins `App\Models\User` to the central connection regardless of which tenant context is active, so the BelongsTo eager-loads correctly. The only thing that breaks is the DB-level FK constraint (which can't span databases) — application-level integrity is preserved.
 
 Audit recipe:
 ```bash
@@ -62,7 +77,7 @@ rg "belongsTo\(.*User::class\)" --type=php
 rg "User::class" --type=php
 ```
 
-For each tenant-scoped model holding a `user_id`, pick option 1 or 2. Anything else (auth flow, controllers, central-side tables) keeps using `User` as-is.
+For each tenant-scoped model holding a `user_id`, rename the column to `central_user_id` in the tenant migration and drop the FK constraint. Anything else (auth flow, controllers, central-side tables) keeps using `User` as-is.
 
 ## Step 4 — Implement `ExistingDataMigrator`
 
@@ -97,31 +112,21 @@ class ProjectsAppMigrator implements ExistingDataMigrator
 
     public function userMapper(): Closure
     {
+        // Payload for the central `users` table (App\Models\User).
+        // Tenant-side membership is created automatically by the iteration loop
+        // (Step 5) attaching the user to the provisioned tenant via the
+        // `tenant_user` pivot with role 'owner'.
         return fn (object $legacyUser): array => [
-            // The 'user' payload is inserted into the central `users` table
-            // (App\Models\User, central-pinned via the CentralConnection trait).
-            'user' => [
-                'id' => $legacyUser->id,
-                'name' => $legacyUser->name,
-                'email' => $legacyUser->email,
-                'password' => $legacyUser->password,
-                'email_verified_at' => $legacyUser->email_verified_at,
-                'remember_token' => $legacyUser->remember_token,
-                'is_active' => $legacyUser->is_active,
-                'timezone' => $legacyUser->timezone,
-                'created_at' => $legacyUser->created_at,
-                'updated_at' => $legacyUser->updated_at,
-            ],
-            // The 'tenant_user' payload is inserted into the per-tenant `users` table
-            // (App\Models\Tenant\User) and links back via central_user_id.
-            'tenant_user' => [
-                'central_user_id' => $legacyUser->id,
-                'email_cache' => $legacyUser->email,
-                'first_name' => $legacyUser->name,
-                'role' => 'owner',
-                'is_active' => $legacyUser->is_active,
-                'timezone' => $legacyUser->timezone,
-            ],
+            'id' => $legacyUser->id,
+            'name' => $legacyUser->name,
+            'email' => $legacyUser->email,
+            'password' => $legacyUser->password,
+            'email_verified_at' => $legacyUser->email_verified_at,
+            'remember_token' => $legacyUser->remember_token,
+            'is_active' => $legacyUser->is_active,
+            'timezone' => $legacyUser->timezone,
+            'created_at' => $legacyUser->created_at,
+            'updated_at' => $legacyUser->updated_at,
         ];
     }
 
@@ -150,10 +155,9 @@ The `tenancy:migrate-existing` command shipped in the template **does not includ
 
 1. Loop over rows from the source connection (the legacy DB), batched.
 2. For each legacy user:
-   a. Insert a `User` row (in the central DB) using `$migrator->userMapper()($legacy)['user']`.
-   b. Provision a tenant via `$migrator->tenantProvisioner()($legacy)`.
+   a. Insert a `User` row (in the central DB) using `$migrator->userMapper()($legacy)`.
+   b. Provision a tenant via `app(\App\Services\Tenancy\TenantProvisioningService::class)->provision(name: ..., ownerEmail: $legacy->email)` — this also attaches the user to the tenant via the `tenant_user` pivot with role `owner`.
    c. Inside `tenancy()->run($tenant, function () use ($legacy, $migrator) { ... })`:
-      - Insert the `Tenant\User` row using `$migrator->userMapper()($legacy)['tenant_user']`.
       - For each table in `$migrator->tablesToMoveToTenant()`: read rows from legacy, transform via the closure, insert into tenant DB. Build the `idMap` as you go.
 3. Write an audit log line per user (JSONL: `user_id`, `tenant_id`, `status`, `rows_moved`, `duration_ms`, `errors`).
 4. Handle `--dry-run` by doing all the reads but skipping the writes.

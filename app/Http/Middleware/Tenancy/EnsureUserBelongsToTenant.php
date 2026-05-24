@@ -7,6 +7,7 @@ namespace App\Http\Middleware\Tenancy;
 use App\Services\Tenancy\TenantMembershipService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -39,7 +40,11 @@ class EnsureUserBelongsToTenant
         $user = $request->user();
 
         if ($user === null) {
-            return redirect()->guest(route('login'));
+            // Fall back to /login if the fork doesn't register a 'login'
+            // named route. Keeps the middleware safe across all fork setups.
+            $loginUrl = Route::has('login') ? route('login') : url('/login');
+
+            return redirect()->guest($loginUrl);
         }
 
         if (! $this->membership->isMember($user, $tenant)) {

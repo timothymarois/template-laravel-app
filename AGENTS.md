@@ -722,7 +722,7 @@ import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 
 The template ships `stancl/tenancy` installed but inert by default. The contract: when `TENANCY_ENABLED=false` (the default), **treat tenancy code as nonexistent**:
 
-- Do not import from `App\Models\Tenant`, `App\Models\Tenant\User`, or `App\Models\Domain`.
+- Do not import from `App\Models\Tenant` or `App\Models\Domain`.
 - `App\Models\User` is fine to import as usual — the `CentralConnection` trait on it is a no-op when tenancy is disabled, so `User` behaves identically to a non-tenancy app.
 - Do not run the package's `tenancy:install` or any `tenants:*` artisan command. `tenancy:install` republishes the package's stock provider over the template's customized one and dumps fresh migrations into `database/migrations/` root — it would break the disabled-state contract. The `tenants:*` commands assume tenancy is initialized.
 - The only tenancy commands that are safe to run in disabled state are `tenancy:enable` (which the operator runs deliberately when they want to enable tenancy), and `php artisan tenancy:provision --help` / `tenancy:migrate-existing --help` for help text only — actually invoking provision/migrate-existing will fail loudly with "Tenancy is disabled".
