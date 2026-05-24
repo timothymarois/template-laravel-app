@@ -20,6 +20,7 @@
         "opcodesio/log-viewer": "^3.10",
         "sentry/sentry-laravel": "^4.7",
         "spatie/laravel-sitemap": "^7.3",
+        "stancl/tenancy": "^3.10",
         "tightenco/ziggy": "^2.3"
     },
     "require-dev": {
@@ -38,7 +39,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

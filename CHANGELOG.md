@@ -6,6 +6,60 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v5.0.0 - 05/24/2026
+
+Adds optional multi-tenancy scaffolding via `stancl/tenancy ^3.10`. **Off by default — no behavior change for forks that don't set `TENANCY_ENABLED=true`.** Major version bump signals the new model classes and provider, not a breaking change to existing behavior.
+
+The core contract: a fork that pulls v5.0.0 and changes nothing in `.env` sees zero runtime difference. Tenancy is shipped fully installed and registered, but `App\Providers\TenancyServiceProvider::boot()` short-circuits on `config('tenancy.enabled')`, and `tests/Feature/Tenancy/DisabledStateTest.php` guards that contract for all time.
+
+### New
+
+- **`stancl/tenancy ^3.10`** composer dependency. Auto-discovered, but every effect is gated by the master switch.
+- **Models:** `App\Models\Tenant`, `App\Models\Domain`, `App\Models\Tenant\User`. The `App\Models\Concerns\CentralConnection` trait is applied to `App\Models\User` and short-circuits to a no-op when tenancy is disabled — so `User` continues to behave identically to v4.5.0 unless the master switch is on. No new auth model and no `AUTH_USER_MODEL` env required.
+- **Tenancy contracts:** `App\Tenancy\Contracts\ExistingDataMigrator` interface + `App\Tenancy\NullExistingDataMigrator` default. Conditionally bound in `AppServiceProvider::register()` only when tenancy is enabled.
+- **`App\Tenancy\Bootstrappers\SignedUrls`** — listed (commented) in `config/tenancy.php` for forks switching to subdomain mode.
+- **`App\Providers\TenancyServiceProvider`** — wraps the package's published provider. The entire `boot()` body is gated on `config('tenancy.enabled')`. When disabled: no event listeners bound, no tenant routes loaded, no middleware priority overrides.
+- **Helpers** in `app/helpers.php`: `tenant_user()`, `central_user()`, `current_actor()`, `tenant_url()`. Every helper has a disabled-mode fallback to the equivalent non-tenancy behavior. (The package's own helpers `tenant()`, `tenancy()`, `tenant_route()`, `tenant_asset()`, `global_asset()`, `global_cache()` are also loaded.)
+- **Artisan commands:**
+  - `php artisan tenancy:enable` — plug-and-play turn-on for new apps. Writes env keys idempotently and prints next steps.
+  - `php artisan tenancy:provision <name> --owner=<email>` — creates a tenant + domain row + fires the package's CreateDatabase → MigrateDatabase pipeline.
+  - `php artisan tenancy:migrate-existing` — skeleton for existing-app data migration. Refuses to run unless a concrete `ExistingDataMigrator` is bound. See `docs/guidelines/tenancy-migrating.md` for the per-fork extension pattern.
+- **`config/tenancy.php`** — env-driven (`TENANCY_ENABLED`, `TENANCY_IDENTIFICATION`, `TENANCY_CENTRAL_DOMAINS`). Points at our models. Disables the package's `/tenancy/assets/*` route by default.
+- **`database/migrations/central/`** and **`database/migrations/tenant/`** folders (empty, gitkeeped). Tenancy migrations (`create_tenants_table`, `create_domains_table`, tenant `create_users_table`) live inside; Laravel does not scan these subdirectories by default, so they're inert when tenancy is disabled.
+- **`routes/tenant.php`** — middleware stack switches on `TENANCY_IDENTIFICATION`: path mode (default) uses `InitializeTenancyByPath` + `/t/{tenant}` prefix; subdomain mode uses `InitializeTenancyByDomain` + `PreventAccessFromCentralDomains`. Loaded only when tenancy is enabled.
+- **Test scaffolding:** `tests/CentralBaseTestCase`, `tests/TenantBaseTestCase` (both auto-skip when disabled), `tests/Feature/Tenancy/DisabledStateTest` (22 assertions guarding the inert contract).
+- **`phpunit.xml`** — adds `Central` and `Tenant` testsuites (empty by default; forks populate) and `TENANCY_ENABLED=false` force-override for the default suite.
+- **Nine new env keys in `.env.example`**, under a clearly-marked OPTIONAL section: `TENANCY_ENABLED`, `TENANCY_IDENTIFICATION`, `TENANCY_CENTRAL_DOMAINS`, plus a `DB_CENTRAL_*` block (`DB_CENTRAL_CONNECTION`, `DB_CENTRAL_HOST`, `DB_CENTRAL_PORT`, `DB_CENTRAL_DATABASE`, `DB_CENTRAL_USERNAME`, `DB_CENTRAL_PASSWORD`).
+- **Documentation:**
+  - `docs/guidelines/tenancy-using.md` — agent-executable runbook for enabling tenancy in a new project.
+  - `docs/guidelines/tenancy-migrating.md` — agent-executable runbook for adopting tenancy on a fork with existing user data.
+  - `docs/migrations/template-v5.0.0.md` — fork-upgrade guide.
+  - `AGENTS.md` gains an **Optional multi-tenancy** section.
+  - `README.md` gains a feature bullet.
+
+### Changed
+
+- **`app/Models/User.php`** — adds the `CentralConnection` trait. The trait returns null when tenancy is disabled (Eloquent default), so the model behaves identically to v4.5.0 unless `TENANCY_ENABLED=true`.
+- **`app/Http/Middleware/HandleInertiaRequests.php`** — adds a `tenancyShared()` branch that emits `currentTenant` / `tenantUser` props only when `tenant()` resolves. Disabled-mode props are identical to v4.5.0.
+- **`bootstrap/providers.php`** — appends `App\Providers\TenancyServiceProvider`.
+- **`app/Providers/AppServiceProvider.php`** — conditionally binds `NullExistingDataMigrator` when tenancy is enabled.
+
+**`config/auth.php` is untouched.** Forks don't modify it during the v5 upgrade.
+
+### Dependencies
+
+- Added `stancl/tenancy: ^3.10`.
+- Added `stancl/jobpipeline`, `stancl/virtualcolumn`, `facade/ignition-contracts` (transitive).
+
+### Migration
+
+See [`docs/migrations/template-v5.0.0.md`](docs/migrations/template-v5.0.0.md). Four tracks:
+
+- **Track A — fork does not want tenancy.** ~10 minutes of mechanical file copying. No DB changes. No code refactors. End state: scaffolding installed but inert.
+- **Track B — new project wants tenancy from day one.** Track A + `php artisan tenancy:enable`. End state: tenancy live in path mode.
+- **Track C — existing project with user data wants tenancy.** Track A + `php artisan tenancy:enable` + [`docs/guidelines/tenancy-migrating.md`](docs/guidelines/tenancy-migrating.md). End state: each existing user has their own tenant.
+- **Track D — fork already has its own tenancy implementation (Invelo).** Track A only. Optional alignment per the migration guide later.
+
 ## v4.5.0 - 05/20/2026
 
 Scaffold correctness pass — bug fixes to template-shipped scaffolding (data-table state, real-time / SSR plumbing, shadcn-vue components, base service, auth middleware, tooling) plus one infrastructure improvement (Ziggy generation moved to the build pipeline so `route()` works identically in browser AND SSR). Most items are drop-in. One behavior change: logout now goes through POST.

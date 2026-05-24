@@ -18,7 +18,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Default binding for the tenancy data-migration contract. Only registered
+        // when tenancy is enabled — keeps the disabled-state DI container clean.
+        // Forks adopting tenancy on an existing dataset replace this with their
+        // own concrete implementation. See docs/guidelines/tenancy-migrating.md.
+        if (config('tenancy.enabled')) {
+            $this->app->bind(
+                \App\Tenancy\Contracts\ExistingDataMigrator::class,
+                \App\Tenancy\NullExistingDataMigrator::class,
+            );
+        }
     }
 
     /**

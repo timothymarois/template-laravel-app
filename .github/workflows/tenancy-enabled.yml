@@ -1,0 +1,53 @@
+name: Tenancy Enabled Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# This workflow runs the Central + Tenant testsuites with tenancy enabled.
+# The default `pnpm check` (php-checks.yml) runs everything else with
+# tenancy disabled — together they prove the v5.0.0 disabled-state
+# contract AND that tenancy actually works when turned on.
+#
+# Forks that don't intend to enable tenancy can leave this workflow as-is
+# (it just runs the smoke tests against the template's enabled-state config)
+# or remove the file — the existing php-checks.yml already validates the
+# disabled-state guarantees they care about.
+
+jobs:
+  tenancy-enabled:
+    name: Tenancy Enabled Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run Central testsuite (enabled state)
+        run: ./vendor/bin/pest --configuration=phpunit.tenancy.xml --testsuite=Central
+
+      - name: Run Tenant testsuite (enabled state)
+        run: ./vendor/bin/pest --configuration=phpunit.tenancy.xml --testsuite=Tenant
