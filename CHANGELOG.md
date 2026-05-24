@@ -14,6 +14,7 @@ Three bundled upgrades, applied as independent chunks (see Migration below): **L
 - **Laravel 12 → 13** (`laravel/framework ^13.0`, `laravel/tinker ^3.0`). No app-level breaking-change touchpoints in the template (verified: no `VerifyCsrfToken`, `Inertia::lazy()`, `->upsert()`, queue-event listeners, or published pagination views). PHP floor is 8.3 (template already on 8.4). Cosmetic at deploy: L13 hyphenates cache-prefix/session-cookie names — flush cache, expect one re-login.
 - **Inertia 2 → 3** (`inertiajs/inertia-laravel ^3.0`, `@inertiajs/vue3 ^3.0`). `config/inertia.php` restructured (page settings nested under `pages`, `testing` simplified, `use_script_element_for_initial_page` removed). `resources/views/app.blade.php` head marker `<title inertia>` → `<title data-inertia>`. Axios stays a direct dependency (template uses it for background calls). No `future` block, `router.cancel()`, or renamed-event usage to migrate in the template.
 - **Pint preset bump** (1.27 → 1.29) now enforces `fully_qualified_strict_types` — reformats many files cosmetically. Two Larastan findings fixed (`InertiaDataTableOptions` dead null-coalesce; `InitializeTenancyBySlug` redundant nullsafe).
+- **CI fix:** `tenancy-enabled.yml`'s Tenant step now passes `--do-not-fail-on-empty-test-suite`. Pest 4.7 exits `1` on an isolated empty suite, and `tests/Tenant/` is an intentionally-empty placeholder for fork-authored tenant tests.
 
 ### What you get when enabled
 - DB-per-tenant isolation (path-mode by default at `/t/{slug}/...`, subdomain mode one env-flip away).

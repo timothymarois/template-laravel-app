@@ -64,6 +64,7 @@ Larastan got stricter with the framework bump. One pre-existing template file ne
 
 - [ ] `pnpm check:php` is green (Pint, Larastan, Pest).
 - [ ] `php artisan --version` prints `Laravel Framework 13.x`.
+- [ ] **Pest 4.7 empty-suite behavior changed:** running a testsuite *in isolation* that contains no test files now exits `1` ("No tests found"). If your fork runs an isolated empty suite anywhere (a CI step, a script), add `--do-not-fail-on-empty-test-suite` to that command. (This is why the template's `tenancy-enabled.yml` Tenant step — see Chunk 3 — carries that flag: `tests/Tenant/` is an intentionally-empty placeholder.) Running suites together (e.g. `pnpm check:tenancy`) is unaffected, since tests are still found overall.
 - [ ] Optional cosmetic note for deploy: L13 hyphenates cache-prefix and session-cookie names. Flush cache and expect users to re-login once after deploy. No code change required.
 
 ---

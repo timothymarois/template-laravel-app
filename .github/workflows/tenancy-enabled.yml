@@ -49,5 +49,9 @@ jobs:
       - name: Run Central testsuite (enabled state)
         run: ./vendor/bin/pest --configuration=phpunit.tenancy.xml --testsuite=Central
 
+      # The template ships no tenant-context tests — tests/Tenant/ is a placeholder
+      # for forks to populate (see tests/TenantBaseTestCase.php). Run in isolation
+      # against an empty directory, Pest exits 1 ("No tests found"), so allow the
+      # empty case. Real tenant tests that fail still fail this step.
       - name: Run Tenant testsuite (enabled state)
-        run: ./vendor/bin/pest --configuration=phpunit.tenancy.xml --testsuite=Tenant
+        run: ./vendor/bin/pest --configuration=phpunit.tenancy.xml --testsuite=Tenant --do-not-fail-on-empty-test-suite
