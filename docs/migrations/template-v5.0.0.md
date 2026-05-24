@@ -544,7 +544,7 @@ v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_tabl
 
 ### Group K — AGENTS.md + CHANGELOG + version bump
 
-- [ ] Copy the `## Optional multi-tenancy` block from the template's `AGENTS.md` into this fork's `AGENTS.md`. Forks need this guidance so their agents know not to wander into tenancy code when tenancy is disabled, and which guides to read when it's enabled.
+- [ ] **AGENTS.md tenancy block — only for forks that will actually use tenancy (Tracks B/C/D).** Copy the `## Optional multi-tenancy` block from the template's `AGENTS.md` into the fork's `AGENTS.md` so agents know which guides to read and not to wander into tenancy code. **Track A forks that will never enable tenancy should SKIP this step** — a tenancy section in a non-tenant fork's `AGENTS.md` is noise that misleads agents about what the app actually is. (versado-site and aprillaneart-site intentionally omit it.) The disabled-state contract is enforced by `tests/Feature/Tenancy/DisabledStateTest.php` regardless of whether the block is present, so skipping it is safe.
 - [ ] Append the template's `v5.0.0` entry from `CHANGELOG.md` to this fork's `CHANGELOG.md` (verbatim or trimmed to the fork's customer-facing voice — at minimum a one-line entry naming the dependency bump and pointing at this migration guide).
 - [ ] Update `template-version.json`:
   ```json
