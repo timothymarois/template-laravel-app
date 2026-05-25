@@ -20,6 +20,7 @@ Chunks 1 and 2 are framework/library upgrades every fork must take to stay on v5
 - `pnpm check` is green on the baseline before you start.
 - PHP **8.4+** (Laravel 13 floor is 8.3; this template targets 8.4).
 - You have read-write access to the fork repo and can run `composer`, `pnpm`, `php artisan`.
+- **CI sanity (carried from v4.5.0 — verify it actually landed):** every `.github/workflows/*.yml` that runs `pnpm build` / `vite build` must install PHP + composer first (`pnpm build` runs `php artisan ziggy:generate`). This is the single most-forgotten step and **local `pnpm check` does not catch it** — the failure is GitHub-Actions-only. Run from the fork root, must print nothing: `for wf in $(grep -rlE 'pnpm( exec vite| run)? build|pnpm build' .github/workflows/ 2>/dev/null); do grep -q 'composer install' "$wf" || echo "NEEDS composer install: $wf"; done`. If a doing-both-at-once upgrade, fix this as part of v4.5.0's "Update CI workflows" step.
 
 ---
 

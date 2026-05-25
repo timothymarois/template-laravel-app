@@ -384,11 +384,25 @@ Work top-down, one group at a time, and run `pnpm check` (or at least the most r
 
 If your fork doesn't have a VitePress `docs/` directory (or its docs don't use `env` fences), skip this group.
 
-### Update CI workflows
+### Update CI workflows — ⛔ MOST-FORGOTTEN STEP (invisible to local `pnpm check`)
 
-- [ ] **JS workflow PHP dependency.** If your fork has a separate JS-only CI workflow (e.g. `.github/workflows/js-checks.yml`) that runs `pnpm build` without installing PHP and composer, it will fail with `Failed to open stream: vendor/autoload.php` once v4.5.0 lands — because the new `pnpm build` runs `php artisan ziggy:generate` first, and the bundled vite import needs a generated `resources/js/ziggy.js`.
+**Read this even if you think you're done.** This step is missed on nearly every fork because **a green local `pnpm check` does NOT prove it's handled.** Locally, `vendor/autoload.php` always exists, so `php artisan ziggy:generate` (now run by `pnpm build` after Group C) succeeds and the build is green. But a **JS-only CI workflow** (e.g. `.github/workflows/js-checks.yml`) that runs `pnpm build` / `pnpm exec vite build --ssr` **without installing PHP + composer** fails only in GitHub Actions with:
 
-  Add a Setup PHP step + `composer install --no-interaction --prefer-dist --no-dev` right after the `pnpm install` step. Composer's `post-autoload-dump` generates `resources/js/ziggy.js` automatically. See the template's `.github/workflows/js-checks.yml` for the exact step layout (Setup PHP → cache composer dir → install composer deps).
+```
+PHP Warning:  require(.../vendor/autoload.php): Failed to open stream: No such file or directory in .../artisan
+PHP Fatal error: Failed opening required '.../vendor/autoload.php'
+ ELIFECYCLE  Command failed with exit code 255.
+```
+
+- [ ] **Every CI workflow that builds must install PHP + composer first.** Right after the `pnpm install` step, add: a `Setup PHP` step (`shivammathur/setup-php@v2`, php `8.4`), an optional composer cache, and `composer install --no-interaction --prefer-dist --no-dev`. Composer's `post-autoload-dump` then generates `resources/js/ziggy.js` automatically. Copy the exact step block verbatim from the template's `.github/workflows/js-checks.yml` (Setup PHP → cache composer dir → install composer deps).
+
+  Verify (run from the fork root — **must print nothing**):
+  ```bash
+  for wf in $(grep -rlE 'pnpm( exec vite| run)? build|pnpm build' .github/workflows/ 2>/dev/null); do
+      grep -q 'composer install' "$wf" || echo "NEEDS composer install (will fail CI): $wf"
+  done
+  ```
+  Any file it prints runs a build step without composer and **will** fail with the error above.
 
 ## Finalize
 
@@ -398,6 +412,8 @@ If your fork doesn't have a VitePress `docs/` directory (or its docs don't use `
   export PATH="$HOME/Library/Application Support/Herd/bin:$PATH"
   pnpm check
   ```
+
+- [ ] **CI workflows verified — do NOT skip; `pnpm check` above does not cover this.** Every `.github/workflows/*.yml` that runs `pnpm build` / `vite build` must install PHP + composer (see "Update CI workflows" above). The break is GitHub-Actions-only — green locally ≠ green in CI. Run that section's verify loop; it must print nothing before you bump `template-version.json`.
 
 - [ ] Smoke-test the app:
   - Login → admin → users list (data-table).
