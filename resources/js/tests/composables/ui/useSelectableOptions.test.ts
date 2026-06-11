@@ -233,7 +233,7 @@ describe('useSelectableOptions', () => {
                 optionLabel: 'name',
             });
 
-            expect(getOptionLabel({ name: 'Apple', id: 'apple' } as any)).toBe('Apple');
+            expect(getOptionLabel({ name: 'Apple', id: 'apple' })).toBe('Apple');
         });
 
         it('falls back to label property when custom key is missing', () => {
@@ -252,7 +252,7 @@ describe('useSelectableOptions', () => {
                 options: ref([]),
             });
 
-            expect(getOptionLabel({ value: 'test-value' } as any)).toBe('test-value');
+            expect(getOptionLabel({ value: 'test-value' })).toBe('test-value');
         });
     });
 
@@ -291,7 +291,7 @@ describe('useSelectableOptions', () => {
                 optionValue: 'id',
             });
 
-            expect(getOptionValue({ name: 'Apple', id: 123 } as any)).toBe(123);
+            expect(getOptionValue({ name: 'Apple', id: 123 })).toBe(123);
         });
 
         it('falls back to value property when custom key is missing', () => {
@@ -571,13 +571,17 @@ describe('useSelectableOptions', () => {
                 toggleOption,
             } = useSelectableOptions({
                 modelValue: ref(1),
-                options: options as any,
+                options,
                 optionLabel: 'name',
                 optionValue: 'id',
             });
 
-            // normalizedOptions should pass through objects
-            expect(normalizedOptions.value).toEqual(options.value);
+            // normalizedOptions should preserve custom properties while adding label/value.
+            expect(normalizedOptions.value).toEqual([
+                { name: 'Apple', id: 1, label: 'Apple', value: 1 },
+                { name: 'Banana', id: 2, label: 'Banana', value: 2 },
+                { name: 'Cherry', id: 3, label: 'Cherry', value: 3 },
+            ]);
 
             // getOptionLabel should use 'name' key
             expect(getOptionLabel(options.value[0])).toBe('Apple');

@@ -13,9 +13,9 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { Check, ChevronsUpDown, X } from 'lucide-vue-next';
 import { cn } from '@/utils';
-import { useSelectableOptions, type SelectableOption } from '@/composables';
+import { useSelectableOptions, type SelectableRawOption } from '@/composables';
 
-export type ComboboxOption = SelectableOption;
+export type ComboboxOption = SelectableRawOption;
 
 interface Props {
     modelValue?: string | number | (string | number)[] | null;

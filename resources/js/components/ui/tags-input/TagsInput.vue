@@ -5,8 +5,7 @@ import { provide, toRef } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { TagsInputRoot, useForwardPropsEmits } from "reka-ui";
 import { cn } from '@/utils';
-
-export type TagsInputVariant = 'default' | 'secondary' | 'outline' | 'primary';
+import type { TagsInputVariant } from './types';
 
 const props = defineProps<TagsInputRootProps & {
     class?: HTMLAttributes["class"];

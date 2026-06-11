@@ -1,14 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { CalendarDate } from '@internationalized/date';
 import { formatDateValue } from '@/utils/format/formatDateValue';
 
-// Mock DateValue object (from @internationalized/date)
-const createDateValue = (year: number, month: number, day: number) => ({
-    year,
-    month,
-    day,
-    calendar: { identifier: 'gregory' },
-    era: 'AD',
-});
+const createDateValue = (year: number, month: number, day: number) => new CalendarDate(year, month, day);
 
 describe('formatDateValue', () => {
     // Happy paths - short format (default)
