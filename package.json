@@ -9,16 +9,17 @@
     "build-ssr": "php artisan ziggy:generate && vite build && vite build --ssr",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint \"resources/js/**/*.{js,vue}\"",
     "lint:fix": "eslint \"resources/js/**/*.{js,vue}\" --fix",
     "lint:css": "stylelint \"resources/css/**/*.css\"",
     "lint:css:fix": "stylelint \"resources/css/**/*.css\" --fix",
     "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && php -d memory_limit=512M ./vendor/bin/pest",
     "check:tenancy": "php -d memory_limit=512M ./vendor/bin/pest --configuration=phpunit.tenancy.xml",
-    "check:js": "pnpm lint && pnpm lint:css && pnpm test",
+    "check:js": "pnpm lint && pnpm lint:css && pnpm typecheck && pnpm test",
     "check:docs": "pnpm docs:lint && pnpm docs:lint:css",
     "check:build": "pnpm build && pnpm exec vite build --ssr && pnpm docs:build",
-    "check": "concurrently -g \"pnpm:check:php\" \"pnpm:check:js\" \"pnpm:check:docs\" && pnpm check:build",
+    "check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" \"pnpm check:docs\" && pnpm check:build",
     "check:all": "pnpm check && pnpm check:tenancy",
     "docs:dev": "cd docs && pnpm dev",
     "docs:build": "cd docs && pnpm build",
@@ -53,7 +54,8 @@
     "typescript": "^5.9.3",
     "unplugin-auto-import": "^0.17.8",
     "vite": "^7.3.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.7",
+    "vue-tsc": "^3.1.8"
   },
   "dependencies": {
     "@internationalized/date": "^3.12.1",
@@ -91,6 +93,10 @@
     "vuedraggable": "^4.1.0"
   },
   "pnpm": {
+    "overrides": {
+      "shell-quote": ">=1.8.4",
+      "yaml": ">=2.8.3"
+    },
     "onlyBuiltDependencies": [
       "esbuild",
       "vue-demi",

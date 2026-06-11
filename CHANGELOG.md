@@ -6,6 +6,27 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v5.0.1 - 06/11/2026
+
+Security/audit patch on top of v5.0.0. Clears `pnpm audit` + `composer audit` findings and adds a `typecheck` step to `check:js`. No framework, schema, or runtime API changes — drop-in for every fork. One minor behavior change in `useSelectableOptions` (noted below).
+
+### Changes
+
+- **Security bumps.** JS: `pnpm.overrides` force `shell-quote >=1.8.4` and `yaml >=2.8.3`. Composer: in-range Symfony refresh (`http-foundation`, `routing`, `polyfill-*`). No `composer.json`/`package.json` constraint changes.
+- **New `typecheck` script** (`tsc --noEmit`), now part of `check:js`. Adds `vue-tsc` to devDeps. Type-safety fixes to make it pass: new `env.d.ts` + `.d.ts` files for `useEcho`/`useFormSubmit`, a generic re-type of `useSelectableOptions`, and `TagsInputVariant` moved to `tags-input/types.ts`.
+- **⚠️ `useSelectableOptions` behavior change.** `normalizedOptions` now always augments object options with normalized `label`/`value` keys (spreading the original) instead of passing them through untouched. Displayed labels and emitted values are unchanged. If your fork reads `normalizedOptions` for the original object shape (deep-equality, key-absence), audit those reads.
+
+### Migration
+
+Mechanical, ~5 minutes:
+
+1. Copy the changed files into your fork (14 files — `package.json`, `pnpm-lock.yaml`, `composer.lock`, the new `*.d.ts` + `tags-input/types.ts`, and the `useSelectableOptions` / combobox / select-popover / tags-input edits).
+2. `composer install && pnpm install --frozen-lockfile`.
+3. Audit any direct reads of `useSelectableOptions`' `normalizedOptions` (see behavior change above).
+4. Run `pnpm check:js`. Bump `template-version.json` to `5.0.1` once green.
+
+> The `typecheck` gate uses `tsc`, which covers `.ts`/`.d.ts` only — it does not deep-typecheck `.vue` `<script setup>` blocks.
+
 ## v5.0.0 - 05/24/2026
 
 Three bundled upgrades, applied as independent chunks (see Migration below): **Laravel 12 → 13**, **Inertia 2 → 3**, and **optional multi-tenancy** via `stancl/tenancy ^3.10`. Tenancy is off by default — forks that don't set `TENANCY_ENABLED=true` see zero tenancy behavior change vs. v4.5.0. The framework/Inertia bumps apply to every fork; the major version signals those library majors plus the new tenancy model classes + schema additions.

@@ -60,22 +60,31 @@ import { computed, type Ref, type ComputedRef } from 'vue';
  */
 
 /** Standard option object with label and value */
-export interface SelectableOption {
-    label: string;
-    value: string | number;
+export type SelectableScalar = string | number;
+
+export type SelectableObject = Record<string, unknown> & {
+    label?: string;
+    value?: SelectableScalar;
     disabled?: boolean;
-    [key: string]: any;
+};
+
+export type SelectableRawOption = SelectableObject | SelectableScalar;
+
+export interface SelectableOption extends SelectableObject {
+    label: string;
+    value: SelectableScalar;
+    disabled?: boolean;
 }
 
 /** Possible values for selection: single value, array of values, or null */
-export type SelectableValue = string | number | (string | number)[] | null;
+export type SelectableValue = SelectableScalar | SelectableScalar[] | null | undefined;
 
 /** Props for useSelectableOptions composable */
-export interface UseSelectableOptionsProps {
+export interface UseSelectableOptionsProps<TOption extends SelectableRawOption = SelectableRawOption> {
     /** Reactive reference to the current selection value */
     modelValue: Ref<SelectableValue> | ComputedRef<SelectableValue>;
     /** Reactive reference to available options (can be objects, strings, or numbers) */
-    options: Ref<(SelectableOption | string | number)[]> | ComputedRef<(SelectableOption | string | number)[]>;
+    options: Ref<TOption[]> | ComputedRef<TOption[]>;
     /** Property key to use for option labels (default: 'label') */
     optionLabel?: string;
     /** Property key to use for option values (default: 'value') */
@@ -85,7 +94,7 @@ export interface UseSelectableOptionsProps {
 }
 
 /** Return type for useSelectableOptions composable */
-export interface UseSelectableOptionsReturn {
+export interface UseSelectableOptionsReturn<TOption extends SelectableRawOption = SelectableRawOption> {
     /** All options normalized to {label, value} format */
     normalizedOptions: ComputedRef<SelectableOption[]>;
     /** Currently selected values as an array (empty if nothing selected) */
@@ -93,37 +102,68 @@ export interface UseSelectableOptionsReturn {
     /** Whether any value is currently selected */
     hasValue: ComputedRef<boolean>;
     /** Extract label from an option (handles string/number/object) */
-    getOptionLabel: (option: SelectableOption | string | number) => string;
+    getOptionLabel: (option: TOption | SelectableRawOption) => string;
     /** Extract value from an option (handles string/number/object) */
-    getOptionValue: (option: SelectableOption | string | number) => string | number;
+    getOptionValue: (option: TOption | SelectableRawOption) => SelectableScalar;
     /** Find the label for a given value */
-    getLabel: (value: string | number) => string;
+    getLabel: (value: SelectableScalar) => string;
     /** Check if a value is currently selected */
-    isSelected: (value: string | number) => boolean;
+    isSelected: (value: SelectableScalar) => boolean;
     /** Toggle an option's selection state, returns new value to emit */
-    toggleOption: (option: SelectableOption | string | number) => SelectableValue;
+    toggleOption: (option: TOption | SelectableRawOption) => SelectableValue;
     /** Remove a value from selection, returns new value to emit */
-    removeValue: (value: string | number) => SelectableValue;
+    removeValue: (value: SelectableScalar) => SelectableValue;
     /** Clear all selections, returns new value to emit ([] or null) */
     clearAll: () => SelectableValue;
 }
 
-export function useSelectableOptions(props: UseSelectableOptionsProps): UseSelectableOptionsReturn {
+export function useSelectableOptions<TOption extends SelectableRawOption = SelectableRawOption>(
+    props: UseSelectableOptionsProps<TOption>,
+): UseSelectableOptionsReturn<TOption> {
     const optionLabelKey = props.optionLabel ?? 'label';
     const optionValueKey = props.optionValue ?? 'value';
+
+    const isScalarOption = (option: SelectableRawOption): option is SelectableScalar => {
+        return typeof option === 'string' || typeof option === 'number';
+    };
+
+    const resolveScalar = (value: unknown, fallback: SelectableScalar): SelectableScalar => {
+        return typeof value === 'string' || typeof value === 'number' ? value : fallback;
+    };
+
+    const getOptionLabel = (option: TOption | SelectableRawOption): string => {
+        if (isScalarOption(option)) return String(option);
+
+        const label = option[optionLabelKey] ?? option.label ?? option.value;
+
+        return String(label ?? '');
+    };
+
+    const getOptionValue = (option: TOption | SelectableRawOption): SelectableScalar => {
+        if (isScalarOption(option)) return option;
+
+        return resolveScalar(option[optionValueKey] ?? option.value, getOptionLabel(option));
+    };
 
     // Normalize options to always have label/value
     const normalizedOptions = computed<SelectableOption[]>(() => {
         return props.options.value.map(opt => {
-            if (typeof opt === 'string' || typeof opt === 'number') {
+            if (isScalarOption(opt)) {
                 return { label: String(opt), value: opt };
             }
-            return opt;
+
+            const option = opt as SelectableObject;
+
+            return {
+                ...option,
+                label: getOptionLabel(opt),
+                value: getOptionValue(opt),
+            };
         });
     });
 
     // Get the selected values as array
-    const selectedValues = computed<(string | number)[]>(() => {
+    const selectedValues = computed<SelectableScalar[]>(() => {
         const val = props.modelValue.value;
         if (val === null || val === undefined || val === '') return [];
         if (Array.isArray(val)) return val.filter(v => v !== '' && v !== null && v !== undefined);
@@ -132,28 +172,17 @@ export function useSelectableOptions(props: UseSelectableOptionsProps): UseSelec
 
     const hasValue = computed(() => selectedValues.value.length > 0);
 
-    // Helper functions
-    const getOptionLabel = (option: SelectableOption | string | number): string => {
-        if (typeof option === 'string' || typeof option === 'number') return String(option);
-        return option[optionLabelKey] ?? option.label ?? String(option.value);
-    };
-
-    const getOptionValue = (option: SelectableOption | string | number): string | number => {
-        if (typeof option === 'string' || typeof option === 'number') return option;
-        return option[optionValueKey] ?? option.value;
-    };
-
-    const getLabel = (value: string | number): string => {
+    const getLabel = (value: SelectableScalar): string => {
         const option = normalizedOptions.value.find(opt => getOptionValue(opt) === value);
         return option ? getOptionLabel(option) : String(value);
     };
 
-    const isSelected = (value: string | number): boolean => {
+    const isSelected = (value: SelectableScalar): boolean => {
         return selectedValues.value.includes(value);
     };
 
     // Toggle selection of an option, returns the new value to emit
-    const toggleOption = (option: SelectableOption | string | number): SelectableValue => {
+    const toggleOption = (option: TOption | SelectableRawOption): SelectableValue => {
         const optionValue = getOptionValue(option);
 
         if (props.multiple) {
@@ -166,7 +195,7 @@ export function useSelectableOptions(props: UseSelectableOptionsProps): UseSelec
     };
 
     // Remove a value from selection, returns the new value to emit
-    const removeValue = (value: string | number): SelectableValue => {
+    const removeValue = (value: SelectableScalar): SelectableValue => {
         if (props.multiple) {
             return selectedValues.value.filter(v => v !== value);
         }

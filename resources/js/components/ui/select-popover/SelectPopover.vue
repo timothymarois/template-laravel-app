@@ -105,9 +105,9 @@ import { ref, computed, watch, nextTick, toRef } from 'vue';
 import { PopoverBase as Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Check, ChevronsUpDown, Search, X } from 'lucide-vue-next';
 import { cn } from '@/utils';
-import { useSelectableOptions, type SelectableOption } from '@/composables';
+import { useSelectableOptions, type SelectableRawOption } from '@/composables';
 
-export type SelectOption = SelectableOption;
+export type SelectOption = SelectableRawOption;
 
 interface Props {
     modelValue?: string | number | (string | number)[] | null;
