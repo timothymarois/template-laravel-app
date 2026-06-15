@@ -87,7 +87,7 @@ In `docker/config/supervisord.conf`, keep `php-fpm` + `nginx` (always required) 
 
 Dockerfile knobs: set `ARG PHP_VERSION` (match `docker.php`), the build command (`build-ssr` vs `build`), and `pnpm` vs `npm`.
 
-DB-less project (`database: false`): set `WAIT_FOR_DB=false` in Coolify env and leave `docker/deploy/post-deployment.sh` a no-op.
+DB-less project (`database: false`): leave `docker/deploy/post-deployment.sh` a no-op.
 
 ### B4. Release tasks
 
@@ -107,7 +107,7 @@ Leave `docker/deploy/pre-deployment.sh` empty (or `php artisan down` for a maint
 - **Pre-deployment Command:** `sh /var/www/html/docker/deploy/pre-deployment.sh`
 - **Post-deployment Command:** `sh /var/www/html/docker/deploy/post-deployment.sh`
 - **Resources:** add Postgres/MySQL + Redis to match `requires.database` / `requires.redis`.
-- **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars (`DB_*`, `REDIS_*`, `REVERB_*`, `WAIT_FOR_DB`, app-specifics). Mark secrets **Runtime-only**.
+- **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars (`DB_*`, `REDIS_*`, `REVERB_*`, app-specifics). Mark secrets **Runtime-only**.
 - **Domains** with `https://` → automatic Let's Encrypt.
 
 ### B6. Verify the build paths resolve

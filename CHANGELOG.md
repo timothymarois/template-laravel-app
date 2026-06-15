@@ -14,7 +14,7 @@ Adds a canonical **Docker deploy setup** for Coolify — `Dockerfile`, `.dockeri
 
 - **Universal multi-stage `Dockerfile`** — PHP 8.4 (`ARG PHP_VERSION`), full extension superset (`pdo_mysql`, `pdo_pgsql`, `redis`, `sockets`, `gd`, `intl`, `zip`, `bcmath`, `pcntl`, `opcache`, `exif`, `gmp`), Node 22, layer-cached composer + pnpm `build-ssr`, OPcache + JIT. supervisord in the foreground (`-n`).
 - **Organized `docker/`** — `config/` (nginx.conf · php.ini · supervisord.conf), `deploy/` (entrypoint.sh · pre-deployment.sh · post-deployment.sh), and `README.md`. **One universal setup — no "simple vs full" variant.** supervisord ships every process (php-fpm · nginx · inertia-ssr · horizon · scheduler; reverb optional); each project enables only what it needs and deletes the rest.
-- **Deploy lifecycle scripts** — `entrypoint.sh` (Start phase: `optimize` + `storage:link` + an optional DB-wait gated by `WAIT_FOR_DB`), `pre-deployment.sh` (Coolify Pre-deployment Command — OLD container, for maintenance/backups), `post-deployment.sh` (Coolify Post-deployment Command — NEW container, for migrations). Pre/post ship even when empty so the Coolify commands are wired once and deploy logic lives in versioned scripts.
+- **Deploy lifecycle scripts** — `entrypoint.sh` (Start phase: `app:ensure-storage` + `optimize` + `storage:link`), `pre-deployment.sh` (Coolify Pre-deployment Command — OLD container, for maintenance/backups), `post-deployment.sh` (Coolify Post-deployment Command — NEW container, for migrations). Pre/post ship even when empty so the Coolify commands are wired once and deploy logic lives in versioned scripts.
 - **`template-manifest.json`** (renamed from `template-version.json`) — declares the template `version` AND the project's Docker requirements: `docker.{php, pkg, build}` plus a `requires` block (`database`, `redis`, `ssr`, `horizon`, `scheduler`, `reverb`). The single machine-readable "what this project needs"; `docker/README.md` → "This project's setup" is the human mirror.
 
 ### Migration
@@ -31,7 +31,7 @@ Adds a canonical **Docker deploy setup** for Coolify — `Dockerfile`, `.dockeri
 
 1. Copy `Dockerfile`, `.dockerignore`, and the `docker/` tree into the fork.
 2. Fill `docker/README.md` → "This project's setup" and `template-manifest.json`'s `docker.requires` to match the app.
-3. In `docker/config/supervisord.conf`, delete the OPTIONAL process blocks the project doesn't use. Set Dockerfile knobs (`ARG PHP_VERSION`, build command, pnpm/npm). DB-less? Set `WAIT_FOR_DB=false` and leave `post-deployment.sh` empty.
+3. In `docker/config/supervisord.conf`, delete the OPTIONAL process blocks the project doesn't use. Set Dockerfile knobs (`ARG PHP_VERSION`, build command, pnpm/npm). DB-less? Leave `post-deployment.sh` empty.
 4. Put migrations in `docker/deploy/post-deployment.sh`.
 5. In Coolify: Build Pack = Dockerfile, Port = 80, Health check = `/up`; add DB/Redis resources to match `requires`; wire **Pre-deployment Command** = `sh /var/www/html/docker/deploy/pre-deployment.sh` and **Post-deployment Command** = `sh /var/www/html/docker/deploy/post-deployment.sh`; set domains with `https://`. Bump `template-manifest.json` `version` to `5.1.0`.
 

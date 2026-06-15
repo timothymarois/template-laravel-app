@@ -37,7 +37,7 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 | PHP                | `8.4`               | `ARG PHP_VERSION` in the Dockerfile               |
 | Package manager    | `pnpm`              | build stage (`pnpm` vs `npm`)                     |
 | Build command      | `build-ssr`         | client + SSR bundles (`pnpm build-ssr`)           |
-| Database           | **yes**             | DB resource + post-deploy migrations + `WAIT_FOR_DB=true` |
+| Database           | **yes**             | DB resource + post-deploy migrations              |
 | Redis              | **yes**             | Redis resource; `QUEUE`/`CACHE` drivers           |
 | Queue (Horizon)    | **yes**             | `horizon` process                                 |
 | Scheduler          | **yes**             | `scheduler` process (`schedule:work`)             |
@@ -48,8 +48,8 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 `inertia-ssr` · `horizon` · `scheduler`.
 
 > This is the template's default (a full-featured app). A DB-less brochure site
-> would set Database/Redis/Queue/Scheduler to **no**, set `WAIT_FOR_DB=false`,
-> and delete the `horizon`/`scheduler` blocks from `supervisord.conf`.
+> would set Database/Redis/Queue/Scheduler to **no** and delete the
+> `horizon`/`scheduler` blocks from `supervisord.conf`.
 
 ## Tailoring a fork (do this once)
 
@@ -70,7 +70,7 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 | **Build** | once, when the image is built | `Dockerfile` | composer install, `pnpm build-ssr` |
 | **Pre-deploy** | before the swap, in the **OLD** container (old code) | `docker/deploy/pre-deployment.sh` (Coolify **Pre-deployment Command**) | maintenance mode, backups — **never migrations** |
 | **Post-deploy** | once per deploy, in the **NEW** container (new code), after build | `docker/deploy/post-deployment.sh` (Coolify **Post-deployment Command**) | `migrate --force`, `tenants:migrate --force` |
-| **Start** | every container boot (restarts/scaling) | `docker/deploy/entrypoint.sh` (automatic) | `optimize`, `storage:link`, optional DB-wait |
+| **Start** | every container boot (restarts/scaling) | `docker/deploy/entrypoint.sh` (automatic) | `ensure-storage`, `optimize`, `storage:link` |
 
 **Migrations go in the Post-deployment phase** — the new container has the new
 code + new migrations, and the build (`composer install` + `pnpm build-ssr`) is a
@@ -91,22 +91,22 @@ wired once and deploy behavior lives in versioned scripts, not the Coolify UI.
 
 | Option | Supervisord process | Coolify needs |
 |--------|---------------------|---------------|
-| Database | — | DB resource (Postgres/MySQL) + `migrate` in post-deploy + `WAIT_FOR_DB=true` |
+| Database | — | DB resource (Postgres/MySQL) + `migrate` in post-deploy |
 | Redis | — | Redis resource; `QUEUE_CONNECTION=redis`, `CACHE_STORE=redis` |
 | Horizon | `horizon` | Redis |
 | Scheduler | `scheduler` | — |
 | Inertia SSR | `inertia-ssr` | `build-ssr` build command |
 | Reverb | `reverb` | expose `:8080` as a second domain/port; `REVERB_*` env |
 
-DB-less project? Set `WAIT_FOR_DB=false`, `SESSION_DRIVER=file`,
-`CACHE_STORE=file`, `QUEUE_CONNECTION=sync`, and leave `post-deployment.sh` empty.
+DB-less project? Set `SESSION_DRIVER=file`, `CACHE_STORE=file`,
+`QUEUE_CONNECTION=sync`, and leave `post-deployment.sh` empty.
 
 ## Coolify settings (every app)
 
 - **Build Pack:** Dockerfile · **Ports Exposes:** `80` — Coolify defaults to `3000`; you MUST change it to `80` or Traefik returns 502 (nginx listens on 80).
 - **Health Check:** scheme **`http`**, path **`/up`**, port **`80`** (the image ships `wget`). Never `https` on port 80. If it misbehaves, disable it; the app is healthy without it.
 - **Pre/Post-deployment Commands:** wire both scripts (above).
-- **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars from the setup table (DB, Redis, `REVERB_*`, `WAIT_FOR_DB`, app-specifics like Sentry/S3).
+- **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars from the setup table (DB, Redis, `REVERB_*`, app-specifics like Sentry/S3).
 - **Mark secrets** (`APP_KEY`, `MAIL_PASSWORD`, `AWS_*`) as **Runtime only** so they aren't baked into image layers.
 - **Resources:** add Postgres/MySQL + Redis only if the project's setup uses them.
 - **Domains** with `https://` → automatic Let's Encrypt SSL (issued once, cached, auto-renewed). Wildcard needs Traefik DNS-01.
@@ -128,7 +128,7 @@ This superset covers every project, so most forks need no extension change.
 | `Dockerfile` build stages, extensions, `CMD` | `ARG PHP_VERSION` |
 | `docker/config/nginx.conf`, `docker/config/php.ini` | asset-build command, pnpm/npm |
 | `docker/deploy/entrypoint.sh` | which `supervisord.conf` process blocks are enabled |
-| `.dockerignore` | env-driven settings (incl. `WAIT_FOR_DB`) |
+| `.dockerignore` | env-driven settings |
 
 Rules:
 
