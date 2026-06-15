@@ -6,6 +6,26 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v5.1.0 - 06/15/2026
+
+Adds a canonical **Docker deploy setup** for Coolify — `Dockerfile`, `.dockerignore`, and `docker/`. Additive feature: no framework, schema, or runtime API changes. Forks adopt it by copying the files; nothing breaks if they don't.
+
+### What's included
+
+- **Universal multi-stage `Dockerfile`** — PHP 8.4 (`ARG PHP_VERSION`), full extension superset (`pdo_mysql`, `pdo_pgsql`, `redis`, `sockets`, `gd`, `intl`, `zip`, `bcmath`, `pcntl`, `opcache`, `exif`, `gmp`), Node 22, layer-cached composer + pnpm `build-ssr`, OPcache + JIT. Runs supervisord in the foreground (`-n`).
+- **`docker/`** — nginx vhost, `php.ini`, supervisord (php-fpm · nginx · inertia-ssr · horizon · scheduler), entrypoint (DB-wait → `optimize` → `storage:link`).
+- **`docker/simple/`** — DB-less variant overrides (web + SSR only; no horizon/scheduler/DB-wait) for lightweight sites. Two-file swap.
+- **`docker/README.md`** — variant selection, knobs, and the Coolify env/resource/SSL checklist.
+
+### Migration
+
+Optional, per fork — adopt when moving a fork to Coolify:
+
+1. Copy `Dockerfile`, `.dockerignore`, and `docker/` into the fork root.
+2. Set the knobs (PHP version, build command, package manager) per `docker/README.md`.
+3. DB-less site? Swap in `docker/simple/*` (two files), set `SESSION_DRIVER=file`/`CACHE_STORE=file`.
+4. In Coolify: Build Pack = Dockerfile, Port = 80, Health check = `/up`; add DB/Redis resources (full) + the `migrate --force` pre-deploy command; set domains with `https://`. Bump `template-version.json` to `5.1.0`.
+
 ## v5.0.1 - 06/11/2026
 
 Security/audit patch on top of v5.0.0. Clears `pnpm audit` + `composer audit` findings and adds a `typecheck` step to `check:js`. No framework, schema, or runtime API changes — drop-in for every fork. One minor behavior change in `useSelectableOptions` (noted below).

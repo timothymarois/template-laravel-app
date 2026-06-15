@@ -1,0 +1,29 @@
+# Built fresh inside the image — never copy the host's copies
+node_modules
+vendor
+public/build
+public/hot
+bootstrap/ssr
+
+# Local env (.env.example IS needed at build time, so keep it)
+.env
+.env.testing
+.env.backup
+
+# VCS / IDE / tooling
+.git
+.github
+.idea
+.vscode
+.editorconfig
+.phpunit.result.cache
+
+# Transient storage
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Docs / tests not needed in the image
+tests
+*.md
