@@ -2,11 +2,11 @@
 #
 # ── Universal Laravel production image ───────────────────────────────────────
 # Canonical deploy image for this template and its forks (Coolify).
-# Single container; supervisord runs: nginx · php-fpm · inertia-ssr · horizon · scheduler
+# Single container; supervisord runs the processes this project enables.
 #
 # Coolify:  Build Pack = Dockerfile · Port = 80 · Health check = /up
-# See docker/README.md for variant selection (full vs simple), knobs, and the
-# Coolify env/resource checklist.
+# See docker/README.md → "This project's setup" (mirrors template-manifest.json)
+# for what this project requires, the knobs, and the Coolify env/resource checklist.
 #
 # PER-PROJECT KNOBS:
 #   1. PHP_VERSION build arg (below) — default 8.4
@@ -15,9 +15,9 @@
 #        non-SSR app .... pnpm build
 #        npm instead .... swap pnpm -> npm
 #        no frontend .... remove the Node install + build lines
-#   3. docker/supervisord.conf — the process list (swap in docker/simple/* for a
-#        DB-less site; swap horizon for queue:work; add reverb; etc.)
-#   4. Coolify pre-deploy command (migrations) — per app
+#   3. docker/config/supervisord.conf — enable only this project's processes
+#        (delete unused OPTIONAL blocks; swap horizon for queue:work; add reverb)
+#   4. Coolify post-deployment command (migrations) — docker/deploy/post-deployment.sh, per app
 #
 # The extension set is the SUPERSET our apps need — MySQL AND Postgres, Redis,
 # Horizon (pcntl), atlas-php/spatie-fork (sockets), image handling (gd/exif),
@@ -104,10 +104,10 @@ WORKDIR /var/www/html
 COPY --from=build --chown=www-data:www-data /app /var/www/html
 
 # Service configuration
-COPY docker/nginx.conf       /etc/nginx/sites-available/default
-COPY docker/php.ini          /usr/local/etc/php/conf.d/zz-app.ini
-COPY docker/supervisord.conf /etc/supervisor/conf.d/app.conf
-COPY docker/entrypoint.sh    /usr/local/bin/entrypoint
+COPY docker/config/nginx.conf       /etc/nginx/sites-available/default
+COPY docker/config/php.ini          /usr/local/etc/php/conf.d/zz-app.ini
+COPY docker/config/supervisord.conf /etc/supervisor/conf.d/app.conf
+COPY docker/deploy/entrypoint.sh    /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
 
 EXPOSE 80

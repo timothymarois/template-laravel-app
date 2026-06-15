@@ -742,13 +742,13 @@ To enable tenancy for the first time in a fork, see [`docs/guidelines/tenancy-us
 
 ## Docker / Deployment
 
-The canonical Coolify deploy setup lives in `docker/` + the root `Dockerfile` and `.dockerignore`. See [`docker/README.md`](docker/README.md) for variants, knobs, and the full drift policy. **This template is the single source of truth — forks copy from here; they never originate Docker capabilities.**
+The canonical Coolify deploy setup lives in `docker/` + the root `Dockerfile` and `.dockerignore`. See [`docker/README.md`](docker/README.md) for this project's setup, knobs, and the full drift policy. **This template is the single source of truth — forks copy from here; they never originate Docker capabilities.**
 
 Enforced rules:
 
-- **Core vs knobs.** *Managed core* (must track this template): the `Dockerfile` build stages + extension list + `CMD`, `docker/nginx.conf`, `docker/php.ini`, `docker/entrypoint.sh`, `docker/deploy.sh`, `.dockerignore`. *Knobs* (per-fork, may differ): `ARG PHP_VERSION`, the asset-build command, pnpm/npm, the `supervisord.conf` variant (full vs `docker/simple/`), and env. A fork may change **only** knobs.
+- **Core vs knobs.** *Managed core* (must track this template): the `Dockerfile` build stages + extension list + `CMD`, `docker/config/nginx.conf`, `docker/config/php.ini`, `docker/deploy/entrypoint.sh`, `docker/deploy/pre-deployment.sh`, `docker/deploy/post-deployment.sh`, `.dockerignore`. *Knobs* (per-fork, may differ): `ARG PHP_VERSION`, the asset-build command, pnpm/npm, which `docker/config/supervisord.conf` process blocks are enabled, `WAIT_FOR_DB`, and env. A fork may change **only** knobs.
 - **New capability → here first.** Add it to this template, bump the version, then forks adopt. Never hand-add a Docker capability in a fork.
-- **Versioning.** Any change to the managed core = a template **version bump** + a `CHANGELOG.md` entry **tagged `Docker:`** (patch for fixes, minor for features), and the `docker` block in `template-version.json` updated.
+- **Versioning.** Any change to the managed core = a template **version bump** + a `CHANGELOG.md` entry **tagged `Docker:`** (patch for fixes, minor for features), and the `docker` block in `template-manifest.json` updated.
 
 ---
 
