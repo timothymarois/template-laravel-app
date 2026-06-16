@@ -51,7 +51,7 @@ Both patterns use the same `tenant_user` pivot table that ships in v5.0.0. **You
 
 ## Prerequisites
 
-- Fork is on template `v5.0.0` or later (`jq -r .version template-version.json` → `5.0.0`).
+- Fork is on template `v5.0.0` or later (`jq -r .version template-manifest.json` → `5.0.0`).
 - A reachable Postgres or MySQL instance for the central DB (can be the same instance your fork already uses).
 - The fork's `pnpm check` is green at baseline.
 

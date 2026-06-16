@@ -1,6 +1,6 @@
 # Component Architecture
 
-Components follow a 2-layer architecture with clear separation between reusable primitives and application-specific logic.
+Components follow a 3-layer architecture (`ui/`, `app/`, `site/`) with clear separation between reusable primitives and application-specific logic.
 
 ## Overview
 

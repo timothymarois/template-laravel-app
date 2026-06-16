@@ -114,9 +114,9 @@ View the docs for:
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| [Laravel](https://laravel.com/docs/12.x) | 12 | Backend framework |
+| [Laravel](https://laravel.com/docs/13.x) | 13 | Backend framework |
 | [Vue.js](https://vuejs.org/guide/introduction.html) | 3 | Frontend framework |
-| [Inertia.js](https://inertiajs.com/) | 2 | SPA without API complexity |
+| [Inertia.js](https://inertiajs.com/) | 3 | SPA without API complexity |
 
 ### Design
 
@@ -146,7 +146,7 @@ Components install to `resources/js/components/ui/`.
 
 ## Component Architecture
 
-Components follow a 2-layer structure:
+Components follow a 3-layer structure:
 
 ```
 components/
@@ -194,13 +194,13 @@ See `AGENTS.md` for detailed component guidelines.
 | `pnpm lint:css:fix` | Stylelint with auto-fix |
 | `pnpm test` | Run Vitest |
 | `pnpm check:php` | Pint + Larastan + Pest |
-| `pnpm check:js` | ESLint + Stylelint + Vitest + build |
+| `pnpm check:js` | ESLint + Stylelint + typecheck + Vitest |
 
 **Individual tools:**
 - [Pest](https://pestphp.com/) — `./vendor/bin/pest`
 - [Vitest](https://vitest.dev/) — `pnpm test:watch`
 - [Larastan](https://github.com/larastan/larastan) — `./vendor/bin/phpstan analyse`
-- [Laravel Pint](https://laravel.com/docs/12.x/pint) — `./vendor/bin/pint`
+- [Laravel Pint](https://laravel.com/docs/13.x/pint) — `./vendor/bin/pint`
 
 </details>
 
@@ -209,7 +209,7 @@ See `AGENTS.md` for detailed component guidelines.
 | Tool | URL | Purpose |
 |------|-----|---------|
 | [Log Viewer](https://github.com/opcodesio/log-viewer) | `/log-viewer` | Browse application logs |
-| [Horizon](https://laravel.com/docs/11.x/horizon) | `/horizon` | Monitor queues and jobs |
+| [Horizon](https://laravel.com/docs/13.x/horizon) | `/horizon` | Monitor queues and jobs |
 
 For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits.
 
@@ -273,7 +273,7 @@ autostart=true
 autorestart=true
 ```
 
-Configure your reverse proxy (Nginx) to handle WebSocket connections on port 443 and proxy to Reverb. See [Reverb docs](https://laravel.com/docs/12.x/reverb#production).
+Configure your reverse proxy (Nginx) to handle WebSocket connections on port 443 and proxy to Reverb. See [Reverb docs](https://laravel.com/docs/13.x/reverb#production).
 
 </details>
 
@@ -355,7 +355,7 @@ Sanctum provides session-based SPA auth with CSRF protection, rate-limited login
 
 ## WebSockets
 
-[Laravel Reverb](https://laravel.com/docs/12.x/reverb) provides real-time WebSocket communication, pre-configured with [Laravel Echo](https://laravel.com/docs/12.x/broadcasting#client-side-installation).
+[Laravel Reverb](https://laravel.com/docs/13.x/reverb) provides real-time WebSocket communication, pre-configured with [Laravel Echo](https://laravel.com/docs/13.x/broadcasting#client-side-installation).
 
 ```bash
 php artisan reverb:start

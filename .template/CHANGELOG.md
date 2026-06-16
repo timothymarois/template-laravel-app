@@ -14,12 +14,20 @@ Aligns the runtime defaults with the mandatory Redis stack, stops the tenant-inv
 
 > ⚠️ **Requires Redis to be reachable.** Redis is already a documented stack requirement (queue + cache via Horizon), but a fork that left `CACHE_STORE`/`QUEUE_CONNECTION` unset **and** has no reachable Redis will break on the next deploy. Provision Redis (`REDIS_HOST`/`REDIS_PORT`) or pin the env vars to `database` explicitly before upgrading.
 
+### Added
+
+- **Node version pinned** — `.nvmrc` (22) + `engines.node >=22.12` in `package.json`; the build requires Node ≥ 22.12.
+
 ### Changed
 
 - **`config/cache.php` + `config/queue.php` defaults → `redis`** (were `database`); `.env.example` matched. Tests unaffected — `phpunit.xml` forces `array`/`sync`.
 - **Tenant invite email now queued** — `TenantInvitationNotification` implements `ShouldQueue`, so it no longer blocks the request (tenancy-only).
 - **Template docs reorganized into `.template/`** — changelog + migration guides moved out of the repo root / `docs/` into a hidden `.template/` dir (with a `README.md` defining the changelog + versioning rules); the root `CHANGELOG.md` is now a stub for the fork's own changelog. No fork code change.
 - **`AGENTS.md` slimmed** — optional tenancy + Docker sections reduced to pointers (detail moved to their own docs); "Template version tracking" section removed. Forks: reconcile your `AGENTS.md`, keeping project-specific additions.
+
+### Fixed
+
+- **Docs corrected** — stale Laravel/Inertia versions (now 13 / 3), config-file names, Node requirement, `2`→`3`-layer wording, and the `app/Integrations` phantom dir across `README.md` / `docs/` / `AGENTS.md`; tenancy guides surfaced in the docs sidebar; the full `pnpm check` family documented.
 
 ### Migration
 

@@ -5,7 +5,7 @@ Get up and running in 5 minutes.
 ## Prerequisites
 
 - PHP 8.4+
-- Node.js 20+
+- Node.js 22+ (Vite 7 requires ≥ 22.12 — pinned in `.nvmrc`)
 - pnpm
 - Composer
 - Redis (for queues and caching)

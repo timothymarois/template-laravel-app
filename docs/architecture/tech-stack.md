@@ -8,18 +8,18 @@ The complete technology stack and directory structure.
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| [Laravel](https://laravel.com/docs/12.x) | 12 | Backend framework |
+| [Laravel](https://laravel.com/docs/13.x) | 13 | Backend framework |
 | PHP | 8.4+ | Runtime |
 | Redis | — | Queue and cache |
-| [Horizon](https://laravel.com/docs/12.x/horizon) | — | Queue monitoring |
-| [Reverb](https://laravel.com/docs/12.x/reverb) | — | WebSocket server |
+| [Horizon](https://laravel.com/docs/13.x/horizon) | — | Queue monitoring |
+| [Reverb](https://laravel.com/docs/13.x/reverb) | — | WebSocket server |
 
 ### Frontend
 
 | Package | Version | Purpose |
 |---------|---------|---------|
 | [Vue.js](https://vuejs.org/guide/introduction.html) | 3 | Frontend framework |
-| [Inertia.js](https://inertiajs.com/) | 2 | SPA without API |
+| [Inertia.js](https://inertiajs.com/) | 3 | SPA without API |
 | [Tailwind CSS](https://tailwindcss.com/docs/installation) | 4 | Utility-first styling |
 | [shadcn-vue](https://www.shadcn-vue.com/) | — | Component primitives |
 | [Lucide Icons](https://lucide.dev/) | — | Icon library |
@@ -33,7 +33,7 @@ The complete technology stack and directory structure.
 | [TypeScript](https://www.typescriptlang.org/) | Type safety |
 | [ESLint](https://eslint.org/) | JavaScript linting |
 | [Stylelint](https://stylelint.io/) | CSS linting |
-| [Laravel Pint](https://laravel.com/docs/12.x/pint) | PHP code style |
+| [Laravel Pint](https://laravel.com/docs/13.x/pint) | PHP code style |
 | [Larastan](https://github.com/larastan/larastan) | PHP static analysis |
 | [Pest](https://pestphp.com/) | PHP testing |
 | [Vitest](https://vitest.dev/) | JavaScript testing |
@@ -49,9 +49,12 @@ app/
 ├── Http/
 │   ├── Concerns/       # Reusable controller traits
 │   ├── Controllers/    # Thin controllers
+│   ├── Middleware/     # HTTP middleware
 │   └── Requests/       # Form Request validation
+├── Jobs/               # Queued jobs
 ├── Models/             # Eloquent models
-├── Integrations/       # Third-party APIs, external services
+├── Notifications/      # Mail / notification classes
+├── Providers/          # Service providers
 ├── Services/           # Business logic
 │   ├── Models/         # Per-model services (extend ModelService)
 │   └── <Domain>/       # Feature services grouped by domain
@@ -107,11 +110,11 @@ Modify CSS custom properties in `resources/css/theme.css`:
 
 | File | Purpose |
 |------|---------|
-| `vite.config.ts` | Vite build configuration |
+| `vite.config.js` | Vite build config (Vitest config is the inline `test` block) |
 | `tsconfig.json` | TypeScript configuration |
-| `tailwind.config.ts` | Tailwind configuration |
+| `tailwind.config.js` | Tailwind configuration |
 | `eslint.config.js` | ESLint rules |
 | `stylelint.config.js` | Stylelint rules |
-| `vitest.config.ts` | Vitest test configuration |
 | `phpstan.neon` | Larastan configuration |
-| `pint.json` | Laravel Pint rules |
+
+Laravel Pint runs on its default ruleset — there is no `pint.json`.

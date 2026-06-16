@@ -638,14 +638,19 @@ app/
 ├── Http/
 │   ├── Concerns/       # Reusable controller traits
 │   ├── Controllers/    # Thin controllers
+│   ├── Middleware/     # HTTP middleware
 │   └── Requests/       # Form Request validation
+├── Jobs/               # Queued jobs
 ├── Models/             # Eloquent models
-├── Integrations/       # Third-party APIs, external services
+├── Notifications/      # Mail / notification classes
+├── Providers/          # Service providers
 ├── Services/           # Business logic
 │   ├── Models/         # Per-model services (extend ModelService)
 │   └── <Domain>/       # Feature services grouped by domain
 └── Support/            # Small helpers, traits, utilities
 ```
+
+`app/Actions/` (single-purpose operations) and `app/DataTransferObjects/` are conventional homes created on first use — they follow PSR-4, so add them when you write the first one rather than expecting them to pre-exist. Third-party API clients live under `app/Services/<Domain>/` or `app/Support/`.
 
 ### Vue
 ```
@@ -737,9 +742,13 @@ An **optional** Coolify deploy setup lives in `docker/` + the root `Dockerfile` 
 Run before completing any task. All must pass.
 
 ```bash
-pnpm check        # Run ALL checks (PHP + JS + SSR build)
-pnpm check:php    # PHP only (Pint, Larastan, Pest)
-pnpm check:js     # JS only (ESLint, Stylelint, Vitest, client build)
+pnpm check         # The standard gate: check:php + check:js + check:docs, then check:build
+pnpm check:php     # PHP only — Pint, Larastan, Pest
+pnpm check:js      # JS only — ESLint, Stylelint, tsc (typecheck), Vitest
+pnpm check:docs    # docs/ lint (ESLint + Stylelint)
+pnpm check:build   # Client + SSR + docs builds
+pnpm check:tenancy # Pest against the tenancy suite (phpunit.tenancy.xml) — run when tenancy is enabled
+pnpm check:all     # check + check:tenancy
 ```
 
 | Layer      | Tool         | Requirement                                |

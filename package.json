@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.0",
   "packageManager": "pnpm@10.20.0",
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "php artisan ziggy:generate && vite",
     "build": "php artisan ziggy:generate && vite build",

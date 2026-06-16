@@ -6,6 +6,7 @@ v5.1.3 aligns the runtime defaults with the mandatory Redis stack, makes the ten
 - **Forks with tenancy enabled:** also pick up the `ShouldQueue` change on the invite notification.
 - **Template housekeeping (no fork action):** the template's lineage docs moved into `.template/` — see Part C.
 - **Sync check (recommended):** confirm the fork's template-managed + Docker-core files haven't drifted from the template — excluding your own knobs/customizations — see Part D.
+- **Optional:** adopt the Node pin (`.nvmrc` + `engines`); the template docs were also corrected — see Part C.
 
 > **⚠️ Requires Redis to be reachable.** Redis is already a documented stack requirement (queue + cache via Horizon). After this change, when `CACHE_STORE` / `QUEUE_CONNECTION` are **unset**, the app falls back to `redis` instead of `database`. A fork that left those vars unset **and** has no reachable Redis will break on the next deploy. Provision Redis (`REDIS_HOST` / `REDIS_PORT`) — or, if you genuinely intend the database driver, pin `CACHE_STORE=database` / `QUEUE_CONNECTION=database` explicitly in your env before upgrading.
 
@@ -82,6 +83,7 @@ This is template-repo housekeeping — **a fork applies no code change for it.**
 - The repo-root **`CHANGELOG.md` is now a stub for your fork's own product changelog** — use it (or your existing one) for your app's releases. It's independent of the template's history.
 - You still track which template version you're on via **`template-manifest.json`** (`version`) at the repo root — never by copying `.template/CHANGELOG.md`.
 - If your fork happened to carry a copy of the template's changelog/migration docs, move them under `.template/` to match — or just delete them and read the upstream repo when you need a guide.
+- v5.1.3 also **corrected stale template docs** (Laravel 13 / Inertia 3, config-file names, Node 22 requirement, 3-layer wording, dropped the `app/Integrations` phantom dir) and **pinned Node** via `.nvmrc` (22) + an `engines.node >=22.12` field. The doc fixes are the template's own docs — no fork action. If you want the Node guardrail, copy `.nvmrc` and the `engines` field into your fork.
 
 ---
 

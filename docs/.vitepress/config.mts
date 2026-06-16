@@ -40,6 +40,8 @@ export default defineConfig({
                     { text: 'Laravel', link: '/guidelines/laravel' },
                     { text: 'Vue', link: '/guidelines/vue' },
                     { text: 'Testing', link: '/guidelines/testing' },
+                    { text: 'Tenancy — Using', link: '/guidelines/tenancy-using' },
+                    { text: 'Tenancy — Migrating', link: '/guidelines/tenancy-migrating' },
                 ],
             },
         ],
