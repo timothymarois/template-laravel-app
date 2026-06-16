@@ -229,6 +229,12 @@ Configured commands: SSR server, queue worker, Reverb, scheduler, and more. See 
 
 ## Deployment
 
+### Self-Hosted (Docker + Coolify)
+
+This template ships with a **production-ready Docker setup** for self-hosting on any VPS — no managed PaaS required. One universal image runs the app, SSR, queues, scheduler, and WebSockets; you enable only what you need. We recommend [Coolify](https://coolify.io/) on a [DigitalOcean](https://www.digitalocean.com/) droplet, but it works on any Docker host (AWS, Hetzner, Linode, bare metal).
+
+See [`docker/README.md`](docker/README.md) for the full setup, knobs, and Coolify configuration.
+
 ### Build
 
 ```bash
