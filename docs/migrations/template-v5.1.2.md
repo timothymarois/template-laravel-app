@@ -91,5 +91,6 @@ before.
 
 ## Finally
 
-Bump the fork's `template-manifest.json` → `"version": "5.1.2"` and copy this
-changelog entry so the fork records the version it's on.
+Bump the fork's `template-manifest.json` → `"version": "5.1.2"`. Don't copy this
+changelog into the fork — the manifest `version` is the record (see the template's
+`AGENTS.md` → Changelog).

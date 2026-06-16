@@ -752,6 +752,14 @@ Enforced rules:
 
 ---
 
+## Changelog
+
+`CHANGELOG.md` is the template's change history — the migration log forks read to stay compatible. **Forks must not replicate it:** a fork's `CHANGELOG.md` is a short stub pointing back to the template, and the template version it's aligned with is recorded in its `template-manifest.json` (`version`), not by copying entries.
+
+**Exception:** a project that keeps its own product changelog (its own version line / customer-facing notes) maintains that, and tracks the template only via `template-manifest.json`.
+
+---
+
 ## Required Checks
 
 Run before completing any task. All must pass.

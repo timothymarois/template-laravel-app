@@ -1,8 +1,8 @@
 # Changelog
 
-Any project using this template should follow the changelog here if its relevant to make the needed updates to be compatible. 
+This is the change history for `template-laravel-app` — the migration log forks read to stay compatible. Each release links its upgrade steps in `docs/migrations/`.
 
-Note: once you update a project on that uses this template, be sure to copy this changelog so that project can also understand which version its currently using.
+**Forks do not copy this file.** A fork records the template version it's aligned with in its `template-manifest.json` (`version`); its own `CHANGELOG.md` is a short stub pointing here (see `AGENTS.md` → Changelog) — unless the fork tracks its own product versions.
 
 # Released
 

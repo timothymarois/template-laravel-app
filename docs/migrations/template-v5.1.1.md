@@ -89,4 +89,4 @@ Then **manually drag-and-drop every surface** that uses a draggable — reorder 
 
 ## Finally
 
-Bump the fork's `template-manifest.json` → `"version": "5.1.1"` and copy this changelog entry so the fork records the version it's on.
+Bump the fork's `template-manifest.json` → `"version": "5.1.1"`. Don't copy this changelog into the fork — the manifest `version` is the record (see the template's `AGENTS.md` → Changelog).
