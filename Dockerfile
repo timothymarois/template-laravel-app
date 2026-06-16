@@ -63,11 +63,15 @@ WORKDIR /app
 # optimized classmap here would be incomplete). --no-scripts defers
 # ziggy:generate, which needs a booted app that doesn't exist yet.
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-autoloader
+RUN --mount=type=cache,target=/tmp/composer-cache \
+    COMPOSER_CACHE_DIR=/tmp/composer-cache \
+    composer install --no-dev --no-interaction --prefer-dist --no-scripts --no-autoloader
 
-# Node deps
+# Node deps — pnpm store kept in a BuildKit cache mount so packages aren't
+# re-downloaded across builds (survives even when the lockfile changes).
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,target=/pnpm-store \
+    pnpm install --frozen-lockfile --store-dir=/pnpm-store
 
 # --- Application source ---
 COPY . /app
@@ -84,7 +88,10 @@ RUN cp .env.example .env \
 # (@inertiajs/vue3, @vue/server-renderer, vue, …), several of which are
 # devDependencies, so they must be present at runtime. Do NOT `pnpm prune --prod`
 # here — it removes the dev deps the SSR server needs.
-RUN pnpm build-ssr
+# NODE_OPTIONS raises V8's heap so a memory-heavy Vite/Rollup build (large apps, or
+# `ssr.noExternal: true` which bundles all deps) doesn't OOM with "JavaScript heap
+# out of memory" (exit 134). Bump to 6144 if a build still aborts.
+RUN NODE_OPTIONS=--max-old-space-size=4096 pnpm build-ssr
 
 RUN rm -f .env
 
