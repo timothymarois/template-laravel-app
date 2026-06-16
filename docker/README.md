@@ -23,7 +23,8 @@ docker/
 ```
 
 `template-manifest.json` (repo root) records the template `version` + the build
-knobs (`php`, `pkg`, `build`). This README's table is the human-readable companion.
+knobs (`php`, `pkg`, `build`, `baseImage`). This README's table is the
+human-readable companion.
 
 ## This project's setup
 
@@ -34,7 +35,7 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 
 | Setting            | This project        | Drives                                            |
 |--------------------|---------------------|---------------------------------------------------|
-| PHP                | `8.4`               | `ARG PHP_VERSION` in the Dockerfile               |
+| PHP                | `8.4`               | the `docker-laravel-base` tag you pin (`:8.4-v1`)  |
 | Package manager    | `pnpm`              | build stage (`pnpm` vs `npm`)                     |
 | Build command      | `build-ssr`         | client + SSR bundles (`pnpm build-ssr`)           |
 | Database           | **yes**             | DB resource + post-deploy migrations              |
@@ -57,8 +58,9 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 2. In `docker/config/supervisord.conf`, **delete the OPTIONAL process blocks you
    don't use** (`inertia-ssr`, `horizon`, `scheduler`, `reverb`). Leave `php-fpm`
    + `nginx` (always required).
-3. Set the build knobs in the `Dockerfile` (`ARG PHP_VERSION`; swap `pnpm`→`npm`
-   or `build-ssr`→`build` if needed) and update `template-manifest.json`.
+3. Set the build knobs in the `Dockerfile` (pin the `docker-laravel-base` tag for
+   the PHP line; swap `pnpm`→`npm` or `build-ssr`→`build` if needed) and update
+   `template-manifest.json`.
 4. Fill `docker/deploy/post-deployment.sh` with this project's release tasks
    (migrations) — or leave it a no-op for a DB-less site.
 5. Set Coolify env + resources to agree (see below).
@@ -113,11 +115,28 @@ DB-less project? Set `SESSION_DRIVER=file`, `CACHE_STORE=file`,
 - **Domains** with `https://` → automatic Let's Encrypt SSL (issued once, cached, auto-renewed). Wildcard needs Traefik DNS-01.
 - **Logs:** `LOG_CHANNEL=stderr` → Coolify **Logs** tab. **Uploads:** S3, or a volume on `/var/www/html/storage/app/public`.
 
-## Extensions baked in
+## Base image & extensions
+
+The PHP-FPM base — the extension superset below **plus composer** — is **not built
+here**. It is pre-built and published as a standalone image:
+
+- **Image:** `ghcr.io/timothymarois/docker-laravel-base` (public GHCR package)
+- **Source + publish CI:** [`timothymarois/docker-laravel-base`](https://github.com/timothymarois/docker-laravel-base)
+
+The root `Dockerfile` consumes it directly —
+`FROM ghcr.io/timothymarois/docker-laravel-base:8.4-v1 AS base` — so the heavy
+extension compile runs **once in CI**, pulls in seconds on deploy, and the named
+image survives `docker image prune`.
 
 `pdo_mysql` · `pdo_pgsql` · `redis` · `bcmath` · `intl` · `zip` · `gd` · `exif`
 · `pcntl` · `opcache` · `sockets` · `gmp` (`posix` is built into the base image).
 This superset covers every project, so most forks need no extension change.
+
+**To change the extension set:** edit + bump the
+[`docker-laravel-base`](https://github.com/timothymarois/docker-laravel-base) repo,
+publish a new tag, then re-pin the `FROM` tag here and bump the template version.
+Forks adopt the new pin deliberately. **Never re-add the apt/extension compile to
+this `Dockerfile`.**
 
 ## Drift policy & versioning
 
@@ -126,7 +145,7 @@ This superset covers every project, so most forks need no extension change.
 
 | Managed core (tracks template) | Knobs (per-fork, may differ) |
 |---|---|
-| `Dockerfile` build stages, extensions, `CMD` | `ARG PHP_VERSION` |
+| `Dockerfile` build stages, base image, `CMD` | base image tag (PHP line / version) |
 | `docker/config/nginx.conf`, `docker/config/php.ini` | asset-build command, pnpm/npm |
 | `docker/deploy/entrypoint.sh` | which `supervisord.conf` process blocks are enabled |
 | `.dockerignore` | env-driven settings |
@@ -140,6 +159,7 @@ Rules:
   ```json
   "docker": {
     "php": "8.4", "pkg": "pnpm", "build": "build-ssr",
+    "baseImage": "ghcr.io/timothymarois/docker-laravel-base:8.4-v1",
     "requires": { "database": true, "redis": true, "ssr": true, "horizon": true, "scheduler": true, "reverb": false }
   }
   ```

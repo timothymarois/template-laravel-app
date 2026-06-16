@@ -9,7 +9,8 @@
 # for what this project requires, the knobs, and the Coolify env/resource checklist.
 #
 # PER-PROJECT KNOBS:
-#   1. PHP_VERSION build arg (below) — default 8.4
+#   1. Base image tag (below) — pin a docker-laravel-base version / PHP line.
+#        The PHP version is set by WHICH base tag you pin (e.g. :8.4-v1), not a build arg.
 #   2. Asset build command in the build stage:
 #        SSR app ........ pnpm build-ssr   (default)
 #        non-SSR app .... pnpm build
@@ -19,31 +20,20 @@
 #        (delete unused OPTIONAL blocks; swap horizon for queue:work; add reverb)
 #   4. Coolify post-deployment command (migrations) — docker/deploy/post-deployment.sh, per app
 #
-# The extension set is the SUPERSET our apps need — MySQL AND Postgres, Redis,
-# Horizon (pcntl), atlas-php/spatie-fork (sockets), image handling (gd/exif),
-# gmp — so forks don't hit missing-extension builds.
+# The PHP-FPM base — the extension SUPERSET our apps need (MySQL AND Postgres,
+# Redis, Horizon/pcntl, sockets, gd/exif, gmp) plus composer — is pre-built and
+# published as ghcr.io/timothymarois/docker-laravel-base. Its source + publish CI
+# live in that repo (https://github.com/timothymarois/docker-laravel-base); this
+# Dockerfile just FROMs it, so the heavy extension compile runs ONCE in CI instead
+# of on every Coolify deploy (and a named image survives `docker image prune`). To
+# change the extension set, bump the base repo and re-pin the tag below — see
+# docker/README.md.
 # ─────────────────────────────────────────────────────────────────────────────
 
-ARG PHP_VERSION=8.4
-
 ###############################################################################
-# 1. Base — PHP-FPM with the full extension set
+# 1. Base — pre-built PHP-FPM image (docker-laravel-base)
 ###############################################################################
-FROM php:${PHP_VERSION}-fpm-bookworm AS base
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git unzip ca-certificates curl wget nginx supervisor \
-        libzip-dev libicu-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
-        libonig-dev libpq-dev libgmp-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" \
-        pdo_mysql pdo_pgsql bcmath intl zip gd pcntl opcache sockets exif gmp \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+FROM ghcr.io/timothymarois/docker-laravel-base:8.4-v1 AS base
 
 ###############################################################################
 # 2. Build — composer deps + client/SSR bundles

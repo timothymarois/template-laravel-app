@@ -6,6 +6,23 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v5.1.2 - 06/16/2026
+
+`Docker:` Extracts the PHP-FPM **base stage** of the deploy `Dockerfile` into a pre-built, published image — **`ghcr.io/timothymarois/docker-laravel-base`** ([repo](https://github.com/timothymarois/docker-laravel-base)) — and `FROM`s it instead of compiling PHP extensions on every build. Patch: no schema, API, or app-runtime changes; the produced container is byte-equivalent. **Deploy-time only.**
+
+**Why:** the `base` stage (apt + compiling `gd`/`pdo_pgsql`/`pdo_mysql`/`redis`/`pcntl`/… + composer) is the slowest, least-changing part of every build, and Coolify's periodic Docker cleanup prunes the local layer cache — so it was recompiled cold (~minutes) on many deploys. A **named, pre-built** base runs that compile once in CI, pulls in seconds, and is never evicted by `docker image prune`.
+
+### What's included
+
+- **`Dockerfile` base stage → `FROM ghcr.io/timothymarois/docker-laravel-base:8.4-v1 AS base`.** The apt/extension/pecl/composer block and `ARG PHP_VERSION` are removed; the `build` and `runtime` stages (`FROM base`) are unchanged. The extension superset is identical — the base image is built from the same recipe.
+- **PHP-version knob moves** from `ARG PHP_VERSION` to **which base tag you pin** (`:8.4-v1`). Only `8.4` is published today.
+- **`template-manifest.json`** `docker` block gains a **`baseImage`** field recording the pinned tag.
+- **Base image source + publish CI** live in the standalone [`docker-laravel-base`](https://github.com/timothymarois/docker-laravel-base) repo (public GHCR package, amd64, built by GitHub Actions). It is the single producer; the template and every fork are consumers.
+
+### Migration
+
+**See [`docs/migrations/template-v5.1.2.md`](docs/migrations/template-v5.1.2.md).** ~5 minutes, mechanical: swap the base stage to the `FROM`, drop `ARG PHP_VERSION`, add `baseImage` to the manifest, redeploy. The base image must be public (it is). Forks on PHP 8.3 stay on the inline base until an `:8.3` base tag is published or they move to 8.4.
+
 ## v5.1.1 - 06/16/2026
 
 Replaces the unmaintained **`vuedraggable@4`** drag-and-drop library with **`vue-draggable-plus`**. Patch: no schema, API, or Docker changes. The only component affected is `CustomizeColumns.vue` (data-table column reorder); behavior is identical.
