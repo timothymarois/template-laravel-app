@@ -20,6 +20,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Behind a TLS-terminating proxy (Coolify/Traefik, load balancers): trust it
+        // so Laravel reads X-Forwarded-Proto/Host and generates HTTPS URLs. Without
+        // this, the app sees the proxy's plain-HTTP hop and emits http:// links —
+        // Ziggy/redirects then trigger mixed-content blocks on an HTTPS page. The
+        // container is only reachable via the proxy, so trusting all proxies is safe.
+        $middleware->trustProxies(at: '*', headers: Request::HEADER_X_FORWARDED_FOR
+            | Request::HEADER_X_FORWARDED_HOST
+            | Request::HEADER_X_FORWARDED_PORT
+            | Request::HEADER_X_FORWARDED_PROTO);
+
         $middleware->web(append: [
             SecurityHeaders::class,
             TrackLastSeen::class,

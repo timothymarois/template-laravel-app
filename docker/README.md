@@ -107,6 +107,7 @@ DB-less project? Set `SESSION_DRIVER=file`, `CACHE_STORE=file`,
 - **Health Check:** scheme **`http`**, path **`/up`**, port **`80`** (the image ships `wget`). Never `https` on port 80. If it misbehaves, disable it; the app is healthy without it.
 - **Pre/Post-deployment Commands:** wire both scripts (above).
 - **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars from the setup table (DB, Redis, `REVERB_*`, app-specifics like Sentry/S3).
+- **`VITE_*` are build-time, not runtime.** Vite **inlines** `VITE_*` into the client bundle at build, reading them from `.env.example` (the throwaway build env) — Coolify's runtime env can't reach an already-compiled bundle. If the frontend needs a public value in prod (Reverb host, analytics id…), set it in committed `.env.example` (these are public, not secret).
 - **Mark secrets** (`APP_KEY`, `MAIL_PASSWORD`, `AWS_*`) as **Runtime only** so they aren't baked into image layers.
 - **Resources:** add Postgres/MySQL + Redis only if the project's setup uses them.
 - **Domains** with `https://` → automatic Let's Encrypt SSL (issued once, cached, auto-renewed). Wildcard needs Traefik DNS-01.

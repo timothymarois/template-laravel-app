@@ -107,7 +107,7 @@ Leave `docker/deploy/pre-deployment.sh` empty (or `php artisan down` for a maint
 - **Pre-deployment Command:** `sh /var/www/html/docker/deploy/pre-deployment.sh`
 - **Post-deployment Command:** `sh /var/www/html/docker/deploy/post-deployment.sh`
 - **Resources:** add Postgres/MySQL + Redis to match `requires.database` / `requires.redis`.
-- **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars (`DB_*`, `REDIS_*`, `REVERB_*`, app-specifics). Mark secrets **Runtime-only**.
+- **Env:** `APP_KEY`, `APP_URL`, `APP_ENV=production`, `LOG_CHANNEL=stderr`, plus the per-project vars (`DB_*`, `REDIS_*`, `REVERB_*`, app-specifics). Mark secrets **Runtime-only**. (`VITE_*` are baked at build from `.env.example`, not injected at runtime.)
 - **Domains** with `https://` → automatic Let's Encrypt.
 
 ### B6. Verify the build paths resolve

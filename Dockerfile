@@ -100,6 +100,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
 
 WORKDIR /var/www/html
 
+# Give every process a readable HOME. supervisord runs as root (HOME=/root) and
+# drops programs to www-data WITHOUT resetting HOME — so a worker's libpq would
+# probe /root/.postgresql for a client cert, hit "Permission denied", fail the SSL
+# handshake to managed Postgres (DO/RDS), and fall back to a rejected plaintext
+# connection. php-fpm is unaffected (sane env), which is why the web works but
+# horizon/scheduler/reverb can't reach the DB. Pointing HOME at the app dir
+# (readable, has no .postgresql) makes that probe a harmless no-op.
+ENV HOME=/var/www/html
+
 # App with vendor/, public/build, bootstrap/ssr and pruned node_modules
 COPY --from=build --chown=www-data:www-data /app /var/www/html
 
