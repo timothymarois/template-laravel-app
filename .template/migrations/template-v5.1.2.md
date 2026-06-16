@@ -93,4 +93,4 @@ before.
 
 Bump the fork's `template-manifest.json` → `"version": "5.1.2"`. Don't copy this
 changelog into the fork — the manifest `version` is the record (see the template's
-`AGENTS.md` → Changelog).
+[`.template/README.md`](../README.md)).

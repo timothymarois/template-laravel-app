@@ -153,8 +153,8 @@ this `Dockerfile`.**
 Rules:
 
 - Forks change **only** knobs. New capabilities go into this template first.
-- A managed-core change bumps the **template version** + a `CHANGELOG.md` entry
-  tagged `Docker:` (patch = fix, minor = feature).
+- A managed-core change bumps the **template version** + a `.template/CHANGELOG.md`
+  entry tagged `Docker:` (patch = fix, minor = feature).
 - Each fork records its knobs + requirements in `template-manifest.json`:
   ```json
   "docker": {

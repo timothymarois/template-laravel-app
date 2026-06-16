@@ -14,6 +14,19 @@ If your app already has user data, **stop here and read [`tenancy-migrating.md`]
 - Default to **path mode** — tenant URLs are `/t/{tenant}/...` on your existing domain. No wildcard DNS or wildcard SSL needed.
 - Be one env flip away from subdomain mode (`<tenant>.example.com`) when you're ready for it.
 
+## Disabled by default — the contract
+
+`TENANCY_ENABLED=false` is the default. **While disabled, treat tenancy code as nonexistent** — a fork not using tenancy must behave identically to a plain Laravel app:
+
+- Don't import `App\Models\Tenant` or `App\Models\Domain`. (`App\Models\User` is fine — its `CentralConnection` trait is a no-op when disabled.)
+- Don't run `tenancy:install` or any `tenants:*` command. `tenancy:install` republishes the package's stock provider over the template's customized one and dumps migrations into `database/migrations/` root — it breaks this contract. `tenants:*` assume tenancy is initialized. The only commands safe while disabled are `tenancy:enable` (run deliberately to turn tenancy on) and `tenancy:provision --help` / `tenancy:migrate-existing --help` (help text only — invoking them fails with "Tenancy is disabled").
+- Don't call `tenant_user()`, `central_user()`, `current_actor()`, `tenant_url()` in user-facing code (they fall back to `auth()->user()` / `url()` when disabled — safe but pointless).
+- Don't add tenant middleware/routes to `routes/web.php` / `routes/api.php`, and don't register tenancy event listeners.
+
+The guard is `App\Providers\TenancyServiceProvider::boot()`, which short-circuits on `config('tenancy.enabled')`. `tests/Feature/Tenancy/DisabledStateTest.php` enforces this contract — don't weaken those tests.
+
+Once tenancy is enabled, never run bare `php artisan test` — use `--testsuite=Central` and `--testsuite=Tenant` separately so the test DBs don't collide.
+
 ## Choose your identification mode
 
 There are two orthogonal axes: **how do you identify the tenant in the request** (path vs subdomain), and **how many tenants can one user belong to** (one vs many). They're independent — pick each separately.

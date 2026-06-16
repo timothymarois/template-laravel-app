@@ -281,7 +281,7 @@ Copy each path verbatim from the template at v5.0.0. If a target directory doesn
 - [ ] `phpunit.tenancy.xml`
 - [ ] `docs/guidelines/tenancy-using.md`
 - [ ] `docs/guidelines/tenancy-migrating.md`
-- [ ] `docs/migrations/template-v5.0.0.md` (this file)
+- [ ] `.template/migrations/template-v5.0.0.md` (this file)
 - [ ] `.github/workflows/tenancy-enabled.yml`
 
 **Gitignore update:**
@@ -571,7 +571,7 @@ v5.0.0 changes the **template's** canonical `0001_01_01_000000_create_users_tabl
 
 ## You're done
 
-With chunks 1 and 2 applied, the fork is on **Laravel 13 + Inertia 3** with all dependencies refreshed. With chunk 3 applied (Track A), tenancy scaffolding is installed but disabled — nothing else changes in the fork. If you want to enable tenancy, see [`docs/guidelines/tenancy-using.md`](../guidelines/tenancy-using.md). If you're adopting tenancy on an existing app with user data, see [`docs/guidelines/tenancy-migrating.md`](../guidelines/tenancy-migrating.md).
+With chunks 1 and 2 applied, the fork is on **Laravel 13 + Inertia 3** with all dependencies refreshed. With chunk 3 applied (Track A), tenancy scaffolding is installed but disabled — nothing else changes in the fork. If you want to enable tenancy, see [`docs/guidelines/tenancy-using.md`](../../docs/guidelines/tenancy-using.md). If you're adopting tenancy on an existing app with user data, see [`docs/guidelines/tenancy-migrating.md`](../../docs/guidelines/tenancy-migrating.md).
 
 Bump `template-version.json` to `5.0.0` only after `pnpm check` is green for every chunk you applied.
 

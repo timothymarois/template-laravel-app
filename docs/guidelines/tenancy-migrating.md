@@ -18,7 +18,7 @@ This is a one-time, somewhat-manual, recoverable process. The template automates
 
 ## Pre-migration checklist
 
-- [ ] Fork is at template v5.0.0+ (apply [`docs/migrations/template-v5.0.0.md`](../migrations/template-v5.0.0.md) first).
+- [ ] Fork is at template v5.0.0+ (apply [`.template/migrations/template-v5.0.0.md`](../../.template/migrations/template-v5.0.0.md) first).
 - [ ] You've read [`tenancy-using.md`](./tenancy-using.md) for the basic enable-flow.
 - [ ] Full backup of the current DB taken and verified (`pg_restore --list` on the dump file).
 - [ ] If production: maintenance window scheduled, status page draft prepared, on-call paged.

@@ -127,5 +127,5 @@ grep -n 'COPY docker/' Dockerfile   # expect docker/config/* and docker/deploy/e
 
 - Bump `template-manifest.json` `version` → `5.1.0` and refresh `updated`.
 - Copy this `CHANGELOG.md` entry into the fork so it tracks which template version it's on.
-- Re-read `AGENTS.md` → "Docker / Deployment" and perform the post-task review.
+- Re-read `AGENTS.md` → "Optional Docker / Deployment" and perform the post-task review.
 - If you only did Part A, no app behavior changed — a `pnpm check` is optional but cheap insurance.

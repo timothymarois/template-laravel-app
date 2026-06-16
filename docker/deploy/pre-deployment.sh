@@ -5,7 +5,7 @@ set -e
 # Runs in the CURRENT/OLD container, with the OLD code, BEFORE the new image is
 # deployed. Wire it once in Coolify (it's a harmless no-op until you fill it in):
 #
-#   sh /var/www/html/docker/pre-deployment.sh
+#   sh /var/www/html/docker/deploy/pre-deployment.sh
 #
 # Because it runs the OLD code, this is NOT where migrations go — the new
 # migrations don't exist in the old container yet. Those live in
