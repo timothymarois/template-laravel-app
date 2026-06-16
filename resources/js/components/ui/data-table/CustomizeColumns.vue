@@ -30,20 +30,20 @@
                     <div class="text-xs py-1 px-4 border-b border-border text-foreground font-semibold uppercase">
                         Visible
                     </div>
-                    <draggable
+                    <VueDraggable
                         v-model="draggableColumns"
-                        item-key="key"
                         group="columns"
                         class="p-2 px-4"
                         ghost-class="ghost-card"
                         :animation="200"
-                        :move="checkLocked"
+                        @move="checkLocked"
                         @start="isDragging = true"
                         @end="isDragging = false"
                     >
-                        <template #item="{ element: column }">
+                        <template v-for="column in draggableColumns" :key="column.key">
                             <div
                                 v-if="column.header.toLowerCase().includes(searchColumns.toLowerCase())"
+                                :data-column-key="column.key"
                                 class="flex items-center w-full hover:bg-accent rounded p-1 cursor-pointer text-sm"
                                 :class="{ 'cursor-not-allowed opacity-50': column.locked }"
                                 @click="!column.locked && toggleColumn(column.key)"
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                         </template>
-                    </draggable>
+                    </VueDraggable>
                     <template v-if="Object.keys(filteredUnselectedColumnGroups).length > 0">
                         <div
                             class="text-xs py-1 px-4 border-y border-border text-foreground font-semibold uppercase"
@@ -146,7 +146,7 @@
 import { ref, computed, watch, nextTick, useSlots } from 'vue';
 import { IconGripVertical } from '@tabler/icons-vue';
 import { Settings2 } from 'lucide-vue-next';
-import draggable from 'vuedraggable';
+import { VueDraggable } from 'vue-draggable-plus';
 import {
     PopoverBase as Popover,
     PopoverContent,
@@ -278,8 +278,16 @@ const submitColumns = () => {
     close();
 };
 
-const checkLocked = ({ draggedContext, relatedContext }: any) => {
-    return !draggedContext.element?.locked && !relatedContext.element?.locked;
+// vue-draggable-plus's `onMove` hands back the raw Sortable.js MoveEvent
+// (DOM nodes), not vuedraggable's `draggedContext`/`relatedContext` data
+// wrappers. Resolve each row's column via its `data-column-key` and reject
+// the move when either the dragged or target column is locked.
+const checkLocked = (evt: any) => {
+    const draggedKey = (evt?.dragged as HTMLElement | undefined)?.dataset?.columnKey;
+    const relatedKey = (evt?.related as HTMLElement | undefined)?.dataset?.columnKey;
+    const dragged = selectedColumns.value.find(column => column.key === draggedKey);
+    const related = selectedColumns.value.find(column => column.key === relatedKey);
+    return !dragged?.locked && !related?.locked;
 };
 
 const close = () => { isOpen.value = false; };

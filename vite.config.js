@@ -31,11 +31,7 @@ export default defineConfig({
         },
     },
     optimizeDeps: {
-        include: ['vuedraggable'],
         exclude: ['vue'],
-    },
-    ssr: {
-        external: ['vuedraggable'],
     },
     test: {
         globals: true,

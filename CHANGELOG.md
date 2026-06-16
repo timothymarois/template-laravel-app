@@ -6,6 +6,22 @@ Note: once you update a project on that uses this template, be sure to copy this
 
 # Released
 
+## v5.1.1 - 06/16/2026
+
+Replaces the unmaintained **`vuedraggable@4`** drag-and-drop library with **`vue-draggable-plus`**. Patch: no schema, API, or Docker changes. The only component affected is `CustomizeColumns.vue` (data-table column reorder); behavior is identical.
+
+**Why:** `vuedraggable@4` ships UMD-only and does `require('vue')`. When the SSR build externalizes it, Rollup emits a default import of Vue's ESM (no default export) → the Inertia SSR server crashes (`The requested module 'vue' does not provide an export named 'default'`) on any page that mounts a `<draggable>`. `vue-draggable-plus` is the maintained Vue 3 successor on the same Sortable.js engine, ships proper ESM/CJS, and is SSR-safe — so the `vite.config.js` SSR special-casing for vuedraggable is removed.
+
+### What's included
+
+- **`vue-draggable-plus` replaces `vuedraggable`** in `package.json`. Same Sortable.js engine; props (`animation`, `handle`, `group`, `disabled`, `ghost-class`, `chosen-class`, `drag-class`, `filter`) carry over.
+- **`CustomizeColumns.vue` migrated** — vuedraggable's `#item` scoped slot → `vue-draggable-plus`'s default slot with a `v-for`; `item-key` → `:key`; the `:move` lock guard → `@move` reading the raw Sortable `MoveEvent` via a `data-column-key` attribute.
+- **`vite.config.js` simplified** — removed `optimizeDeps.include: ['vuedraggable']` and the `ssr: { external: ['vuedraggable'] }` block. `resolve.dedupe: ['vue']` and `optimizeDeps.exclude: ['vue']` stay.
+
+### Migration
+
+**See [`docs/migrations/template-v5.1.1.md`](docs/migrations/template-v5.1.1.md).** Only forks that use `<draggable>` (i.e. ship `CustomizeColumns.vue` or any other draggable) need the component migration; every fork should swap the dependency and clean `vite.config.js`. ~10 minutes.
+
 ## v5.1.0 - 06/15/2026
 
 Adds a canonical **Docker deploy setup** for Coolify — `Dockerfile`, `.dockerignore`, and an organized `docker/` tree — and renames `template-version.json` → **`template-manifest.json`**. Additive: no framework, schema, or runtime API changes. Forks adopt the Docker files by copying them; the manifest rename applies to every fork.

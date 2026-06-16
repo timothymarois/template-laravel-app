@@ -81,10 +81,8 @@ const DraggableStub = defineComponent({
             default: () => [],
         },
     },
-    setup(props, { slots }) {
-        return () => h('div', slots.item
-            ? (props.modelValue as any[]).map(item => slots.item?.({ element: item }))
-            : slots.default?.());
+    setup(_, { slots }) {
+        return () => h('div', slots.default?.());
     },
 });
 
@@ -105,7 +103,7 @@ describe('CustomizeColumns', () => {
         Button: ButtonStub,
         InputText: InputStub,
         Checkbox: CheckboxStub,
-        draggable: DraggableStub,
+        VueDraggable: DraggableStub,
         Settings2: true,
         IconGripVertical: true,
     };
