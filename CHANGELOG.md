@@ -6,6 +6,24 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.1.3 - 06/16/2026
+
+Aligns the runtime defaults with the mandatory Redis stack and stops the tenant-invite email from blocking the request. Patch: no schema or API changes.
+
+**⚠️ Requires Redis to be reachable.** Redis is already a documented stack requirement (queue + cache via Horizon), but a fork that left `CACHE_STORE`/`QUEUE_CONNECTION` unset **and** has no reachable Redis will break on the next deploy. Provision Redis (`REDIS_HOST`/`REDIS_PORT`) or pin the env vars to `database` explicitly before upgrading.
+
+### What's included
+
+- **`config/cache.php` default → `redis`** (was `database`). `TrackLastSeen` throttles writes via `Cache::has()`/`Cache::put()` on every authenticated request — on the `database` store that throttle was itself a per-request `SELECT`+`INSERT`, the exact write it exists to prevent. `.env.example` `CACHE_STORE` is updated to `redis` to match.
+- **`config/queue.php` default → `redis`** (was `database`). Horizon only consumes the `redis` connection — a production deploy that didn't inject `QUEUE_CONNECTION=redis` silently bypassed Horizon and ran jobs on the database driver. `.env.example` already set `redis`.
+- **`TenantInvitationNotification` now `implements ShouldQueue`** (+ `SerializesModels`). The invite email previously sent synchronously inside the request (200ms–seconds of SMTP latency on `TenantInviteService::send()`); it now dispatches to a worker. Tenancy-only — disabled-state forks never reach it. Under `QUEUE_CONNECTION=sync` it still sends inline.
+
+`phpunit.xml` forces `CACHE_STORE=array` and `QUEUE_CONNECTION=sync`, so the test suite is unaffected and needs no Redis.
+
+### Migration
+
+**See [`docs/migrations/template-v5.1.3.md`](docs/migrations/template-v5.1.3.md).** ~2 minutes, mechanical: change the two config defaults, add `ShouldQueue`/`SerializesModels` to the notification, confirm `REDIS_HOST` resolves and a queue worker / Horizon is running.
+
 ## v5.1.2 - 06/16/2026
 
 `Docker:` Extracts the PHP-FPM **base stage** of the deploy `Dockerfile` into a pre-built, published image — **`ghcr.io/timothymarois/docker-laravel-base`** ([repo](https://github.com/timothymarois/docker-laravel-base)) — and `FROM`s it instead of compiling PHP extensions on every build. Patch: no schema, API, or app-runtime changes; the produced container is byte-equivalent. **Deploy-time only.**

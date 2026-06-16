@@ -7,19 +7,25 @@ namespace App\Notifications\Tenancy;
 use App\Models\Tenant;
 use App\Models\TenantInvite;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * Email notification sent to invitees with an acceptance link.
+ *
+ * Queued (ShouldQueue) so the SMTP call runs on a worker instead of blocking
+ * the invite request. Requires a running queue worker / Horizon to deliver —
+ * with QUEUE_CONNECTION=sync it still sends inline.
  *
  * Renders via Laravel's default MailMessage template — forks can swap in a
  * custom Markdown view by extending this class. The acceptance URL is on
  * the central domain at /invites/{token}.
  */
-class TenantInvitationNotification extends Notification
+class TenantInvitationNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     public function __construct(
         private readonly TenantInvite $invite,
