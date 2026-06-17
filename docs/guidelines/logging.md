@@ -54,6 +54,8 @@ LOG_STDERR_FORMATTER=          # empty = Monolog's default LineFormatter
 
 ## Recommended default — Coolify → Loki + Grafana
 
+> **A ready-to-deploy stack lives at [`docker-laravel-base/observability`](https://github.com/timothymarois/docker-laravel-base/tree/main/observability)** — a single `docker-compose.yaml` with the Loki, Alloy, and Grafana configs embedded. Paste it into a Coolify *Docker Compose* resource, set `GF_ADMIN_PASSWORD`, attach a domain to the `grafana` service. You don't need to hand-assemble the snippets below — they're here to explain what that stack does.
+
 The default path for this template's deployments. The **app side needs nothing** beyond what ships: `LOG_CHANNEL=stderr` (set in Coolify) + JSON-by-default (above). Everything below is **one-time host infrastructure**, shared by every app on the server — you do not repeat it per fork.
 
 **1. Object storage (retention).** Create an S3-compatible bucket — e.g. a DigitalOcean Space — and an access key/secret. This is where Loki keeps chunks + index cheaply.
