@@ -101,6 +101,22 @@ In Grafana, query `{app="<your-app>"}` to see each app's logs. One Loki + one Gr
 
 > Run Loki + Grafana + Alloy as Coolify-managed resources (ideally one Compose stack) so the Coolify UI controls their lifecycle. A raw `docker run`/compose outside Coolify won't be tracked, and deleting it from the UI leaves the container running.
 
+## Multiple servers
+
+There is always **one** Loki and **one** bucket. **Never** run a second Loki against the same bucket — single-binary Loki instances don't coordinate, so two would corrupt each other's index and their compactors would delete each other's chunks. Instead, every additional server runs **only an Alloy agent** that pushes to the one central Loki:
+
+```
+Primary server:  Loki + Grafana + Alloy   ← the only Loki, the only bucket
+Other server(s): Alloy agent  ───────────▶ pushes to the central Loki
+```
+
+Two steps to add a server:
+
+1. **Expose the central Loki to it** — either give the `loki` service a domain (`https://loki.example.com`, port 3100) with **Basic Auth** (Loki has no auth of its own), or, if both servers share a private network (e.g. a DO VPC), push to the primary's private IP `http://<private-ip>:3100`.
+2. **Deploy the Alloy agent on the other server** (collector only — no Loki/Grafana) pointed at that Loki URL, tagging logs with a `server` label so you can filter per host in Grafana: `{app="rundesk", server="server-b"}`.
+
+A ready-made agent stack is at [`docker-laravel-base/observability/alloy-agent`](https://github.com/timothymarois/docker-laravel-base/tree/main/observability/alloy-agent) — paste it as a Coolify Docker Compose resource on the other server and set `LOKI_URL` + `SERVER_LABEL`. Apps on that server still just need `LOG_CHANNEL=stderr`; nothing app-side changes for multi-server.
+
 ## Errors vs. logs
 
 Logging is for searchable, high-volume application output. For **error tracking and alerting** (grouped exceptions, release/commit correlation), the template ships Sentry — set `SENTRY_LARAVEL_DSN`. The two are complementary; use both.
