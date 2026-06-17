@@ -86,7 +86,9 @@ Discord is wired in because spatie ships only mail + slack — the `discord` cha
 
 ### Recovery pings (down → ok)
 
-spatie only notifies on **failure** — it goes silent on recovery. `NotifyOnHealthRecovery` (listens to `CheckEndedEvent`) closes that gap: it remembers each check's last status in the cache and posts a green **"✅ recovered"** Discord embed when a check flips from failed/warning/crashed back to ok. So you get 🔴 when something breaks and ✅ when it comes back — gated on the same Discord webhook + enabled flags.
+spatie only notifies on **failure** — it goes silent on recovery. `NotifyOnHealthRecovery` (listens to `CheckEndedEvent`) closes that gap: it posts a green **"✅ recovered"** Discord embed when a check returns to ok. So you get 🔴 when something breaks and ✅ when it comes back — gated on the same Discord webhook + enabled flags.
+
+It is **debounced**: a check must be down for **≥ 2 consecutive runs** (~2 min, tracked as a per-check down streak in the cache) before it counts as a real outage, so a single transient/flapping failure never produces a spurious "recovered" ping — and you get exactly one recovery per outage. (`ScheduleCheck` also uses a 2-minute heartbeat window for the same reason — its 1-minute default false-fails on normal scheduler jitter.)
 
 ### Maintenance-mode pings (`artisan down` / `up`)
 

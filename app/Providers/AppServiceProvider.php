@@ -98,8 +98,10 @@ class AppServiceProvider extends ServiceProvider
             QueueCheck::new()
                 ->if(fn () => config('queue.default') !== 'sync'),
 
-            // Scheduler is firing (heartbeat — see schedule).
-            ScheduleCheck::new(),
+            // Scheduler is firing (heartbeat — see schedule). Tolerate 2 min: the
+            // heartbeat runs once a minute, so the default 1-min window false-fails
+            // on the slightest scheduler jitter (and flaps → spurious recovery pings).
+            ScheduleCheck::new()->heartbeatMaxAgeInMinutes(2),
 
             // Reverb websocket server is accepting connections (full-variant only).
             ReverbCheck::new()

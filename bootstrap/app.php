@@ -43,9 +43,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // so /health serves the latest snapshot. The two heartbeats feed the
         // Queue and Schedule checks — QueueCheck reads the queued heartbeat job's
         // last run; ScheduleCheck confirms the scheduler itself is firing.
-        $schedule->command('health:check')->everyMinute();
-        $schedule->command('health:queue-check-heartbeat')->everyMinute();
-        $schedule->command('health:schedule-check-heartbeat')->everyMinute();
+        // onOneServer + withoutOverlapping: on a multi-instance deploy this keeps
+        // a single scheduler from running health:check twice in a tick (which would
+        // double every notification). Safe on single-server too.
+        $schedule->command('health:check')->everyMinute()->withoutOverlapping()->onOneServer();
+        $schedule->command('health:queue-check-heartbeat')->everyMinute()->onOneServer();
+        $schedule->command('health:schedule-check-heartbeat')->everyMinute()->onOneServer();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);
