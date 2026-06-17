@@ -46,9 +46,9 @@ Production-grade applications require more than just code—they need authentica
 
 **Monitoring & Debugging**
 
-- ✅ Log Viewer — browse application logs in the browser
 - ✅ Horizon dashboard — monitor queues and failed jobs
 - ✅ Sentry-ready — error tracking integration configured
+- ✅ Centralized logging — logs to stderr, shipped to the sink of your choice (Loki/Grafana, Axiom, …)
 - ✅ Health check endpoint — load balancer and uptime monitoring
 
 **SEO & Social**
@@ -208,10 +208,9 @@ See `AGENTS.md` for detailed component guidelines.
 
 | Tool | URL | Purpose |
 |------|-----|---------|
-| [Log Viewer](https://github.com/opcodesio/log-viewer) | `/log-viewer` | Browse application logs |
 | [Horizon](https://laravel.com/docs/13.x/horizon) | `/horizon` | Monitor queues and jobs |
 
-For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits.
+For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see the [Logging guide](docs/guidelines/logging.md).
 
 **Health check:** Laravel provides `/up` for load balancer health checks.
 

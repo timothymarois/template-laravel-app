@@ -50,7 +50,7 @@ Pre-v4.0.0 history is frozen in [`CHANGELOG-LEGACY.md`](CHANGELOG-LEGACY.md) —
 ```
 
 - Newest release at the **top**, under `# Released`. Date `MM/DD/YYYY`.
-- Include only the sections that apply, always in the order **Added → Changed → Fixed → Migration**.
+- **Section order is fixed and mandatory: Added → Changed → Fixed → Migration.** Include only the sections that apply, but never reorder them — even when a release is "mostly a removal," `Added` still comes before `Changed`.
 
 ### The sections
 

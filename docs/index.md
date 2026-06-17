@@ -28,7 +28,7 @@ features:
     details: Security headers, rate limiting, CORS configuration, and Sanctum authentication out of the box.
   - icon: 📊
     title: Monitoring Built-in
-    details: Log viewer, Horizon dashboard, health checks, and Sentry integration for production visibility.
+    details: Centralized logging, Horizon dashboard, health checks, and Sentry integration for production visibility.
   - icon: 🌐
     title: SEO Optimized
     details: Server-side rendering, meta tags, Open Graph, Twitter Cards, and automatic sitemap generation.

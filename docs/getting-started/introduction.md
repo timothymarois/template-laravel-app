@@ -39,9 +39,9 @@ Production-grade applications require more than just code—they need authentica
 
 ### Monitoring & Debugging
 
-- **Log Viewer** — Browse application logs in the browser
 - **Horizon dashboard** — Monitor queues and failed jobs
 - **Sentry-ready** — Error tracking integration configured
+- **Centralized logging** — Logs ship to stderr and forward to your chosen sink (see [Logging guide](../guidelines/logging.md))
 - **Health check endpoint** — Load balancer and uptime monitoring
 
 ### SEO & Social

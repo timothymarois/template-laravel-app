@@ -1,7 +1,7 @@
 {
     "template": "template-laravel-app",
     "repo": "https://github.com/timothymarois/template-laravel-app",
-    "version": "5.1.3",
+    "version": "5.2.0",
     "updated": "2026-06-16",
     "docker": {
         "php": "8.4",

@@ -18,7 +18,6 @@
         "laravel/socialite": "^5.19",
         "laravel/tinker": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "opcodesio/log-viewer": "^3.10",
         "sentry/sentry-laravel": "^4.7",
         "spatie/laravel-sitemap": "^7.3",
         "stancl/tenancy": "^3.10",

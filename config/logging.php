@@ -1,5 +1,6 @@
 <?php
 
+use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
@@ -98,7 +99,10 @@ return [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
+            // Default to one-line JSON so a log collector (Alloy/Fluent Bit) can ship
+            // structured fields to Loki/Grafana out of the box. Set LOG_STDERR_FORMATTER
+            // to an empty string or another formatter class for human-readable lines.
+            'formatter' => env('LOG_STDERR_FORMATTER', JsonFormatter::class),
             'with' => [
                 'stream' => 'php://stderr',
             ],

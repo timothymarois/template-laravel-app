@@ -6,5 +6,5 @@
  */
 return [
     // 'only' => ['home', 'posts.index', 'posts.show'],
-    'except' => ['_debugbar.*', 'horizon.*', 'log-viewer.*', 'sanctum'],
+    'except' => ['_debugbar.*', 'horizon.*', 'sanctum'],
 ];

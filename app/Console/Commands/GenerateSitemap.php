@@ -39,7 +39,6 @@ class GenerateSitemap extends Command
         'register',
         'logout',
         'horizon',
-        'log-viewer',
         'sanctum',
         'up',
     ];

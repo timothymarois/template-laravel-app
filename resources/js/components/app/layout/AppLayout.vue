@@ -89,7 +89,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import { House, User, Palette, Gauge, ScrollText, LogOut } from 'lucide-vue-next';
+import { House, User, Palette, Gauge, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
 import ModeToggle from '../navigation/ModeToggle.vue';
@@ -165,7 +165,6 @@ const absoluteOgImage = computed(() => {
 const profileMenuItems = computed(() => [
     { separator: true },
     { label: 'Horizon', icon: Gauge, href: '/horizon', external: true },
-    { label: 'Log Viewer', icon: ScrollText, href: '/log-viewer', external: true },
     { separator: true },
     { label: 'Logout', icon: LogOut, href: '/logout', method: 'post' }
 ]);

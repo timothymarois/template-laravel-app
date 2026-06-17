@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use Opcodes\LogViewer\Facades\LogViewer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,19 +38,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configurePasswordRules();
         $this->configureRateLimiting();
-        $this->configureLogViewer();
-    }
-
-    /**
-     * Configure Log Viewer authorization.
-     */
-    protected function configureLogViewer(): void
-    {
-        // Allow access in local/dev mode, require authentication in production
-        LogViewer::auth(function (Request $request) {
-            return app()->environment('local', 'development')
-                || $request->user() !== null;
-        });
     }
 
     /**

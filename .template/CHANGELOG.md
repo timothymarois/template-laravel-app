@@ -8,6 +8,23 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.2.0 - 06/16/2026
+
+Replaces the disk-bound **Log Viewer** with centralized logging: production logs to `stderr` as structured JSON, shipped to a central sink. Minor: no schema or API changes. Local dev is unchanged (`LOG_CHANNEL` stays `daily`; `/log-viewer` page is the only thing gone).
+
+### Added
+
+- **Centralized logging guide** — `docs/guidelines/logging.md` (in the docs sidebar): the local-vs-prod model, sink options (self-hosted Loki/Grafana + Spaces, Axiom, Better Stack), and the recommended **Coolify → Loki/Grafana via Alloy** default setup.
+
+### Changed
+
+- **`stderr` channel defaults to one-line JSON** (`config/logging.php`) so a log collector ships structured fields to Loki/Grafana with no per-app setup; override with `LOG_STDERR_FORMATTER`.
+- **Removed: Log Viewer** (`opcodesio/log-viewer`) — non-functional on the disk-less Coolify deploy and an exposed `/log-viewer` route; replaced by the central-logging path above.
+
+### Migration
+
+See [`migrations/template-v5.2.0.md`](migrations/template-v5.2.0.md) — remove Log Viewer (package, config, 5 code refs, published assets) and adopt the JSON-stderr default. ~5 minutes, mechanical.
+
 ## v5.1.3 - 06/16/2026
 
 Aligns the runtime defaults with the mandatory Redis stack, stops the tenant-invite email from blocking the request, and reorganizes the template's lineage docs into a dedicated `.template/` directory. Patch: no schema or API changes.
