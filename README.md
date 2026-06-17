@@ -49,7 +49,7 @@ Production-grade applications require more than just code—they need authentica
 - ✅ Horizon dashboard — monitor queues and failed jobs
 - ✅ Sentry-ready — error tracking integration configured
 - ✅ Centralized logging — logs to stderr, shipped to the sink of your choice (Loki/Grafana, Axiom, …)
-- ✅ Health check endpoint — load balancer and uptime monitoring
+- ✅ Health checks — `/up` for the container, plus deep `/health` covering DB, Redis, Horizon, queue, scheduler & Reverb
 
 **SEO & Social**
 
@@ -212,7 +212,7 @@ See `AGENTS.md` for detailed component guidelines.
 
 For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see the [Logging guide](docs/guidelines/logging.md).
 
-**Health check:** Laravel provides `/up` for load balancer health checks.
+**Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See the [Health Checks guide](docs/guidelines/health-checks.md).
 
 ### Solo (Dev Runner)
 

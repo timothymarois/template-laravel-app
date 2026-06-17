@@ -47,6 +47,7 @@ export default defineConfig({
                     { text: 'Vue', link: '/guidelines/vue' },
                     { text: 'Testing', link: '/guidelines/testing' },
                     { text: 'Logging', link: '/guidelines/logging' },
+                    { text: 'Health Checks', link: '/guidelines/health-checks' },
                     { text: 'Tenancy — Using', link: '/guidelines/tenancy-using' },
                     { text: 'Tenancy — Migrating', link: '/guidelines/tenancy-migrating' },
                 ],

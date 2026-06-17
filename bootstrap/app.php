@@ -4,6 +4,7 @@ use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrackLastSeen;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -36,6 +37,15 @@ return Application::configure(basePath: dirname(__DIR__))
             EnsureUserIsActive::class,
             HandleInertiaRequests::class,
         ]);
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        // Health checks (spatie/laravel-health): run + store results every minute
+        // so /health serves the latest snapshot. The two heartbeats feed the
+        // Queue and Schedule checks — QueueCheck reads the queued heartbeat job's
+        // last run; ScheduleCheck confirms the scheduler itself is firing.
+        $schedule->command('health:check')->everyMinute();
+        $schedule->command('health:queue-check-heartbeat')->everyMinute();
+        $schedule->command('health:schedule-check-heartbeat')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);

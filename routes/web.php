@@ -7,9 +7,17 @@ use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Tenancy\InviteController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
 
 // Public routes
 Route::get('/', [PageController::class, 'home'])->name('home');
+
+// Health checks (spatie/laravel-health) — JSON snapshot of the last scheduled
+// run, for uptime monitors / external probes. Central (NOT tenant-scoped) and
+// distinct from Laravel's lightweight `/up` (which gates the container). Returns
+// 503 when any check fails (see config: json_results_failure_status). Optionally
+// lock down with HEALTH_SECRET_TOKEN (sent as the X-Secret-Token header).
+Route::get('health', HealthCheckJsonResultsController::class)->name('health');
 
 // Tenant invite acceptance endpoints — registered only when tenancy is enabled
 // (otherwise hitting them would query a non-existent tenant_invites table).

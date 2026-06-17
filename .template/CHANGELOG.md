@@ -8,6 +8,24 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.3.0 - 06/17/2026
+
+Adds **application health checks** via `spatie/laravel-health`: a `/health` endpoint covering database, Redis, Horizon, queue, scheduler, and Reverb, complementing Laravel's `/up`. Each check self-gates to the services a fork runs. Cache result store — no migration.
+
+### Added
+
+- **`spatie/laravel-health`** — checks for disk, database, Redis, Horizon, queue, schedule, and a custom `ReverbCheck`; registered (and gated) in `AppServiceProvider`.
+- **`GET /health`** — JSON snapshot for uptime monitors, 503 on failure; distinct from the `/up` container gate. Optional `HEALTH_SECRET_TOKEN`.
+- **Discord notifications** (opt-in) — failed checks, "recovered" pings, and maintenance-mode (`artisan down`/`up`) pings post to `HEALTH_DISCORD_WEBHOOK_URL`. Channels self-gate to whichever target env is set.
+
+### Changed
+
+- **`config/health.php`** uses the cache result store (no migration; multi-tenant / DB-less safe). Notifications default off (Sentry covers errors).
+
+### Migration
+
+See [`migrations/template-v5.3.0.md`](migrations/template-v5.3.0.md). **Trim the check list to the services your fork runs.** No deploy-time DB work. Full detail in `docs/guidelines/health-checks.md`.
+
 ## v5.2.1 - 06/17/2026
 
 `Docker:` Adds the missing **Reverb WebSocket proxy** to `docker/config/nginx.conf`. The Pusher-protocol `/app/{appKey}` connection now upgrades and proxies to the Reverb server on `127.0.0.1:8080`; without it, browsers could never open the websocket through the public domain (the handshake fell through to `index.php` and failed). Patch: nginx-only, no schema/API/app-runtime change. No-op for forks that don't run Reverb.
