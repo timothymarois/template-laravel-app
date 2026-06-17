@@ -8,6 +8,20 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.2.1 - 06/17/2026
+
+`Docker:` Adds the missing **Reverb WebSocket proxy** to `docker/config/nginx.conf`. The Pusher-protocol `/app/{appKey}` connection now upgrades and proxies to the Reverb server on `127.0.0.1:8080`; without it, browsers could never open the websocket through the public domain (the handshake fell through to `index.php` and failed). Patch: nginx-only, no schema/API/app-runtime change. No-op for forks that don't run Reverb.
+
+> Note: this fixes a real gap — Reverb websockets never worked through the public domain on any fork built from this template, because nginx had no `/app/` location. `broadcasting.md` documented the proxy as if it existed. Server-side publishing (`/apps/{id}/events`, direct to `127.0.0.1:8080`) was unaffected; only the browser→Reverb path was broken.
+
+### Changed
+
+- **`docker/config/nginx.conf` gains `location ^~ /app/`** — proxies the websocket to `127.0.0.1:8080` with `Upgrade`/`Connection` headers and a long read/send timeout. The `^~ /app/` matcher catches the WS path only and never `/apps/{id}/events` (the server-side events API, which must stay off the public domain).
+
+### Migration
+
+See [`migrations/template-v5.2.1.md`](migrations/template-v5.2.1.md) — add the one `location` block to `docker/config/nginx.conf` and redeploy. Only forks running Reverb (`requires.reverb: true`) need it functionally; others can take it as a harmless no-op to stay in sync.
+
 ## v5.2.0 - 06/16/2026
 
 Replaces the disk-bound **Log Viewer** with centralized logging: production logs to `stderr` as structured JSON, shipped to a central sink. Minor: no schema or API changes. Local dev is unchanged (`LOG_CHANNEL` stays `daily`; `/log-viewer` page is the only thing gone).
