@@ -92,7 +92,7 @@ loki.source.docker "all" {
   relabel_rules = loki.relabel.coolify.rules
 }
 loki.relabel "coolify" {
-  rule { source_labels = ["__meta_docker_container_label_coolify_name"], target_label = "app" }
+  rule { source_labels = ["__meta_docker_container_label_coolify_serviceName"], target_label = "app" }
 }
 loki.write "default" { endpoint { url = "http://loki:3100/loki/api/v1/push" } }
 ```

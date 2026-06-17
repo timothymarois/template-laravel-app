@@ -139,6 +139,39 @@ Full detail incl. the recommended Coolify → Loki/Grafana + Spaces setup: [`doc
 
 ---
 
+## Part E — Ensure CI workflows are present (every fork)
+
+Every fork must carry the template's GitHub Actions so pushes/PRs run the lint +
+test + build suite. **Pre-template forks (and any fork created before CI existed)
+often have no `.github/workflows/` at all** — copy the workflows in. This is a
+standing requirement, surfaced here so it's checked on every v5.2.0 adoption.
+
+```sh
+mkdir -p .github/workflows
+cp <template>/.github/workflows/php-checks.yml .github/workflows/
+cp <template>/.github/workflows/js-checks.yml  .github/workflows/
+# Multi-tenant forks ONLY (skip for single-tenant forks):
+# cp <template>/.github/workflows/tenancy-enabled.yml .github/workflows/
+```
+
+Then reconcile to the fork:
+
+- **Node version** — set `js-checks.yml`'s `node-version` to match the fork's pin
+  (`.nvmrc` / `engines.node`). v5.1.3+ forks are on **`22`** (Vite 7 needs ≥ 22.12).
+- **PHP version** — the workflows pin `8.4`; match a fork still on 8.3.
+- **No JS tests yet?** set the `test` script to `vitest run --passWithNoTests` so the
+  Vitest step stays green until the fork adds tests.
+- **Keep `Setup PHP` + `composer install` BEFORE the build** in `js-checks.yml` —
+  `pnpm build` runs `php artisan ziggy:generate`, which needs PHP/composer. This is
+  the #1 CI-only failure and local `pnpm check` does not catch it.
+- **Skip `tenancy-enabled.yml`** unless the fork actually enables tenancy.
+
+Both workflows must be **green** before the fork is considered aligned. If
+`php-checks` is red on pre-existing failing tests, fix them — running the test suite
+in CI is the point.
+
+---
+
 ## Verify
 
 ```sh
@@ -147,6 +180,8 @@ php artisan route:list | grep log-viewer   # expect no matches
 php artisan config:clear
 
 pnpm check                                  # PHP + JS + docs + build, all green
+
+ls .github/workflows/php-checks.yml .github/workflows/js-checks.yml   # CI present (Part E)
 ```
 
 Boot the app locally and confirm the profile menu no longer shows **Log Viewer** (Horizon stays). Trigger a log line and confirm it still writes to `storage/logs/laravel-*.log` locally.
