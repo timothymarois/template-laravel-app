@@ -8,6 +8,18 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.3.1 - 06/23/2026
+
+Documents the missing storage testing placeholder as a required fork sync. Patch: no runtime behavior change; keeps `app:ensure-storage` from creating untracked setup files.
+
+### Fixed
+
+- **Storage testing placeholder sync** — forks should track `storage/framework/testing/.gitignore` so `app:ensure-storage` stays clean.
+
+### Migration
+
+See [`migrations/template-v5.3.1.md`](migrations/template-v5.3.1.md). Copy one placeholder file if missing, then bump `template-manifest.json`.
+
 ## v5.3.0 - 06/17/2026
 
 Adds **application health checks** via `spatie/laravel-health`: a `/health` endpoint covering database, Redis, Horizon, queue, scheduler, and Reverb, complementing Laravel's `/up`. Each check self-gates to the services a fork runs. Cache result store — no migration.
