@@ -67,7 +67,8 @@ and how to write it; copy its `TEMPLATE.md` to start. Then, for every doc (inclu
 2. Task enters an area → read its `PRD/` (what's guaranteed); check `PRD-drafts/` for anything in flight,
    `research/` for prior art and visual targets, `guides/` for a procedure.
 3. Building something new → draft it in `PRD-drafts/`, citing `research/`.
-4. It shipped and tests are green → graduate the draft to a `PRD/`, mapping every `R-` to its test.
+4. It shipped and tests are green → graduate the draft to a `PRD/`, mapping every `R-` to its test, and
+   **delete the draft** (no pointer stub).
 5. Hit friction → add a line to `.ai/MEMORY.md` (and delete it once solved). A repeatable procedure → `guides/`.
 
 Each home has its own `README.md` (its rules) and a `TEMPLATE.md` (copy it to start a new doc).

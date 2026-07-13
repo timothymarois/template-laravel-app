@@ -867,8 +867,8 @@ to start a new doc. Don't write into a home whose rules you haven't read.
 - Hit friction (a trap, a non-obvious constraint, a workaround) → add a line to `.ai/MEMORY.md`, and
   **delete it once the friction is genuinely solved**. This codebase only.
 - Shipped a system whose behavior is now guaranteed → its `.ai/docs/PRD-drafts/` draft graduates to a
-  `.ai/docs/PRD/`, with every `R-` requirement mapped to a passing Pest test. **Behavior and its PRD change
-  in the same commit — they never drift.**
+  `.ai/docs/PRD/`, with every `R-` requirement mapped to a passing Pest test, and the **draft is deleted**
+  (no pointer stub). **Behavior and its PRD change in the same commit — they never drift.**
 - Implementing a `.ai/docs/PRD/` requirement in code → cite its `R-<AREA>-<n>` in the method's doc-block,
   so code ↔ contract ↔ test stay linked.
 - Do not add rationale, history, or maintainer commentary to `.ai/` files — they address the next agent

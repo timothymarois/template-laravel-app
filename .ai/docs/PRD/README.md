@@ -29,7 +29,7 @@ says so.
 1. The system is implemented and behaves as drafted.
 2. Every proposed `R-<AREA>-<n>` from the draft has a **passing** test.
 3. Copy the requirements into a new `PRD-<System>.md`, fill the Tests table, declare owns / does-NOT-own.
-4. Leave a one-line pointer in the old `PRD-drafts/` doc, or delete it — the PRD is now the source of truth.
+4. **Delete** the old `PRD-drafts/` doc — do not leave a pointer stub. The PRD is the only source of truth.
 
 ## Current PRDs
 

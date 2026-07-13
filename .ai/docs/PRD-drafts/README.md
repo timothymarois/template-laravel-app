@@ -17,8 +17,8 @@ research/  ──►  PRD-drafts/<slug>.md  ──build it──►  tests pass 
 
 - While in flight it lives here and changes as much as needed.
 - The moment the system is built and its tests are green, its **truth moves to `PRD/`** — every
-  requirement mapped to a test. Leave a one-line pointer here or delete the draft; never keep two copies
-  of the same truth.
+  requirement mapped to a test. **Delete the draft** (no pointer stub). Never keep two copies of the
+  same truth.
 - A rejected draft's lesson, if any, goes to `.ai/MEMORY.md` — the draft itself doesn't linger.
 
 ## Rules
