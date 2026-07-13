@@ -84,18 +84,9 @@ Visit `http://localhost:8000` (or your Herd domain) to see the app. Register a n
 
 ## Documentation
 
-This starter includes built-in documentation powered by VitePress.
-
-```bash
-pnpm docs:dev       # Start docs dev server at http://localhost:5173
-pnpm docs:build     # Build docs for production
-```
-
-View the docs for:
-- Architecture overview and tech stack
-- Component guidelines (ui/, app/, site/ layers)
-- Laravel and Vue coding standards
-- Testing requirements
+Contributor and agent documentation lives in [`.ai/`](.ai/) — start at
+[`.ai/docs/README.md`](.ai/docs/README.md) for the knowledge map (architecture, how-to guides, lessons,
+and tested PRDs). The rules every agent follows are in [`AGENTS.md`](AGENTS.md).
 
 ### Quick Links
 - [Tech Stack](#tech-stack) — Core technologies and why they're chosen

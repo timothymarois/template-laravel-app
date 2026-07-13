@@ -20,17 +20,9 @@
     "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && php -d memory_limit=512M ./vendor/bin/pest",
     "check:tenancy": "php -d memory_limit=512M ./vendor/bin/pest --configuration=phpunit.tenancy.xml",
     "check:js": "pnpm lint && pnpm lint:css && pnpm typecheck && pnpm test",
-    "check:docs": "pnpm docs:lint && pnpm docs:lint:css",
-    "check:build": "pnpm build && pnpm exec vite build --ssr && pnpm docs:build",
-    "check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" \"pnpm check:docs\" && pnpm check:build",
-    "check:all": "pnpm check && pnpm check:tenancy",
-    "docs:dev": "cd docs && pnpm dev",
-    "docs:build": "cd docs && pnpm build",
-    "docs:lint": "cd docs && pnpm lint",
-    "docs:lint:fix": "cd docs && pnpm lint:fix",
-    "docs:lint:css": "cd docs && pnpm lint:css",
-    "docs:lint:css:fix": "cd docs && pnpm lint:css:fix",
-    "docs:check": "cd docs && pnpm check"
+    "check:build": "pnpm build && pnpm exec vite build --ssr",
+    "check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" && pnpm check:build",
+    "check:all": "pnpm check && pnpm check:tenancy"
   },
   "devDependencies": {
     "@inertiajs/vue3": "^3.2.0",
