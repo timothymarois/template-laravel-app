@@ -8,6 +8,25 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.4.0 - 07/13/2026
+
+Replaces the VitePress **`docs/` site** with a Markdown-only **`.ai/` knowledge system** and restructures `AGENTS.md` onto it. Minor: docs / agent-tooling only — no schema, API, runtime, or Docker-core change. `pnpm check` drops its `docs` step.
+
+### Added
+
+- **`.ai/docs/` knowledge system** — `research/ references/ design/ PRD/ guides/ lessons/` homes (each with a `README` + `TEMPLATE`) and a `docs/README.md` map; `.ai/tmp/` git-ignored scratch. The template's guideline pages ship as `guides/`.
+- **Code-documentation convention** (`AGENTS.md`) — complex methods get a doc-block; a method implementing a `PRD/` requirement cites its `R-<AREA>-<n>`.
+
+### Changed
+
+- **`AGENTS.md`** restructured onto the `.ai/docs` model — light-by-default load order (`.ai/BRIEF` + `.ai/CODEMAP` first), a read-the-home-`README` doc gate, and `.ai/docs` references throughout; all conventions preserved.
+- **Removed: `.ai/MEMORY.md`** — folded into `.ai/docs/lessons/` (per-area, `L-` IDs).
+- **Removed: VitePress `docs/` site** — the site, its `docs:*` / `check:docs` scripts, the `docs:build` step in `check`, and its `.gitignore` block. Guideline content moved to `.ai/docs/guides/`.
+
+### Migration
+
+See [`migrations/template-v5.4.0.md`](migrations/template-v5.4.0.md). Every fork: add `.ai/docs`, fold `MEMORY` into `lessons/`, restructure `AGENTS.md`, remove the VitePress site. Docs-only — no deploy work.
+
 ## v5.3.0 - 06/17/2026
 
 Adds **application health checks** via `spatie/laravel-health`: a `/health` endpoint covering database, Redis, Horizon, queue, scheduler, and Reverb, complementing Laravel's `/up`. Each check self-gates to the services a fork runs. Cache result store — no migration.
