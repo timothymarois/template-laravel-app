@@ -738,6 +738,27 @@ import Sidebar from '@/components/app/navigation/Sidebar.vue';
 import SiteLayout from '@/components/site/layout/SiteLayout.vue';
 ```
 
+## Code documentation
+
+Document the non-obvious — *why* a method exists, its contract, and which PRD requirement it satisfies.
+Trivial controllers and accessors get nothing; a comment that restates the code is noise.
+
+- **Complex Services/Actions get a PHPDoc block** (intent · contract · edge cases). Non-trivial
+  composables/utils get TSDoc. Explain *why*, not *what*.
+- **Cite the requirement** — when a method implements a `.ai/docs/PRD/` requirement, name its
+  `R-<AREA>-<n>` in the doc-block, linking the code to its tested contract.
+- **Keep it true** — a stale doc-block is worse than none; update it in the same change.
+
+```php
+✅ /**
+    * Provisions a tenant database and seeds its owner (R-TENANT-2).
+    * Idempotent: a re-run on a half-provisioned tenant resumes — never duplicates.
+    * @throws ProvisioningException when the central connection is unreachable.
+    */
+   public function provision(Tenant $tenant): void
+❌ // provision the tenant      ← restates the name; teaches nothing
+```
+
 ## Directory Structure
 
 ### Laravel
@@ -848,6 +869,8 @@ to start a new doc. Don't write into a home whose rules you haven't read.
 - Shipped a system whose behavior is now guaranteed → its `.ai/docs/design/` proposal graduates to a
   `.ai/docs/PRD/`, with every `R-` requirement mapped to a passing Pest test. **Behavior and its PRD change
   in the same commit — they never drift.**
+- Implementing a `.ai/docs/PRD/` requirement in code → cite its `R-<AREA>-<n>` in the method's doc-block,
+  so code ↔ contract ↔ test stay linked.
 - Do not add rationale, history, or maintainer commentary to `.ai/` files — they address the next agent
   doing work, nothing else.
 - Need a scratch file — a throwaway draft, a generated asset, experiment output? Put it in `.ai/tmp/`. It's
