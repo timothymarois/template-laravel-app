@@ -138,5 +138,5 @@ Notable: `tenancy.php`, `health.php`, `horizon.php`, `reverb.php`, `broadcasting
 
 ## Documentation
 
-- `.ai/` — agent docs. `BRIEF.md` (what & why), `CODEMAP.md` (this file), and `docs/` — the knowledge system: `research/ references/ design/ PRD/ guides/ lessons/` (see `.ai/docs/README.md` for the map). `.ai/tmp/` is git-ignored scratch.
+- `.ai/` — agent docs. Always-loaded: `BRIEF.md` (what & why), `CODEMAP.md` (this file), `MEMORY.md` (current friction). On-demand knowledge in `docs/`: `research/` (+ `references/` visuals), `PRD-drafts/`, `PRD/`, `guides/` (see `.ai/docs/README.md` for the map). `.ai/tmp/` is git-ignored scratch.
 - `.template/` _(hidden)_ — fork release artifacts: `CHANGELOG.md`, `CHANGELOG-LEGACY.md`, `README.md`, `migrations/`.

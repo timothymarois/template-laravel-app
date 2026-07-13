@@ -10,7 +10,7 @@ Answers: *"What must `<system>` do — guaranteed and proven?"*
 ## The one rule
 
 **A PRD is born when a system ships — not when it's planned.** A proposal for something unbuilt lives in
-`../design/`; it graduates here only when implemented and green. A PRD is "true" only because a test
+`../PRD-drafts/`; it graduates here only when implemented and green. A PRD is "true" only because a test
 says so.
 
 ## Rules
@@ -21,15 +21,15 @@ says so.
   same commit — they never drift.
 - **Owns / does NOT own.** Each PRD names what it owns and what it doesn't, cross-referencing siblings,
   so no two PRDs define the same thing.
-- **State what *is* true.** Rejected approaches and dead-ends go to `../lessons/`.
+- **State what *is* true.** Rejected approaches and dead-ends go to `.ai/MEMORY.md`.
 - **Self-contained.** State the actual requirement — never point at a ticket or tracker.
 
-## Graduation checklist (design → PRD)
+## Graduation checklist (PRD-draft → PRD)
 
-1. The system is implemented and behaves as designed.
-2. Every proposed `R-<AREA>-<n>` from the design has a **passing** test.
+1. The system is implemented and behaves as drafted.
+2. Every proposed `R-<AREA>-<n>` from the draft has a **passing** test.
 3. Copy the requirements into a new `PRD-<System>.md`, fill the Tests table, declare owns / does-NOT-own.
-4. Leave a one-line pointer in the old `design/` doc, or delete it — the PRD is now the source of truth.
+4. Leave a one-line pointer in the old `PRD-drafts/` doc, or delete it — the PRD is now the source of truth.
 
 ## Current PRDs
 
@@ -39,4 +39,4 @@ says so.
 |---|---|---|
 | _(none yet)_ | | |
 
-Copy `TEMPLATE.md` to graduate a design into a PRD.
+Copy `TEMPLATE.md` to graduate a draft into a PRD.

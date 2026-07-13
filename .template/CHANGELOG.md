@@ -14,18 +14,18 @@ Replaces the VitePress **`docs/` site** with a Markdown-only **`.ai/` knowledge 
 
 ### Added
 
-- **`.ai/docs/` knowledge system** — `research/ references/ design/ PRD/ guides/ lessons/` homes (each with a `README` + `TEMPLATE`) and a `docs/README.md` map; `.ai/tmp/` git-ignored scratch. The template's guideline pages ship as `guides/`.
+- **`.ai/docs/` knowledge system** — `research/` (with a `references/` subfolder for visual targets), `PRD-drafts/` (upcoming PRDs), `PRD/` (tested contracts), and `guides/`, each with a `README` + `TEMPLATE`, under a `docs/README.md` map; `.ai/tmp/` git-ignored scratch. The template's guideline pages ship as `guides/`.
 - **Code-documentation convention** (`AGENTS.md`) — complex methods get a doc-block; a method implementing a `PRD/` requirement cites its `R-<AREA>-<n>`.
 
 ### Changed
 
-- **`AGENTS.md`** restructured onto the `.ai/docs` model — light-by-default load order (`.ai/BRIEF` + `.ai/CODEMAP` first), a read-the-home-`README` doc gate, and `.ai/docs` references throughout; all conventions preserved.
-- **Removed: `.ai/MEMORY.md`** — folded into `.ai/docs/lessons/` (per-area, `L-` IDs).
+- **`AGENTS.md`** restructured onto the `.ai/docs` model — light-by-default load order (always read `.ai/BRIEF` + `.ai/CODEMAP` + `.ai/MEMORY`), a read-the-home-`README` doc gate, and `.ai/docs` references throughout; all conventions preserved.
+- **`.ai/MEMORY.md`** is now a living friction log — a trap stays until it's solved, then gets deleted — and one of the always-loaded orientation trio (`BRIEF` · `CODEMAP` · `MEMORY`).
 - **Removed: VitePress `docs/` site** — the site, its `docs:*` / `check:docs` scripts, the `docs:build` step in `check`, and its `.gitignore` block. Guideline content moved to `.ai/docs/guides/`.
 
 ### Migration
 
-See [`migrations/template-v5.4.0.md`](migrations/template-v5.4.0.md). Every fork: add `.ai/docs`, fold `MEMORY` into `lessons/`, restructure `AGENTS.md`, remove the VitePress site. Docs-only — no deploy work.
+See [`migrations/template-v5.4.0.md`](migrations/template-v5.4.0.md). Every fork: add `.ai/docs`, keep `MEMORY.md` (refresh its framing), restructure `AGENTS.md`, remove the VitePress site. Docs-only — no deploy work.
 
 ## v5.3.0 - 06/17/2026
 

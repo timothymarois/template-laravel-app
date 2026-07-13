@@ -1,7 +1,7 @@
-# Design: <system / feature>
+# PRD draft: <system / feature>
 
-> Copy this file to `design/<slug>.md` and fill it in. Delete this line. (Being in `design/` means this
-> is a proposal — not yet built. When it ships with tests, it graduates to `PRD/`; no status field needed.)
+> Copy this file to `PRD-drafts/<slug>.md` and fill it in. Delete this line. (Being in `PRD-drafts/`
+> means this is a proposal — not yet built. When it ships with tests, it graduates to `PRD/`.)
 
 ## Problem
 
@@ -14,7 +14,7 @@
 that someone could build it from this. Cite the inputs that shaped it:>
 
 - Research: [`research/<note>.md`](../research/<note>.md)
-- References: [`references/<board>.md`](../references/<board>.md)
+- Visual references: [`research/references/`](../research/references/)
 
 ## Proposed requirements
 
@@ -25,8 +25,8 @@ that someone could build it from this. Cite the inputs that shaped it:>
 
 ## Alternatives considered
 
-- <option we weighed and why we didn't pick it> _(prevents re-litigating; a rejected path may later
-  become a `lessons/` entry)_
+- <option we weighed and why we didn't pick it> _(prevents re-litigating; a rejected path's lesson may
+  later become a `.ai/MEMORY.md` entry)_
 
 ## Open questions
 

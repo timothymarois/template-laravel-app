@@ -1,7 +1,7 @@
 # guides/ — how to do a recurring task here
 
 Operational how-to for procedures that repeat in *this* repo: the steps to run, in order, to get a known
-result. A guide is a recipe, not a rationale — it tells you *how*, not *why* (`design/`/`PRD/` cover why).
+result. A guide is a recipe, not a rationale — it tells you *how*, not *why* (`PRD-drafts/`/`PRD/` cover why).
 
 Answers: *"How do I `<do the recurring task>` in this repo?"*
 

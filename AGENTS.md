@@ -14,15 +14,15 @@ logic, with a Vue 3 SPA rendered through Inertia (TailwindCSS 4, shadcn-vue, Red
 
 **Load light by default, then pull depth only when the task reaches for it.**
 
-1. **Always** (keeps context light): read [`.ai/BRIEF.md`](./.ai/BRIEF.md) (what & why) and
-   [`.ai/CODEMAP.md`](./.ai/CODEMAP.md) (where things are). Nothing else is required up front.
-   [`.ai/docs/README.md`](./.ai/docs/README.md) is the map to everything below.
-2. **On demand, when your task enters an area — pull only what you need:** `.ai/docs/lessons/<area>.md`
-   (what we learned + the fix — **read before touching the area**); `.ai/docs/guides/<task>.md` (the
-   recipe for a recurring procedure); `.ai/docs/PRD/PRD-<System>.md` (the tested contract, if you're
-   changing its behavior); `.ai/docs/design/<slug>.md` (if it's proposed, not yet built);
-   `.ai/docs/research/` + `.ai/docs/references/` (when designing or generating visuals). Current state is
-   read from here — what's in `design/` is in flight, what's in `PRD/` is shipped; there is no status file.
+1. **Always** (keeps context light): read [`.ai/BRIEF.md`](./.ai/BRIEF.md) (what & why),
+   [`.ai/CODEMAP.md`](./.ai/CODEMAP.md) (where things are), and [`.ai/MEMORY.md`](./.ai/MEMORY.md)
+   (current friction to avoid). [`.ai/docs/README.md`](./.ai/docs/README.md) is the map to everything below.
+2. **On demand, when your task enters an area — pull only what you need:** `.ai/docs/PRD/PRD-<System>.md`
+   (the tested contract, if you're changing its behavior); `.ai/docs/PRD-drafts/<slug>.md` (if it's
+   proposed, not yet built); `.ai/docs/guides/<task>.md` (the recipe for a recurring procedure);
+   `.ai/docs/research/` and its `references/` visuals (prior art and targets, when designing). Current
+   state is read from here — what's in `PRD-drafts/` is in flight, what's in `PRD/` is shipped; there is
+   no status file.
 3. Read every file before editing it. Search the codebase before writing new logic — if it exists, reuse,
    extend, or refactor. Never duplicate.
 4. When the user raises a concern, investigate before contradicting. Contradict only with evidence — a
@@ -864,9 +864,9 @@ home: what belongs there, how to write it, and any ID convention (`R-`, `L-`). T
 to start a new doc. Don't write into a home whose rules you haven't read.
 
 - Restructured directories or moved files → update `.ai/CODEMAP.md`.
-- Learned something that would have saved you time (a trap, a non-obvious constraint, and the fix) → add it
-  to the relevant `.ai/docs/lessons/<area>.md`. Lessons are about *this codebase* only.
-- Shipped a system whose behavior is now guaranteed → its `.ai/docs/design/` proposal graduates to a
+- Hit friction (a trap, a non-obvious constraint, a workaround) → add a line to `.ai/MEMORY.md`, and
+  **delete it once the friction is genuinely solved**. This codebase only.
+- Shipped a system whose behavior is now guaranteed → its `.ai/docs/PRD-drafts/` draft graduates to a
   `.ai/docs/PRD/`, with every `R-` requirement mapped to a passing Pest test. **Behavior and its PRD change
   in the same commit — they never drift.**
 - Implementing a `.ai/docs/PRD/` requirement in code → cite its `R-<AREA>-<n>` in the method's doc-block,

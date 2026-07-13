@@ -21,7 +21,7 @@ trade-offs they chose. Enough that a reader never needs to open the source.>
 
 ## Verdict for us
 
-<The "so what": what this means for our design. Point to the `design/` doc it feeds, if one exists.>
+<The "so what": what this means for us. Point to the `PRD-drafts/` doc it feeds, if one exists.>
 
 ## Open questions
 
