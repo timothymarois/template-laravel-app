@@ -136,7 +136,7 @@ Notable: `tenancy.php`, `health.php`, `horizon.php`, `reverb.php`, `broadcasting
 - **Master:** `pnpm check` (php + js + docs + build); `pnpm check:tenancy` / `pnpm check:all` add the enabled-state tenancy suite.
 - Rate limits (`AppServiceProvider`): `api` 60/min/user, `auth` 5/min/IP, `uploads` 10/min/user.
 
-## Documentation (docs/ — 14 .md)
+## Documentation
 
-- VitePress: getting-started (introduction, installation, configuration), architecture (overview, tech-stack, components), guidelines (laravel, vue, testing, health-checks, logging, tenancy-using, tenancy-migrating).
+- `.ai/` — agent docs. `BRIEF.md` (what & why), `CODEMAP.md` (this file), and `docs/` — the knowledge system: `research/ references/ design/ PRD/ guides/ lessons/` (see `.ai/docs/README.md` for the map). `.ai/tmp/` is git-ignored scratch.
 - `.template/` _(hidden)_ — fork release artifacts: `CHANGELOG.md`, `CHANGELOG-LEGACY.md`, `README.md`, `migrations/`.

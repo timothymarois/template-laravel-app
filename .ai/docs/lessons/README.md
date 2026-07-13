@@ -37,6 +37,7 @@ Those belong in the agent's own memory, not here. If it isn't a fact about *this
 
 | Area | File | Covers |
 |---|---|---|
-| _(none yet)_ | | |
+| Backend | `backend.md` | PhoneNumber normalize edge case, InertiaDataTable `viewFields` casting |
+| Template machinery | `template-machinery.md` | `.template/` changelog + migration conventions |
 
 Copy `TEMPLATE.md` to start an area's lessons file.
