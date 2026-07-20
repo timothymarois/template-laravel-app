@@ -10,7 +10,7 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ## v5.5.0 - 07/20/2026
 
-Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — and restructures `AGENTS.md` onto it. Minor: docs / agent-tooling only — no schema, API, runtime, or Docker-core change. `pnpm check` regains a `check:docs` step.
+Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — restructures `AGENTS.md` onto it, and fixes a data-table crash. Minor: no schema, dependency, or Docker-core change. `pnpm check` regains a `check:docs` step.
 
 ### Added
 
@@ -24,9 +24,13 @@ Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, l
 - **`README.md`** points at `.knowledge/` and credits knowledge-template.
 - **Removed: `.ai/`** — the orientation trio and project guides moved into `.knowledge/`, reshaped to the new standards; placeholder `TEMPLATE.md`/`README.md` files dropped.
 
+### Fixed
+
+- **500 crash on the admin data-table routes when `filters` is a scalar.** A non-array `filters` query param reached the array-typed caster and threw; any authenticated user could 500 the admin users page (and the simple-table endpoint), and a scalar submitted via `POST /admin/users/filters` persisted into the session and crashed the next load. `app/Http/Concerns/InertiaDataTableOptions.php` now coerces a non-array `filters` back to the default before casting; regression tests added.
+
 ### Migration
 
-See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; go straight to v5.5.0 (Path 2, fresh adoption). Docs-only — no deploy work.
+See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; go straight to v5.5.0 (Path 2, fresh adoption). Mostly docs; the one code change is the data-table `filters` guard (Part F).
 
 ## v5.4.0 - 07/13/2026
 

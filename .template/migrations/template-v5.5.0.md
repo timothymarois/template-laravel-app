@@ -110,7 +110,29 @@ git rm -r .ai
 
 Path 2 forks have no `.ai/` to remove.
 
-## Part F — Stamp the version
+## Part F — Apply the data-table filters guard (every fork)
+
+A scalar `filters` query param on the admin data-table routes reaches the array-typed caster and throws a
+500 — and a scalar submitted via `POST /admin/users/filters` persists into the session and crashes the next
+load. In `app/Http/Concerns/InertiaDataTableOptions.php`, coerce a non-array `filters` back to the default
+**before** it is cast (after `perPage` is set):
+
+```php
+$merged['perPage'] = (int) ($merged['perPage'] ?? $defaults['perPage']);
+
+if (! is_array($merged['filters'])) {   // ← add this guard
+    $merged['filters'] = $defaults['filters'];
+}
+
+$merged['filters'] = Caster::cast($merged['filters'], $filterCasts);
+```
+
+If your fork hasn't customized this concern, copy the template's version wholesale; if you have, add just
+the four-line guard. The template also adds three regression cases to `tests/Feature/UserControllerTest.php`
+(scalar filters on the simple-table endpoint, on the index route, and one persisted through the session) —
+copy them if your fork keeps its suite aligned.
+
+## Part G — Stamp the version
 
 Set your fork's template version:
 
@@ -128,6 +150,8 @@ template version. They are two different version lines.
 - `python3 .knowledge/scripts/doc-lint .knowledge` → `doc-lint: OK`.
 - `python3 .knowledge/scripts/test_doc_lint.py` → all checks pass.
 - `pnpm check` is green, and now includes `check:docs`.
+- A scalar `filters` on the admin users index, the simple-table endpoint, and `POST /admin/users/filters`
+  returns 200, not 500 (Part F).
 - No `.ai/` directory remains (Path 1); no `.ai/` path reference remains anywhere except `.template/` history.
 - No `<project>` or `_(none yet)_` placeholder remains in `BRIEF.md`, `CODEMAP.md`, `OVERVIEW.md`, or any
   catalog.
