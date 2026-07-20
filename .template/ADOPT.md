@@ -33,21 +33,35 @@ infer rather than guessing.
 
 3. MAKE THE KNOWLEDGE OURS. .knowledge/ currently describes the starter. Rewrite it for OUR product:
    - Read .knowledge/README.md and the guides/docs-*.md standards, then rewrite BRIEF.md, CODEMAP.md, and
-     OVERVIEW.md to describe what WE are building — researching this codebase, not guessing. Leave no
-     <project> placeholder. MEMORY.md starts empty.
+     OVERVIEW.md to describe what WE are building — researching THIS codebase, not guessing. The docs
+     describe the code that ACTUALLY EXISTS: CODEMAP maps the real tree, OVERVIEW/BRIEF describe our product.
+     (The template ships these filled with the literal string "template-laravel-app", not "<project>"
+     tokens — replace the real content, don't just grep for a placeholder.)
+   - MEMORY.md: clear the template's own dev-process notes — but KEEP any friction entry that is still true
+     of code we are keeping (it's real and the next agent will hit it too).
    - Declare OUR components (the ontology) in .knowledge/prd/README.md — this is MY call, so PROPOSE a set
-     and get my sign-off before writing it in.
+     and get my sign-off before writing it in. (Stop here and ask; don't adopt a default silently.)
    - Keep the writing standards (guides/docs-*.md) and the linter (scripts/) EXACTLY as shipped — they are
-     versioned by knowledge-template and .payload-manifest checksums them; editing them fails the build.
+     versioned by knowledge-template and .payload-manifest checksums them; editing one fails the build. The
+     PROJECT how-to guides (tenancy-usage, stack-examples, etc.) are ours to keep or delete — but if you
+     delete one, remove its row from guides/README.md too, or the catalog lint goes red.
 
-4. KEEP OR CUT THE OPTIONAL STACKS, based on what we actually use:
-   - If we are NOT multi-tenant: I'll confirm, then remove the tenancy guides and the tenancy sections from
-     AGENTS.md/CODEMAP (a persisted-state + deletion change — get my approval first).
-   - If we do NOT deploy via Docker/Coolify: same, for the docker/ setup and its AGENTS.md section.
+4. MATCH THE DOCS TO WHAT WE SHIP — don't rip out code during adoption. The template documents optional
+   stacks (multi-tenancy installed-but-inert; Docker/Coolify):
+   - The docs must describe the code THAT EXISTS. While the tenancy code is still present (even inert),
+     CODEMAP/AGENTS keep it — marked inert/optional, not deleted. Do NOT remove a feature from the docs
+     while its code still ships; that makes the docs lie about the repo.
+   - If we won't use a stack, you MAY delete its how-to GUIDES now (e.g. the tenancy guides + their
+     guides/README.md rows) and trim BRIEF/OVERVIEW to our product — those are docs-only.
+   - Actually removing a stack's CODE, config, migrations, and dependency (e.g. stancl/tenancy) is a
+     SEPARATE, hard-gated change (schema + dependency + deletion). Do NOT do it during adoption — raise it
+     and I'll run it as its own task. Only once the code is gone do CODEMAP/AGENTS drop the feature.
 
-5. VERIFY. `pnpm check` is green (it includes check:docs → the knowledge linter). No <project> placeholder
-   remains. AGENTS.md, README, and .knowledge/ describe OUR product, with no stray "template" references
-   except template-manifest.json.
+5. VERIFY. The doc gate is green: `python3 .knowledge/scripts/doc-lint .knowledge` and
+   `python3 .knowledge/scripts/test_doc_lint.py`. No "template-laravel-app" or "<project>" reference remains
+   in the docs. AGENTS.md, README, and .knowledge/ describe OUR product, with no stray "template" references
+   except template-manifest.json. (Full `pnpm check` also runs PHP/JS/build — run it if the toolchain is set
+   up; the doc gate is the part this adoption changed.)
 
 Then stop and show me: what you renamed, what you removed, the component ontology you propose, and anything
 you had to infer.
@@ -63,7 +77,13 @@ built. Paste this to your agent:
 ```
 This is a fork of template-laravel-app. Bring it up to a newer template version by following the template's
 migration guides — WITHOUT breaking what we've customized. Read AGENTS.md first and follow it as law. Do NOT
-run destructive git commands. Commit nothing until I approve.
+run history-rewriting or working-tree-discarding git commands (reset --hard, checkout -- <path>, clean,
+rebase, force-push) — but a `git rm` of files a migration tells you to remove is fine (it's staged, not
+committed). Commit nothing until I approve.
+
+VERIFY AGAINST THE CODE, NOT ASSUMPTIONS — including mine. If anything I tell you about this fork (what it
+uses, what was removed) contradicts what the code actually shows, TRUST THE CODE and flag the contradiction.
+Never delete or rewrite a doc for a feature the code still ships.
 
 1. FIND THE GAP. Read template-manifest.json for our current "version". The template's releases and their
    ordered upgrade steps live in the template's HIDDEN .template/ directory (default search skips it — use

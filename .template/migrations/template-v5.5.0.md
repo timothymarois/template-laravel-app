@@ -60,10 +60,12 @@ only tells you how to get your fork onto it.
 - **Declare your components** in `.knowledge/prd/README.md` — the ontology is **your call**, the shipped
   `base-`/`entity-`/`flow-` default or names that fit your domain. Do not guess it silently.
 
-> **Mold this to your fork.** A migration guide cannot know what your fork became. If you dropped tenancy,
-> your CODEMAP and guides say so and the tenancy how-tos may not apply. If you renamed or removed template
-> features, the docs describe *your* code, not the template's. Verify every path in `CODEMAP.md` against the
-> real tree; do not carry a description of a feature you no longer have.
+> **Mold this to your fork — and let the code decide.** A migration guide cannot know what your fork became.
+> The docs must describe the code that ACTUALLY EXISTS: verify every path in `CODEMAP.md` against the real
+> tree. Both directions matter — do not carry a description of a feature you removed, and do not drop one you
+> still ship. Tenancy is the common trap: the template ships it installed-but-inert, so most forks still have
+> the code and their docs should keep it (marked inert), *not* delete it. Only a fork that genuinely tore out
+> the tenancy code omits it from the docs.
 
 ## Part C — Restructure `AGENTS.md` onto `.knowledge/`
 
@@ -93,7 +95,8 @@ Add the CI workflow `.github/workflows/doc-lint.yml` (copy this template's) so t
 
 ## Part E — Remove `.ai/` (Path 1 only)
 
-Once every real file is migrated and `.knowledge/` lints clean, delete the old home:
+Once every real file is migrated and `.knowledge/` lints clean, delete the old home (a `git rm` of migrated
+files is a normal, staged, pre-commit step — not a "destructive" git command):
 
 ```sh
 git rm -r .ai
