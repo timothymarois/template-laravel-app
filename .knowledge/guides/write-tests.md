@@ -32,6 +32,16 @@ pnpm test:watch      # watch mode
 pnpm check:js        # ESLint + Stylelint + Vitest + build
 ```
 
+**If tenancy is enabled, the tenant tests are a SEPARATE suite.** The default `phpunit.xml` runs with
+tenancy disabled, so tenant routes return false 404s and tenant behavior isn't exercised at all — a green
+`pnpm check` can hide broken tenant code. Run the tenancy suite too whenever you touch anything
+tenant-scoped (tables, observers, services, routes):
+
+```bash
+pnpm check:tenancy   # Pest against phpunit.tenancy.xml (tenancy enabled)
+pnpm check:all       # check + check:tenancy
+```
+
 ### PHP — Pest
 
 Feature test (HTTP endpoints and workflows) live in `tests/Feature/`:
@@ -158,3 +168,4 @@ resources/js/tests/
 - Don't use production data in tests; use factories.
 - Don't ignore flaky tests — fix them.
 - Write tests that describe behavior, not implementation, with descriptive names covering edge cases and error conditions.
+- **A green default suite does not prove tenant code works.** `phpunit.xml` disables tenancy; tenant routes 404 and tenant tables aren't touched. Validate tenant-scoped changes under `phpunit.tenancy.xml` (`pnpm check:tenancy`), not the flat suite alone.

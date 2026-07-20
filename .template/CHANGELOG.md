@@ -10,7 +10,7 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ## v5.5.0 - 07/20/2026
 
-Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — restructures `AGENTS.md` onto it, and fixes a data-table crash. Minor: no schema, dependency, or Docker-core change. `pnpm check` regains a `check:docs` step.
+Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — restructures `AGENTS.md` onto it, and folds in several small bug fixes and guide improvements sourced from fork friction. Minor: no schema, dependency, or Docker-core change. `pnpm check` regains a `check:docs` step.
 
 ### Added
 
@@ -23,14 +23,17 @@ Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, l
 - **`AGENTS.md`** restructured onto `.knowledge/` and cut from ~900 to ~205 lines — every rule kept, the two code-example galleries moved to `guides/stack-examples.md`, all `.ai/` paths now `.knowledge/`.
 - **`README.md`** points at `.knowledge/` and credits knowledge-template.
 - **Removed: `.ai/`** — the orientation trio and project guides moved into `.knowledge/`, reshaped to the new standards; placeholder `TEMPLATE.md`/`README.md` files dropped.
+- **Guide improvements from fork friction** — `write-tests.md` and `tenancy-usage.md` now warn that the default `phpunit.xml` disables tenancy (a green run hides tenant behavior; run `check:tenancy`), and that a new tenant table must not reuse a framework/central table name.
 
 ### Fixed
 
 - **500 crash on the admin data-table routes when `filters` is a scalar.** A non-array `filters` query param reached the array-typed caster and threw; any authenticated user could 500 the admin users page (and the simple-table endpoint), and a scalar submitted via `POST /admin/users/filters` persisted into the session and crashed the next load. `app/Http/Concerns/InertiaDataTableOptions.php` now coerces a non-array `filters` back to the default before casting; regression tests added.
+- **`viewFields` accepted a scalar and returned untyped.** The same concern now guards `viewFields` the way it guards `filters` (no crash, but it kept a scalar through); regression test added.
+- **`PhoneNumber::normalize()` kept a stray non-leading `+`.** `415-555-019+` used to format as `(415) 555-019+`; it now strips every non-digit before validating the 10-digit number. Test added. *(Both surfaced from fork friction logs.)*
 
 ### Migration
 
-See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; go straight to v5.5.0 (Path 2, fresh adoption). Mostly docs; the one code change is the data-table `filters` guard (Part F).
+See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; go straight to v5.5.0 (Path 2, fresh adoption). Mostly docs; the code changes are three small bug fixes in Part F (data-table scalar guards, `PhoneNumber` normalize).
 
 ## v5.4.0 - 07/13/2026
 

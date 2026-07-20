@@ -53,6 +53,10 @@ trait InertiaDataTableOptions
             $merged['filters'] = $defaults['filters'];
         }
 
+        if (! is_array($merged['viewFields'])) {
+            $merged['viewFields'] = $defaults['viewFields'];
+        }
+
         /** @var array<string, string> $filterCasts */
         $filterCasts = $this->filterCasts;
         $merged['filters'] = Caster::cast($merged['filters'], $filterCasts);

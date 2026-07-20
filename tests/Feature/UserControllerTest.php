@@ -96,3 +96,13 @@ it('does not crash when a scalar filters value is persisted via session and relo
 
     $response->assertOk();
 });
+
+it('does not crash when viewFields query param is a scalar', function () {
+    $authUser = User::factory()->create();
+
+    $this->withoutVite();
+
+    $response = $this->actingAs($authUser)->get('/admin/users/table?viewFields=hacked');
+
+    $response->assertOk();
+});

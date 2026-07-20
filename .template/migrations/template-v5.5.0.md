@@ -110,27 +110,45 @@ git rm -r .ai
 
 Path 2 forks have no `.ai/` to remove.
 
-## Part F — Apply the data-table filters guard (every fork)
+## Part F — Apply the shipped bug fixes (every fork)
 
-A scalar `filters` query param on the admin data-table routes reaches the array-typed caster and throws a
-500 — and a scalar submitted via `POST /admin/users/filters` persists into the session and crashes the next
-load. In `app/Http/Concerns/InertiaDataTableOptions.php`, coerce a non-array `filters` back to the default
-**before** it is cast (after `perPage` is set):
+Three small fixes to template-managed code — apply each if your fork still carries the file. If you haven't
+customized the file, copy the template's version wholesale; if you have, apply just the change shown.
+
+**F.1 — Data-table scalar guards** (`app/Http/Concerns/InertiaDataTableOptions.php`). A scalar `filters`
+reaches the array-typed caster and throws a 500 (and, submitted via `POST /admin/users/filters`, persists
+into the session and crashes the next load); a scalar `viewFields` came back untyped. Guard both back to
+their defaults **before** `filters` is cast (after `perPage` is set):
 
 ```php
 $merged['perPage'] = (int) ($merged['perPage'] ?? $defaults['perPage']);
 
-if (! is_array($merged['filters'])) {   // ← add this guard
+if (! is_array($merged['filters'])) {       // ← add
     $merged['filters'] = $defaults['filters'];
+}
+
+if (! is_array($merged['viewFields'])) {    // ← add
+    $merged['viewFields'] = $defaults['viewFields'];
 }
 
 $merged['filters'] = Caster::cast($merged['filters'], $filterCasts);
 ```
 
-If your fork hasn't customized this concern, copy the template's version wholesale; if you have, add just
-the four-line guard. The template also adds three regression cases to `tests/Feature/UserControllerTest.php`
-(scalar filters on the simple-table endpoint, on the index route, and one persisted through the session) —
-copy them if your fork keeps its suite aligned.
+**F.2 — `PhoneNumber::normalize()`** (`app/Support/PhoneNumber.php`) kept a stray non-leading `+`
+(`415-555-019+` → `(415) 555-019+`). Strip every non-digit before validating the 10-digit number:
+
+```php
+$phoneNumber = preg_replace('/\D+/', '', $phoneNumber) ?? '';
+
+if (strlen($phoneNumber) === 11 && $phoneNumber[0] === '1') {
+    $phoneNumber = substr($phoneNumber, 1);
+}
+
+return strlen($phoneNumber) === 10 ? $phoneNumber : null;
+```
+
+The template also adds regression tests (`tests/Feature/UserControllerTest.php` for the scalar params,
+`tests/Unit/PhoneNumberTest.php` for the phone helper) — copy them if your fork keeps its suite aligned.
 
 ## Part G — Stamp the version
 
@@ -150,8 +168,8 @@ template version. They are two different version lines.
 - `python3 .knowledge/scripts/doc-lint .knowledge` → `doc-lint: OK`.
 - `python3 .knowledge/scripts/test_doc_lint.py` → all checks pass.
 - `pnpm check` is green, and now includes `check:docs`.
-- A scalar `filters` on the admin users index, the simple-table endpoint, and `POST /admin/users/filters`
-  returns 200, not 500 (Part F).
+- A scalar `filters` or `viewFields` on the admin users routes returns 200, not 500, and
+  `PhoneNumber::normalize('415-555-019+')` returns `null` rather than a `+`-tailed string (Part F).
 - No `.ai/` directory remains (Path 1); no `.ai/` path reference remains anywhere except `.template/` history.
 - No `<project>` or `_(none yet)_` placeholder remains in `BRIEF.md`, `CODEMAP.md`, `OVERVIEW.md`, or any
   catalog.

@@ -180,6 +180,11 @@ php artisan tenants:migrate                        # every tenant
 php artisan tenants:migrate --tenants=<uuid>        # a specific tenant
 ```
 
+**Don't reuse a framework or central table name.** The flat test suite merges tenant and framework
+migrations into one database, so a new tenant model whose inferred table collides with a framework/central
+table (e.g. `jobs`, the reserved queue table) breaks. Give it an explicit `protected $table` — a `Job`
+model mapping to `job_manuals`, not the inferred `jobs`.
+
 ## Step 7 — Using tenancy in code
 
 `tenant_user()` and `central_user()` both return the central `App\Models\User`:
@@ -314,5 +319,7 @@ Restart the app. Validate by visiting `https://acme.example.com/` — the conten
 | Broadcasts leak across tenants. | Update `routes/channels.php` so channel names include `tenant()?->id`. |
 | `tenant_url('/foo')` returns the wrong URL. | The helper uses the tenant's key as the slug. For pretty domain-based URLs in subdomain mode, use the package's `tenant_route($domain, $route)`. |
 | `EnsureTenantReady`, `EnsureUserBelongsToTenant`, `RecordTenantVisit` middleware referenced elsewhere don't exist. | They're not shipped in v5.0.0 — they're fork-specific (depend on a `ready` column / pivot tables you decide on). |
+| A tenant-scoped change passes the default suite but breaks in production. | The default `phpunit.xml` runs with tenancy disabled — tenant routes 404 and tenant tables aren't exercised. Run `pnpm check:tenancy` (`phpunit.tenancy.xml`) for anything tenant-scoped. |
+| A new tenant model errors in the test suite about a missing/duplicate table. | Its inferred table name collides with a framework/central table in the merged test DB. Set an explicit `protected $table`. |
 
 Package docs: <https://tenancyforlaravel.com/docs/v3/>. For migrating a fork that already has data, see [`tenancy-migrations.md`](./tenancy-migrations.md).

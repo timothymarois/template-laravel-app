@@ -33,12 +33,10 @@ class PhoneNumber
      */
     public static function normalize(string $phoneNumber): ?string
     {
-        $phoneNumber = preg_replace('/[^+\\d]|(?<=\\+|1)[^0-9]/', '', $phoneNumber);
+        // Strip every non-digit — symbols, spaces, and any stray '+' wherever it sits.
+        $phoneNumber = preg_replace('/\\D+/', '', $phoneNumber) ?? '';
 
-        if (strlen($phoneNumber) > 1 && $phoneNumber[0] === '+') {
-            $phoneNumber = substr($phoneNumber, 1);
-        }
-
+        // Drop a leading US country code on an 11-digit number (covers +1… once the '+' is gone).
         if (strlen($phoneNumber) === 11 && $phoneNumber[0] === '1') {
             $phoneNumber = substr($phoneNumber, 1);
         }
