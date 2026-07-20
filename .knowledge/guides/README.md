@@ -25,6 +25,7 @@ Add a row when you add a guide; `doc-lint` fails the build if one is missing.
 | [health-checks.md](./health-checks.md) | Configure, tailor, and read the spatie/laravel-health checks and wire failure notifications |
 | [logging.md](./logging.md) | Read application logs locally, and ship container logs to a central searchable store on deploy |
 | [stack-examples.md](./stack-examples.md) | Look up the worked ✅/❌ code patterns for this stack (companion to the AGENTS.md Best Practices rules) |
+| [ziggy-routes.md](./ziggy-routes.md) | How Laravel route names reach Vue via Ziggy — the generated `ziggy.js`, the `@routes` directive, and the "route not found after adding it" fix |
 | [tenancy-migrations.md](./tenancy-migrations.md) | Adopt multi-tenancy in a fork that already has user data (data-migration path) |
 | [tenancy-usage.md](./tenancy-usage.md) | Enable and use multi-tenancy in a fresh clone or a fork that just upgraded to v5.0.0 |
 | [write-tests.md](./write-tests.md) | Write and run the Pest (backend) and Vitest (JS/Vue) test suites before committing |

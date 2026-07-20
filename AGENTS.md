@@ -114,7 +114,10 @@ The enforceable conventions of this stack. Worked `✅`/`❌` galleries for both
   logic — extract to `composables/` (stateful, `use`-prefixed) or `utils/` (pure). **Don't** let the same
   logic live in 2+ components.
 - **Do** `route()` in scripts / `$route()` in templates, Lucide icons, `cursor-pointer` + hover/focus on
-  interactive elements, Sonner for toasts. **Don't** hardcode URLs or add another icon library.
+  interactive elements, Sonner for toasts. **Don't** hardcode URLs or add another icon library. **Route names
+  come from `routes/*.php`** — never hand-edit the generated, git-ignored `resources/js/ziggy.js`; if `route()`
+  can't find a route you just added, regenerate (`php artisan ziggy:generate`) or restart `pnpm dev`. See
+  [`.knowledge/guides/ziggy-routes.md`](.knowledge/guides/ziggy-routes.md).
 
 ```vue
 ✅ <script setup> const form = useForm({ name: '' }); function submit(){ form.post(route('admin.users.store')); } </script>

@@ -23,7 +23,7 @@ Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, l
 - **`AGENTS.md`** restructured onto `.knowledge/` and cut from ~900 to ~205 lines — every rule kept, the two code-example galleries moved to `guides/stack-examples.md`, all `.ai/` paths now `.knowledge/`.
 - **`README.md`** points at `.knowledge/` and credits knowledge-template.
 - **Removed: `.ai/`** — the orientation trio and project guides moved into `.knowledge/`, reshaped to the new standards; placeholder `TEMPLATE.md`/`README.md` files dropped.
-- **Guide improvements from fork friction** — `write-tests.md` and `tenancy-usage.md` now warn that the default `phpunit.xml` disables tenancy (a green run hides tenant behavior; run `check:tenancy`), and that a new tenant table must not reuse a framework/central table name.
+- **Guide improvements from fork friction** — `write-tests.md` and `tenancy-usage.md` now warn that the default `phpunit.xml` disables tenancy (a green run hides tenant behavior; run `check:tenancy`), and that a new tenant table must not reuse a framework/central table name. New `guides/ziggy-routes.md` documents the Ziggy operational gotchas that repeatedly tripped agents (never hand-edit the generated `ziggy.js`; regenerate when `route()` can't find a new route; `route()` is SSR-safe); `AGENTS.md` carries the one-line rule.
 
 ### Fixed
 
