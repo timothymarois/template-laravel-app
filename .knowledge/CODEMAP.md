@@ -1,6 +1,6 @@
-# Codemap - template-laravel-app
+# Codemap — template-laravel-app
 
-> Last updated: 2026-06-30 — inventory only; conventions live in the repo's AGENTS.md.
+> Last updated: 2026-07-20 — inventory only; conventions live in the repo's AGENTS.md.
 
 Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + TypeScript (strict).
 
@@ -91,14 +91,16 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 Data: accordion, alert, avatar, badge, card, carousel, chart, code-block, data-table, pagination, progress, skeleton, table, tooltip, view-toggle | Forms: checkbox, combobox, date-picker, input (NumberInput, MaskInput), label, pin-input, radio-group, range-calendar, select, select-popover, slider, switch, tags-input, textarea | Overlays: alert-dialog, dialog, popover, sheet, dropdown-menu, context-menu | Nav: tabs, sidebar | Layout: collapsible, resizable, scroll-frame, separator, command | Editor: editor (TipTap) | Upload: upload | Feedback: sonner, spinner, form-errors | Actions: button | Other: calendar.
 
-## App Components (resources/js/components/app/ — 15 .vue)
+## App Components (resources/js/components/app/ — 15 .vue, by subfolder)
 
-- **Layout:** AppLayout, AppShell, AppTopbar. **Modals:** DeleteUserModal, EditUserModal.
-- **Navigation:** ModeToggle, ProfileMenu, Sidebar, Topbar. **Page:** Content, Footer, Header, PageSidebar, SideContent, SideNav.
+- **layout/** — AppLayout, AppShell, AppTopbar.
+- **modals/** — DeleteUserModal, EditUserModal.
+- **navigation/** — ModeToggle, ProfileMenu, Sidebar, Topbar.
+- **page/** — Content, Footer, Header, PageSidebar, SideContent, SideNav.
 
 ## Site Components (resources/js/components/site/ — 1)
 
-- **SiteLayout** — public layout with SEO meta.
+- **layout/SiteLayout** — public layout with SEO meta.
 
 ## Composables (resources/js/composables/)
 
@@ -111,32 +113,36 @@ Data: accordion, alert, avatar, badge, card, carousel, chart, code-block, data-t
 - **validate/** — isEmpty, isNumeric, isValidEmail, isValidURL. **file/** — getFileExtension, normalizeFiles, validateFileSize, validateFileType.
 - **array/** getRandomItem | **browser/** isClient | **vue/** expandTransition, hasSlotContent, inertia/isPageActive | **math/** roundTo | **cn.ts**.
 
-## Frontend Entry Points (resources/js/ — 6)
+## Frontend Entry Points & Plugins (resources/js/ — 6)
 
 - `app.js`, `bootstrap.js`, `setup.js`, `ssr.js`, `ziggy.js`, `env.d.ts`.
+- **plugins/inertia/** — `ziggy.js` (Ziggy route helper wiring).
 
 ## Migrations (database/migrations/)
 
 - Central top-level (4): users, cache, jobs, personal_access_tokens.
-- _(tenancy)_ **central/** (4): tenants, domains, tenant_user, tenant_invites. **tenant/** — empty scaffold.
+- _(tenancy)_ **central/** (4): tenants, domains, tenant_user, tenant_invites. **tenant/** — empty scaffold (`.gitkeep`).
 
 ## Config (config/ — 21)
 
 Notable: `tenancy.php`, `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`, `solo.php`.
 
-## Testing (tests/ — 31 Test files)
+## Testing
 
-- **Backend (Pest):** Feature — AuthenticationFlow, EnsureStorage, EnsureUserIsActive, TrackLastSeen, UserController, GoogleAnalytics, Tenancy/{DisabledState, EnableCommand, MigrateExistingCommand}. Unit — Services/UserService, Enums/{UserRole, TenantRole}, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}, Models/TenantInvite, Notifications/TenantInvitationNotification, Tenancy/NullExistingDataMigrator.
+- **Backend (Pest — tests/, 31 test files):** Feature — AuthenticationFlow, EnsureStorage, EnsureUserIsActive, TrackLastSeen, UserController, GoogleAnalytics, Tenancy/{DisabledState, EnableCommand, MigrateExistingCommand}. Unit — Services/UserService, Enums/{UserRole, TenantRole}, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}, Models/TenantInvite, Notifications/TenantInvitationNotification, Tenancy/NullExistingDataMigrator.
 - **Central** _(tenancy enabled-state suite)_ — EnabledStateSmoke, InviteController, MultiTenantAccess, PathModeRouting, ProvisionCommand, SignedUrlsBootstrapper, TenantInviteService, TenantLifecycle, TenantMembershipService, TenantProvisioningService (bases: CentralBaseTestCase, TenantBaseTestCase).
-- **Frontend (Vitest + Vue Test Utils, happy-dom):** UI helpers, composables, and utils under `resources/js/tests/`.
+- **Frontend (Vitest + Vue Test Utils, happy-dom — resources/js/tests/, 41 test files):** UI component helpers, composables, and utils.
 
 ## Code Quality
 
 - **PHP:** Pint (PSR-12), Larastan (level 5). **JS:** ESLint (strict TS + Vue 3), Stylelint.
 - **Master:** `pnpm check` (php + js + docs + build); `pnpm check:tenancy` / `pnpm check:all` add the enabled-state tenancy suite.
-- Rate limits (`AppServiceProvider`): `api` 60/min/user, `auth` 5/min/IP, `uploads` 10/min/user.
+- Rate limits (`AppServiceProvider`): `api`, `auth` (per-IP), `uploads` — see `AppServiceProvider` for the current per-window values.
 
 ## Documentation
 
-- `.ai/` — agent docs. Always-loaded: `BRIEF.md` (what & why), `CODEMAP.md` (this file), `MEMORY.md` (current friction). On-demand knowledge in `docs/`: `research/` (+ `references/` visuals), `PRD-drafts/`, `PRD/`, `guides/` (see `.ai/docs/README.md` for the map). `.ai/tmp/` is git-ignored scratch.
+- `.knowledge/` — the agent knowledge system. Always-loaded orientation trio: `BRIEF.md` (what & why), `CODEMAP.md` (this file), `MEMORY.md` (current friction), plus `OVERVIEW.md`. On-demand homes: `prd/`, `prd-drafts/`, `research/` (+ `references/` visuals), `guides/` (writing standards `docs-*.md` + project how-tos). See `.knowledge/README.md` for the map; `.knowledge/tmp/` is git-ignored scratch.
 - `.template/` _(hidden)_ — fork release artifacts: `CHANGELOG.md`, `CHANGELOG-LEGACY.md`, `README.md`, `migrations/`.
+
+---
+*Editing this file? Follow the standard first: [`guides/docs-codemap.md`](./guides/docs-codemap.md).*

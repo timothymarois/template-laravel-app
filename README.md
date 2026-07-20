@@ -84,9 +84,11 @@ Visit `http://localhost:8000` (or your Herd domain) to see the app. Register a n
 
 ## Documentation
 
-Contributor and agent documentation lives in [`.ai/`](.ai/) — start at
-[`.ai/docs/README.md`](.ai/docs/README.md) for the knowledge map (architecture, how-to guides, lessons,
-and tested PRDs). The rules every agent follows are in [`AGENTS.md`](AGENTS.md).
+Contributor and agent documentation lives in [`.knowledge/`](.knowledge/) — start at
+[`.knowledge/README.md`](.knowledge/README.md) for the knowledge map (orientation, how-to guides, and tested
+PRDs), or [`.knowledge/OVERVIEW.md`](.knowledge/OVERVIEW.md) for the platform in plain language. The rules
+every agent follows are in [`AGENTS.md`](AGENTS.md). This documentation system is
+[knowledge-template](https://github.com/timothymarois/knowledge-template).
 
 ### Quick Links
 - [Tech Stack](#tech-stack) — Core technologies and why they're chosen
