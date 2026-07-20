@@ -84,9 +84,26 @@ Visit `http://localhost:8000` (or your Herd domain) to see the app. Register a n
 
 ## For coding agents
 
-**Starting a new project** from this template, or **upgrading a fork** to a newer template version? Both
-prompts live in [`.template/ADOPT.md`](.template/ADOPT.md) — hand the relevant one to your coding agent. It
-also picks up `AGENTS.md` (the rules) and `.knowledge/` (the docs).
+The full prompts live in [`.template/ADOPT.md`](.template/ADOPT.md). Hand your agent the launcher for the
+flow you want — it reads the detailed prompt from there and follows it.
+
+**🌱 Starting a new project** from this clone:
+
+```
+Set this repo up as our own product from the template-laravel-app starter. Read .template/ADOPT.md and
+follow the "Start a new project" prompt end to end — rename the project to <OUR NAME>, strip the template
+machinery, and rewrite .knowledge/ for our product. Ask me about the component ontology and anything you
+must infer. Start by reading AGENTS.md.
+```
+
+**⬆️ Upgrading this fork** to a newer template version:
+
+```
+Upgrade this fork to the latest template version. Read .template/ADOPT.md and follow the "Upgrade an
+existing fork" prompt — find our template-manifest version, apply the .template/migrations/ in order
+(honoring any skip notes), and mold each migration to what this fork actually is. Don't break our
+customizations; stop and ask before any hard gate. Start by reading AGENTS.md.
+```
 
 ---
 
