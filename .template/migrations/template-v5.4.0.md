@@ -1,5 +1,11 @@
 # Migrating a fork to template v5.4.0
 
+> **⏭️ Heading to v5.5.0 from v5.3.0 or below? Skip this release.** v5.4.0 installs the `.ai/` knowledge
+> system, which **v5.5.0 replaces with `.knowledge/` and deletes.** Adopting `.ai/` here only to migrate off
+> it next is wasted work. If your fork never adopted `.ai/`, go straight to
+> [`template-v5.5.0.md`](template-v5.5.0.md) (Path 2) and set your manifest to `5.5.0`.
+
+
 v5.4.0 replaces the VitePress **`docs/` site** with a Markdown-only **`.ai/` knowledge system** and
 restructures `AGENTS.md` onto it. Every fork. Minor — docs / agent-tooling only; no schema, API, runtime,
 or Docker-core change.

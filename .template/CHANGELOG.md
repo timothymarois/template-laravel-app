@@ -8,6 +8,26 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.5.0 - 07/20/2026
+
+Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — and restructures `AGENTS.md` onto it. Minor: docs / agent-tooling only — no schema, API, runtime, or Docker-core change. `pnpm check` regains a `check:docs` step.
+
+### Added
+
+- **`.knowledge/` knowledge system** — homes (`prd/`, `prd-drafts/`, `research/`, `references/`, `tmp/`), writing standards (`guides/docs-*.md`), a stdlib `doc-lint` + teeth-test, the orientation trio + `OVERVIEW.md`, a `.version` stamp, and a `.payload-manifest` that checksums the shipped files so a repo can prove it runs the version it claims. Versioned separately from the template, by [knowledge-template](https://github.com/timothymarois/knowledge-template).
+- **`check:docs`** back in the gate — `pnpm check` runs the knowledge linter (teeth-test + `doc-lint`) alongside PHP and JS; a new `.github/workflows/doc-lint.yml` runs it in CI.
+- **`guides/stack-examples.md`** — the full PHP + Vue `✅`/`❌` code galleries, pulled out of `AGENTS.md`.
+
+### Changed
+
+- **`AGENTS.md`** restructured onto `.knowledge/` and cut from ~900 to ~205 lines — every rule kept, the two code-example galleries moved to `guides/stack-examples.md`, all `.ai/` paths now `.knowledge/`.
+- **`README.md`** points at `.knowledge/` and credits knowledge-template.
+- **Removed: `.ai/`** — the orientation trio and project guides moved into `.knowledge/`, reshaped to the new standards; placeholder `TEMPLATE.md`/`README.md` files dropped.
+
+### Migration
+
+See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; go straight to v5.5.0 (Path 2, fresh adoption). Docs-only — no deploy work.
+
 ## v5.4.0 - 07/13/2026
 
 Replaces the VitePress **`docs/` site** with a Markdown-only **`.ai/` knowledge system** and restructures `AGENTS.md` onto it. Minor: docs / agent-tooling only — no schema, API, runtime, or Docker-core change. `pnpm check` drops its `docs` step.
