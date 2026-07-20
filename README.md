@@ -2,6 +2,7 @@
 
 [![PHP Checks](https://github.com/timothymarois/template-laravel-app/actions/workflows/php-checks.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/php-checks.yml)
 [![JavaScript Checks](https://github.com/timothymarois/template-laravel-app/actions/workflows/js-checks.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/js-checks.yml)
+[![Knowledge Lint](https://github.com/timothymarois/template-laravel-app/actions/workflows/doc-lint.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/doc-lint.yml)
 
 Production-grade applications require more than just code—they need authentication, real-time updates, background jobs, testing, monitoring, security hardening, SEO, and deployment pipelines. Setting all of this up correctly takes weeks.
 
