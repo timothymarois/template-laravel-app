@@ -49,6 +49,10 @@ trait InertiaDataTableOptions
         $merged['sortOrder'] = (int) ($merged['sortOrder'] ?? $defaults['sortOrder']);
         $merged['perPage'] = (int) ($merged['perPage'] ?? $defaults['perPage']);
 
+        if (! is_array($merged['filters'])) {
+            $merged['filters'] = $defaults['filters'];
+        }
+
         /** @var array<string, string> $filterCasts */
         $filterCasts = $this->filterCasts;
         $merged['filters'] = Caster::cast($merged['filters'], $filterCasts);

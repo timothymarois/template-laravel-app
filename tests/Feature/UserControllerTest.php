@@ -64,3 +64,35 @@ it('allows user to be deleted', function () {
         'id' => $targetUser->id,
     ]);
 });
+
+it('does not crash when filters query param is a scalar', function () {
+    $authUser = User::factory()->create();
+
+    $this->withoutVite();
+
+    $response = $this->actingAs($authUser)->get('/admin/users/table?filters=hacked');
+
+    $response->assertOk();
+});
+
+it('does not crash on the index route when filters query param is a scalar', function () {
+    $authUser = User::factory()->create();
+
+    $this->withoutVite();
+
+    $response = $this->actingAs($authUser)->get('/admin/users?filters=hacked');
+
+    $response->assertOk();
+});
+
+it('does not crash when a scalar filters value is persisted via session and reloaded', function () {
+    $authUser = User::factory()->create();
+
+    $this->withoutVite();
+
+    $this->actingAs($authUser)->post('/admin/users/filters', ['filters' => 'hacked']);
+
+    $response = $this->actingAs($authUser)->get('/admin/users');
+
+    $response->assertOk();
+});
