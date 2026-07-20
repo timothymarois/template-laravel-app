@@ -9,6 +9,17 @@ rules live.
 > by reading the template's `.template/` (this file + `migrations/`) from a fresh clone of the template, not
 > from itself.
 
+> **Two version lines — always take the latest `.knowledge/`.** The Laravel template version
+> (`template-manifest.json`, e.g. 5.5.0) and the `.knowledge/` documentation-system version
+> (`.knowledge/.version`, e.g. 1.0.0) move **independently**. The template only *bundles* a known-good
+> `.knowledge/` — a **floor, not a ceiling.** In both flows below, bring `.knowledge/` to the **latest
+> knowledge-template release**, even when the Laravel template is behind on it: check
+> [knowledge-template](https://github.com/timothymarois/knowledge-template)'s head (its `VERSION` /
+> latest tag) against the bundled `.knowledge/.version`, and if newer, upgrade `.knowledge/` first by
+> applying that repo's `.changes/` migrations in order. It's safe to run ahead — the shipped
+> `.payload-manifest` + `doc-lint` verify the result, so a mismatch fails the build rather than passing
+> silently.
+
 ---
 
 ## 🌱 Start a new project from this template
@@ -32,6 +43,11 @@ infer rather than guessing.
      Leave its "version" as-is; do not bump it.
 
 3. MAKE THE KNOWLEDGE OURS. .knowledge/ currently describes the starter. Rewrite it for OUR product:
+   - FIRST, make sure .knowledge/ is on the LATEST knowledge-template release, not just what this template
+     bundled. Compare .knowledge/.version to knowledge-template's head (github.com/timothymarois/
+     knowledge-template — its VERSION / latest tag). If ours is behind, upgrade .knowledge/ to latest by
+     applying that repo's .changes/ migrations in order, before rewriting our docs. The template's bundled
+     version is a floor, not a ceiling — take the newest even if this template is behind on it.
    - Read .knowledge/README.md and the guides/docs-*.md standards, then rewrite BRIEF.md, CODEMAP.md, and
      OVERVIEW.md to describe what WE are building — researching THIS codebase, not guessing. The docs
      describe the code that ACTUALLY EXISTS: CODEMAP maps the real tree, OVERVIEW/BRIEF describe our product.
@@ -105,12 +121,21 @@ Never delete or rewrite a doc for a feature the code still ships.
      before resolving it.
    - Persisted-state, schema, dependency, or deletion changes are HARD GATES — get my approval before each.
 
-4. STAMP + VERIFY per release: update template-manifest.json "version" as each migration's Verify section
+4. INDEPENDENTLY, BRING .knowledge/ TO THE LATEST knowledge-template RELEASE. The docs-system version
+   (.knowledge/.version) moves separately from the template version — and can advance even when no new
+   template release is due. Compare .knowledge/.version to knowledge-template's head
+   (github.com/timothymarois/knowledge-template — its VERSION / latest tag); if we're behind, apply that
+   repo's .changes/ migrations in order to get current, even if this Laravel template bundles an older
+   .knowledge/. The bundled version is a floor, not a ceiling. (Safe to run ahead: .payload-manifest +
+   doc-lint verify the result.)
+
+5. STAMP + VERIFY per release: update template-manifest.json "version" as each migration's Verify section
    says, and run that section's checks (`pnpm check` — includes check:docs — plus anything the guide names).
    Don't move to the next release until the current one is green.
 
-5. REPORT. For each release: what you applied, what you adapted for this fork and why, any file where our
-   customization met the template's change, and every point you stopped to ask.
+6. REPORT. For each release: what you applied, what you adapted for this fork and why, any file where our
+   customization met the template's change, the .knowledge/ version before/after, and every point you
+   stopped to ask.
 
 Target version: <e.g. latest, or a specific vX.Y.Z>. If I didn't name one, use the template's head from
 .template/CHANGELOG.md and confirm it with me before starting.

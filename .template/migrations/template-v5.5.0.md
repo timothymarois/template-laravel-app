@@ -38,9 +38,15 @@ cp -R <kt>/template/.knowledge .knowledge
 
 You now have the homes (`prd/`, `prd-drafts/`, `research/`, `references/`, `tmp/`), the writing standards
 (`guides/docs-*.md`), the linter (`scripts/`), the orientation trio + `OVERVIEW.md` as fill-in templates, the
-`.version` stamp (`1.0.0`), and `.payload-manifest` (integrity checksums). **Read `.knowledge/README.md`
+`.version` stamp, and `.payload-manifest` (integrity checksums). **Read `.knowledge/README.md`
 before writing to any home.** The full rules for the docs system are knowledge-template's — this migration
 only tells you how to get your fork onto it.
+
+> **Take the latest `.knowledge/`, not just what this template bundles.** This template pins a known-good
+> knowledge-template version as a **floor, not a ceiling**. Check knowledge-template's head (its `VERSION` /
+> latest tag) against the `.version` you just copied; if newer, upgrade `.knowledge/` to latest by applying
+> that repo's `.changes/` migrations in order. The docs system is versioned independently of this template —
+> keep it current even when the template is behind. The integrity manifest + `doc-lint` verify the result.
 
 ## Part B — Move your content into it
 
