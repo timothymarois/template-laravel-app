@@ -44,10 +44,10 @@ infer rather than guessing.
 
 3. MAKE THE KNOWLEDGE OURS. .knowledge/ currently describes the starter. Rewrite it for OUR product:
    - FIRST, make sure .knowledge/ is on the LATEST knowledge-template release, not just what this template
-     bundled. Compare .knowledge/.version to knowledge-template's head (github.com/timothymarois/
-     knowledge-template — its VERSION / latest tag). If ours is behind, upgrade .knowledge/ to latest by
-     applying that repo's .changes/ migrations in order, before rewriting our docs. The template's bundled
-     version is a floor, not a ceiling — take the newest even if this template is behind on it.
+     bundled. Compare .knowledge/.version to knowledge-template's head — https://github.com/timothymarois/knowledge-template
+     (its VERSION / latest tag). If ours is behind, upgrade .knowledge/ to latest by applying that repo's
+     .changes/ migrations in order, before rewriting our docs. The template's bundled version is a floor,
+     not a ceiling — take the newest even if this template is behind on it.
    - Read .knowledge/README.md and the guides/docs-*.md standards, then rewrite BRIEF.md, CODEMAP.md, and
      OVERVIEW.md to describe what WE are building — researching THIS codebase, not guessing. The docs
      describe the code that ACTUALLY EXISTS: CODEMAP maps the real tree, OVERVIEW/BRIEF describe our product.
@@ -124,7 +124,7 @@ Never delete or rewrite a doc for a feature the code still ships.
 4. INDEPENDENTLY, BRING .knowledge/ TO THE LATEST knowledge-template RELEASE. The docs-system version
    (.knowledge/.version) moves separately from the template version — and can advance even when no new
    template release is due. Compare .knowledge/.version to knowledge-template's head
-   (github.com/timothymarois/knowledge-template — its VERSION / latest tag); if we're behind, apply that
+   (https://github.com/timothymarois/knowledge-template — its VERSION / latest tag); if we're behind, apply that
    repo's .changes/ migrations in order to get current, even if this Laravel template bundles an older
    .knowledge/. The bundled version is a floor, not a ceiling. (Safe to run ahead: .payload-manifest +
    doc-lint verify the result.)
