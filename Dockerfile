@@ -109,12 +109,24 @@ ENV HOME=/var/www/html
 # App with vendor/, public/build, bootstrap/ssr and pruned node_modules
 COPY --from=build --chown=www-data:www-data /app /var/www/html
 
-# Service configuration
-COPY docker/config/nginx.conf       /etc/nginx/sites-available/default
-COPY docker/config/php.ini          /usr/local/etc/php/conf.d/zz-app.ini
-COPY docker/config/supervisord.conf /etc/supervisor/conf.d/app.conf
-COPY docker/deploy/entrypoint.sh    /usr/local/bin/entrypoint
+# Service configuration (MANAGED CORE — the template owns these)
+COPY docker/config/nginx.conf          /etc/nginx/sites-available/default
+COPY docker/config/nginx-snippets/     /etc/nginx/snippets/
+COPY docker/config/php.ini             /usr/local/etc/php/conf.d/zz-app.ini
+COPY docker/config/supervisord.conf    /etc/supervisor/conf.d/app.conf
+COPY docker/deploy/entrypoint.sh       /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
+
+# Project configuration (KNOB — this fork owns these; empty by default).
+# nginx: http-context files (shared-memory zones, maps) and server-context files
+# (locations needing their own client_max_body_size). A wildcard include that
+# matches nothing is not an error, so an empty directory changes nothing.
+# php:   loaded from conf.d AFTER zz-app.ini, so a `zzz-`-prefixed project file
+#        wins on any directive it repeats. PHP scans conf.d in filename order.
+# See docker/README.md → "Project configuration".
+COPY docker/project/nginx/http/        /etc/nginx/project/http/
+COPY docker/project/nginx/server/      /etc/nginx/project/server/
+COPY docker/project/php/               /usr/local/etc/php/conf.d/
 
 EXPOSE 80
 

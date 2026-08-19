@@ -8,6 +8,26 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.6.0 - 08/19/2026
+
+Adds a supported **`docker/project/`** directory so a fork can add its own nginx and PHP configuration without editing managed core. `Docker:` minor — no schema, dependency, API, or app-runtime change. Drop-in: the directory ships empty and an empty wildcard include changes nothing.
+
+### Added
+
+- **`docker/project/`** — per-fork configuration copied into the image: `nginx/http/*.conf` (http context: `limit_req_zone`, `limit_conn_zone`, `map`), `nginx/server/*.conf` (server context: `location` blocks), and `php/*.ini` (loaded from `conf.d` after the template's `zz-app.ini`, so a `zzz-`-prefixed file wins).
+- **`docker/config/nginx-snippets/`** — `laravel-fastcgi.conf` (the body of `location ~ \.php$`, factored out) and `laravel-front-controller.conf`, which hands *any* URI to `index.php`. A project location that needs its own `client_max_body_size` must terminate in FastCGI itself; `try_files … /index.php` re-runs location matching and loses the elevated ceiling.
+- **`.github/workflows/docker-config.yml`** — builds the image with and without fixture project files and asserts against the running container: `nginx -t`, effective `nginx -T` (context, uniqueness, wiring), `ini_get()`, and a real oversized POST refused on a default route and accepted on the elevated one.
+- **`docker/README.md` → "Project configuration"** — the directory table, a worked route-scoped upload example including the pre-body `limit_req`/`limit_conn` guard, and why the server-wide ceiling stays low.
+
+### Changed
+
+- **`docker/config/nginx.conf`** gains two wildcard includes (http context and last in the `server` block) and its `location ~ \.php$` body moves into the shared snippet. Behavior with no project files is unchanged: still `client_max_body_size 25M`.
+- **Drift policy** now names `docker/project/**` as a knob and `docker/config/nginx-snippets/` as managed core.
+
+### Migration
+
+See [`migrations/template-v5.6.0.md`](migrations/template-v5.6.0.md). Drop-in — no fork has to supply anything.
+
 ## v5.5.0 - 07/20/2026
 
 Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — restructures `AGENTS.md` onto it, and folds in several small bug fixes and guide improvements sourced from fork friction. Minor: no schema, dependency, or Docker-core change. `pnpm check` regains a `check:docs` step.

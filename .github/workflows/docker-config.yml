@@ -1,0 +1,71 @@
+name: Docker Config Checks
+
+# Proves the shipped Docker configuration against the BUILT IMAGE, not against
+# the source files. A config file that reads correctly but is copied to the
+# wrong path, included in the wrong context, or shadowed by a later directive
+# passes every source-level check and still breaks production.
+on:
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker/**'
+      - 'tests/docker/**'
+      - '.github/workflows/docker-config.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker/**'
+      - 'tests/docker/**'
+      - '.github/workflows/docker-config.yml'
+
+jobs:
+  effective-config:
+    name: Effective built-image configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ── Image 1: no project files (the default every fork inherits) ────────
+      - name: Build image with an empty project directory
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runtime
+          load: true
+          tags: template-app:default
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ── Image 2: the fixture project files, through the SAME Dockerfile ────
+      # Only the three project COPY layers re-run; the app build is cached.
+      - name: Install fixture project configuration
+        run: |
+          cp tests/docker/fixtures/nginx/http/*.conf   docker/project/nginx/http/
+          cp tests/docker/fixtures/nginx/server/*.conf docker/project/nginx/server/
+          cp tests/docker/fixtures/php/*.ini           docker/project/php/
+
+      - name: Build image with project configuration
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runtime
+          load: true
+          tags: template-app:project
+          cache-from: type=gha
+
+      - name: Restore a clean tree
+        run: git checkout -- docker/project && git clean -fd docker/project
+
+      - name: Verify the default image
+        run: bash tests/docker/verify-default.sh template-app:default
+
+      - name: Verify the project-configured image
+        run: bash tests/docker/verify-project.sh template-app:project

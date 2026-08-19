@@ -12,10 +12,15 @@ config files, and the Coolify settings matched.
 ```
 docker/
   README.md                  ← this file (declares the project's setup)
-  config/                    ← service config baked into the image
+  config/                    ← service config baked into the image — MANAGED CORE
     nginx.conf
     php.ini
     supervisord.conf         ← the process list (enable only what's needed)
+    nginx-snippets/          ← reusable FastCGI blocks a project location can include
+  project/                   ← THIS FORK's config — empty by default, never tracked upstream
+    nginx/http/*.conf        ← http context: limit_req_zone, limit_conn_zone, map, geo
+    nginx/server/*.conf      ← server context: locations needing their own body ceiling
+    php/*.ini                ← loaded from conf.d AFTER the template's php.ini
   deploy/                    ← lifecycle scripts
     entrypoint.sh            ← Start phase: runs every container boot
     pre-deployment.sh        ← Coolify "Pre-deployment Command" (old container)
@@ -138,6 +143,86 @@ publish a new tag, then re-pin the `FROM` tag here and bump the template version
 Forks adopt the new pin deliberately. **Never re-add the apt/extension compile to
 this `Dockerfile`.**
 
+## Project configuration
+
+`docker/config/` is **managed core** — the template owns it, and a fork that
+edits it drifts. `docker/project/` is the supported way to add what only this
+fork needs. It ships empty; a wildcard include that matches nothing is not an
+error, so a fork that adds nothing gets byte-identical behavior.
+
+| Directory | Copied to | Context | Use it for |
+|---|---|---|---|
+| `docker/project/nginx/http/*.conf` | `/etc/nginx/project/http/` | http | `limit_req_zone`, `limit_conn_zone`, `map`, `geo` — anything that cannot be declared inside a `server` block |
+| `docker/project/nginx/server/*.conf` | `/etc/nginx/project/server/` | server | `location` blocks, most often one that needs its own `client_max_body_size` |
+| `docker/project/php/*.ini` | `/usr/local/etc/php/conf.d/` | — | PHP directives that must beat the template's. **Prefix `zzz-`**: PHP scans `conf.d` in filename order and the template lands at `zz-app.ini`, so an earlier name loses. |
+
+### Raising the body ceiling for one route
+
+The server-wide `client_max_body_size 25M` is a deliberate protection: nginx
+buffers a request body to `client_body_temp_path` **before** PHP sees it, so
+raising it at server level hands every endpoint — including unauthenticated
+ones — that much temp disk and inbound bandwidth per concurrent request. Scope
+the increase to the URI that needs it instead.
+
+A project location must terminate in FastCGI **itself**. Wrapping the existing
+`location /` does not work: `try_files $uri /index.php` issues an internal
+redirect, nginx re-runs location matching, and the elevated ceiling is lost to
+`location ~ \.php$` before the body is read. Include the front-controller
+snippet to hand any URI to Laravel without copying managed-core wiring:
+
+```nginx
+# docker/project/nginx/http/uploads.conf  (http context — zones live here)
+limit_req_zone  $binary_remote_addr zone=upload_req:1m rate=10r/m;
+limit_conn_zone $binary_remote_addr zone=upload_conn:1m;
+```
+
+```nginx
+# docker/project/nginx/server/uploads.conf  (server context)
+location ~ ^/admin/products/[0-9]+/media$ {
+    client_max_body_size 110M;
+
+    # Preaccess phase — runs BEFORE the body is read, so a refused request
+    # never reaches client_body_temp_path. Without these, one elevated route
+    # is an unmetered temp-disk and bandwidth sink.
+    limit_conn upload_conn 2;
+    limit_req  zone=upload_req burst=2 nodelay;
+    limit_req_status 429;
+    limit_conn_status 429;
+
+    client_body_timeout 120s;
+
+    include /etc/nginx/snippets/laravel-front-controller.conf;
+}
+```
+
+**Match carefully.** The project include is the **last** thing in the `server`
+block, and nginx tries regex locations in configuration order — so everything
+the template ships wins a tie. A project regex can neither shadow
+`location ~ \.php$` nor punch a hole in the dotfile `deny all`. Use
+`location = /exact/uri`, or a regex that cannot match either.
+
+**Raise PHP to match.** nginx accepting the body is only half of it —
+`upload_max_filesize` is the file limit and `post_max_size` bounds the whole
+multipart body, so `post_max_size` must exceed the file limit by enough to
+carry boundary lines and part headers:
+
+```ini
+; docker/project/php/zzz-project.ini
+upload_max_filesize=100M
+post_max_size=110M
+```
+
+### Proving it
+
+`.github/workflows/docker-config.yml` builds the image twice — once with an
+empty `docker/project/`, once with the fixtures in `tests/docker/fixtures/` —
+and asserts against the **running container**, not the source files:
+`nginx -t`, the effective `nginx -T` (right context, loaded exactly once, no
+duplicate directive, front-controller wiring present), `ini_get()`, and a real
+oversized POST that must be refused on a default route and accepted on the
+elevated one. A file copied to the wrong path or included in the wrong context
+passes every source-level check and fails here.
+
 ## Drift policy & versioning
 
 "In sync" means the **managed core** matches this template (at the fork's
@@ -146,7 +231,8 @@ this `Dockerfile`.**
 | Managed core (tracks template) | Knobs (per-fork, may differ) |
 |---|---|
 | `Dockerfile` build stages, base image, `CMD` | base image tag (PHP line / version) |
-| `docker/config/nginx.conf`, `docker/config/php.ini` | asset-build command, pnpm/npm |
+| `docker/config/nginx.conf`, `docker/config/php.ini`, `docker/config/nginx-snippets/` | asset-build command, pnpm/npm |
+| — | **`docker/project/**`** — this fork's own nginx/PHP configuration |
 | `docker/deploy/entrypoint.sh` | which `supervisord.conf` process blocks are enabled |
 | `.dockerignore` | env-driven settings |
 
