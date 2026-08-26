@@ -2,7 +2,6 @@
 
 [![PHP Checks](https://github.com/timothymarois/template-laravel-app/actions/workflows/php-checks.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/php-checks.yml)
 [![JavaScript Checks](https://github.com/timothymarois/template-laravel-app/actions/workflows/js-checks.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/js-checks.yml)
-[![Knowledge Lint](https://github.com/timothymarois/template-laravel-app/actions/workflows/doc-lint.yml/badge.svg)](https://github.com/timothymarois/template-laravel-app/actions/workflows/doc-lint.yml)
 
 Production-grade applications require more than just code—they need authentication, real-time updates, background jobs, testing, monitoring, security hardening, SEO, and deployment pipelines. Setting all of this up correctly takes weeks.
 
@@ -93,8 +92,8 @@ flow you want — it reads the detailed prompt from there and follows it.
 ```
 Set this repo up as our own product from the template-laravel-app starter. Read .template/ADOPT.md and
 follow the "Start a new project" prompt end to end — rename the project to <OUR NAME>, strip the template
-machinery, and rewrite .knowledge/ for our product. Ask me about the component ontology and anything you
-must infer. Start by reading AGENTS.md.
+machinery, and rewrite docs/BRIEF.md and docs/CODEMAP.md for our product. Ask me anything you must
+infer. Start by reading AGENTS.md.
 ```
 
 **⬆️ Upgrading this fork** to a newer template version:
@@ -110,11 +109,12 @@ customizations; stop and ask before any hard gate. Start by reading AGENTS.md.
 
 ## Documentation
 
-Contributor and agent documentation lives in [`.knowledge/`](.knowledge/) — start at
-[`.knowledge/README.md`](.knowledge/README.md) for the knowledge map (orientation, how-to guides, and tested
-PRDs), or [`.knowledge/OVERVIEW.md`](.knowledge/OVERVIEW.md) for the platform in plain language. The rules
-every agent follows are in [`AGENTS.md`](AGENTS.md). This documentation system is
-[knowledge-template](https://github.com/timothymarois/knowledge-template).
+Contributor and agent documentation lives in [`docs/`](docs/) — start at
+[`docs/README.md`](docs/README.md) for the index, [`docs/BRIEF.md`](docs/BRIEF.md) for what this is and who
+it serves, or [`docs/CODEMAP.md`](docs/CODEMAP.md) for where each layer lives.
+[`docs/concepts/`](docs/concepts/) explains how each subsystem works and fails;
+[`docs/guides/`](docs/guides/) is one task per page. The rules every agent follows — and the worked
+`✅`/`❌` code galleries — are in [`AGENTS.md`](AGENTS.md).
 
 ### Quick Links
 - [Tech Stack](#tech-stack) — Core technologies and why they're chosen
