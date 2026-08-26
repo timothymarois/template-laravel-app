@@ -2,9 +2,9 @@ name: Tenancy Enabled Checks
 
 on:
   push:
-    branches: [main]
+    branches: [main, production]
   pull_request:
-    branches: [main]
+    branches: [main, production]
 
 # This workflow runs the Central + Tenant testsuites with tenancy enabled.
 # The default `pnpm check` (php-checks.yml) runs everything else with

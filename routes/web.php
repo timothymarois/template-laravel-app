@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ReleaseController;
 use App\Http\Controllers\Tenancy\InviteController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
@@ -18,6 +19,11 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 // 503 when any check fails (see config: json_results_failure_status). Optionally
 // lock down with HEALTH_SECRET_TOKEN (sent as the X-Secret-Token header).
 Route::get('health', HealthCheckJsonResultsController::class)->name('health');
+
+// Deployed release version. Read by scripts/publish-production-release to prove a
+// production deploy is live before the tag is published, and by any external
+// deployment monitor. Never cached. See docs/concepts/deployment-endpoints.md.
+Route::get('release', ReleaseController::class)->name('release.version');
 
 // Tenant invite acceptance endpoints — registered only when tenancy is enabled
 // (otherwise hitting them would query a non-existent tenant_invites table).

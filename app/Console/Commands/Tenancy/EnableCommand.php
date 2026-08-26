@@ -72,7 +72,7 @@ class EnableCommand extends Command
         $this->line('  3. Provision your first tenant:');
         $this->line('       php artisan tenancy:provision acme --owner=you@example.com');
         $this->newLine();
-        $this->line('Full guide: docs/guidelines/tenancy-using.md');
+        $this->line('Full guide: docs/guides/tenancy-using.md');
 
         return self::SUCCESS;
     }

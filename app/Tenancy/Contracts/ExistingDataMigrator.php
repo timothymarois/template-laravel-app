@@ -16,7 +16,7 @@ use Closure;
  *     );
  *
  * Then run `php artisan tenancy:migrate-existing`. See
- * docs/guidelines/tenancy-migrating.md for a full worked example.
+ * docs/guides/tenancy-migrating.md for a full worked example.
  *
  * The template ships NullExistingDataMigrator as the default — it throws
  * informative errors directing the operator to implement this interface.

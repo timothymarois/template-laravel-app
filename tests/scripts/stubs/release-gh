@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ "$1 $2" == "repo view" ]]; then
+    printf 'test-owner/test-repo\n'
+    exit 0
+fi
+
+if [[ "$1 $2" == "release view" ]]; then
+    tag="$3"
+    [[ -f "$RELEASE_TEST_STATE" ]] || exit 1
+    printf '{"name":"%s","tagName":"%s","url":"https://github.example/releases/%s"}\n' "$tag" "$tag" "$tag"
+    exit 0
+fi
+
+if [[ "$1 $2" == "release create" ]]; then
+    tag="$3"
+    generated_notes=false
+    shift 3
+
+    while [[ $# -gt 0 ]]; do
+        if [[ "$1" == "--generate-notes" ]]; then
+            generated_notes=true
+            shift
+            continue
+        fi
+
+        if [[ "$1" == "--notes-file" ]]; then
+            exit 1
+        fi
+
+        shift
+    done
+
+    [[ "$generated_notes" == true ]] || exit 1
+    printf 'create %s --repo test-owner/test-repo --generate-notes\n' "$tag" >> "$RELEASE_TEST_LOG"
+    git tag "$tag"
+    git push --quiet origin "refs/tags/${tag}"
+    : > "$RELEASE_TEST_STATE"
+    exit 0
+fi
+
+echo "Unexpected gh invocation: $*" >&2
+exit 1

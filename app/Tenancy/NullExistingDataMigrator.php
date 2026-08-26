@@ -37,6 +37,6 @@ class NullExistingDataMigrator implements ExistingDataMigrator
     {
         return 'No ExistingDataMigrator implementation is bound. Implement '
             .'App\Tenancy\Contracts\ExistingDataMigrator and bind it in '
-            .'AppServiceProvider::register(). See docs/guidelines/tenancy-migrating.md.';
+            .'AppServiceProvider::register(). See docs/guides/tenancy-migrating.md.';
     }
 }

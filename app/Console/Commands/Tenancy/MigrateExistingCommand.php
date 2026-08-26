@@ -21,7 +21,7 @@ use Illuminate\Console\Command;
  * The iteration loop itself is intentionally NOT shipped in v5.0.0 — every
  * fork's source schema is different enough that the template's "one size fits
  * all" loop would be wrong more often than right. See
- * docs/guidelines/tenancy-migrating.md for a worked example showing how to
+ * docs/guides/tenancy-migrating.md for a worked example showing how to
  * extend this command per-fork.
  */
 class MigrateExistingCommand extends Command
@@ -57,14 +57,14 @@ class MigrateExistingCommand extends Command
             $this->line('       );');
             $this->line('  3. Re-run this command.');
             $this->newLine();
-            $this->line('Full worked example: docs/guidelines/tenancy-migrating.md');
+            $this->line('Full worked example: docs/guides/tenancy-migrating.md');
 
             return self::FAILURE;
         }
 
         $this->error('A concrete ExistingDataMigrator is bound but the iteration loop is fork-implemented.');
         $this->line('Override App\Console\Commands\Tenancy\MigrateExistingCommand::handle() in your fork');
-        $this->line('with the per-user iteration. See docs/guidelines/tenancy-migrating.md for the pattern.');
+        $this->line('with the per-user iteration. See docs/guides/tenancy-migrating.md for the pattern.');
 
         return self::FAILURE;
     }

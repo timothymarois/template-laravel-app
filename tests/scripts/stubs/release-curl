@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+url="${!#}"
+
+case "$url" in
+    */release)
+        printf 'release %s\n' "$url" >> "$RELEASE_TEST_LOG"
+        printf '{"version":"%s"}\n' "${RELEASE_TEST_DEPLOYED_VERSION:-1.2.3}"
+        ;;
+    */up)
+        printf 'up %s\n' "$url" >> "$RELEASE_TEST_LOG"
+        printf '%s' "${RELEASE_TEST_UP_STATUS:-200}"
+        ;;
+    */health)
+        printf 'health %s\n' "$url" >> "$RELEASE_TEST_LOG"
+        printf '%s' "${RELEASE_TEST_HEALTH_STATUS:-200}"
+        ;;
+    *)
+        echo "Unexpected curl URL: $url" >&2
+        exit 1
+        ;;
+esac

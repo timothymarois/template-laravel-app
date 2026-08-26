@@ -37,7 +37,7 @@ it('every method points at the migrating doc', function () {
             (new NullExistingDataMigrator)->{$method}();
             expect(false)->toBeTrue("Expected {$method} to throw");
         } catch (RuntimeException $e) {
-            expect($e->getMessage())->toContain('docs/guidelines/tenancy-migrating.md');
+            expect($e->getMessage())->toContain('docs/guides/tenancy-migrating.md');
         }
     }
 });

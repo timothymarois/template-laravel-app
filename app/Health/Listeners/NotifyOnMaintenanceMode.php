@@ -13,7 +13,7 @@ use App\Health\DiscordWebhook;
  *
  * NOTE: this covers DELIBERATE maintenance mode, not a crash. A fully-down app
  * can't notify anyone — for "the whole app is unreachable" detection, point an
- * external uptime monitor at /health (see docs/guidelines/health-checks.md).
+ * external uptime monitor at /health (see docs/concepts/health-checks.md).
  *
  * Gated on the same Discord webhook + notifications-enabled flags as the health
  * notifications, via the shared {@see DiscordWebhook} sender.

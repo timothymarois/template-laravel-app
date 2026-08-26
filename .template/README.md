@@ -105,4 +105,4 @@ Every release that needs fork action ships a guide at `migrations/template-vX.Y.
 - **Major** (`X.0.0`) — breaking library majors, schema changes forks must run, or removals that break forks. Deliberate sign-off only.
 - **Docker-core changes** carry a `Docker:` tag on the lead line and follow `AGENTS.md` → "Optional Docker / Deployment" for the bump.
 
-A release that touches the managed core also updates `template-manifest.json` (`version`) and the workspace `VERSIONS.md` tracker.
+A release that touches the managed core also updates `template-manifest.json` (`version`) and the workspace `VERSION_TEMPLATE.md` tracker.
