@@ -8,6 +8,36 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.6.0 - 08/26/2026
+
+Replaces the `.knowledge/` documentation payload with a plain **`docs/`** tree in the standard layout, and adds a **production release process** with a `/release` endpoint so a deploy can be polled instead of guessed at. Minor: no schema, dependency, or Docker-core change. `pnpm check` swaps its `check:docs` step for `check:release`.
+
+> ⚠️ Every fork acts: convert `.knowledge/` to `docs/`, and fill in the new `deploy` block in `template-manifest.json` before its first release.
+
+### Added
+
+- **`docs/` documentation home** — `BRIEF.md` + `CODEMAP.md` at the root, `concepts/` (how a subsystem works and how it fails) and `guides/` (one task each), every home carrying a `README.md` index. No payload, no linter, no version stamp: the writing standards live in the `structuring-project-docs` skill, so there is nothing to version again.
+- **Production release process** — `scripts/{prepare,publish}-production-release`, `production-release-version`, `assert-neutral-main-version`. `production` is the deployed branch, `main` stays at version `0.0.0`, and a tag is published only after the deploy is verified live. Full procedure in `docs/guides/releasing.md`.
+- **`GET /release`** — reports the deployed version as JSON with `Cache-Control: no-store`, the endpoint the publish script and any external deployment monitor poll. Joins `/up` and `/health`; the three are documented together in `docs/concepts/deployment-endpoints.md`.
+- **`deploy` block in `template-manifest.json`** — `repository`, `productionUrl`, `productionBranch`, read by the release scripts. An unedited placeholder is refused rather than polled.
+- **`check:release`** — the four release suites, with stubbed `gh` and `curl` so nothing reaches the network; wired into `pnpm check` and CI alongside a neutral-version guard for main-bound changes.
+
+### Changed
+
+- **`AGENTS.md`** rewired onto `docs/`, and the `✅`/`❌` code galleries folded back in as a closing appendix — reversing that part of v5.5.0, which had extracted them. 208 → 698 lines, all always-loaded.
+- **Guides renamed to the paths the code already cites** — `tenancy-usage.md` → `guides/tenancy-using.md`, `tenancy-migrations.md` → `guides/tenancy-migrating.md`, `write-tests.md` → `guides/writing-tests.md`; `health-checks.md`, `logging.md` and `ziggy-routes.md` → `concepts/`.
+- **Workflows trigger on `production` as well as `main`** — without it a release pull request arrives with no checks.
+- **Removed: `.knowledge/`** — the seven `docs-*.md` standards, `doc-lint` and its teeth-test, `.version`, `.payload-manifest`, and the four homes that only ever held a "none yet" row. `MEMORY.md` is not carried forward; friction now goes in the page that owns the subsystem, under how it fails.
+- **Removed: `check:docs` and `.github/workflows/doc-lint.yml`** — nothing replaces them. `docs/` correctness is a review concern, and `AGENTS.md` says so.
+
+### Fixed
+
+- **18 dangling `docs/guidelines/*` citations**, in shipped runtime output, `README.md`, `docker/README.md`, `.env.example`, and two test assertions. That directory has not existed since v5.4.0 removed the VitePress site; the tests passed throughout because they assert on the string, not on a file existing. Naming the new guides after the paths the code already used fixes 16 of the 18 by construction.
+
+### Migration
+
+See [`migrations/template-v5.6.0.md`](migrations/template-v5.6.0.md). Every fork: convert its docs home, fill in the `deploy` block, and drop the retired gate. Docs, tooling and one additive route — no schema or deploy-time work.
+
 ## v5.5.0 - 07/20/2026
 
 Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — restructures `AGENTS.md` onto it, and folds in several small bug fixes and guide improvements sourced from fork friction. Minor: no schema, dependency, or Docker-core change. `pnpm check` regains a `check:docs` step.
