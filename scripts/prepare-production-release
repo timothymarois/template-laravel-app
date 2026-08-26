@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: scripts/prepare-production-release vMAJOR.MINOR.PATCH" >&2
+}
+
+fail() {
+    echo "Release preparation refused: $1" >&2
+    exit 1
+}
+
+if [[ $# -ne 1 ]]; then
+    usage
+    exit 2
+fi
+
+release_tag="$1"
+
+if [[ ! "$release_tag" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+    fail "version must use strict vMAJOR.MINOR.PATCH syntax"
+fi
+
+version="${release_tag#v}"
+expected_branch="release/${release_tag}"
+repository_root="$(git rev-parse --show-toplevel 2>/dev/null)" || fail "run this inside the repository"
+cd "$repository_root"
+
+[[ -f composer.json && -f package.json ]] || fail "composer.json or package.json is missing"
+[[ -z "$(git status --porcelain)" ]] || fail "the worktree must be clean"
+
+current_branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || fail "detached HEAD is not allowed"
+[[ "$current_branch" == "$expected_branch" ]] || fail "run on ${expected_branch}, not ${current_branch}"
+
+main_commit="$(git rev-parse --verify origin/main 2>/dev/null)" || fail "origin/main is unavailable; fetch it first"
+head_commit="$(git rev-parse HEAD)"
+[[ "$head_commit" == "$main_commit" ]] || fail "the release branch must start at current origin/main"
+
+if git show-ref --verify --quiet "refs/tags/${release_tag}"; then
+    fail "tag ${release_tag} already exists locally"
+fi
+
+set +e
+git ls-remote --exit-code --tags origin "refs/tags/${release_tag}" >/dev/null 2>&1
+remote_tag_status=$?
+set -e
+
+case "$remote_tag_status" in
+    0) fail "tag ${release_tag} already exists on origin" ;;
+    2) ;;
+    *) fail "could not verify tags on origin" ;;
+esac
+
+command -v python3 >/dev/null 2>&1 || fail "python3 is required"
+
+python3 - "$version" <<'PY'
+import json
+import re
+import sys
+from pathlib import Path
+
+version = sys.argv[1]
+
+for filename in ("composer.json", "package.json"):
+    path = Path(filename)
+    source = path.read_text()
+    data = json.loads(source)
+
+    if data.get("version") != "0.0.0":
+        raise SystemExit(f"Release preparation refused: {filename} must start at version 0.0.0")
+
+    updated, count = re.subn(
+        r'(?m)^(\s*"version"\s*:\s*)"0\.0\.0"',
+        rf'\g<1>"{version}"',
+        source,
+        count=1,
+    )
+
+    if count != 1:
+        raise SystemExit(f"Release preparation refused: could not update {filename} safely")
+
+    path.write_text(updated)
+PY
+
+changed_files="$(git diff --name-only)"
+expected_files=$'composer.json\npackage.json'
+[[ "$changed_files" == "$expected_files" ]] || fail "unexpected files changed"
+
+echo "Prepared ${release_tag} in composer.json and package.json."
+echo "Review and commit these changes, then open a pull request to production."
+echo "Do not tag or publish the release until the production deployment is approved and verified."

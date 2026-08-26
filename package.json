@@ -20,9 +20,9 @@
         "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && php -d memory_limit=512M ./vendor/bin/pest",
         "check:tenancy": "php -d memory_limit=512M ./vendor/bin/pest --configuration=phpunit.tenancy.xml",
         "check:js": "pnpm lint && pnpm lint:css && pnpm typecheck && pnpm test",
-        "check:docs": "python3 .knowledge/scripts/test_doc_lint.py && python3 .knowledge/scripts/doc-lint .knowledge",
+        "check:release": "bash tests/scripts/prepare-production-release.sh && bash tests/scripts/production-release-version.sh && bash tests/scripts/publish-production-release.sh && bash tests/scripts/assert-neutral-main-version.sh",
         "check:build": "pnpm build && pnpm exec vite build --ssr",
-        "check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" \"pnpm check:docs\" && pnpm check:build",
+        "check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" \"pnpm check:release\" && pnpm check:build",
         "check:all": "pnpm check && pnpm check:tenancy"
     },
     "devDependencies": {

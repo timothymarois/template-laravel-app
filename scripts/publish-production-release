@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+
+usage() {
+    echo "Usage: scripts/publish-production-release --confirm" >&2
+}
+
+fail() {
+    echo "Production release refused: $1" >&2
+    exit 1
+}
+
+if [[ $# -ne 1 || "$1" != "--confirm" ]]; then
+    usage
+    exit 2
+fi
+
+repository_root="$(git rev-parse --show-toplevel 2>/dev/null)" || fail "run this inside the repository"
+cd "$repository_root"
+
+for command in curl gh git python3; do
+    command -v "$command" >/dev/null 2>&1 || fail "$command is required"
+done
+
+# Identity and target come from template-manifest.json -> deploy, so a fork
+# configures its release in one declarative place instead of editing a script
+# it is otherwise told not to touch. Placeholders are refused: polling
+# example.com would "verify" a deploy that never happened.
+manifest_deploy() {
+    python3 - "$1" <<'PYREAD'
+import json
+import sys
+from pathlib import Path
+
+key = sys.argv[1]
+path = Path("template-manifest.json")
+
+if not path.is_file():
+    raise SystemExit("template-manifest.json is missing")
+
+try:
+    deploy = json.loads(path.read_text())["deploy"]
+except (json.JSONDecodeError, KeyError, TypeError):
+    raise SystemExit("template-manifest.json has no valid deploy block")
+
+value = deploy.get(key)
+if not isinstance(value, str) or not value.strip():
+    raise SystemExit(f"deploy.{key} is missing")
+
+if value in ("owner/repo", "https://example.com"):
+    raise SystemExit(f"deploy.{key} is still the template placeholder ({value})")
+
+print(value)
+PYREAD
+}
+
+repository="$(manifest_deploy repository)" || fail "deploy.repository: $(manifest_deploy repository 2>&1 | tail -1)"
+production_url="$(manifest_deploy productionUrl)" || fail "deploy.productionUrl: $(manifest_deploy productionUrl 2>&1 | tail -1)"
+production_branch="$(manifest_deploy productionBranch)" || fail "deploy.productionBranch: $(manifest_deploy productionBranch 2>&1 | tail -1)"
+
+worktree_changes="$(git status --porcelain --untracked-files=normal)"
+[[ -z "$worktree_changes" ]] || fail "the worktree must be clean"
+
+git fetch --quiet origin "$production_branch" --tags || fail "could not fetch origin/${production_branch} and tags"
+
+head_commit="$(git rev-parse HEAD)"
+production_commit="$(git rev-parse --verify "origin/${production_branch}" 2>/dev/null)" || fail "origin/${production_branch} is unavailable"
+[[ "$head_commit" == "$production_commit" ]] || fail "HEAD must exactly match current origin/${production_branch}"
+
+remote_repository="$(gh repo view --json nameWithOwner --jq '.nameWithOwner' 2>/dev/null)" || fail "authenticate the GitHub CLI with gh auth login"
+[[ "$remote_repository" == "$repository" ]] || fail "GitHub CLI resolved ${remote_repository}, expected ${repository}"
+
+version=""
+tag=""
+while IFS='=' read -r key value; do
+    case "$key" in
+        version) version="$value" ;;
+        tag) tag="$value" ;;
+    esac
+done < <(scripts/production-release-version)
+
+[[ -n "$version" && "$tag" == "v${version}" ]] || fail "the stored release version could not be resolved"
+
+remote_tag_commit() {
+    local tag_name="$1"
+    local direct peeled
+
+    direct="$(git ls-remote origin "refs/tags/${tag_name}" | awk 'NR == 1 { print $1 }')" || return 1
+    peeled="$(git ls-remote origin "refs/tags/${tag_name}^{}" | awk 'NR == 1 { print $1 }')" || return 1
+    printf '%s\n' "${peeled:-$direct}"
+}
+
+existing_release="$(gh release view "$tag" --repo "$repository" --json name,tagName,url 2>/dev/null || true)"
+tag_commit="$(remote_tag_commit "$tag")" || fail "could not inspect ${tag} on origin"
+
+if [[ -n "$existing_release" ]]; then
+    [[ -n "$tag_commit" ]] || fail "GitHub Release ${tag} exists without a matching Git tag"
+    [[ "$tag_commit" == "$head_commit" ]] || fail "tag ${tag} points to a different commit"
+
+    python3 - "$tag" "$existing_release" <<'PY'
+import json
+import sys
+
+expected_tag, payload = sys.argv[1:]
+release = json.loads(payload)
+
+if release.get("tagName") != expected_tag or release.get("name") != expected_tag:
+    raise SystemExit(f"Production release refused: existing release must use tag and title {expected_tag}")
+
+print(f"Release {expected_tag} already exists: {release['url']}")
+PY
+    exit 0
+fi
+
+if [[ -n "$tag_commit" && "$tag_commit" != "$head_commit" ]]; then
+    fail "tag ${tag} points to a different commit"
+fi
+
+attempts="${RELEASE_VERIFY_ATTEMPTS:-90}"
+interval="${RELEASE_VERIFY_INTERVAL_SECONDS:-10}"
+[[ "$attempts" =~ ^[1-9][0-9]*$ ]] || fail "RELEASE_VERIFY_ATTEMPTS must be a positive integer"
+[[ "$interval" =~ ^[0-9]+$ ]] || fail "RELEASE_VERIFY_INTERVAL_SECONDS must be a non-negative integer"
+
+verified=false
+for ((attempt = 1; attempt <= attempts; attempt++)); do
+    deployed_version="$({ curl --fail --silent --show-error --max-time 15 "${production_url}/release" || true; } | python3 -c 'import json, sys; data=json.load(sys.stdin); print(data.get("version", ""))' 2>/dev/null || true)"
+    up_status="$(curl --output /dev/null --silent --max-time 15 --write-out '%{http_code}' "${production_url}/up" || true)"
+    health_status="$(curl --output /dev/null --silent --max-time 15 --write-out '%{http_code}' "${production_url}/health" || true)"
+
+    if [[ "$deployed_version" == "$version" && "$up_status" == "200" && "$health_status" == "200" ]]; then
+        verified=true
+        break
+    fi
+
+    if ((attempt < attempts)); then
+        echo "Waiting for ${tag}: deployed=${deployed_version:-unavailable}, up=${up_status:-unavailable}, health=${health_status:-unavailable} (${attempt}/${attempts})"
+        sleep "$interval"
+    fi
+done
+
+[[ "$verified" == true ]] || fail "${tag} was not verified live and healthy within the allowed time"
+
+if [[ -n "$tag_commit" ]]; then
+    echo "Verified existing tag ${tag} at ${production_branch} commit ${head_commit}."
+fi
+
+gh release create "$tag" \
+    --repo "$repository" \
+    --target "$head_commit" \
+    --title "$tag" \
+    --generate-notes \
+    --latest
+
+published_release="$(gh release view "$tag" --repo "$repository" --json name,tagName,url)" || fail "could not verify the published release"
+published_tag_commit="$(remote_tag_commit "$tag")" || fail "could not verify the published tag"
+[[ "$published_tag_commit" == "$head_commit" ]] || fail "published tag ${tag} does not point to ${production_branch} HEAD"
+
+python3 - "$tag" "$published_release" <<'PY'
+import json
+import sys
+
+expected_tag, payload = sys.argv[1:]
+release = json.loads(payload)
+
+if release.get("tagName") != expected_tag or release.get("name") != expected_tag:
+    raise SystemExit(f"Production release refused: published release must use tag and title {expected_tag}")
+
+print(f"Published {expected_tag}: {release['url']}")
+PY

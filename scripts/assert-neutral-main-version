@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# Guards the invariant that `main` carries no release version.
+#
+# A production release bumps composer.json and package.json on a release branch,
+# and merging `production` back into `main` carries that bump with it. Left in
+# place it blocks the next release: scripts/prepare-production-release requires
+# both manifests to start at 0.0.0 *and* requires the release branch head to
+# equal origin/main, so a versioned `main` cannot be corrected from the release
+# branch. Every production-to-main reconciliation must therefore neutralize both
+# fields before it merges.
+#
+# This script asserts the neutral state only. It reads no branch and no
+# environment, so the caller decides when the invariant applies: CI runs it for
+# main-bound changes, and release branches — which are versioned on purpose —
+# never invoke it.
+
+set -euo pipefail
+
+fail() {
+    echo "Neutral version check refused: $1" >&2
+    exit 1
+}
+
+repository_root="$(git rev-parse --show-toplevel 2>/dev/null)" || fail "run this inside the repository"
+cd "$repository_root"
+
+command -v python3 >/dev/null 2>&1 || fail "python3 is required"
+
+python3 <<'PY'
+import json
+from pathlib import Path
+
+for filename in ("composer.json", "package.json"):
+    path = Path(filename)
+    if not path.is_file():
+        raise SystemExit(f"Neutral version check refused: {filename} is missing")
+
+    try:
+        version = json.loads(path.read_text())["version"]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        raise SystemExit(f"Neutral version check refused: {filename} has no valid version")
+
+    if version != "0.0.0":
+        raise SystemExit(
+            f"Neutral version check refused: {filename} carries release version {version!r}; "
+            "main must stay at 0.0.0 — reset both manifests on the reconciliation branch"
+        )
+PY
+
+echo "composer.json and package.json are neutral at 0.0.0."

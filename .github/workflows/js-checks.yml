@@ -2,9 +2,9 @@ name: JavaScript Checks
 
 on:
   push:
-    branches: [main]
+    branches: [main, production]
   pull_request:
-    branches: [main]
+    branches: [main, production]
 
 jobs:
   js:
@@ -51,6 +51,18 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --no-dev
+
+      - name: Test the production release scripts
+        run: pnpm check:release
+
+      # main must never carry a release version: scripts/prepare-production-release
+      # requires both manifests at 0.0.0 and pins the release branch to origin/main,
+      # so a versioned main blocks the next release and cannot be fixed from the
+      # release branch. This runs for main-bound changes only — a release branch is
+      # versioned on purpose, and its pull request targets production.
+      - name: Require neutral package versions on main
+        if: github.base_ref == 'main' || github.ref_name == 'main'
+        run: scripts/assert-neutral-main-version
 
       - name: Run ESLint
         run: pnpm lint
