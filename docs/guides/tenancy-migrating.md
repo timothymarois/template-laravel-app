@@ -1,7 +1,7 @@
 # Guide: Migrate an existing app to multi-tenancy
 
-**When to use:** Adopting multi-tenancy in a fork that **already has user data**. If your fork is brand new with no user data, use [`tenancy-usage.md`](./tenancy-usage.md) instead.
-**Prerequisites:** Fork at template v5.0.0+; you've read [`tenancy-usage.md`](./tenancy-usage.md) for the basic enable-flow; a full, verified DB backup.
+**When to use:** Adopting multi-tenancy in a fork that **already has user data**. If your fork is brand new with no user data, use [`tenancy-using.md`](./tenancy-using.md) instead.
+**Prerequisites:** Fork at template v5.0.0+; you've read [`tenancy-using.md`](./tenancy-using.md) for the basic enable-flow; a full, verified DB backup.
 
 This is a one-time, somewhat-manual, recoverable process. The template automates env, central DB setup, tenant provisioning, and the import-loop scaffolding. What's necessarily manual is schema-specific decision-making — only your fork knows which tables are tenant-scoped, what your User model is used for, and how to remap FKs.
 

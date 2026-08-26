@@ -31,7 +31,7 @@ Production-grade applications require more than just code—they need authentica
 
 **Multi-Tenancy (Optional)**
 
-- ✅ stancl/tenancy ^3.10 — DB-per-tenant isolation, off by default. Enable with `php artisan tenancy:enable`. See [`docs/guidelines/tenancy-using.md`](docs/guidelines/tenancy-using.md).
+- ✅ stancl/tenancy ^3.10 — DB-per-tenant isolation, off by default. Enable with `php artisan tenancy:enable`. See [`docs/guides/tenancy-using.md`](docs/guides/tenancy-using.md).
 
 **Developer Experience**
 
@@ -229,9 +229,9 @@ See `AGENTS.md` for detailed component guidelines.
 |------|-----|---------|
 | [Horizon](https://laravel.com/docs/13.x/horizon) | `/horizon` | Monitor queues and jobs |
 
-For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see the [Logging guide](docs/guidelines/logging.md).
+For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see the [Logging guide](docs/concepts/logging.md).
 
-**Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See the [Health Checks guide](docs/guidelines/health-checks.md).
+**Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See the [Health Checks guide](docs/concepts/health-checks.md).
 
 ### Solo (Dev Runner)
 

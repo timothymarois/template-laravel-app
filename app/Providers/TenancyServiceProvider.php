@@ -53,7 +53,7 @@ class TenancyServiceProvider extends ServiceProvider
                 // To go async, MOVE MarkTenantReady's body into a final
                 // queued job appended to the JobPipeline array above, so it
                 // only runs after CreateDatabase + MigrateDatabase succeed.
-                // See docs/guidelines/tenancy-using.md (production note).
+                // See docs/guides/tenancy-using.md (production note).
                 MarkTenantReady::class,
             ],
             Events\SavingTenant::class => [],

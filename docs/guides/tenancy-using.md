@@ -1,6 +1,6 @@
 # Guide: Enable and use multi-tenancy
 
-**When to use:** Setting up multi-tenancy in a fresh template clone, or a fork that just upgraded to v5.0.0 and wants tenancy on. If your app **already has user data**, stop and use [`tenancy-migrations.md`](./tenancy-migrations.md) instead — it covers the data-migration concerns this guide doesn't.
+**When to use:** Setting up multi-tenancy in a fresh template clone, or a fork that just upgraded to v5.0.0 and wants tenancy on. If your app **already has user data**, stop and use [`tenancy-migrating.md`](./tenancy-migrating.md) instead — it covers the data-migration concerns this guide doesn't.
 **Prerequisites:**
 - Fork is on template `v5.0.0`+ (`jq -r .version template-manifest.json` → `5.0.0`).
 - A reachable Postgres or MySQL instance for the central DB (can be the instance your fork already uses).
@@ -322,4 +322,4 @@ Restart the app. Validate by visiting `https://acme.example.com/` — the conten
 | A tenant-scoped change passes the default suite but breaks in production. | The default `phpunit.xml` runs with tenancy disabled — tenant routes 404 and tenant tables aren't exercised. Run `pnpm check:tenancy` (`phpunit.tenancy.xml`) for anything tenant-scoped. |
 | A new tenant model errors in the test suite about a missing/duplicate table. | Its inferred table name collides with a framework/central table in the merged test DB. Set an explicit `protected $table`. |
 
-Package docs: <https://tenancyforlaravel.com/docs/v3/>. For migrating a fork that already has data, see [`tenancy-migrations.md`](./tenancy-migrations.md).
+Package docs: <https://tenancyforlaravel.com/docs/v3/>. For migrating a fork that already has data, see [`tenancy-migrating.md`](./tenancy-migrating.md).

@@ -12,7 +12,7 @@ use App\Tenancy\NullExistingDataMigrator;
 | The skeleton command refuses to do work until (a) tenancy is enabled
 | and (b) a concrete ExistingDataMigrator is bound. These tests verify
 | the refusal paths — the actual iteration loop is fork-implemented per
-| docs/guidelines/tenancy-migrating.md and not tested here.
+| docs/guides/tenancy-migrating.md and not tested here.
 |
 */
 
@@ -36,7 +36,7 @@ it('refuses to run with NullExistingDataMigrator and points at the migration doc
 
     $this->artisan('tenancy:migrate-existing')
         ->expectsOutputToContain('No ExistingDataMigrator bound')
-        ->expectsOutputToContain('docs/guidelines/tenancy-migrating.md')
+        ->expectsOutputToContain('docs/guides/tenancy-migrating.md')
         ->assertFailed();
 });
 

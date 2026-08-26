@@ -19,7 +19,7 @@ use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
  *
  * SoftDeletes is enabled so deleting a tenant is recoverable. Forks that
  * want true async cleanup with a grace window can follow Invelo's pattern
- * (see docs/guidelines/tenancy-using.md "Deletion lifecycle").
+ * (see docs/guides/tenancy-using.md "Deletion lifecycle").
  *
  * Status: a tenant's provisioning state is tracked via the `ready` virtual
  * attribute. `false` until the TenantCreated job pipeline (CreateDatabase

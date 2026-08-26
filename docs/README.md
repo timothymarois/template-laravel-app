@@ -17,3 +17,10 @@ carries the conventions and the worked ✅/❌ code galleries for this stack.
 |---|---|
 | [BRIEF.md](./BRIEF.md) | What this is, who it serves, and what it refuses |
 | [CODEMAP.md](./CODEMAP.md) | Where each layer lives, and what exists in it |
+
+## Homes
+
+| Home | Holds |
+|---|---|
+| [concepts/](./concepts/) | How a subsystem works, and how it fails |
+| [guides/](./guides/) | One task each, start to finish |
