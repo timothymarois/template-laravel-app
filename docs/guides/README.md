@@ -4,6 +4,7 @@ One task each, start to finish. Steps in order, with the check that confirms eac
 
 | Guide | How to |
 |---|---|
+| [releasing.md](./releasing.md) | Cut a production release: version, deploy, verify live, publish the tag |
 | [writing-tests.md](./writing-tests.md) | Write and run the Pest and Vitest suites before committing |
 | [tenancy-using.md](./tenancy-using.md) | Enable and use multi-tenancy in a fresh clone or a fork that just turned it on |
 | [tenancy-migrating.md](./tenancy-migrating.md) | Adopt multi-tenancy in a fork that already has user data |

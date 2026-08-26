@@ -24,9 +24,9 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 - **Models/ModelService** — abstract base; **Models/UserService** — user CRUD.
 - _(tenancy)_ **Tenancy/**: TenantInviteService, TenantMembershipService, TenantProvisioningService.
 
-## Controllers (app/Http/Controllers/ — 8)
+## Controllers (app/Http/Controllers/ — 9)
 
-- **PageController** — public home; **Auth/SessionController** (login/logout), **Auth/RegisterController**.
+- **PageController** — public home; **ReleaseController** — deployed version as JSON; **Auth/SessionController** (login/logout), **Auth/RegisterController**.
 - **Admin/DashboardController**, **Admin/UserController** (CRUD + `simpleTable`, `prepareIndexFilters`), **Admin/ComponentController** (showcase).
 - Base **Controller**; _(tenancy)_ **Tenancy/InviteController** (show/accept/decline).
 
@@ -76,7 +76,7 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 `web.php`, `components.php`, `api.php`, `channels.php`, `tenant.php`.
 
-- **Public:** `GET /` (home), `GET /health` (spatie health JSON).
+- **Public:** `GET /` (home), `GET /up` (container gate), `GET /health` (spatie health JSON), `GET /release` (deployed version).
 - **Guest:** `GET /register|/login`, `POST /auth/register|/auth/login`.
 - **Auth (`auth:sanctum`):** `POST /logout`; admin group — `GET /admin/` (dashboard), `/admin/users/*` (resource + `users/table`, `users/filters`), `/admin/components/*` (showcase).
 - **API:** `GET /user` (auth:sanctum, throttle:api). **Broadcast:** `App.Models.User.{id}`.
@@ -124,9 +124,22 @@ Data: accordion, alert, avatar, badge, card, carousel, chart, code-block, data-t
 - Central top-level (4): users, cache, jobs, personal_access_tokens.
 - _(tenancy)_ **central/** (4): tenants, domains, tenant_user, tenant_invites. **tenant/** — empty scaffold (`.gitkeep`).
 
-## Config (config/ — 21)
+## Release scripts (scripts/ — 4)
 
-Notable: `tenancy.php`, `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`, `solo.php`.
+Stack-neutral bash + `python3`, no dependencies. `production` is the deployed branch; `main` stays at
+version `0.0.0`. Identity and target come from `template-manifest.json` -> `deploy`. Procedure:
+[`guides/releasing.md`](./guides/releasing.md).
+
+| Script | What it does |
+|--------|--------------|
+| prepare-production-release | Bumps both manifests on a `release/vX.Y.Z` branch cut from `origin/main` |
+| production-release-version | Reads the stored version, refusing `0.0.0` or manifests that disagree |
+| publish-production-release | Verifies the deploy is live via `/release`, `/up`, `/health`, then tags and publishes |
+| assert-neutral-main-version | Guards the invariant that `main` never carries a release version |
+
+## Config (config/ — 22)
+
+Notable: `release.php` (reads `version` from `composer.json`, served by `/release`), `tenancy.php`, `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`, `solo.php`.
 
 ## Testing
 
