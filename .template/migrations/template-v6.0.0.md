@@ -482,8 +482,14 @@ surfacing at runtime.
   scripts); only the build half needs PHP, because lint, types and Vitest do not
   read the generated `ziggy.js`. Every workflow gained a `concurrency` group so a
   superseded push stops burning a runner.
-- **The Docker workflow no longer triggers on markdown** under `docker/`. It builds
-  the production image twice, and a README edit cannot change the image.
+- **The Docker workflow no longer triggers on markdown** under `docker/`, and no longer builds the
+  application at all. ⚠️ **`Dockerfile` is managed core and changes here:** the `runtime` stage is split
+  into `runtime-config` (base + Node + every configuration COPY) and `runtime` (`runtime-config` + the
+  app copy). Same directives, reordered — configuration now sits *before* the app copy, so a source
+  change stops invalidating it, and the config checks build `--target runtime-config`, skipping
+  composer, pnpm and both Vite builds. The job ran 400-635s on every run, including on `main`; it also
+  now shares one `type=gha` cache scope instead of a per-branch one. If your fork edited the
+  `Dockerfile`, re-apply your change against the new stage boundaries.
 
 ---
 

@@ -75,6 +75,12 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 | Phase | When | Where | Examples |
 |-------|------|-------|----------|
 | **Build** | once, when the image is built | `Dockerfile` | composer install, `pnpm build-ssr` |
+> **Stages.** `base` → `build` (composer, pnpm, Vite) and `base` → `runtime-config` → `runtime`.
+> `runtime-config` is the image without the application: the same configuration COPY directives the
+> shipped image uses, with the app copied in afterwards. Configuration layers therefore sit before the
+> app copy, so a source change no longer invalidates them, and CI can prove the effective web-tier
+> configuration without running a full application build. Build `--target runtime` for anything real.
+
 | **Pre-deploy** | before the swap, in the **OLD** container (old code) | `docker/deploy/pre-deployment.sh` (Coolify **Pre-deployment Command**) | maintenance mode, backups — **never migrations** |
 | **Post-deploy** | once per deploy, in the **NEW** container (new code), after build | `docker/deploy/post-deployment.sh` (Coolify **Post-deployment Command**) | `migrate --force` |
 | **Start** | every container boot (restarts/scaling) | `docker/deploy/entrypoint.sh` (automatic) | `ensure-storage`, `optimize`, `storage:link` |

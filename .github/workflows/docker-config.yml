@@ -38,7 +38,9 @@ jobs:
   effective-config:
     name: Effective built-image configuration
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    # Config-only build: this must stay fast. If it approaches the limit,
+    # something has started pulling the application build back in.
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +53,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          target: runtime
+          # runtime-config, not runtime: this job proves the effective web-tier
+          # configuration, which verify-*.sh establishes by starting nginx and
+          # php-fpm directly, before any application code runs. Targeting the
+          # config stage skips composer, pnpm and both Vite builds — the same
+          # COPY directives, without a full application build.
+          target: runtime-config
           load: true
           tags: template-app:default
           # A fixed scope. type=gha keys its cache per-branch by default, so every
@@ -76,7 +83,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          target: runtime
+          # runtime-config, not runtime: this job proves the effective web-tier
+          # configuration, which verify-*.sh establishes by starting nginx and
+          # php-fpm directly, before any application code runs. Targeting the
+          # config stage skips composer, pnpm and both Vite builds — the same
+          # COPY directives, without a full application build.
+          target: runtime-config
           load: true
           tags: template-app:project
           cache-from: type=gha,scope=docker-config
