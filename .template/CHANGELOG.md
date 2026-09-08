@@ -18,6 +18,7 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 - **14 vendored agent skills** in `.claude/skills/`, matched to this stack and its delivery workflow, plus `.agents/skills` for the neutral path.
 - **`docs/guides/git-conventions.md`** — branch and commit naming, the canonical type set, imperative summaries, and the no-machine-authorship-branding rule. Versions stay in `releasing.md`.
+- **`.lerd.yaml`** — the [Lerd](https://lerd.sh/) counterpart to `herd.yml`, so the free, cross-platform local environment is a first-class option. Both files coexist; each tool ignores the other's.
 - **Issue and pull-request templates** in `.github/` — bug, feature, and PR — so a filed issue or PR carries the same headings whoever writes it.
 - **`docker/project/`** — nginx fragments a fork owns, baked into the image and never template-managed. Ships empty.
 - **`check:deploy`** — contract tests over `php.ini`, the nginx server config, and the deploy scripts, wired into `pnpm check`.
@@ -30,6 +31,10 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 - **No commit, branch, or pull request is branded as machine-authored** — stated in `git-conventions.md`, and the identity block is gone from the shipped PR template and from `managing-github`'s own fallback.
 - **`.gitignore` ignores `/.claude/settings.local.json`** — the skills are committed, per-machine permissions are not.
+
+### Fixed
+
+- **`herd.yml` pinned PHP 8.3 while `composer.json` requires `^8.4`** — `composer install` refused on a Herd site built from the shipped file.
 
 ### Migration
 

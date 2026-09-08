@@ -264,6 +264,30 @@ owns the bump table.
 The guide also carries the **no machine-authorship branding** rule, which pairs with the identity block
 removed from the PR template in Part H.
 
+## Part J — Take the Lerd environment file (optional, plus one fix for every fork)
+
+**Every fork: correct `herd.yml`.** It pinned `php: '8.3'` while `composer.json` requires `^8.4`, so
+`composer install` refuses on a site built from it:
+
+```diff
+-php: '8.3'
++php: '8.4'
+```
+
+**Optional: add `.lerd.yaml`.** [Lerd](https://lerd.sh/) is an MIT-licensed local environment for Linux,
+macOS and WSL2 with nothing paywalled. It reads `.lerd.yaml` and ignores `herd.yml`, so both files sit in
+the repo and each contributor uses whichever they have:
+
+```bash
+cp <t>/.lerd.yaml .lerd.yaml
+```
+
+Adjust it to your fork before committing — `php` from `composer.json`, `node` from `.nvmrc`, `database`
+from `DB_CONNECTION`, and `workers` from `template-manifest.json`'s `docker.requires` (drop `horizon` if
+the fork does not run it, add `reverb` if it does). Then `lerd link` and `lerd setup`.
+
+Skip the file entirely if nobody on the fork uses Lerd; the `herd.yml` fix above still applies.
+
 ## Verify
 
 ```bash
@@ -284,13 +308,16 @@ grep -rhoE '^```[A-Za-z0-9+#_-]+' .claude/skills | sort -u
 # 5. Nothing links outside a skill except the known validation record
 grep -rn '\.\./\.\./\.\.' .claude/skills
 
-# 6. The templates are in place
+# 6. Local environment files agree with the app
+grep '^php:' herd.yml .lerd.yaml          # both 8.4, matching composer.json
+
+# 7. The templates are in place
 ls .github/ISSUE_TEMPLATE/ .github/pull_request_template.md
 
-# 7. The two agent instruction files are one document
+# 8. The two agent instruction files are one document
 cmp AGENTS.md CLAUDE.md && echo "identical"
 
-# 8. The deploy gate, and the baseline
+# 9. The deploy gate, and the baseline
 pnpm check:deploy
 pnpm check
 ```

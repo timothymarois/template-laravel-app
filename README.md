@@ -61,7 +61,19 @@ Production-grade applications require more than just code—they need authentica
 
 ## Quick Start
 
-We recommend [Laravel Herd](https://herd.laravel.com/) for local development—it provides PHP, nginx, and database services with zero configuration.
+### Local environment
+
+The repo ships configuration for two, so use whichever you have. Both files can live here — each tool ignores the other's.
+
+| Tool | Reads | Notes |
+|---|---|---|
+| [Herd](https://herd.laravel.com/) | `herd.yml` | macOS. Mail capture and database services are behind Herd Pro. |
+| [Lerd](https://lerd.sh/) | `.lerd.yaml` | Linux, macOS, and WSL2. MIT-licensed, nothing paywalled. |
+
+**Herd** — park or link the directory; it picks up `herd.yml`.
+**Lerd** — `lerd link` then `lerd setup`: it reads `.lerd.yaml` and brings up MySQL, Redis and Mailpit, starts Horizon and the scheduler, and serves `<name>.test` over HTTPS.
+
+Neither is required. Any PHP 8.4 with MySQL and Redis will do.
 
 ```bash
 # Clone and install
@@ -78,7 +90,7 @@ php artisan migrate
 pnpm dev
 ```
 
-Visit `http://localhost:8000` (or your Herd domain) to see the app. Register a new account to access `/admin`. The component showcase is at `/admin/components`.
+Visit `http://localhost:8000` (or your Herd/Lerd `.test` domain) to see the app. Register a new account to access `/admin`. The component showcase is at `/admin/components`.
 
 ---
 

@@ -1,0 +1,18 @@
+# Lerd local environment — https://lerd.sh
+#
+# The Lerd counterpart to herd.yml. Both may sit in the repo: each tool ignores
+# the other's file. Applied by `lerd link` then `lerd setup`.
+#
+# Keep the versions here in step with composer.json (php) and .nvmrc (node), and
+# the workers in step with template-manifest.json's docker.requires block.
+php: "8.4"
+node: "22"
+database: mysql
+services:
+  - redis
+  - mailpit
+workers:
+  - horizon
+  - schedule
+site:
+  https: true

@@ -1,5 +1,5 @@
 name: template-laravel-app
-php: '8.3'
+php: '8.4'
 secured: true
 aliases: {  }
 services:
