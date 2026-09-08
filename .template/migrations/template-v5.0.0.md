@@ -1,5 +1,9 @@
 # Migrating a fork to template v5.0.0
 
+> ⚠️ **Skip this if you are heading to v6.0.0 or later.** v6.0.0 removes the built-in multi-tenancy
+> this guide installs — do not adopt it only to delete it. A fork that wants tenancy follows
+> `docs/guides/adding-tenancy.md` instead.
+
 v5.0.0 bundles **three independent upgrades**. Apply them as ordered, self-contained chunks — each has its own official upgrade guide to read first, its own steps, and its own verification gate. Do not bump `template-version.json` until every chunk you apply is green under `pnpm check`.
 
 > **For agents:** read the linked official upgrade guide for a chunk **before** touching files. This template's notes tell you what *we* changed; your fork may have added code the official guide covers that we don't. The official guide is the source of truth for anything beyond what's listed here.

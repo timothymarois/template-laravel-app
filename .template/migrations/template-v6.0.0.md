@@ -1,7 +1,8 @@
 # Migrating a fork to template v6.0.0
 
 v6.0.0 **removes built-in multi-tenancy**, **completes the authentication surface**, **authorizes the
-admin area**, and **ships an API-key system**. Major: it removes a shipped capability, renames a public
+admin area**, **ships an API-key system**, and fixes confirmed defects in the **health checks**, the
+**UI kit** and the **document head**. Major: it removes a shipped capability, renames a public
 enum method, and closes a privilege-escalation hole that changes who can reach `/admin`.
 
 > ⚠️ **Two changes will break a fork that does nothing.** `/admin` now requires `role = admin` — an
@@ -344,6 +345,123 @@ it has been in your git history for as long as it has existed.
   the suite fails. v6.0.0 also restructures "Before you work" to five points, hardens the skill-loading
   rule, and adds a "Delegation and review" section; take those if your fork tracks the template's rules.
 
+
+---
+
+## Part I — Health-check defects (every fork) ⚠️
+
+Two of these are live problems in every fork, not cleanups.
+
+1. **`/health` never enforced `HEALTH_SECRET_TOKEN`.** The route carried no middleware, and the package
+   only auto-wires its own Oh Dear route (disabled here) — so setting the env var did nothing at all
+   while the docs said it protected the endpoint. Attach it:
+
+   ```diff
+   +use Spatie\Health\Http\Middleware\RequiresSecretToken;
+   -Route::get('health', HealthCheckJsonResultsController::class)->name('health');
+   +Route::get('health', HealthCheckJsonResultsController::class)
+   +    ->middleware(RequiresSecretToken::class)
+   +    ->name('health');
+   ```
+
+   It is a no-op until the env var is set, so this is safe to apply immediately.
+
+2. **`always_send_fresh_results` was left at the package default `true`.** The `/health` controller reads
+   it whether or not the Oh Dear endpoint is enabled, so **every request ran every check inline** — a DB
+   round-trip, a Redis lookup, a `df` subprocess and a TCP probe — fired the `CheckEnded` events that
+   drive the recovery debounce, and rewrote the shared result cache. On an unauthenticated, unthrottled
+   URL that is a denial-of-service lever. Set it to `false` in `config/health.php`. `?fresh` still forces
+   a live run.
+
+3. **`HorizonCheck` gated on `class_exists()`**, which is always true because `laravel/horizon` is a hard
+   composer requirement. A fork that removed the horizon process from `supervisord.conf` — the documented
+   way to drop it — had the check fail forever. Gate on the queue driver instead:
+   `->if(fn () => config('queue.default') === 'redis')`.
+
+Copy `tests/Feature/HealthEndpointTest.php` from `<t>`; nothing covered this endpoint before, which is
+how all three survived.
+
+---
+
+## Part J — UI kit fixes (every fork with the shared kit)
+
+These were all found by diffing this template against forks that had patched them locally. Take them
+from `<t>` file by file; each is small.
+
+| File | What was wrong |
+|---|---|
+| `resources/js/utils/vue/inertia/isPageActive.ts` | Returned `false` under SSR and depended on `document.baseURI`, so every nav item rendered inactive server-side then flipped on hydration. **Behaviour note:** a caller passing an absolute URL previously matched on its pathname and now will not. |
+| `resources/js/composables/inertia/useDataTableOptions.js` | PHP serializes an empty `filters` as `[]`; letting that land on `form.filters` means later mutations become non-numeric array props, which `JSON.stringify` drops — the request silently loses every filter. The coercion must sit **after** the `...options` spread. Its `sortField` default also changes `'name'` → `'id'`; a caller passing `sortField` explicitly is unaffected. |
+| `resources/js/components/ui/sheet/SheetForm.vue` | Laid out wider than the viewport on mobile with Save/Cancel off-screen (`!max-w-none` is `!important` and beat the inline `maxWidth`); rendered no `SheetDescription`, violating reka-ui's dialog contract on every sheet; hardcoded "Save"/"Cancel". New props: `description`, `submitLabel`, `cancelLabel`, `submitDisabled`, and a `footer-actions` slot — all defaulted so rendering is unchanged. |
+| `resources/js/components/ui/accordion/Accordion.vue` | Ignored a passed `class`. **Behaviour note:** `class` becomes a declared prop, so it now merges via `cn()` instead of appending as a fallthrough attr — which is what every other component in the kit does. |
+| `resources/js/components/app/page/SideNav.vue` | Destructured props, so a computed `items` never re-rendered. |
+| `resources/js/components/app/layout/AppLayout.vue` | Read `page.props.user` by value, so the avatar did not update on a partial reload. |
+| `resources/js/components/ui/index.ts` | Omitted 13 shipped components with nothing saying why. Nine are now exported; the four that pull optional deps or clash by name are excluded **with a comment naming the reason**. |
+| `resources/js/components/app/layout/AppShell.vue` | `defineAsyncComponent()` on the Toaster could not split, because the barrel exports it statically — Vite warned on every build. |
+
+---
+
+## Part K — The document head (every fork) ⚠️
+
+Verified by running the built SSR bundle and reading the head it returns.
+
+1. **`canonical`, `og:url` and `og:image` were built from `window.location.origin`**, which is undefined
+   under SSR — the exact render a crawler or social scraper reads. `og:url` shipped **empty**, a relative
+   `og:image` shipped unresolvable, and there was **no `<link rel="canonical">` anywhere**. Share the base
+   URL from the server and build from it:
+
+   ```php
+   'appUrl' => rtrim((string) config('app.url'), '/'),
+   ```
+
+   **`APP_URL` must now be correct in production** — every absolute URL, and `sitemap:generate`'s
+   `<loc>`, is built from it.
+
+2. **Two `<title>` tags.** The Blade root emitted one and `@inertiaHead` emitted another; Inertia does not
+   de-duplicate and parsers take the first, so **every page was titled `APP_NAME`**. Delete the Blade
+   `<title>`. If your fork does **not** run SSR, note that the server HTML then carries no title at all
+   (Inertia sets it on the client) — that is the trade the template makes because SSR is on by default.
+
+3. **The head block was copy-pasted into both layouts** and had drifted. It is now one
+   `components/app/SeoHead.vue`, with defaults from a new `config/seo.php`.
+
+4. **`SEO_INDEXABLE`** gates an `X-Robots-Tag: noindex, nofollow` header from `SecurityHeaders`. Set it
+   `false` on staging. A `robots.txt` `Disallow` is **not** a substitute — it stops crawling, not
+   indexing, so a linked page still appears.
+
+5. **The sitemap listed `/health`, `/release` and `/_inertia/devtools/entries`.** `/health` answers 503
+   whenever a check fails, so that was a 5xx URL in the sitemap. Add those prefixes to
+   `GenerateSitemap::$excludePrefixes`. Remember `public/sitemap.xml` is git-ignored and the command is
+   not scheduled — a fresh deploy serves 404 until you schedule it or add it to post-deploy.
+
+6. `resources/views/app.blade.php` referenced `/favicon.svg`, which does not exist — a 404 on every page
+   load.
+
+Copy `tests/Feature/SeoTest.php` from `<t>`.
+
+---
+
+## Part L — Dependencies (every fork)
+
+PHP is fully current on this template, majors included: **Laravel 13.31**, plus **Pest 5** and
+**PHPUnit 13** (upgrade together — Pest 5 requires PHPUnit 13) and **spatie/laravel-sitemap 8**
+(check `GenerateSitemap` still compiles; the route-exclusion API is unchanged).
+
+`stylelint`'s newer `at-rule-prelude-no-invalid` flags every Tailwind `@apply`, since it validates the
+prelude as CSS values. Add the ignore in `stylelint.config.js`:
+
+```js
+'at-rule-prelude-no-invalid': [true, {
+    ignoreAtRules: ['apply', 'variant', 'custom-variant', 'theme', 'source']
+}],
+```
+
+**JavaScript majors are deliberately NOT in this release** — TypeScript 7, Vite 8, Vitest 5, ESLint 10,
+Stylelint 17, `@tanstack/vue-table` 9, `lucide-vue-next` 1.0, `unplugin-auto-import` 21 and
+`laravel-vite-plugin` 3 all remain outstanding. `@tanstack/vue-table` v9 is a rewrite and backs the
+data-table kit; TypeScript 7 is the native port. Upgrade them one at a time, proving `pnpm check` green
+after each, rather than in a single `pnpm up --latest`.
+
 ---
 
 ## Verify
@@ -379,7 +497,12 @@ php artisan tinker --execute="echo App\Models\User::where('role','admin')->count
 # 7. API keys resolve end to end.
 php artisan route:list --name=api-keys                 # expect 3 routes
 
-# 8. The whole gate.
+# 8. Health, head and sitemap.
+php artisan tinker --execute="var_dump(config('health.oh_dear_endpoint.always_send_fresh_results'));"  # false
+grep -c '<title' resources/views/app.blade.php                          # expect 0
+php artisan sitemap:generate && grep -cE '/health|/release|_inertia' public/sitemap.xml   # expect 0
+
+# 9. The whole gate.
 pnpm check
 ```
 

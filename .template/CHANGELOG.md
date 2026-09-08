@@ -8,6 +8,41 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.0.0 - 09/08/2026
+
+Removes built-in multi-tenancy, completes authentication, authorizes the admin area, and ships API keys. Major: a shipped capability is removed, a public enum method is renamed, and `/admin` changes who it lets in.
+
+> ⚠️ Every fork acts. `/admin` now requires `role = admin` — promote an operator **before** deploying, or lock yourself out.
+
+### Added
+
+- **Password reset** — the four conventional `password.*` routes, one controller, two Form Requests, and the two pages. Neither endpoint reveals whether an address is registered.
+- **API keys** on Sanctum personal access tokens — a closed `ApiAbility` enum, expiry (or explicit never-expires), hard-delete revocation, and an admin screen that shows the plaintext exactly once.
+- **`flash` shared prop** — nothing shared it, so every `->with('status')`/`->with('error')` in the app was written to the session and dropped, including the deactivation message.
+- **`config/seo.php` + `SeoHead`** — head defaults, per-page `robots`, and `SEO_INDEXABLE`, which sends `X-Robots-Tag: noindex`.
+- **`docs/guides/adding-tenancy.md`**, **`docs/concepts/api-keys.md`**, **`docs/concepts/seo.md`**.
+
+### Changed
+
+- **Removed: multi-tenancy** — 57 files, `stancl/tenancy`, `config/tenancy.php`, the `central/`+`tenant/` migration dirs, the `Central`/`Tenant` suites, `phpunit.tenancy.xml`, the tenancy CI job, and `check:tenancy`/`check:all`. It is a guide now.
+- **Removed: `atlas-php/atlas`** — declared and imported nowhere. Also drops the orphaned `storage/debugbar/` and its ziggy exclusion.
+- ⚠️ **`UserRole::canManageAllTenants()` → `canManageAllUsers()`** — no deprecation shim.
+- **Dependencies to latest, PHP majors included** — Laravel 13.31, Pest 5, PHPUnit 13, spatie/laravel-sitemap 8. JS toolchain majors are deliberately deferred.
+- **`AGENTS.md`/`CLAUDE.md`** — "Before you work" cut to five points, skill loading hardened into a failure condition, and a "Delegation and review" section added.
+
+### Fixed
+
+- ⚠️ **`/admin` was gated by `auth:sanctum` alone** — no policy, no role check — so any authenticated user could list, create, edit and delete every user. All three known forks had patched this independently.
+- **`EnsureApiKey` did not re-attach the validated key**, so `abilities:` could still be answered by a session's `TransientToken`, whose `can()` is true for everything.
+- **`HEALTH_SECRET_TOKEN` was never enforced** — `/health` carried no middleware — and `always_send_fresh_results` was left `true`, so every request to that unauthenticated URL ran every check inline.
+- **`og:url` shipped empty and `og:image` relative** under SSR, there was no canonical at all, and two `<title>` tags meant every page was titled `APP_NAME`.
+- **Session fixation on registration**, a deactivated user completing a login POST, and a `min:8` login rule that locked out pre-policy passwords.
+- **UI kit** — `isPageActive` dead under SSR, `useDataTableOptions` silently dropping every filter, `SheetForm` off-screen on mobile and violating the dialog a11y contract, and 13 components missing from the barrel.
+
+### Migration
+
+See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–L. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
+
 ## v5.7.0 - 09/08/2026
 
 `Docker:` Vendors this stack's agent skills into `.claude/skills/`, adds `docker/project/` so a fork can configure nginx and PHP without editing managed core, and puts the production image under a `check:deploy` gate plus a built-image CI workflow. Minor: no schema or dependency change.
