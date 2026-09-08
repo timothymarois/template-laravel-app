@@ -2,8 +2,15 @@
 
 v6.0.0 **removes built-in multi-tenancy**, **completes the authentication surface**, **authorizes the
 admin area**, **ships an API-key system**, and fixes confirmed defects in the **health checks**, the
-**UI kit** and the **document head**. Major: it removes a shipped capability, renames a public
-enum method, and closes a privilege-escalation hole that changes who can reach `/admin`.
+**UI kit**, the **document head**, **date handling**, the **type and lint gates** and **deploy
+verification**. Major: it removes a shipped capability, renames a public enum method, and closes a
+privilege-escalation hole that changes who can reach `/admin`.
+
+**Parts A–T.** Not all apply to every fork — each is labelled by audience. The ones marked ⚠️ change
+behaviour a fork depends on; read those before deploying, not after. Every defect below was reproduced
+in this template before it was fixed, and every regression test was proved by reverting its fix and
+watching only that case fail — so if a Part's test passes on your fork before you apply the Part, you
+have copied the test without the fix.
 
 > ⚠️ **Two changes will break a fork that does nothing.** `/admin` now requires `role = admin` — an
 > operator whose row says `user` loses access until promoted. And `UserRole::canManageAllTenants()` is
@@ -463,6 +470,11 @@ errors that then have to be fixed, so budget for it.
 
 ## Part K — The document head (every fork) ⚠️
 
+Take `<t>/docs/concepts/seo.md` and its `docs/concepts/README.md` index row with this
+Part — it is the page that owns what is server-rendered, why absolute URLs come from the
+server, and the two settings that keep an environment out of the index.
+
+
 Verified by running the built SSR bundle and reading the head it returns.
 
 1. **`canonical`, `og:url` and `og:image` were built from `window.location.origin`**, which is undefined
@@ -656,6 +668,127 @@ Take `resources/js/tests/components/ui/dialog/dialogUtils.test.ts` and
 
 ---
 
+## Part P — Time zones and dates (every fork) ⚠️
+
+Two defects in `resources/js/utils/format/`, both silent, both proved by test before the
+fix. Copy `<t>/resources/js/utils/format/timezone.ts`, the two formatters and
+`parseUtcDate.ts`, plus their tests.
+
+| Defect | What a user saw |
+|---|---|
+| `parseUtcDate` appended `Z` to any string not already ending in `Z` | Laravel's `toIso8601String()` ends `+00:00`, so it built `...+00:00Z` — an invalid date. The parser returned null, the formatter returned `''`, and **the field rendered blank** with nothing thrown. Fixtures ending in `Z` never caught it. |
+| `formatDate('2026-01-01', 'America/New_York')` returned **`12/31/2025`** | A date-only value is a calendar date, not an instant. Reading it as UTC midnight and rendering it west of UTC moves it back a day — every birthday and due date. It is now rendered as stored, in any zone. A real instant still converts, which is correct. |
+| An unknown or empty time zone | `toLocaleDateString` threw `RangeError` and **crashed the render of every date on the page**. The zone usually comes from stored user data, so it now falls back to UTC. |
+
+`timezone.ts` exports `isDateOnly` and `resolveTimeZone`; both formatters use them. If your
+fork stores a per-user zone, this is the file that decides what happens when it is stale.
+
+---
+
+## Part Q — Observability for background work (every fork)
+
+Copy `<t>/app/Listeners/LogBackgroundFailures.php`, register the two `Event::listen` calls
+in `AppServiceProvider` (see `<t>`), and take `tests/Feature/BackgroundFailureLoggingTest.php`.
+
+**This is not a coverage gap.** Laravel already reports both failures to the exception
+handler — `Queue\Worker` for a failed job, `ScheduleRunCommand` for a failed task — so the
+trace already reaches your log sink. What it does not give you is *shape*: the job class,
+queue, attempt count and uuid live only inside the trace string, where a sink cannot filter
+on them. The listener emits one structured line alongside it (`event=job.failed`,
+`event=schedule.failed`), which under `LOG_CHANNEL=stderr` becomes queryable JSON fields.
+The cost is a second ERROR line per failure. A fork that never queries logs by field can
+skip this Part entirely and lose only the filtering.
+
+While you are here, confirm the queue invariant rather than assuming it:
+
+- Horizon `timeout` must stay **below** the connection's `retry_after`, or the queue
+  releases a job back while it is still running and it executes twice. The template ships
+  `timeout: 60` against `REDIS_QUEUE_RETRY_AFTER: 90`. Raise one, raise the other.
+- `tries: 1` is Laravel's own default and deliberate — retrying a non-idempotent job is
+  worse than failing it. Set `$tries`/`$backoff` per job class, not globally.
+- `schedule:work` under supervisor **is** the scheduler. No host cron. `docker/config/supervisord.conf`
+  gives Horizon `stopwaitsecs=3600` with `stopasgroup`/`killasgroup` so a deploy drains
+  in-flight jobs instead of killing a worker mid-job.
+
+---
+
+## Part R — A collection endpoint for API keys (every fork with the API) 
+
+Part G gives a fork API keys but only `GET /api/user`, which returns the caller's own
+record — nothing that exercises a key against pagination or authorization. Copy
+`<t>/app/Http/Controllers/Api/UserController.php`,
+`<t>/app/Http/Requests/Api/ListUsersRequest.php`, the route in `routes/api.php`, and
+`tests/Feature/ApiUserListTest.php`.
+
+**The two gates are independent, and this is the part forks get wrong:**
+`abilities:api:read` says what the **key** may do; `UserPolicy::viewAny` says whether its
+**owner** may. A valid read key held by a non-admin must be refused. An ability reads like
+a role and is not one.
+
+Three habits worth copying into your own endpoints, each fixing something a fork shipped:
+
+- **Bound `perPage`.** Unbounded, one key asks for every row and a read endpoint becomes a
+  denial of service.
+- **Allow-list `sortField`.** It reaches `orderBy()`, so free text is a 500 on an unknown
+  column and an injection surface.
+- **Name the response fields.** Returning the model publishes every column added later —
+  including whatever your fork adds next — to every integration, silently.
+
+---
+
+## Part S — The deploy verification hole (every fork that deploys) ⚠️
+
+`scripts/publish-production-release` gated on `/health` returning **200**. That is not proof
+of health: `always_send_fresh_results` is false, so `/health` serves the snapshot the
+scheduler last stored, and on a cold container that snapshot does not exist — the endpoint
+answers **200 with an empty body**. Verified against a running app: 200/0 bytes before
+`health:check`, then 503 with real JSON after it.
+
+So within the first minute of a deploy, before the scheduler's first tick, the publisher
+could see the version matched, `/up` 200 and `/health` 200-with-nothing-checked, declare the
+release verified, and publish the tag on a deploy whose every check was about to fail.
+
+Copy `<t>/scripts/publish-production-release` (it now also requires a non-empty
+`checkResults`) together with `<t>/tests/scripts/stubs/release-curl` and
+`<t>/tests/scripts/publish-production-release.sh` — the stub had to learn the difference
+between the body call and the `--write-out` status call, so taking the script without the
+stub breaks `check:release`.
+
+**Any agent verifying a deploy by hand needs the same rule:** a 200 from `/health` whose
+`checkResults` is empty means *not yet checked*, never *healthy*.
+
+---
+
+## Part T — Tests to copy with the fixes (every fork)
+
+A fix without its test is a fix your next upgrade silently reverts. Every regression case
+below was proved by reverting its fix and observing only that case fail.
+
+| Test | Proves |
+|---|---|
+| `tests/Feature/ApiUserListTest.php` | Both API gates, deactivated owner, the bounds (Part R) |
+| `tests/Feature/BackgroundFailureLoggingTest.php` | Job and schedule failures are logged (Part Q) |
+| `tests/Feature/CreateUserCommandTest.php`, `CreateApiKeyCommandTest.php` | The console paths, including refusals |
+| `tests/Feature/GenerateSitemapTest.php` | `/health`, `/release` and Inertia partials stay out of the sitemap |
+| `tests/scripts/preflight-php.sh` | `scripts/preflight-php` only reports, never edits PATH, and never names a directory where no PHP exists. Wire it into `check:deploy`. |
+| `resources/js/tests/utils/format/timezone.test.ts` | Part P, including a US DST boundary |
+| `resources/js/tests/composables/inertia/useDataTableOptions.test.js` | The filters array-to-object coercion and its ordering trap |
+| `resources/js/tests/plugins/inertia/ziggy.test.js` | `route()` is reachable three ways and is relative by default |
+| `resources/js/tests/conventions/tailwindClasses.test.js` | Fails the build on names that read as Tailwind and emit no CSS |
+| `resources/js/tests/setup.js` | `enableAutoUnmount(afterEach)` — without it a component bound to `window`/`document` answers the **next** case's events |
+| `resources/js/tests/components/ui/label/LabelField.test.ts` | The `help` prop renders, and an error replaces it rather than stacking (Part J) |
+| `resources/js/tests/components/ui/code-block/highlighter.test.ts` | Language aliases, auto-detect, unknown-language fallback, and that output is escaped |
+| `resources/js/tests/components/ui/carousel/useCarousel.test.ts`, `sidebar/utils.test.ts`, `utils/vue/hasSlotContent.test.ts` | Modules that had no test at all. Every `.ts`/`.js` under `utils/`, `composables/` and the kit now has one; the only files without are three type-only modules with zero runtime exports. |
+
+⚠️ **Two of these need config, not just files.** `setup.js` must be listed in
+`vite.config.js`'s `test.setupFiles`, and `vite.config.js` must alias `ziggy` to
+`resources/js/tests/stubs/ziggy.js` for `test` only — the unit-test job is node-only, so
+without that alias any test touching the Ziggy plugin fails in CI with
+`Failed to resolve import` while passing locally. Copy `<t>/vite.config.js`'s `test` block
+and `<t>/resources/js/tests/stubs/ziggy.js` together.
+
+---
+
 ## Verify
 
 ```sh
@@ -703,7 +836,19 @@ php artisan tinker --execute="var_dump(config('health.oh_dear_endpoint.always_se
 grep -c '<title' resources/views/app.blade.php                          # expect 0
 php artisan sitemap:generate && grep -cE '/health|/release|_inertia' public/sitemap.xml   # expect 0
 
-# 9. The whole gate.
+# 9. The users API answers, and both gates hold.
+php artisan route:list --name=api.users               # expect 1 route
+
+# 10. The scheduler is the scheduler, and failures are shaped.
+grep -c "schedule:work" docker/config/supervisord.conf                  # expect 1 (no host cron)
+php artisan tinker --execute="echo config('horizon.defaults.supervisor-1.timeout').' < '.config('queue.connections.redis.retry_after').PHP_EOL;"
+#     the left number MUST be smaller, or a job runs twice
+
+# 11. The unit-test job is node-only. Reproduce CI before pushing, or a test that
+#     reaches vendor/ passes here and fails there.
+mv vendor /tmp/v && pnpm test; mv /tmp/v vendor
+
+# 12. The whole gate.
 pnpm check
 ```
 
@@ -713,6 +858,9 @@ Then run the suites that prove the security properties, not just that things boo
 php -d memory_limit=512M ./vendor/bin/pest tests/Feature/ApiKeyTest.php
 php -d memory_limit=512M ./vendor/bin/pest tests/Feature/PasswordResetTest.php
 php -d memory_limit=512M ./vendor/bin/pest tests/Feature/UserControllerTest.php
+php -d memory_limit=512M ./vendor/bin/pest tests/Feature/ApiUserListTest.php
+php -d memory_limit=512M ./vendor/bin/pest tests/Feature/EnsureUserIsActiveTest.php
+php -d memory_limit=512M ./vendor/bin/pest tests/Feature/BackgroundFailureLoggingTest.php
 ```
 
 Finally, log in as a **non-admin** and request `/admin`. A 403 is the fix working. A 200 means Part D is

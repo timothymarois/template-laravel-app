@@ -22,7 +22,11 @@ Removes built-in multi-tenancy, completes authentication, authorizes the admin a
 - **`user:create --admin`** and a seeded operator — `/admin` is gated on the role, so a fresh `migrate --seed` previously produced an install nobody could administer.
 - **Role on the user form**, options built from `UserRole::cases()`; `role` is validated with `Rule::enum` on both user Form Requests.
 - **`config/seo.php` + `SeoHead`** — head defaults, per-page `robots`, and `SEO_INDEXABLE`, which sends `X-Robots-Tag: noindex`.
-- **`docs/guides/adding-tenancy.md`**, **`docs/concepts/api-keys.md`**, **`docs/concepts/seo.md`**.
+- **`GET /api/users`** — a real collection endpoint so a key can be exercised against pagination and authorization, not just its own record. The ability and the policy are independent gates: a read key held by a non-admin is refused.
+- **Structured background-failure logs** — `job.failed` and `schedule.failed` with queryable fields. Laravel already reports both to the exception handler; what was missing was shape, since the job class lives only inside the trace string.
+- **`scripts/preflight-php`** — turns `env: php: No such file or directory` into the `export PATH=…` line you need. It probes Herd, Lerd, Homebrew and the system paths and names only a PHP that exists on that machine.
+- **`docs/guides/troubleshooting.md`** — the traps this stack has already sprung, opening with the instruction to send a template-managed fix upstream as a PR rather than patching one fork.
+- **`docs/guides/adding-tenancy.md`**, **`docs/concepts/api-keys.md`**, **`docs/concepts/seo.md`**, **`docs/concepts/ui-kit.md`**.
 
 ### Changed
 
@@ -42,10 +46,18 @@ Removes built-in multi-tenancy, completes authentication, authorizes the admin a
 - **UI kit** — `isPageActive` dead under SSR, `useDataTableOptions` silently dropping every filter, `SheetForm` off-screen on mobile and violating the dialog a11y contract, and 13 components missing from the barrel.
 - **The API-key screen did not work** — nothing linked to it, and its list rendered no columns because `DataTable`'s required `activeColumnList` was never passed.
 - **Enter did nothing on the auth forms** (the submit control sits outside the `<form>`, so browsers performed no implicit submission), and a confirmation dialog closed on click but not on Enter.
+- ⚠️ **A deactivated user got a 500 on `/admin`, not a redirect.** Behind `auth:sanctum`, `Authenticate` has already called `shouldUse('sanctum')`, so a bare `Auth::logout()` reached Sanctum's `RequestGuard`, which has no `logout()`. Every existing case used `/`, a session-only route, so the broken path was never exercised.
+- ⚠️ **A 200 from `/health` was treated as proof a deploy was healthy.** `always_send_fresh_results` is false, so the endpoint serves the last stored snapshot — and a cold container has none, answering 200 with an empty body. The publisher could tag a release whose every check was about to fail; it now requires a non-empty `checkResults`.
+- ⚠️ **`typecheck` never read a single component.** `tsc` cannot parse `.vue`, and `env.d.ts` declared every SFC as `Record<string, never>`, which also suppressed every real error inside one. Now `vue-tsc`, with the 103 errors it surfaced fixed — among them a `placeholder` overwritten by `v-bind` (quick-nav could not move the calendar), tiptap v2's three-argument `setContent` silently dropping `emitUpdate` and `preserveWhitespace`, and an import of an export that does not exist.
+- **`lint` skipped 156 `.ts` files** — the glob was `*.{js,vue}` while the ESLint config already had a TS block.
+- **Dates rendered blank or a day early.** `parseUtcDate` appended `Z` to `+00:00`, producing an invalid date; a date-only value rendered west of UTC moved back a day; and an unknown time zone threw `RangeError`, crashing every date on the page.
+- **`useModal`'s `v-model` wiped modal data** when an overlay synced its open state back, re-firing every `onOpen` listener with `null`.
+- **`text-md` is not a Tailwind utility** and emitted no CSS at all — 5 usages, 4 on auth pages. A conventions test now fails the build on names that read as Tailwind and emit nothing.
+- **`LabelField` had no `help` prop**, so a passed `help` fell through onto the wrapper and rendered nowhere; **`Input` had no `inputmode`**, so mobile got the wrong keyboard. Both adopted from forks that had already paid for them.
 
 ### Migration
 
-See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–O. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
+See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–T. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
 
 ## v5.7.0 - 09/08/2026
 
