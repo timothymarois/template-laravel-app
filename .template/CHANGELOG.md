@@ -10,30 +10,26 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ## v5.7.0 - 09/08/2026
 
-`Docker:` Vendors the **agent skills** this stack needs into `.claude/skills/`, rewires `AGENTS.md` onto them, adds **`docker/project/`** — a fork-owned nginx extension point — and puts the production image's own configuration under a **`check:deploy`** gate that nothing tested before. Minor: no schema or dependency change.
+`Docker:` Vendors this stack's agent skills into `.claude/skills/`, adds `docker/project/` for nginx configuration a fork owns, and puts the production image's own configuration under a `check:deploy` gate. Minor: no schema or dependency change.
 
-> ⚠️ Managed core changes in `Dockerfile` and `docker/config/nginx.conf`. A fork carrying its own edits there re-applies them once, and can then retire them.
+> ⚠️ Managed core moves — `Dockerfile` and `docker/config/nginx.conf`. Every fork acts.
 
 ### Added
 
-- **`.claude/skills/` — 13 vendored skills**, every one from the `rundesk-team-development` catalog, matched to the stack: `using-laravel`, `using-inertia`, `using-vuejs`, `using-tailwindcss`, `using-mysql`, `using-postgres`, `using-sqlite`, `designing-apis`, `designing-databases`, `designing-ui-ux`, `testing-code`, `debugging-code`, `maintaining-project-docs`. An agent started in the repository root discovers them with no configuration. Both relational engines ship because a fork picks one — the template defaults to MySQL, several forks run Postgres — and a fork drops the one it does not use.
-- **`.agents/skills`** — a repository-relative symlink to `.claude/skills`, so a provider reading the neutral path gets the same set with no second copy to keep in sync.
-- **`docker/project/` — nginx configuration a fork owns**, baked into the image but never template-managed: `nginx/http/*.conf` to `conf.d` (http context, where nginx demands `limit_req_zone` and `limit_conn_zone` live), `nginx/server/*.conf` to `snippets/`, included from the server block. Ships empty behind a wildcard include, so the image builds exactly as before until a fork adds a file. Its `README.md` carries the two traps that make a route-scoped block silently wrong — `try_files` re-running location matching, and `fastcgi_params` overwriting `SCRIPT_NAME` — plus the overlapping-temp-disk arithmetic an upload ceiling has to satisfy.
-- **`CLAUDE.md` is a byte-identical copy of `AGENTS.md`**, no longer a three-line pointer to it, with `tests/Feature/AgentInstructionsTest.php` failing the existing Pest suite when the two drift. Two runtimes read two different filenames, and a rule reaching only one of them is worse than no rule, because the divergence is silent.
-- **`check:deploy`** — contract tests over the production image's own configuration, which the application suite never exercises: the committed `php.ini` and that the `Dockerfile` still installs it where PHP reads it **last**; the snippets include and that it still precedes `location ~ \.php$`; that the nginx and PHP transport ceilings can be reached; and that `post-deployment.sh` still runs `migrate --force` exactly once. Wired into `pnpm check` alongside the other three suites.
+- **13 vendored agent skills** in `.claude/skills/`, matched to this stack, plus `.agents/skills` for the neutral path.
+- **`docker/project/`** — nginx fragments a fork owns, baked into the image and never template-managed. Ships empty.
+- **`check:deploy`** — contract tests over `php.ini`, the nginx server config, and the deploy scripts, wired into `pnpm check`.
 
 ### Changed
 
-- **`AGENTS.md` — "Before you work" gains a skills step and a scope rule.** Step 3 loads every skill the task touches, not the most obvious one, replacing a stale item that still routed documentation through `research/ -> prd-drafts/ -> prd/` and broke mid-sentence. Step 5 is the smallest change that does the job — nothing adjacent touched, no refactor or rename the task did not send you to, improvements mentioned rather than made, scope never widened unless directed.
-- **"Hard gates" and "Never" are one "Hard rules" list** — five that need approval, five that do not, each carrying its own force word instead of a section heading. Its approval rule now covers both `AGENTS.md` and `CLAUDE.md`, and **"Directory structure" is a real tree**: every layer named with what it owns, and `docker/`'s managed core marked off from the fork's own `project/`.
-- **`client_max_body_size` stays low, and is raised per route instead** — the server block applies to every endpoint, and nginx buffers a body to temp disk before PHP is reached, so a global ceiling hands unauthenticated routes that much temp disk and inbound bandwidth per concurrent request. `nginx.conf` says so at the setting, and `docker/project/` is where the exception goes.
-- **Vendored copies are trimmed to this stack** — `debugging-code` drops its React, Python, and C++ references along with the routing, citations, and `description` that named them; the Python and JSX examples in `testing-code` and `using-tailwindcss`, the Node/JDBC driver note in `using-postgres`, and the Rails-only column traps in `designing-databases` are restated for Pest, Vue, PDO, and Eloquent.
-- **`structuring-project-docs` renamed `maintaining-project-docs` and rescoped to ongoing documentation work** — it loads for writing a page or recording what a change altered, not only for standing up or converting a docs home, and gains the routine that keeps a page moving with the code it describes.
-- **`.gitignore` ignores `/.claude/settings.local.json`** — the vendored skills are committed, per-machine permission rules are not.
+- **`client_max_body_size` stays low**; route-scoped upload capacity goes in `docker/project/` instead of the server block.
+- **`CLAUDE.md` is a byte-identical copy of `AGENTS.md`**, enforced by a Pest test in the existing suite.
+- **`AGENTS.md` restructured** — a skills step and a scope rule in "Before you work", "Hard gates" and "Never" folded into one "Hard rules" list, "Tech stack" and "Architecture" merged, tree trimmed.
+- **`.gitignore` ignores `/.claude/settings.local.json`** — the skills are committed, per-machine permissions are not.
 
 ### Migration
 
-See [`migrations/template-v5.7.0.md`](migrations/template-v5.7.0.md). Every fork: copy the skills in, add the ignore rule, trim the set to its own stack, and reconcile `CLAUDE.md` with `AGENTS.md`. Docker forks additionally take the `docker/project/` extension point and the `check:deploy` gate. No schema, dependency, or deploy-time work.
+See [`migrations/template-v5.7.0.md`](migrations/template-v5.7.0.md). Parts A-D and G: every fork. Parts E-F: Docker forks.
 
 ## v5.6.0 - 08/26/2026
 

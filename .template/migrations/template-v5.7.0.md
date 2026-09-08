@@ -228,7 +228,7 @@ ls .agents/skills | wc -l
 
 # 3. Local permissions are ignored, skills are not
 git check-ignore -v .claude/settings.local.json
-git status --porcelain --untracked-files=all | grep -c '\.claude/skills/'
+git ls-files --cached --others --exclude-standard .claude/skills | wc -l
 
 # 4. No reference survives to a stack this fork does not use
 grep -rhoE '^```[A-Za-z0-9+#_-]+' .claude/skills | sort -u
@@ -244,8 +244,8 @@ pnpm check:deploy
 pnpm check
 ```
 
-Step 1 prints `13`, step 2 prints `13`, step 3 names the ignore rule and a non-zero count of tracked skill
-files, and step 4 prints only fences this stack uses — `bash`, `blade`, `css`, `dotenv`, `html`, `http`,
+Step 1 prints `13`, step 2 prints `13`, step 3 names the ignore rule and counts the skill files git will
+carry — 166 in the template, and non-zero in any fork whether or not they are committed yet, and step 4 prints only fences this stack uses — `bash`, `blade`, `css`, `dotenv`, `html`, `http`,
 `ini`, `js`, `json`, `md`, `php`, `pseudocode`, `sh`, `sql`, `text`, `ts`, `typescript`, `vue`. A
 `python`, `cpp`, or `jsx` in that list means an untrimmed copy.
 
