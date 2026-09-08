@@ -3,8 +3,11 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title data-inertia>{{ config('app.name', 'App') }}</title>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+        {{-- The document title is emitted by @inertiaHead, from the title callback
+             in app.js and ssr.js. A hardcoded one here would be echoed BEFORE it,
+             giving two of them — and parsers take the first, so every page was
+             titled APP_NAME regardless of what the page asked for. --}}
+        <link rel="icon" href="/favicon.ico" sizes="any">
         <script>
             // Apply saved or system color scheme synchronously to avoid FOUC.
             // Key matches VueUse's useColorMode/useDark default storage key.

@@ -45,6 +45,15 @@ class HandleInertiaRequests extends Middleware
             // One-request session messages. Without this share every ->with('status')
             // and ->with('error') in the app is written to the session and dropped on
             // the floor — the UI has no way to read it.
+            // Absolute base URL for the document head. The SSR bundle has no
+            // window, so canonical/og:url/og:image must come from the server or
+            // they ship empty in exactly the render crawlers read.
+            'appUrl' => rtrim((string) config('app.url'), '/'),
+            'seo' => [
+                'siteName' => config('seo.site_name'),
+                'description' => config('seo.description'),
+                'image' => config('seo.image'),
+            ],
             'flash' => [
                 'status' => $request->session()->get('status'),
                 'error' => $request->session()->get('error'),

@@ -29,6 +29,14 @@ class SecurityHeaders
         // Permissions policy (formerly Feature-Policy)
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
 
+        // Keep a non-production deployment out of the search index. A robots.txt
+        // Disallow does not do this — it stops crawling, not indexing, so a page
+        // linked from anywhere still appears (without a description). X-Robots-Tag
+        // is the header that actually prevents indexing.
+        if (! config('seo.indexable')) {
+            $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+        }
+
         // Enable HSTS in production (forces HTTPS)
         if (app()->isProduction()) {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');

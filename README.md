@@ -51,9 +51,11 @@ Production-grade applications require more than just code—they need authentica
 
 **SEO & Social**
 
-- ✅ Open Graph + Twitter Cards — social sharing just works
-- ✅ Sitemap generation — auto-generates from your routes
-- ✅ Meta tag management — per-page title, description, images
+- ✅ Open Graph + Twitter Cards — absolute URLs built server-side, so they survive SSR
+- ✅ Canonical URLs + per-page `robots` — auth and error pages ship `noindex`
+- ✅ `SEO_INDEXABLE=false` — one switch keeps staging out of the search index
+- ✅ Sitemap command — excludes admin, auth and utility routes (schedule it; the output is git-ignored)
+- ✅ Meta tag management — one `SeoHead` component, defaults from `config/seo.php`
 
 ---
 

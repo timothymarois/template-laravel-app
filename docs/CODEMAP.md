@@ -79,8 +79,9 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 Data: accordion, alert, avatar, badge, card, carousel, chart, code-block, data-table, pagination, progress, skeleton, table, tooltip, view-toggle | Forms: checkbox, combobox, date-picker, input (NumberInput, MaskInput), label, pin-input, radio-group, range-calendar, select, select-popover, slider, switch, tags-input, textarea | Overlays: alert-dialog, dialog, popover, sheet, dropdown-menu, context-menu | Nav: tabs, sidebar | Layout: collapsible, resizable, scroll-frame, separator, command | Editor: editor (TipTap) | Upload: upload | Feedback: sonner, spinner, form-errors | Actions: button | Other: calendar.
 
-## App Components (resources/js/components/app/ — 15 .vue, by subfolder)
+## App Components (resources/js/components/app/ — 16 .vue, by subfolder)
 
+- **SeoHead** — the single owner of the document head (canonical, OG, Twitter, robots).
 - **layout/** — AppLayout, AppShell, AppTopbar.
 - **modals/** — DeleteUserModal, EditUserModal.
 - **navigation/** — ModeToggle, ProfileMenu, Sidebar, Topbar.
@@ -123,13 +124,13 @@ version `0.0.0`. Identity and target come from `template-manifest.json` -> `depl
 | publish-production-release | Verifies the deploy is live via `/release`, `/up`, `/health`, then tags and publishes |
 | assert-neutral-main-version | Guards the invariant that `main` never carries a release version |
 
-## Config (config/ — 21)
+## Config (config/ — 22)
 
-Notable: `release.php` (reads `version` from `composer.json`, served by `/release`), `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`, `solo.php`.
+Notable: `release.php` (reads `version` from `composer.json`, served by `/release`), `seo.php` (head defaults + the `indexable` switch), `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`, `solo.php`.
 
 ## Testing
 
-- **Backend (Pest — 19 test files: Feature 11, Unit 8):** Feature — AgentInstructions, ApiKey, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, PasswordReset, ReleaseVersion, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
+- **Backend (Pest — 21 test files: Feature 13, Unit 8):** Feature — AgentInstructions, ApiKey, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, HealthEndpoint, PasswordReset, ReleaseVersion, Seo, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
 - **Frontend (Vitest + Vue Test Utils, happy-dom — resources/js/tests/, 41 test files):** UI component helpers, composables, and utils.
 
 ## Code Quality

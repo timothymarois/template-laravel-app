@@ -1,5 +1,5 @@
 <template>
-    <SiteLayout title="Page Not Found">
+    <SiteLayout title="Page Not Found" robots="noindex">
         <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
             <h1 class="text-6xl font-bold text-foreground">404</h1>
             <p class="mt-4 text-xl text-muted-foreground">Page not found</p>
