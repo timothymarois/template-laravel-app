@@ -356,8 +356,25 @@ it has been in your git history for as long as it has existed.
 - `docs/BRIEF.md`, `docs/concepts/platform.md`, `docs/guides/writing-tests.md`, `README.md` — drop the
   tenancy claims.
 - `AGENTS.md` **and** `CLAUDE.md` — byte-identical, enforced by a test. Edit both in the same commit or
-  the suite fails. v6.0.0 also restructures "Before you work" to five points, hardens the skill-loading
-  rule, and adds a "Delegation and review" section; take those if your fork tracks the template's rules.
+  the suite fails. **Take the template's file wholesale rather than merging yours into it.** From v6.0.2
+  these files are template-managed and a fork does not customise them: every project on this template
+  runs the same engineering contract, which is what lets an upgrade replace the file instead of
+  reconciling it. Correct only genuine **stack** differences — a fork on Postgres, or one that does not
+  run Horizon, fixes the stack sections to match what it actually runs.
+
+  Your fork's own rules do not disappear, they move. Before you overwrite, list every rule in your
+  `AGENTS.md` that is not in the template's, and rehome each one:
+
+  | A fork rule about | Goes to |
+  |---|---|
+  | What the product is, who it serves, what it refuses | `docs/BRIEF.md` |
+  | How a subsystem works and how it fails | `docs/concepts/<subsystem>.md` |
+  | How to perform one task | `docs/guides/<task>.md` |
+  | A trap that has already cost someone an hour | `docs/guides/troubleshooting.md` |
+  | A domain invariant worth enforcing | a test, not prose |
+
+  A rule you cannot rehome is a signal it belongs in the template for everyone — send it upstream as a
+  PR rather than keeping a local copy.
 - **Copy `docs/guides/troubleshooting.md` from `<t>` and add its `docs/guides/README.md` row.** ⚠️ Take it
   even if you skip every other doc in this part. It carries the traps this stack has already sprung —
   several of which each fork rediscovered independently — and it opens by telling whoever reads it that a

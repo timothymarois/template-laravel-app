@@ -8,6 +8,19 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.0.2 - 09/08/2026
+
+Makes `AGENTS.md`/`CLAUDE.md` template-managed: a fork no longer customises them. Patch: rules and docs only, no code change.
+
+### Changed
+
+- **A fork does not customise `AGENTS.md`/`CLAUDE.md`.** Every project on this template runs the same engineering contract, which is what lets an upgrade replace the file wholesale instead of reconciling a fork's edits into it. The only permitted divergence is a genuine **stack** difference — a fork on Postgres, or one not running Horizon, corrects the stack sections to match what it runs. Fork rules move to where they belong: the product's identity to `docs/BRIEF.md`, a subsystem to `docs/concepts/`, a task to `docs/guides/`, a trap to `docs/guides/troubleshooting.md`, and a domain invariant to a test. A rule that resists rehoming belongs in the template for everyone — send it upstream.
+- **v6.0.0's Part H rewritten** to match: take the template's file wholesale, and rehome fork rules against a table rather than merging them in.
+
+### Migration
+
+Copy `AGENTS.md` and `CLAUDE.md` (byte-identical — a test enforces it). If your fork carries its own rules in those files, rehome them using the table in Part H **before** overwriting, or you will lose them.
+
 ## v6.0.1 - 09/08/2026
 
 Restores the no-machine-authorship rule to `AGENTS.md`/`CLAUDE.md`. Patch: rules and docs only, no code change.

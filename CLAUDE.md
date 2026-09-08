@@ -31,8 +31,16 @@ The first five need explicit approval. The rest are not negotiable.
   pinned engine.
 - **Deletions — ask first.** Any file outside the task's immediate scope.
 - **Commits — ask first.** Never commit or push unless told to.
-- **This file — ask first.** `CLAUDE.md` is a byte-identical copy; change both in the same commit.
-  `pnpm check` fails when they drift, so a change to one is unfinished until the other matches.
+- **This file — ask first, and it is template-managed.** `CLAUDE.md` is a byte-identical copy; change
+  both in the same commit. `pnpm check` fails when they drift, so a change to one is unfinished until the
+  other matches. **A fork does not customise these rules.** Every project on this template runs the same
+  engineering contract, so an upgrade can replace this file wholesale instead of merging it. The one
+  exception is a genuine **stack** difference — a fork that runs Postgres instead of MySQL, or does not
+  run Horizon, corrects the stack sections to match what it actually runs. Everything else a fork wants
+  to say belongs elsewhere: what the product is and refuses goes in `docs/BRIEF.md`, how a subsystem
+  works and fails goes in `docs/concepts/`, a task goes in `docs/guides/`, and a domain invariant worth
+  enforcing goes in a test. If a fork rule feels like it must live here, that is a signal it belongs in
+  the template for everyone — send it upstream as a PR.
 - **Never touch `.env` or commit credentials.** Read env only through `config/` — never `env()` outside it.
 - **Never ship debug output**, commented-out code, or disabled tests.
 - **Never validate on the frontend.** Form Requests are the single source of truth; the frontend renders
