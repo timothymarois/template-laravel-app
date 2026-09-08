@@ -1,9 +1,13 @@
 import { parseUtcDate } from './parseUtcDate';
+import { isDateOnly, resolveTimeZone } from './timezone';
 
 /**
  * Converts a UTC datetime (string or Date) to a localized date string.
  * @param utcDatetime - A UTC ISO date string or Date object
- * @param userTimezone - Target time zone (default: 'UTC')
+ * A date-only input (`2026-01-01`) is a calendar date, so it is rendered as stored
+ * and never shifted into `userTimezone`. An unknown zone falls back to UTC.
+ *
+ * @param userTimezone - Target IANA time zone (default: 'UTC')
  * @param locale - Output locale (default: 'en-US')
  * @returns Localized date string (e.g. '7/22/2025')
  */
@@ -18,5 +22,7 @@ export const formatDate = (
 
     if (!date) return '';
 
-    return date.toLocaleDateString(locale, { timeZone: userTimezone });
+    const timeZone = isDateOnly(utcDatetime) ? 'UTC' : resolveTimeZone(userTimezone);
+
+    return date.toLocaleDateString(locale, { timeZone });
 };
