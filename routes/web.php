@@ -62,7 +62,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [SessionController::class, 'destroy'])->name('auth.logout');
 
     // Admin routes
-    Route::prefix('admin')->name('admin.')->group(function () {
+    // `admin` is the coarse gate: a route added here is refused by default rather
+    // than exposed until somebody remembers to authorize it. Per-resource decisions
+    // still go through the policies on the controllers and Form Requests.
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('users/table', [UserController::class, 'simpleTable'])->name('users.table');
         Route::resource('users', UserController::class);

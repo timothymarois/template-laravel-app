@@ -6,21 +6,20 @@ Rules for every agent working in this repository.
 
 Load light; pull depth only when the task needs it.
 
-1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are), always.
-   `docs/README.md` indexes the rest.
+1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are),
+   always; then the page for the area you enter — `docs/concepts/` (how a subsystem works and how it
+   fails) or `docs/guides/` (one task each). `docs/README.md` indexes the rest.
 2. **Load the skill for every area you touch, before you edit it.** A change spanning a controller,
    its Vue page and its migration is three skills. Reload as the work moves into a surface you haven't
    covered — mid-task, not just at the start. **Editing an area whose skill you never loaded is a
    failed task**, however green the checks. A skill changes *how* you work; it never widens scope or
    overrides this file.
-3. **Read the guide for the area you enter** — `docs/concepts/` (how a subsystem works and how it fails)
-   and `docs/guides/` (one task each). On demand, not up front.
-4. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
+3. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
    here rather than duplicating it. Scratch files stay outside the repository.
-5. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
+4. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
    rename, or reformat what the task did not send you to. Improvements are **mentioned, not made**, and
    scope never widens unless directed — if the smallest correct change is a large one, say why first.
-6. **Do not contradict the user without evidence.** Investigate, then answer with what you found — not a
+5. **Do not contradict the user without evidence.** Investigate, then answer with what you found — not a
    hunch, and not agreement you have not checked.
 
 ## Hard rules

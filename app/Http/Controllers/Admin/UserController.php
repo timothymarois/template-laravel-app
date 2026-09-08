@@ -36,6 +36,8 @@ class UserController extends Controller
 
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', User::class);
+
         $options = $this->resolveIndexOptions($request, true, 'admin.users.index');
 
         return $this->inertia->render('admin/users/Index', [
@@ -46,6 +48,8 @@ class UserController extends Controller
 
     public function prepareIndexFilters(Request $request): RedirectResponse
     {
+        $this->authorize('viewAny', User::class);
+
         $this->resolveIndexOptions($request, true, 'admin.users.index');
 
         return redirect()->route('admin.users.index');
@@ -53,6 +57,8 @@ class UserController extends Controller
 
     public function simpleTable(Request $request): Response
     {
+        $this->authorize('viewAny', User::class);
+
         $options = $this->resolveIndexOptions($request);
 
         if (! isset($options['filters']['user_id'])) {
@@ -69,6 +75,8 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
+        $this->authorize('view', $user);
+
         return $this->inertia->render('admin/users/Show', [
             'item' => $user,
         ]);
@@ -90,6 +98,8 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('delete', $user);
+
         $this->userService->delete($user);
 
         return back();

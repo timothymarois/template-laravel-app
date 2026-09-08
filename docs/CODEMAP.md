@@ -33,9 +33,13 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 - Auth: `LoginRequest`, `RegisterRequest`, `ForgotPasswordRequest`, `ResetPasswordRequest`; User: `StoreUserRequest`, `UpdateUserRequest`.
 
-## Middleware (app/Http/Middleware/ — 4)
+## Middleware (app/Http/Middleware/ — 5)
 
-- **HandleInertiaRequests** (shares `user` + `flash.{status,error}`), **TrackLastSeen**, **EnsureUserIsActive**, **SecurityHeaders**.
+- **HandleInertiaRequests** (shares an allow-listed `user` + `flash.{status,error}`), **TrackLastSeen**, **EnsureUserIsActive**, **EnsureUserIsAdmin** (aliased `admin`, gates the whole admin prefix), **SecurityHeaders**.
+
+## Policies (app/Policies/ — 1)
+
+- **UserPolicy** — viewAny/view/create/update/delete against `UserRole::canManageAllUsers()`; delete also refuses self-deletion.
 
 ## Health (app/Health/ — 5)
 
@@ -59,7 +63,7 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 - **Public:** `GET /` (home), `GET /up` (container gate), `GET /health` (spatie health JSON), `GET /release` (deployed version).
 - **Guest:** `GET /register|/login`, `POST /auth/register|/auth/login`; password reset — `GET /forgot-password` (`password.request`), `POST /auth/forgot-password` (`password.email`), `GET /reset-password/{token}` (`password.reset`), `POST /auth/reset-password` (`password.store`). The three unauthenticated POSTs share one `throttle:auth` bucket (5/min/IP).
-- **Auth (`auth:sanctum`):** `POST /logout`; admin group — `GET /admin/` (dashboard), `/admin/users/*` (resource + `users/table`, `users/filters`), `/admin/components/*` (showcase).
+- **Auth (`auth:sanctum`):** `POST /logout`; admin group (additionally `admin` middleware) — `GET /admin/` (dashboard), `/admin/users/*` (resource + `users/table`, `users/filters`), `/admin/components/*` (showcase).
 - **API:** `GET /user` (auth:sanctum, throttle:api). **Broadcast:** `App.Models.User.{id}`.
 
 ## Pages (resources/js/pages/ — 59 .vue)
