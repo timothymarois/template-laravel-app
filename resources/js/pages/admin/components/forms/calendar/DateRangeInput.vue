@@ -242,7 +242,7 @@ const customPresets: DateRangePreset[] = [
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import type { DateValue, DateRange } from 'reka-ui';
 import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -259,40 +259,40 @@ const pageTabs = [
 ];
 
 // DateRangePicker examples
-const rangePickerEmpty = ref<DateRange>();
-const rangePickerClearable = ref<DateRange>();
-const rangePickerValue = ref<DateRange>({
+const rangePickerEmpty = shallowRef<DateRange>();
+const rangePickerClearable = shallowRef<DateRange>();
+const rangePickerValue = shallowRef<DateRange>({
     start: today(getLocalTimeZone()),
     end: today(getLocalTimeZone()).add({ days: 7 }),
 });
-const rangePickerInvalid = ref<DateRange>();
-const rangePickerDisabled = ref<DateRange>(rangePickerValue.value);
-const rangePickerSingleMonth = ref<DateRange>();
+const rangePickerInvalid = shallowRef<DateRange>();
+const rangePickerDisabled = shallowRef<DateRange>(rangePickerValue.value);
+const rangePickerSingleMonth = shallowRef<DateRange>();
 
 // Inline range calendar
-const dateRange = ref<DateRange>();
-const dateRangeSingle = ref<DateRange>();
+const dateRange = shallowRef<DateRange>();
+const dateRangeSingle = shallowRef<DateRange>();
 
 // Quick navigation
-const quickNavRange = ref<DateRange>();
-const quickNavRangeInline = ref<DateRange>();
-const quickNavRangeCustomYear = ref<DateRange>();
+const quickNavRange = shallowRef<DateRange>();
+const quickNavRangeInline = shallowRef<DateRange>();
+const quickNavRangeCustomYear = shallowRef<DateRange>();
 
 // Disabled dates
-const rangeNoWeekends = ref<DateRange>();
-const rangeNoPast = ref<DateRange>();
-const rangePickerNoWeekends = ref<DateRange>();
-const rangePickerNoPast = ref<DateRange>();
-const rangePickerWeekdaysFuture = ref<DateRange>();
+const rangeNoWeekends = shallowRef<DateRange>();
+const rangeNoPast = shallowRef<DateRange>();
+const rangePickerNoWeekends = shallowRef<DateRange>();
+const rangePickerNoPast = shallowRef<DateRange>();
+const rangePickerWeekdaysFuture = shallowRef<DateRange>();
 
 // Presets
-const rangeWithPresets = ref<DateRange>();
-const rangeCustomPresets = ref<DateRange>();
+const rangeWithPresets = shallowRef<DateRange>();
+const rangeCustomPresets = shallowRef<DateRange>();
 
 // Confirm mode
-const rangeConfirmBasic = ref<DateRange>();
-const rangeConfirm = ref<DateRange>();
-const rangeFull = ref<DateRange>();
+const rangeConfirmBasic = shallowRef<DateRange>();
+const rangeConfirm = shallowRef<DateRange>();
+const rangeFull = shallowRef<DateRange>();
 
 // Custom presets
 const customPresets: DateRangePreset[] = [

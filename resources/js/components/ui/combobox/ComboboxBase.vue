@@ -13,7 +13,7 @@ import {
 import { Spinner } from '@/components/ui/spinner';
 import { Check, ChevronsUpDown, X } from 'lucide-vue-next';
 import { cn } from '@/utils';
-import { useSelectableOptions, type SelectableRawOption } from '@/composables';
+import { useSelectableOptions, type SelectableRawOption, type SelectableValue } from '@/composables';
 
 export type ComboboxOption = SelectableRawOption;
 
@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-    'update:modelValue': [value: string | number | (string | number)[] | null];
+    'update:modelValue': [value: SelectableValue];
     'search': [query: string];
 }>();
 
@@ -106,7 +106,7 @@ const displayLabel = computed(() => {
     return getLabel(selectedValues.value[0]);
 });
 
-const handleSelect = (ev: { detail: { value: string } }) => {
+const handleSelect = (ev: { detail: { value?: unknown } }) => {
     const label = ev.detail.value;
     // Find the option by label (Command uses label as value for filtering)
     const option = normalizedOptions.value.find(opt => getOptionLabel(opt) === label);

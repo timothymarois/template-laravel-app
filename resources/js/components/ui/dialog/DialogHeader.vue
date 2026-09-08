@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue";
+import type { ComputedRef, HTMLAttributes } from "vue";
 import { inject, computed } from "vue";
 import { cn } from "@/utils";
 
@@ -7,7 +7,7 @@ const props = defineProps<{
     class?: HTMLAttributes["class"];
 }>();
 
-const isDraggable = inject<ReturnType<typeof computed<boolean>>>('dialogDraggable', computed(() => false));
+const isDraggable = inject<ComputedRef<boolean>>('dialogDraggable', computed(() => false));
 </script>
 
 <template>

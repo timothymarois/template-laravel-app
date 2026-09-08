@@ -87,7 +87,7 @@ const emit = defineEmits<{
 
 const isOpen = ref(false);
 
-function onSelect(date: DateValue) {
+function onSelect(date: DateValue | undefined) {
     emit('update:modelValue', date);
     isOpen.value = false;
 }

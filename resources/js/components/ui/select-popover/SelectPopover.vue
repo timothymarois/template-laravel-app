@@ -105,7 +105,7 @@ import { ref, computed, watch, nextTick, toRef } from 'vue';
 import { PopoverBase as Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Check, ChevronsUpDown, Search, X } from 'lucide-vue-next';
 import { cn } from '@/utils';
-import { useSelectableOptions, type SelectableRawOption } from '@/composables';
+import { useSelectableOptions, type SelectableRawOption, type SelectableValue } from '@/composables';
 
 export type SelectOption = SelectableRawOption;
 
@@ -147,7 +147,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-    'update:modelValue': [value: string | number | (string | number)[] | null];
+    'update:modelValue': [value: SelectableValue];
 }>();
 
 const isOpen = ref(false);

@@ -159,14 +159,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 // Inject layout footer height for dynamic scroll calculation
-const layoutFooterHeight = inject<Ref<number>>('layoutFooterHeight', null);
+const layoutFooterHeight = inject<Ref<number> | null>('layoutFooterHeight', null);
 
 // Track scroll state for header shadow and footer shadow
 const scrollFrameRef = ref<any>(null);
 const isScrolled = ref(false);
 
 // Inject setter from layout to update scroll-to-bottom state
-const setScrolledToBottom = inject<(value: boolean) => void>('setScrolledToBottom', null);
+const setScrolledToBottom = inject<((value: boolean) => void) | null>('setScrolledToBottom', null);
 
 const checkScrollPosition = (target: HTMLElement) => {
     isScrolled.value = target.scrollTop > 0;
@@ -201,7 +201,7 @@ const isSomeSelected = computed(() => selectionState.value.isSomeSelected);
 const isRowSelected = (item: any): boolean =>
     isItemSelected(item, props.selected, props.dataKey!, props.selectAll);
 
-const toggleSelectAll = (value: boolean | 'indeterminate') => {
+const toggleSelectAll = (value: boolean | string[] | 'indeterminate') => {
     if (value === true) {
         emit('update:selected', [...props.items]);
     } else {

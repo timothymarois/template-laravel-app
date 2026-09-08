@@ -6,9 +6,9 @@ interface ScrollState {
     lockScroll: boolean;
 }
 
-const scrollStates = reactive(new Map<string, ScrollState>());
+const scrollStates = reactive(new Map<string | symbol, ScrollState>());
 
-export function useScroll(id: string) {
+export function useScroll(id: string | symbol) {
     if (!scrollStates.has(id)) {
         scrollStates.set(id, {
             isTop: true,

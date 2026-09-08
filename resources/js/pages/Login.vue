@@ -3,7 +3,7 @@
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <Card>
                 <template #header>
-                    <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
+                    <div class="font-semibold text-gray-900 dark:text-gray-100 text-base flex items-center space-x-2">
                         <div>Login</div>
                     </div>
                 </template>

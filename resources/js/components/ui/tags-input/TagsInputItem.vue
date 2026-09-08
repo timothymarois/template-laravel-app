@@ -5,7 +5,7 @@ import { inject, computed } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { TagsInputItem, useForwardProps } from "reka-ui";
 import { cn } from '@/utils';
-import type { TagsInputVariant } from "./TagsInput.vue";
+import type { TagsInputVariant } from "./types";
 
 const props = defineProps<TagsInputItemProps & { class?: HTMLAttributes["class"] }>();
 

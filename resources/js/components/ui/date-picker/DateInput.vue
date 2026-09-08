@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, shallowRef } from 'vue';
 import type { DateValue } from 'reka-ui';
 import { Input } from '@/components/ui/input';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -94,7 +94,7 @@ const emit = defineEmits<{
 }>();
 
 const inputValue = ref(props.modelValue ? formatDateValue(props.modelValue) : '');
-const dateValue = ref<DateValue | undefined>(props.modelValue);
+const dateValue = shallowRef<DateValue | undefined>(props.modelValue);
 const isOpen = ref(false);
 const isValid = ref(true);
 
@@ -157,9 +157,9 @@ function onBlur() {
     }
 }
 
-function onCalendarSelect(date: DateValue) {
+function onCalendarSelect(date: DateValue | undefined) {
     dateValue.value = date;
-    inputValue.value = formatDateValue(date);
+    inputValue.value = date ? formatDateValue(date) : '';
     isValid.value = true;
     isOpen.value = false;
     emit('update:modelValue', date);

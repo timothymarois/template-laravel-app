@@ -12,7 +12,7 @@
                     <CardDescription>Auto-advance focus, one-time-code autocomplete. Value: <code>{{ otp.join('') || '—' }}</code></CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <PinInput v-model="otp" :id="['1','2','3','4','5','6']">
+                    <PinInput v-model="otp">
                         <PinInputGroup>
                             <PinInputSlot v-for="(_, i) in 3" :key="i" :index="i" />
                         </PinInputGroup>
@@ -51,5 +51,5 @@ import { useShowcaseNav } from '../_composables/useShowcaseNav';
 const { sidebarItems } = useShowcaseNav();
 
 const otp = ref<string[]>([]);
-const pin = ref<string[]>([]);
+const pin = ref<number[]>([]);
 </script>

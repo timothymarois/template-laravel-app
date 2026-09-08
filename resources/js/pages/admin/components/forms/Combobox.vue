@@ -242,9 +242,9 @@
                                 <template #option="{ option }">
                                     <div class="flex items-center gap-2">
                                         <div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
-                                            {{ option.name.charAt(0) }}
+                                            {{ (option as unknown as { name: string }).name.charAt(0) }}
                                         </div>
-                                        <span>{{ option.name }}</span>
+                                        <span>{{ (option as unknown as { name: string }).name }}</span>
                                     </div>
                                 </template>
                             </Combobox>

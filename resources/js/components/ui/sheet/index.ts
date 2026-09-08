@@ -1,15 +1,15 @@
-import type { VariantProps } from "class-variance-authority"
-import { cva } from "class-variance-authority"
+import type { VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 
-export { default as Sheet } from "./Sheet.vue"
-export { default as SheetClose } from "./SheetClose.vue"
-export { default as SheetContent } from "./SheetContent.vue"
-export { default as SheetDescription } from "./SheetDescription.vue"
-export { default as SheetFooter } from "./SheetFooter.vue"
-export { default as SheetForm } from "./SheetForm.vue"
-export { default as SheetHeader } from "./SheetHeader.vue"
-export { default as SheetTitle } from "./SheetTitle.vue"
-export { default as SheetTrigger } from "./SheetTrigger.vue"
+export { default as Sheet } from "./Sheet.vue";
+export { default as SheetClose } from "./SheetClose.vue";
+export { default as SheetContent } from "./SheetContent.vue";
+export { default as SheetDescription } from "./SheetDescription.vue";
+export { default as SheetFooter } from "./SheetFooter.vue";
+export { default as SheetForm } from "./SheetForm.vue";
+export { default as SheetHeader } from "./SheetHeader.vue";
+export { default as SheetTitle } from "./SheetTitle.vue";
+export { default as SheetTrigger } from "./SheetTrigger.vue";
 
 export const sheetVariants = cva(
     "fixed z-50 bg-background p-6",
@@ -26,6 +26,6 @@ export const sheetVariants = cva(
             side: "right",
         },
     },
-)
+);
 
 export type SheetVariants = VariantProps<typeof sheetVariants>

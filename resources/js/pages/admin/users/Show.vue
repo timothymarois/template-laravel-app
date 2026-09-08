@@ -9,7 +9,7 @@
                 </Link>
             </div>
             <div class="flex flex-col space-y-0 py-3">
-                <div class="text-md font-medium">{{ item.name }}</div>
+                <div class="text-base font-medium">{{ item.name }}</div>
                 <div class="text-sm text-slate-500">{{ item.email }}</div>
             </div>
         </template>
