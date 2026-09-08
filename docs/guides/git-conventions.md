@@ -60,6 +60,11 @@ in a body — and no generated-by footer, identity block, robot emoji, or provid
 Some agent runtimes append these by default; remove them before the commit lands. A footer naming the tool
 that produced a change tells a reviewer nothing they can act on, and dates the history permanently.
 
+**This rule is deliberately in two places.** `AGENTS.md` carries the one-line form and this page carries
+the detail. v5.7.0 removed it from `AGENTS.md` on the grounds that it now had a dedicated home, and a fork
+then shipped eight commits with `Co-Authored-By:` trailers — because a guide is read when you go looking
+for it, and `AGENTS.md` is loaded on every task. Do not de-duplicate it again.
+
 ## Verify
 
 ```bash

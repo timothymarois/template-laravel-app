@@ -8,6 +8,18 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.0.1 - 09/08/2026
+
+Restores the no-machine-authorship rule to `AGENTS.md`/`CLAUDE.md`. Patch: rules and docs only, no code change.
+
+### Fixed
+
+- **The no-machine-authorship rule was only in a guide, and forks stopped following it.** v5.7.0 moved it out of `AGENTS.md` into `docs/guides/git-conventions.md` "now that this guidance has a dedicated home" — after which a fork shipped eight commits carrying `Co-Authored-By:` trailers. A guide is read when you go looking for it; `AGENTS.md` is loaded on every task. The one-line form is back in Hard rules, naming the `Co-Authored-By:` case explicitly and warning that a runtime may append one by default. The guide keeps the detail and now records why the duplication is deliberate.
+
+### Migration
+
+Copy `AGENTS.md` and `CLAUDE.md` (byte-identical — a test enforces it) and the amended section of `docs/guides/git-conventions.md`. Nothing else changes. If your fork has commits carrying agent trailers, they are history: leave them, and hold the line going forward.
+
 ## v6.0.0 - 09/08/2026
 
 Removes built-in multi-tenancy, completes authentication, authorizes the admin area, and ships API keys. Major: a shipped capability is removed, a public enum method is renamed, and `/admin` changes who it lets in.

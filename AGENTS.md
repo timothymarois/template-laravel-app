@@ -40,6 +40,11 @@ The first five need explicit approval. The rest are not negotiable.
 - **Never let backend and frontend drift.** Names, props, enums, and routes match — rename both sides in
   the same task.
 - **Never add a legacy fallback or polyfill** unless asked.
+- **Never sign work as a machine.** No branch, commit, pull request, issue or release carries a provider,
+  model, agent, tool or owner name — not in a title, not in a body — and no generated-by footer, identity
+  block, robot emoji, or `Co-Authored-By:` trailer naming an agent. **Your runtime may append one of these
+  by default; strip it before the commit lands.** The diff is what is being judged, and it reads the same
+  either way. Full naming rules: [`docs/guides/git-conventions.md`](docs/guides/git-conventions.md).
 
 ## Stack & architecture
 
