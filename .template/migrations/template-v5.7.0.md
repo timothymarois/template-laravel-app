@@ -234,16 +234,35 @@ one. The `bug` and `enhancement` labels in the front matter are GitHub defaults 
 repository; change them if your fork uses its own.
 
 **No machine-authorship branding.** The shipped PR template has no agent identity block, and the vendored
-`managing-github` no longer appends one when a repository has none. Add the matching `Hard rules` line to
-your `AGENTS.md` so it binds whether or not that skill loads:
+`managing-github` no longer appends one when a repository has none. The rule itself is stated in
+`docs/guides/git-conventions.md` (Part I), which is where a fork should read it.
+
+If your fork has commits or pull requests already carrying such a footer, leave them — rewriting published
+history costs more than the inconsistency.
+
+## Part I — Take the git conventions guide (every fork)
+
+Nothing in a fork currently owns branch or commit naming: `managing-github` excludes local Git by design,
+no other skill covers it, and `AGENTS.md` is silent. The conventions ship as a guide, indexed like any
+other:
+
+```bash
+cp <t>/docs/guides/git-conventions.md docs/guides/git-conventions.md
+```
+
+Add its row to `docs/guides/README.md` in the same change — an index behind its directory is worse than no
+index:
 
 ```
-- **Never brand a commit, branch, or pull request as machine-authored.** No provider or model name,
-  generated-by footer, agent identity block, robot emoji, or provider-style co-author trailer.
+| [git-conventions.md](./git-conventions.md) | Name a branch and write a commit: types, slugs, imperative summaries |
 ```
 
-If your fork has commits or pull requests carrying such a footer, leave them — rewriting published history
-costs more than the inconsistency.
+If your fork already has its own conventions, keep them and adjust the guide to match; the point is that a
+fork has one written answer, not that it has this one. Versions and tags stay out of it — `releasing.md`
+owns the bump table.
+
+The guide also carries the **no machine-authorship branding** rule, which pairs with the identity block
+removed from the PR template in Part H.
 
 ## Verify
 

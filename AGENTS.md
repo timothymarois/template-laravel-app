@@ -39,8 +39,6 @@ The first five need explicit approval. The rest are not negotiable.
 - **Never let backend and frontend drift.** Names, props, enums, and routes match — rename both sides in
   the same task.
 - **Never add a legacy fallback or polyfill** unless asked.
-- **Never brand a commit, branch, or pull request as machine-authored.** No provider or model name,
-  generated-by footer, agent identity block, robot emoji, or provider-style co-author trailer.
 
 ## Stack & architecture
 
