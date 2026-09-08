@@ -94,8 +94,12 @@ class AppServiceProvider extends ServiceProvider
                 ->if(fn () => in_array('redis', [config('cache.default'), config('queue.default'), config('session.driver')], true)),
 
             // Horizon master supervisor is running (needs the queue worker stack).
+            // Gated on the queue driver, not on class_exists(): laravel/horizon is a
+            // hard composer requirement, so the class is always present — including
+            // in a fork that deleted the horizon process from supervisord, where the
+            // check would then fail forever.
             HorizonCheck::new()
-                ->if(fn () => class_exists(Horizon::class)),
+                ->if(fn () => config('queue.default') === 'redis'),
 
             // Jobs are actually being processed (heartbeat job — see schedule).
             QueueCheck::new()

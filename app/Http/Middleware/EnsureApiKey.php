@@ -44,7 +44,24 @@ class EnsureApiKey
             throw new AuthenticationException;
         }
 
+        // Expiry is checked here, not left to Sanctum's guard: this middleware does
+        // its own findToken() lookup, which does not go through the guard's expiry
+        // path when the user was resolved some other way.
+        if ($key->expires_at !== null && $key->expires_at->isPast()) {
+            throw new AuthenticationException;
+        }
+
         abort_unless($user->is_active, 403, 'Your account has been deactivated.');
+
+        // Re-attach the key we just validated. The `abilities:` middleware does not
+        // look at the token found here — it asks $request->user()->currentAccessToken(),
+        // which is whatever Sanctum's guard attached first. With `web` in
+        // config('sanctum.guard'), a resolved session attaches a TransientToken whose
+        // can() is unconditionally true, so without this line the ability check would
+        // still be answered by the session rather than by the key. That path is not
+        // reachable through the current `api` group (it has no session middleware),
+        // which is exactly why it must be closed here rather than depended upon.
+        $user->withAccessToken($key);
 
         return $next($request);
     }

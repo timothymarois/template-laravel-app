@@ -112,8 +112,12 @@ class ApiKeyService
     }
 
     /**
-     * Revoke every key belonging to the owner — used when an account is
-     * deactivated, so disabling a user disables their keys in the same act.
+     * Revoke every key belonging to the owner.
+     *
+     * Nothing in the template calls this: deactivating a user is already enforced
+     * at request time by EnsureApiKey, which refuses a key whose owner is inactive.
+     * It is here for a fork that wants deactivation to destroy the keys outright
+     * rather than merely refuse them.
      */
     public function revokeAll(User $owner): int
     {

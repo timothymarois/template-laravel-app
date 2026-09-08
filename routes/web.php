@@ -10,6 +10,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReleaseController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Health\Http\Controllers\HealthCheckJsonResultsController;
+use Spatie\Health\Http\Middleware\RequiresSecretToken;
 
 // Public routes
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -18,7 +19,13 @@ Route::get('/', [PageController::class, 'home'])->name('home');
 // run, for uptime monitors / external probes. Distinct from Laravel's lightweight
 // `/up` (which gates the container). Returns 503 when any check fails (see config: json_results_failure_status). Optionally
 // lock down with HEALTH_SECRET_TOKEN (sent as the X-Secret-Token header).
-Route::get('health', HealthCheckJsonResultsController::class)->name('health');
+// RequiresSecretToken is a no-op until HEALTH_SECRET_TOKEN is set, and a 403 gate
+// once it is. It has to be attached explicitly: the package only auto-wires its own
+// Oh Dear route, which is disabled here — so before this the documented protection
+// did nothing at all.
+Route::get('health', HealthCheckJsonResultsController::class)
+    ->middleware(RequiresSecretToken::class)
+    ->name('health');
 
 // Deployed release version. Read by scripts/publish-production-release to prove a
 // production deploy is live before the tag is published, and by any external

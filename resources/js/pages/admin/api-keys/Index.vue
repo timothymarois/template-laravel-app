@@ -50,7 +50,7 @@
             </Card>
         </div>
 
-        <Dialog v-model="creating" header="Create an API key">
+        <Dialog v-model:visible="creating" header="Create an API key">
             <form class="space-y-4" @submit.prevent="submit">
                 <LabelField name="name" label="Name" required :error="form.errors.name">
                     <InputText v-model="form.name" fluid :invalid="!!form.errors.name" />
@@ -62,10 +62,7 @@
                             :key="ability.value"
                             class="flex items-center gap-2 cursor-pointer"
                         >
-                            <Checkbox
-                                :modelValue="form.abilities.includes(ability.value)"
-                                @update:modelValue="toggleAbility(ability.value)"
-                            />
+                            <Checkbox v-model="form.abilities" :value="ability.value" />
                             <span class="text-sm">{{ ability.label }} <code class="text-xs text-muted-foreground">{{ ability.value }}</code></span>
                         </label>
                     </div>
@@ -100,7 +97,7 @@
             </template>
         </Dialog>
 
-        <Dialog v-model="showIssued" header="Copy your API key now">
+        <Dialog v-model:visible="showIssued" header="Copy your API key now">
             <div class="space-y-3">
                 <Alert variant="warning">
                     <AlertDescription>
@@ -134,9 +131,9 @@ import {
     Checkbox,
     Dialog,
     FormErrors,
+    DataTable as Table,
     Input as InputText,
     LabelField,
-    Table,
 } from '@/components/ui';
 import { formatDatetime } from '@/utils';
 
@@ -150,11 +147,11 @@ const page = usePage();
 const flash = computed(() => page.props.flash ?? {});
 
 const columns = [
-    { field: 'name', header: 'Name' },
-    { field: 'abilities', header: 'Abilities' },
-    { field: 'last_used_at', header: 'Last used' },
-    { field: 'expires_at', header: 'Expires' },
-    { field: 'actions', header: '' },
+    { key: 'name', header: 'Name' },
+    { key: 'abilities', header: 'Abilities' },
+    { key: 'last_used_at', header: 'Last used' },
+    { key: 'expires_at', header: 'Expires' },
+    { key: 'actions', header: '' },
 ];
 
 const creating = ref(false);
@@ -174,12 +171,6 @@ const startCreate = () => {
     form.clearErrors();
     neverExpires.value = false;
     creating.value = true;
-};
-
-const toggleAbility = (value) => {
-    form.abilities = form.abilities.includes(value)
-        ? form.abilities.filter((a) => a !== value)
-        : [...form.abilities, value];
 };
 
 const submit = () => {

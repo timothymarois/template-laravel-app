@@ -23,7 +23,7 @@ Registered in `app/Providers/AppServiceProvider.php` → `configureHealthChecks(
 | `UsedDiskSpaceCheck` | Disk below threshold | always |
 | `DatabaseCheck` | A connection can be made | a database is configured |
 | `RedisCheck` | Redis responds | Redis backs cache, queue, or sessions |
-| `HorizonCheck` | Horizon master supervisor is running | Horizon is installed |
+| `HorizonCheck` | Horizon master supervisor is running | `queue.default` is `redis` |
 | `QueueCheck` | Jobs are actually being processed (heartbeat) | queue driver isn't `sync` |
 | `ScheduleCheck` | The scheduler is firing (heartbeat) | always |
 | `ReverbCheck` | Reverb is accepting socket connections | `BROADCAST_CONNECTION=reverb` |
@@ -72,6 +72,15 @@ Health notifications are **off by default** (`HEALTH_NOTIFICATIONS_ENABLED=false
 Discord is wired in because spatie ships only mail + slack — registered via `Notification::extend('discord', …)` in `AppServiceProvider`. Failures are throttled (one notification per hour per channel by default; `config/health.php` → `throttle_notifications_for_minutes`).
 
 - **Recovery pings.** spatie only notifies on failure. `NotifyOnHealthRecovery` (listens to `CheckEndedEvent`) posts a green "recovered" Discord embed when a check returns to ok. **Debounced**: a check must be down for **≥ 2 consecutive runs** (~2 min, a per-check down streak in the cache) before it counts as a real outage, so a single transient failure never produces a spurious recovery ping. (`ScheduleCheck` also uses a 2-minute heartbeat window — its 1-minute default false-fails on normal scheduler jitter.)
+- **The endpoint serves the scheduled snapshot.** `always_send_fresh_results` is `false` in
+  `config/health.php`. The package ships it as `true`, and the `/health` controller reads it whether or
+  not the Oh Dear endpoint is enabled — so leaving it true makes every request run every check inline,
+  fire the `CheckEnded` events that drive the recovery debounce, and rewrite the shared result cache.
+  On an unauthenticated, unthrottled endpoint that is a denial-of-service lever. `?fresh` still forces a
+  live run.
+- **`HEALTH_SECRET_TOKEN` is enforced by middleware on the route.** `RequiresSecretToken` has to be
+  attached explicitly; the package only auto-wires its own Oh Dear route, which is disabled here. Set
+  the env var and the endpoint requires `X-Secret-Token`; leave it unset and the endpoint is open.
 - **Maintenance-mode pings.** `NotifyOnMaintenanceMode` listens for `MaintenanceModeEnabled` / `MaintenanceModeDisabled` and posts to Discord when the app enters (amber) or leaves (green) maintenance — handy for bracketing deploy windows.
 
 ## Verify

@@ -4,6 +4,16 @@
             <!-- Header -->
             <div class="px-6 pt-4" :class="tabs?.length ? 'pb-2' : 'pb-4 border-b border-border'">
                 <SheetTitle>{{ title }}</SheetTitle>
+                <!-- reka-ui's dialog contract requires a description; without one it
+                     warns and ships no aria-describedby. The sr-only fallback keeps
+                     every existing caller compliant without changing what it renders. -->
+                <SheetDescription v-if="$slots.description" class="mt-1 text-sm text-muted-foreground">
+                    <slot name="description" />
+                </SheetDescription>
+                <SheetDescription v-else-if="description" class="mt-1 text-sm text-muted-foreground">
+                    {{ description }}
+                </SheetDescription>
+                <SheetDescription v-else class="sr-only">{{ title }}</SheetDescription>
             </div>
 
             <!-- With Tabs -->
@@ -56,11 +66,14 @@
                     class="rounded-none border-0"
                 />
                 <div class="px-6 py-4 flex items-center gap-2 border-t border-border">
-                    <Button @click="$emit('submit')" :disabled="loading">
+                    <Button :disabled="loading || submitDisabled" @click="$emit('submit')">
                         <Loader2 v-if="loading" class="mr-2 h-4 w-4 animate-spin" />
-                        Save
+                        {{ submitLabel }}
                     </Button>
-                    <Button variant="ghost" @click="isOpen = false">Cancel</Button>
+                    <Button variant="ghost" @click="isOpen = false">{{ cancelLabel }}</Button>
+                    <div v-if="$slots['footer-actions']" class="ml-auto flex items-center gap-2">
+                        <slot name="footer-actions" />
+                    </div>
                 </div>
             </div>
         </SheetContent>
@@ -71,6 +84,7 @@
 import { ref, computed } from 'vue';
 import Sheet from './Sheet.vue';
 import SheetContent from './SheetContent.vue';
+import SheetDescription from './SheetDescription.vue';
 import SheetTitle from './SheetTitle.vue';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -85,20 +99,30 @@ interface Tab {
 interface Props {
     modelValue?: boolean;
     title?: string;
+    /** Announced to screen readers, and shown under the title when set. */
+    description?: string;
     tabs?: Tab[];
     position?: 'left' | 'right' | 'top' | 'bottom';
     width?: string;
     loading?: boolean;
+    /** Name the outcome, e.g. 'Create account' — keep it identical to whatever opened the sheet. */
+    submitLabel?: string;
+    cancelLabel?: string;
+    submitDisabled?: boolean;
     errors?: Record<string, string>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     modelValue: false,
     title: '',
+    description: '',
     tabs: () => [],
     position: 'right',
     width: '400px',
     loading: false,
+    submitLabel: 'Save',
+    cancelLabel: 'Cancel',
+    submitDisabled: false,
     errors: () => ({}),
 });
 
@@ -116,7 +140,12 @@ const isOpen = computed({
 
 const widthStyle = computed(() => {
     if (props.position === 'left' || props.position === 'right') {
-        return { width: props.width, maxWidth: '100%' };
+        // min() clamps the width itself. Relying on maxWidth does not work here:
+        // SheetContent carries `!max-w-none`, and Tailwind's `!` is !important,
+        // which beats an inline max-width. A sheet asked for 720px therefore
+        // stayed 720px in a 390px viewport and was laid out off-screen, with its
+        // Save and Cancel controls unreachable.
+        return { width: `min(${props.width}, 100vw)`, maxWidth: '100%' };
     }
     return {};
 });

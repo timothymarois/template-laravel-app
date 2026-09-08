@@ -279,6 +279,34 @@ it('refuses a browser session carrying no key', function () {
         ->assertUnauthorized();
 });
 
+it('answers the ability check from the key, not from a session', function () {
+    // Sanctum's guard attaches a TransientToken when it resolves a session, and
+    // TransientToken::can() is true for every ability. If EnsureApiKey did not
+    // re-attach the key it validated, `abilities:` would be answered by the session
+    // and a Read-only key would pass a Write gate. The api group has no session
+    // middleware today, so actingAs() is the only way to reach this — which is
+    // precisely why the guard belongs in the middleware and not in the route list.
+    $user = User::factory()->admin()->create();
+    $key = issueKey($user, [ApiAbility::Write->value]);
+
+    $this->actingAs($user)
+        ->withHeader('Authorization', "Bearer {$key}")
+        ->getJson('/api/user')
+        ->assertForbidden();
+});
+
+it('refuses an expired key even alongside a session', function () {
+    $user = User::factory()->admin()->create();
+    $key = issueKey($user, [ApiAbility::Read->value], 1);
+
+    $this->travel(2)->days();
+
+    $this->actingAs($user)
+        ->withHeader('Authorization', "Bearer {$key}")
+        ->getJson('/api/user')
+        ->assertUnauthorized();
+});
+
 it('refuses a key belonging to a different user', function () {
     $owner = User::factory()->admin()->create();
     $other = User::factory()->admin()->create();

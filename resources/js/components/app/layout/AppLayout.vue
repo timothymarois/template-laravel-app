@@ -97,7 +97,9 @@ import EditUserModal from '../modals/EditUserModal.vue';
 import DeleteUserModal from '../modals/DeleteUserModal.vue';
 
 const page = usePage();
-const user = page.props.user;
+// Computed, not a plain read: a partial reload or an impersonation swap changes
+// the shared user under a mounted layout, and a by-value read keeps the old one.
+const user = computed(() => page.props.user);
 
 const props = defineProps({
     title: {

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, provide } from 'vue';
+import type { HTMLAttributes } from 'vue';
+import { cn } from '@/utils';
 
 interface Props {
     type?: 'single' | 'multiple';
     modelValue?: string | string[];
     defaultValue?: string | string[];
     collapsible?: boolean;
+    class?: HTMLAttributes['class'];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -69,7 +72,7 @@ provide('accordionContext', {
 </script>
 
 <template>
-    <div class="divide-y divide-border rounded-md border">
+    <div :class="cn('divide-y divide-border rounded-md border', props.class)">
         <slot />
     </div>
 </template>

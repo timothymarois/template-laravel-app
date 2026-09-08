@@ -1,8 +1,16 @@
 import { usePage } from '@inertiajs/vue3';
-import { isClient } from '../../browser';
+
+const stripQuery = (value: string): string => value.split('?')[0] || '/';
 
 /**
  * Determine whether the current Inertia page is active.
+ *
+ * Runs identically on the server and the client. It previously bailed out to
+ * `false` during SSR because it built a `URL` against `document.baseURI`, which
+ * does not exist in the SSR bundle — so every nav item rendered inactive in the
+ * server HTML and then flipped on hydration, a visible flash and a class
+ * mismatch on every page. `page.url` is already root-relative, so no `URL`
+ * construction is needed at all.
  *
  * @param itemPath - Path to compare against the current page URL.
  * @param itemParent - Optional parent path that overrides itemPath.
@@ -14,12 +22,11 @@ export const isPageActive = (
     itemParent?: string,
     eq = false
 ): boolean => {
-    if (!isClient) return false;
-
     const page = usePage();
     const path = itemParent ?? itemPath;
-    const currentPath = new URL(page.url, document.baseURI).pathname;
-    const routePath = new URL(path, document.baseURI).pathname;
+
+    const currentPath = stripQuery(page.url ?? '/');
+    const routePath = stripQuery(path.startsWith('/') ? path : `/${path}`);
 
     return eq ? currentPath === routePath : currentPath.startsWith(routePath);
 };

@@ -103,8 +103,17 @@ return [
         /*
          * When this option is enabled, the checks will run before sending a response.
          * Otherwise, we'll send the results from the last time the checks have run.
+         *
+         * FALSE on purpose. The package default is true, and it is read by the
+         * /health controller regardless of whether this Oh Dear endpoint is enabled
+         * — so leaving it true makes every /health request run every check inline
+         * (a DB round-trip, a Redis lookup, a `df` subprocess, a TCP probe), fire
+         * CheckEnded events that defeat the recovery debounce, and write the shared
+         * result cache. On an unauthenticated endpoint with no rate limit that is a
+         * denial-of-service lever. /health serves the scheduled snapshot; `?fresh`
+         * still forces a live run.
          */
-        'always_send_fresh_results' => true,
+        'always_send_fresh_results' => false,
 
         /*
          * The secret that is displayed at the Application Health settings at Oh Dear.

@@ -109,3 +109,22 @@ export * from './upload';
 
 // View Toggle (grid / list switcher)
 export * from './view-toggle';
+
+// Primitives that ship in this kit but were never exported. Reaching them by
+// path worked; importing them from the barrel did not, with nothing saying why.
+export * from './accordion';
+export * from './collapsible';
+export * from './command';
+export * from './context-menu';
+export * from './progress';
+export * from './separator';
+export * from './skeleton';
+export * from './spinner';
+export * from './tabs';
+
+// Deliberately NOT exported, so the barrel stays cheap to import:
+//   carousel, chart  — pull optional dependencies into the module graph
+//   resizable        — same
+//   sidebar          — its Sidebar clashes with components/app/navigation/Sidebar
+//   editor           — optional @tiptap deps (see above)
+// Import these by path when you need them.
