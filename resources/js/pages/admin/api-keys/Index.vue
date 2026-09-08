@@ -50,9 +50,9 @@
             </div>
 
             <Dialog v-model:visible="creating" header="Create API key">
-                <form class="space-y-4" @submit.prevent="submit">
+                <form class="space-y-4 w-full" @submit.prevent="submit">
                     <LabelField name="name" label="Name" required :error="form.errors.name">
-                        <InputText v-model="form.name" fluid :invalid="!!form.errors.name" />
+                        <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
                     </LabelField>
                     <LabelField name="abilities" label="Abilities" required :error="form.errors.abilities">
                         <div class="space-y-2">
@@ -68,6 +68,7 @@
                     </LabelField>
                     <LabelField name="lifetime_days" label="Expires after (days)" :error="form.errors.lifetime_days">
                         <InputText
+                            id="lifetime_days"
                             v-model="form.lifetime_days"
                             type="number"
                             fluid
@@ -79,10 +80,16 @@
                         <Checkbox v-model="neverExpires" />
                         <span class="text-sm">Never expires</span>
                     </label>
+
+                    <!-- The summary sits under the fields, not in the footer: the
+                         footer is a horizontal row, so an error block there is
+                         squeezed beside the action instead of reading full width. -->
+                    <FormErrors :errors="form.errors" :expandDefault="true" />
+
                     <button type="submit" class="hidden" tabindex="-1" aria-hidden="true"></button>
                 </form>
                 <template #footer>
-                    <FormErrors :errors="form.errors" />
+                    <Button variant="outline" label="Cancel" class="cursor-pointer" @click="creating = false" />
                     <Button
                         label="Create key"
                         class="cursor-pointer"
@@ -216,6 +223,14 @@ const confirmRevoke = (key) => {
 };
 
 const revoke = () => {
-    router.delete(route('admin.api-keys.destroy', revokeTarget.value.id), { preserveScroll: true });
+    const name = revokeTarget.value.name;
+
+    router.delete(route('admin.api-keys.destroy', revokeTarget.value.id), {
+        preserveScroll: true,
+        // Confirm the outcome, not the click: the row disappearing is the only
+        // other signal, and on a long list it can happen off-screen.
+        onSuccess: () => toast.success(`API key “${name}” revoked`),
+        onError: () => toast.error(`Could not revoke “${name}”`),
+    });
 };
 </script>

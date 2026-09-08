@@ -88,6 +88,19 @@ weak when it appears only because no decision was made.
   confirmation for irreversible or high-impact actions and name the object and consequence.
 - Confirm completion, not just receipt of a click. State what changed, what happens next, and how the
   user can recover, revisit, or continue.
+- **Every action that changes state raises a notification on completion, naming the object.** A row
+  vanishing, a count changing, or a dialog closing is not confirmation — the user may not have been
+  looking at it, and on a long list it happens off-screen. Report failure the same way: an action
+  that silently does nothing is indistinguishable from one that silently failed. Reserve this for
+  actions the user initiated and whose result is not already the whole screen; a navigation that
+  lands on the changed thing confirms itself.
+- **Keyboard: Enter submits, Escape cancels — in every form and every dialog.** A user who has typed
+  the last field should not have to reach for the mouse, and Escape must always be the way out. The
+  keyboard and pointer paths must end in the same state; a confirm that closes on click but stays
+  open on Enter is a defect. Two traps: implicit submission needs a submit control **inside** the
+  form, so a form whose button sits in a footer outside it needs a hidden one; and a listener bound
+  in the template of a portalled dialog never receives the event — bind it to the document while
+  open.
 
 Read [forms-and-feedback.md](references/forms-and-feedback.md) when designing forms, validation,
 loading and submission behavior, notifications, confirmations, empty states, or error recovery.

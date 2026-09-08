@@ -516,6 +516,84 @@ Stylelint 17, `@tanstack/vue-table` 9, `lucide-vue-next` 1.0, `unplugin-auto-imp
 data-table kit; TypeScript 7 is the native port. Upgrade them one at a time, proving `pnpm check` green
 after each, rather than in a single `pnpm up --latest`.
 
+
+---
+
+## Part O — Admin UI, roles on the user form, and keyboard behaviour (every fork) ⚠️
+
+### 1. `role` is now required when creating or updating a user ⚠️
+
+`StoreUserRequest` and `UpdateUserRequest` both gained
+`'role' => ['required', Rule::enum(UserRole::class)]`. **Any fork code that posts to
+`admin.users.store` or `admin.users.update` without a `role` now fails validation with a
+422.** Grep for callers — your own tests are the usual casualty:
+
+```bash
+grep -rn "admin.users.store\|admin.users.update\|/admin/users" --include=*.php --include=*.vue \
+  --exclude-dir=vendor --exclude-dir=node_modules .
+```
+
+If your fork should not let an operator set a role from that form, drop the rule and the field
+rather than sending a default — a silently-defaulted role on an authorization-bearing column is
+worse than a validation error.
+
+`Admin/UserController@index` now also passes a `roles` prop, built from `UserRole::cases()`, which
+is what the modal's picker reads.
+
+### 2. Console command and seeder
+
+- **`php artisan api-key:create`** (`app/Console/Commands/CreateApiKey.php`) — issues a key where
+  there is no browser: seeding, CI, a deploy script. Prints the plaintext once, and refuses an
+  unknown or deactivated owner and an ability outside the enum.
+- **`php artisan user:create --admin`** (`app/Console/Commands/CreateUser.php`) — the supported way
+  to make an operator. Prompts for anything not passed; generates and prints the password once when
+  `--password` is omitted, so a real one never lands in shell history.
+- **`DatabaseSeeder` now seeds an operator** alongside the plain user. Before this, a fresh
+  `migrate --seed` on v6.0.0 produced an install whose admin surface nobody could reach, because
+  Part D gates it on the role. Take this even if you keep your own seeder.
+
+### 3. Admin forms are centered modals
+
+`EditUserModal` moves from `SheetForm` to `Dialog`, and the new API-key form uses `Dialog` too.
+Actions read `Save changes` / `Create user` rather than a generic "Save". `SheetForm` stays in the
+kit, improved, for wider or tabbed forms.
+
+**Put `FormErrors` inside the form, after the fields — never in the `#footer` slot.** `DialogFooter`
+is a horizontal flex row, so an error block placed there is squeezed beside the action instead of
+reading full width.
+
+### 4. Keyboard behaviour
+
+- **Enter submits, Escape cancels**, in every form and dialog.
+- The four auth pages keep their submit control in the Card footer, **outside** the `<form>`, so each
+  needs `@submit.prevent` **and** a hidden `<button type="submit">` inside the form. Browsers only
+  perform implicit submission when the form contains a submit control; without one, Enter did
+  nothing on a form with more than one field.
+- `DialogConfirmation` confirms on Enter and closes on Escape, and **confirming now closes the
+  dialog** — clicking the action already closed it while the keyboard path did not, leaving one
+  gesture with two outcomes. Its Enter listener binds to `document` in the capture phase while open:
+  reka renders through a portal whose wrapper root emits no DOM node, so a listener in the template
+  never received the event and Enter activated the focused Cancel button instead.
+- The guard lives in `resources/js/components/ui/dialog/dialogUtils.ts` (`shouldConfirmOnEnter`) —
+  it refuses while the dialog is busy and ignores Enter raised from an input, textarea or select.
+
+Take `resources/js/tests/components/ui/dialog/dialogUtils.test.ts` and
+`resources/js/tests/utils/isPageActive.test.ts` with these.
+
+### 5. Smaller items in this release
+
+| File | Change |
+|---|---|
+| `config/sanctum.php` | `token_prefix` defaults to `apik_` (was empty, which disables secret scanning) |
+| `config/ziggy.php` | drops the `_debugbar.*` exclusion; the package is not installed |
+| `app/Console/Commands/GenerateSitemap.php` | excludes `health`, `release`, `_inertia`, `_debugbar`, `storage` |
+| `app/Http/Middleware/SecurityHeaders.php` | sends `X-Robots-Tag: noindex` unless `config('seo.indexable')` |
+| `resources/js/pages/errors/*.vue`, `Register.vue` | `robots="noindex"`, and Enter-to-submit on the auth pages |
+| `routes/api.php` | the API-key chain (Part G) |
+| `docs/concepts/{seo,health-checks,api-keys}.md` | new/updated pages — add the index rows |
+| `.claude/skills/designing-ui-ux/SKILL.md` | gains the notification and keyboard rules; take it if your fork vendors the skills |
+| `storage/debugbar/`, `.env.example` | orphaned directory removed; `DB_DATABASE` no longer defaults to the colliding name `template` |
+
 ---
 
 ## Verify
@@ -554,6 +632,11 @@ php artisan tinker --execute="echo App\Models\User::where('role','admin')->count
 
 # 7. API keys resolve end to end.
 php artisan route:list --name=api-keys                 # expect 3 routes
+
+# 7b. The user form's new required field, and the operator path.
+php artisan user:create --admin --name=Probe --email=probe@example.test
+grep -rn "admin.users.store\|admin.users.update" --include=*.php --exclude-dir=vendor tests/
+#     every caller must now send a role, or it 422s
 
 # 8. Health, head and sitemap.
 php artisan tinker --execute="var_dump(config('health.oh_dear_endpoint.always_send_fresh_results'));"  # false

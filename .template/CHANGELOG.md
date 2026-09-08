@@ -19,6 +19,8 @@ Removes built-in multi-tenancy, completes authentication, authorizes the admin a
 - **Password reset** — the four conventional `password.*` routes, one controller, two Form Requests, and the two pages. Neither endpoint reveals whether an address is registered.
 - **API keys** on Sanctum personal access tokens — a closed `ApiAbility` enum, expiry (or explicit never-expires), hard-delete revocation, and an admin screen that shows the plaintext exactly once.
 - **`flash` shared prop** — nothing shared it, so every `->with('status')`/`->with('error')` in the app was written to the session and dropped, including the deactivation message.
+- **`user:create --admin`** and a seeded operator — `/admin` is gated on the role, so a fresh `migrate --seed` previously produced an install nobody could administer.
+- **Role on the user form**, options built from `UserRole::cases()`; `role` is validated with `Rule::enum` on both user Form Requests.
 - **`config/seo.php` + `SeoHead`** — head defaults, per-page `robots`, and `SEO_INDEXABLE`, which sends `X-Robots-Tag: noindex`.
 - **`docs/guides/adding-tenancy.md`**, **`docs/concepts/api-keys.md`**, **`docs/concepts/seo.md`**.
 
@@ -38,10 +40,12 @@ Removes built-in multi-tenancy, completes authentication, authorizes the admin a
 - **`og:url` shipped empty and `og:image` relative** under SSR, there was no canonical at all, and two `<title>` tags meant every page was titled `APP_NAME`.
 - **Session fixation on registration**, a deactivated user completing a login POST, and a `min:8` login rule that locked out pre-policy passwords.
 - **UI kit** — `isPageActive` dead under SSR, `useDataTableOptions` silently dropping every filter, `SheetForm` off-screen on mobile and violating the dialog a11y contract, and 13 components missing from the barrel.
+- **The API-key screen did not work** — nothing linked to it, and its list rendered no columns because `DataTable`'s required `activeColumnList` was never passed.
+- **Enter did nothing on the auth forms** (the submit control sits outside the `<form>`, so browsers performed no implicit submission), and a confirmation dialog closed on click but not on Enter.
 
 ### Migration
 
-See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–N. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
+See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–O. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
 
 ## v5.7.0 - 09/08/2026
 

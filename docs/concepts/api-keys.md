@@ -80,6 +80,20 @@ to disable its keys in the same act.
 | Adding an ability to the enum changes nothing | An ability is only a scope once a route enforces it with `abilities:`. Add the case and the route in the same change. |
 | `abilities:` routes 500 or never match | The `abilities`/`ability` aliases are registered in `bootstrap/app.php`. Sanctum ships the middleware but does not register them in Laravel 11+. |
 
+## Issuing from the console
+
+`php artisan api-key:create` covers the cases with no browser — seeding an environment,
+provisioning CI, scripting a deploy:
+
+```sh
+php artisan api-key:create --user=ops@example.com --name="CI pipeline" \
+    --ability=api:read --ability=api:write --days=30
+php artisan api-key:create --user=ops@example.com --name=Integration --never-expires
+```
+
+Like the screen, it prints the plaintext once. It refuses an unknown owner, a deactivated owner (the
+key would be refused at request time anyway) and an ability outside the enum, listing the valid ones.
+
 ## Adding an ability
 
 1. Add the case to `App\Enums\ApiAbility` with a `label()`.

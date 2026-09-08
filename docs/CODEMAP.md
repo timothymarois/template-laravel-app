@@ -51,9 +51,9 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 - **AppServiceProvider** (password rules, rate limiters, health checks), **HorizonServiceProvider**.
 
-## Commands (app/Console/Commands/ — 3)
+## Commands (app/Console/Commands/ — 5)
 
-- **StartFresh** (`start:fresh`), **GenerateSitemap** (`sitemap:generate`), **EnsureStorage** (`app:ensure-storage`).
+- **StartFresh** (`start:fresh`), **GenerateSitemap** (`sitemap:generate`), **EnsureStorage** (`app:ensure-storage`), **CreateUser** (`user:create --admin`), **CreateApiKey** (`api-key:create`).
 
 ## Support (app/Support/ — 2)
 
