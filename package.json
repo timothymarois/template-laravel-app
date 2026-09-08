@@ -20,7 +20,7 @@
         "check:php": "scripts/preflight-php && ./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && php -d memory_limit=512M ./vendor/bin/pest",
         "check:js": "pnpm lint && pnpm lint:css && pnpm typecheck && pnpm test",
         "check:release": "bash tests/scripts/prepare-production-release.sh && bash tests/scripts/production-release-version.sh && bash tests/scripts/publish-production-release.sh && bash tests/scripts/assert-neutral-main-version.sh",
-        "check:deploy": "bash tests/scripts/php-ini.sh && bash tests/scripts/nginx-config.sh && bash tests/scripts/post-deployment.sh",
+        "check:deploy": "bash tests/scripts/preflight-php.sh && bash tests/scripts/php-ini.sh && bash tests/scripts/nginx-config.sh && bash tests/scripts/post-deployment.sh",
         "check:build": "pnpm build && pnpm exec vite build --ssr",
         "check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" \"pnpm check:release\" \"pnpm check:deploy\" && pnpm check:build"
     },

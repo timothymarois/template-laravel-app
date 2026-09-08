@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ApiAbility;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,11 @@ Route::middleware(['throttle:api', 'auth:sanctum', 'api.key'])->group(function (
         Route::get('/user', function (Request $request) {
             return $request->user()->only(['id', 'name', 'email', 'role']);
         })->name('api.user');
+
+        // A real collection endpoint, so a key's read scope can be exercised against
+        // something with pagination and authorization rather than only the caller's
+        // own record. Authorized per-request through UserPolicy: the ability says what
+        // the key may do, the policy says whether its owner may.
+        Route::get('/users', [UserController::class, 'index'])->name('api.users.index');
     });
 });

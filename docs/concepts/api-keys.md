@@ -67,6 +67,23 @@ an `abilities:` check passes for any signed-in user carrying no key at all. Requ
 key belonging to a deactivated user would otherwise keep authenticating — deactivating an account has
 to disable its keys in the same act.
 
+## The endpoints a key can reach
+
+| Route | Ability | Also authorized by |
+|---|---|---|
+| `GET /api/user` | `api:read` | — the caller's own record |
+| `GET /api/users` | `api:read` | `UserPolicy::viewAny` — admin owners only |
+
+`GET /api/users` is the collection endpoint worth testing a key against: it has
+pagination, a bounded `perPage`, an allow-listed `sortField`, and an explicit field list
+rather than a serialized model. **The two gates are independent** — the ability says what
+the *key* may do, the policy says whether its *owner* may. A read key held by a non-admin
+is refused, which is the case a fork most often gets wrong.
+
+```sh
+curl -H "Authorization: Bearer $KEY" https://<host>/api/users?perPage=25&search=ada
+```
+
 ## Configure
 
 ### Issue from the console
