@@ -146,4 +146,31 @@ describe('useModal', () => {
             expect(callback2).toHaveBeenCalled();
         });
     });
+
+    describe('activeState', () => {
+        it('does not wipe the data when v-model writes true to an already-open modal', () => {
+            // An overlay syncs its own open state back through v-model as it appears. That
+            // write used to reach open(name) with no data, re-firing onOpen with null and
+            // clearing whatever the caller passed a moment earlier.
+            const modal = useModal();
+            const onOpen = vi.fn();
+
+            modal.onOpen('test-modal', onOpen);
+            modal.open('test-modal', { id: 7 });
+
+            modal.activeState('test-modal').value = true;
+
+            expect(modal.data('test-modal').value).toEqual({ id: 7 });
+            expect(onOpen).toHaveBeenCalledTimes(1);
+        });
+
+        it('closes when v-model writes false', () => {
+            const modal = useModal();
+
+            modal.open('test-modal', { id: 7 });
+            modal.activeState('test-modal').value = false;
+
+            expect(modal.activeState('test-modal').value).toBe(false);
+        });
+    });
 });
