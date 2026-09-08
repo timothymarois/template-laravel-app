@@ -54,8 +54,15 @@ jobs:
           target: runtime
           load: true
           tags: template-app:default
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # A fixed scope. type=gha keys its cache per-branch by default, so every
+          # branch rebuilt the whole image from cold — which is why this job took
+          # 400-635s on every run including main. A shared scope lets a PR branch
+          # reuse the layers main already built.
+          cache-from: type=gha,scope=docker-config
+          cache-to: type=gha,mode=max,scope=docker-config
+          # No SLSA attestation: nothing consumes it here, and it adds an export
+          # step to a job that only inspects configuration.
+          provenance: false
 
       # ── Image 2: the fixture project files, through the SAME Dockerfile ────
       # Only the three project COPY layers re-run; the app build is cached.
@@ -72,7 +79,8 @@ jobs:
           target: runtime
           load: true
           tags: template-app:project
-          cache-from: type=gha
+          cache-from: type=gha,scope=docker-config
+          provenance: false
 
       - name: Restore a clean tree
         run: git checkout -- docker/project && git clean -fd docker/project
