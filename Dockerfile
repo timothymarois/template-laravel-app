@@ -116,6 +116,17 @@ COPY docker/config/supervisord.conf /etc/supervisor/conf.d/app.conf
 COPY docker/deploy/entrypoint.sh    /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
 
+# Fork-owned nginx fragments (docker/project/ — never template-managed, so an
+# upgrade never conflicts on them). The http/ set lands in conf.d, which the base
+# image includes inside http context, because nginx rejects limit_req_zone and
+# limit_conn_zone anywhere else; the server/ set lands in snippets/, included from
+# the server block in docker/config/nginx.conf. Both directories ship empty and
+# the include is a wildcard, so this is a no-op until a fork adds a file. The
+# directories are copied whole rather than by *.conf glob, which would fail the
+# build when a fork has added nothing.
+COPY docker/project/nginx/http/   /etc/nginx/conf.d/
+COPY docker/project/nginx/server/ /etc/nginx/snippets/
+
 EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]

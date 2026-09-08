@@ -1,61 +1,54 @@
 # AGENTS
 
-Rules for every agent working in this repository. These rules are law; where they conflict with your general
-habits, this file wins.
-
-This is a **Laravel 13 + Inertia/Vue 3 starter template** (PHP 8.4, TailwindCSS 4, shadcn-vue, Redis/Horizon,
-optional `stancl/tenancy`): a thin HTTP layer over service/action business logic, with a Vue 3 SPA rendered
-through Inertia. The *what & why* lives in `docs/BRIEF.md`; the documentation index is `docs/README.md`.
-This file defines how you build here.
+Rules for every agent working in this repository.
 
 ## Before you work
 
 Load light; pull depth only when the task needs it.
 
-1. **Always read first:** `docs/BRIEF.md` (what & why), `docs/CODEMAP.md` (where things are).
+1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are), always.
    `docs/README.md` indexes the rest.
-2. **On demand, when the task enters an area:** `docs/concepts/` (how a subsystem works and how it
-   fails — `deployment-endpoints.md` before touching a deploy), `docs/guides/` (one task each).
-3. **How work flows:** `research/` -> `prd-drafts/` -> `prd/`; a `prd/` contract never cites a draft. New
-   guaranteed behavior is a `prd/` row backed by a test — cite its `R-<AREA>-<n>` in the code. Follow a doc's
-   guide before writing or modifying it, and keep docs true in the same task. Run
-   Keep scratch files outside the repository.
-4. Read every file before editing it; search before writing new logic — reuse, extend, refactor.
-5. When the user raises a concern, investigate before contradicting — evidence, not a hunch.
+2. **Read the guide for the area you enter** — `docs/concepts/` (how a subsystem works and how it fails)
+   and `docs/guides/` (one task each). On demand, not up front.
+3. **Load every skill the task touches**, not the most obvious one: a change spanning a controller, its
+   Vue page and its migration is three. A skill changes *how* you work — it never widens scope, authorizes
+   an edit, or overrides this file.
+4. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
+   here rather than duplicating it. Scratch files stay outside the repository.
+5. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
+   rename, or reformat what the task did not send you to. Improvements are **mentioned, not made**, and
+   scope never widens unless directed — if the smallest correct change is a large one, say why first.
+6. **Do not contradict the user without evidence.** Investigate, then answer with what you found — not a
+   hunch, and not agreement you have not checked.
 
-> **Searching the repo:** the template's changelog + migration guides live in the hidden `.template/`
-> directory, which default code search skips. Pass `--hidden`, use `grep -r` / `find`, or read the path
-> directly when you need them.
+## Hard rules
 
-## Hard gates — require explicit approval
+The first five need explicit approval. The rest are not negotiable.
 
-- **Migrations / persisted state.** Any change to database schema, user data, or stored state is confirmed first.
-- **Dependencies.** Do not add, remove, or version-bump a Composer or pnpm package (or a pinned engine) without approval.
-- **Deletions.** Do not delete files outside the task's immediate scope without approval.
-- **Commits.** Do not commit or push unless told to.
-- **This file.** Never modify `AGENTS.md` without approval; when approved, follow
-  raise it with the user rather than working around it.
+- **Persisted state — ask first.** Any change to schema, stored data, or migrations.
+- **Dependencies — ask first.** Adding, removing, or version-bumping a Composer or pnpm package, or a
+  pinned engine.
+- **Deletions — ask first.** Any file outside the task's immediate scope.
+- **Commits — ask first.** Never commit or push unless told to.
+- **This file — ask first.** `CLAUDE.md` is a byte-identical copy; change both in the same commit.
+  `pnpm check` fails when they drift, so a change to one is unfinished until the other matches.
+- **Never touch `.env` or commit credentials.** Read env only through `config/` — never `env()` outside it.
+- **Never ship debug output**, commented-out code, or disabled tests.
+- **Never validate on the frontend.** Form Requests are the single source of truth; the frontend renders
+  the errors the server returns.
+- **Never let backend and frontend drift.** Names, props, enums, and routes match — rename both sides in
+  the same task.
+- **Never add a legacy fallback or polyfill** unless asked.
 
-## Never
-
-- Never touch `.env` or commit credentials. Access env only through `config/` — never call `env()` outside `config/`.
-- Never leave debug output (`dd()`, `dump()`, `console.log`), commented-out code, or disabled tests in completed work.
-- Never validate on the frontend — Laravel Form Requests are the single source of truth; the frontend only
-  displays server-returned errors.
-- Never let backend and frontend drift — names, props, enums, and routes match between Laravel and Vue; rename
-  one side, rename the other in the same task.
-- Never add legacy fallbacks or polyfills unless asked — use the current, modern approach.
-
-## Tech stack
+## Stack & architecture
 
 - **Backend:** Laravel 13+ (PHP 8.4+), Redis via Horizon (queue + cache), Inertia server adapter, optional
   `stancl/tenancy` (inert by default).
 - **Frontend:** Vue 3 (`<script setup>`), Inertia.js, TailwindCSS 4, shadcn-vue (Radix Vue primitives),
   Lucide icons, Ziggy named routes, vue-sonner (toasts).
 
-## Architecture — the one rule that matters
-
-The HTTP layer is thin; business logic lives in services and actions. Dependencies point **inward**, one-way.
+**The one rule that matters:** the HTTP layer is thin, business logic lives in services and actions, and
+dependencies point **inward**, one-way.
 
 | Layer | Owns | May depend on | Must not |
 |---|---|---|---|
@@ -68,6 +61,37 @@ The HTTP layer is thin; business logic lives in services and actions. Dependenci
   the component showcase (`resources/js/pages/admin/components/`) before building a new one — it likely exists.
 - **shadcn primitives use the `*Base` suffix**; enhanced `ui/` versions wrap them. `ui/` requires `lang="ts"`
   with typed props. Barrel imports (`index.ts`) are `ui/`-only; `app/` and `site/` use direct file imports.
+
+## Directory structure
+
+```
+app/
+├── Http/
+│   ├── Controllers/    Thin — Form Request in, service call, response out
+│   └── Requests/       Form Requests: validation + authorization
+├── Services/           Business logic — Actions/ + DataTransferObjects/ on first use
+├── Models/             Eloquent models, kept light
+├── Jobs/               Queued work
+├── Health/             /health checks + notification channel
+├── Tenancy/            stancl/tenancy wiring (inert until enabled)
+└── Console/ · Enums/ · Notifications/ · Providers/ · Support/ · Http/{Concerns,Middleware}/
+
+resources/js/
+├── components/ui/      Stateless kit — no Inertia, auth or routes; lang="ts"; barrel imports
+├── components/app/     Authenticated surfaces
+├── components/site/    Public marketing pages
+├── pages/              Inertia pages by route (Index.vue = home, admin/ = /admin/*)
+├── composables/        Stateful logic, use-prefixed
+└── utils/ · plugins/ · tests/ (Vitest)
+
+routes/                 web · api · channels · components · tenant
+database/               migrations/ (central; tenant/ when tenancy is on) · factories/ · seeders/
+tests/                  Feature/ · Unit/ · Central/ · Tenant/ · scripts/ (shell contract tests)
+docs/                   BRIEF · CODEMAP · concepts/ · guides/ — see docs/README.md
+scripts/                Release commands — see docs/guides/releasing.md
+docker/                 config/ + deploy/ = managed core · project/ = yours, never template-managed
+.template/              Changelog + migration guides (hidden; pass --hidden to search)
+```
 
 ## Best practices — do / don't
 
@@ -143,35 +167,22 @@ controllers and accessors get nothing; a comment that restates the code is noise
 ❌ // provision the tenant      ← restates the name; teaches nothing
 ```
 
-## Directory structure
-
-```
-app/
-├── Console/Commands/  Enums/  Jobs/  Models/  Notifications/  Providers/  Support/
-├── Http/{Controllers,Requests,Middleware,Concerns}/   # thin controllers, Form Request validation
-├── Services/{Models,<Domain>}/                         # business logic; Actions/ + DataTransferObjects/ on first use
-resources/js/
-├── components/{ui,app,site}/   pages/   composables/   utils/   tests/
-├── pages/                      # Inertia pages by route (Index.vue = public home, admin/ = /admin/*)
-routes/{web,api,tenant,channels}.php
-database/migrations/            # central; tenant/ = per-tenant when tenancy is enabled
-docs/                           # BRIEF, CODEMAP, concepts/, guides/ — see docs/README.md
-scripts/                        # release commands — see docs/guides/releasing.md
-```
-
 ## Build, test & run
 
 ```bash
-pnpm check         # the gate: check:php + check:js (parallel), then check:build
+pnpm check         # the gate: check:php + check:js + check:release + check:deploy, then check:build
 pnpm check:tenancy # Pest against the tenancy suite (phpunit.tenancy.xml) — when tenancy is enabled
 pnpm check:all     # check + check:tenancy
 pnpm dev           # local dev server (Herd serves the app)
 ```
 
-`pnpm check` runs Pint, Larastan (level 5), Pest, ESLint, Stylelint, tsc, Vitest, the release-script
-linter, and the client + SSR builds. Auto-fix: `pnpm lint:fix`, `pnpm lint:css:fix`. **Who runs the app:**
-build to prove it compiles, then hand off — the **owner runs the UI** and provides screenshots for visual
-sign-off. "Compiles + wired" is not "done".
+`pnpm check` runs Pint, Larastan (level 5), Pest, ESLint, Stylelint, tsc, Vitest, the release and
+deployment contract scripts, and the client + SSR builds. `check:deploy` asserts the production image's own
+configuration — the application suite runs under a different ini and never executes the deploy scripts, so
+nothing else checks what the container ships. Auto-fix: `pnpm lint:fix`, `pnpm lint:css:fix`.
+
+**Who runs the app:** build to prove it compiles, then hand off — the **owner runs the UI** and provides
+screenshots for visual sign-off. "Compiles + wired" is not "done".
 
 ## Optional stacks
 
@@ -185,23 +196,23 @@ sign-off. "Compiles + wired" is not "done".
 
 ## Documentation duties
 
-Keep docs true in the same task that changes reality. Before creating or editing a page, read its home
-`README.md` — and add the index row in the same change as the page, never afterwards.
+Keep docs true in the same task that changes reality. Read a page's home `README.md` before adding to it,
+and add the index row in the same change as the page.
 
-- Moved/restructured files, or a changed count -> update `docs/CODEMAP.md`. Count artifacts, not lines.
-- A page is the source of truth for its subsystem. Never state the same fact in two pages; cite one.
-- Hit friction — **anything that cost you a failed attempt**: an env var or flag you had to discover, a guard
-  you had to satisfy, a command that only worked the second way -> write it into the page that owns that
-  subsystem, under how it fails, the moment you find the workaround. By the end of the task it will feel too
-  small to mention, which is exactly how the next agent loses the same hour.
-- No requirement contracts ship here. When a fork writes its first, it goes in `docs/requirements/` under
-  the closed schema; a requirement ID is never reused or renumbered.
-- Scratch stays outside the repository.
-- There is no automated documentation check. `docs/` correctness is a review concern.
+- **One page owns a fact.** Cite it from elsewhere; never restate it.
+- **Moved files, or a changed count** -> `docs/CODEMAP.md`. Count artifacts, not lines.
+- **Friction goes in the page that owns the subsystem, under how it fails, the moment you find the
+  workaround** — an env var you had to discover, a guard you had to satisfy, a command that only worked the
+  second way. By the end of the task it feels too small to mention, which is how the next agent loses the
+  same hour.
+- **Requirement contracts** live in `docs/requirements/` under the closed schema; an ID is never reused or
+  renumbered. None ship here.
+- Nothing lints `docs/`. Correctness is a review concern.
 
 ## Definition of done
 
-1. `pnpm check` passes (Pint, Larastan level 5, Pest, ESLint, Stylelint, tsc, Vitest, the release suites, client + SSR build).
+1. `pnpm check` passes (Pint, Larastan level 5, Pest, ESLint, Stylelint, tsc, Vitest, the release and
+   deployment suites, client + SSR build).
 2. Every rule here held — thin controllers, validation server-side only, no backend/frontend drift.
 3. New guaranteed behavior is proven by a test, and the page that owns it says so.
 4. **Friction you hit is written into the page that owns the subsystem, not only into your reply** — the next
@@ -695,4 +706,3 @@ defineProps({
 });
 </script>
 ```
-
