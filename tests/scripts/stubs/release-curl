@@ -4,6 +4,19 @@ set -euo pipefail
 
 url="${!#}"
 
+# The publisher calls /health twice: once for the body (to prove the scheduler has
+# actually stored results) and once with --write-out for the status code. Answer each
+# in kind, or the body call returns "200" and is not parseable as JSON.
+default_health_body='{"finishedAt":1,"checkResults":{"1":{"status":"ok"}}}'
+
+wants_status=false
+for arg in "$@"; do
+    if [[ "$arg" == "--write-out" ]]; then
+        wants_status=true
+        break
+    fi
+done
+
 case "$url" in
     */release)
         printf 'release %s\n' "$url" >> "$RELEASE_TEST_LOG"
@@ -15,7 +28,11 @@ case "$url" in
         ;;
     */health)
         printf 'health %s\n' "$url" >> "$RELEASE_TEST_LOG"
-        printf '%s' "${RELEASE_TEST_HEALTH_STATUS:-200}"
+        if [[ "$wants_status" == true ]]; then
+            printf '%s' "${RELEASE_TEST_HEALTH_STATUS:-200}"
+        else
+            printf '%s' "${RELEASE_TEST_HEALTH_BODY-$default_health_body}"
+        fi
         ;;
     *)
         echo "Unexpected curl URL: $url" >&2
