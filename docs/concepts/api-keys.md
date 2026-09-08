@@ -97,6 +97,7 @@ Existing keys are unaffected; abilities are stored per key at issue time.
 |---|---|
 | A signed-in user reaches an `abilities:`-gated route with no key | `api.key` is missing from that route's middleware. It is not optional; `auth:sanctum` alone accepts a session. |
 | A deactivated user's integration keeps working | Same — `EnsureUserIsActive` never runs on `api` routes. |
+| A deactivated user gets a 500 on an `admin` route, not a redirect | `EnsureUserIsActive` must log out `Auth::guard('web')`, never the default guard. Behind `auth:sanctum`, `Authenticate` has already called `shouldUse('sanctum')`, so the default guard is Sanctum's `RequestGuard`, which has no `logout()`. A test that only exercises `/` never reaches this path. |
 | A key stops working after ~90 days | Working as designed — that is the default lifetime. Issue a replacement, or use "Never expires" if the caller cannot rotate. |
 | A key meant to be permanent expired anyway | The lifetime reached the service as `null` rather than `0`. Anything that coerces falsy values (`?:`) turns NEVER_EXPIRES back into the default. |
 | The plaintext appears in `storage/logs` | Something logged the `IssuedApiKey` or the request. Neither may be logged. |
