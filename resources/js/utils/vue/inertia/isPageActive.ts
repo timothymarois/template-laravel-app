@@ -1,6 +1,16 @@
 import { usePage } from '@inertiajs/vue3';
 
-const stripQuery = (value: string): string => value.split('?')[0] || '/';
+const toPath = (value: string): string => {
+    // Strip an origin by string rather than with `new URL()`: Ziggy's route()
+    // returns absolute URLs, and the SSR bundle has no `document` to resolve
+    // against.
+    const withoutOrigin = value.replace(/^[a-z][a-z0-9+.-]*:\/\/[^/]+/i, '');
+    const path = withoutOrigin.split('?')[0].split('#')[0];
+
+    if (path === '') return '/';
+
+    return path.startsWith('/') ? path : `/${path}`;
+};
 
 /**
  * Determine whether the current Inertia page is active.
@@ -25,8 +35,8 @@ export const isPageActive = (
     const page = usePage();
     const path = itemParent ?? itemPath;
 
-    const currentPath = stripQuery(page.url ?? '/');
-    const routePath = stripQuery(path.startsWith('/') ? path : `/${path}`);
+    const currentPath = toPath(page.url ?? '/');
+    const routePath = toPath(path);
 
     return eq ? currentPath === routePath : currentPath.startsWith(routePath);
 };
