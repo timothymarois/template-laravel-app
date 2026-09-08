@@ -23,6 +23,7 @@ Production-grade applications require more than just code—they need authentica
 - ✅ Security headers, CORS, rate limiting — hardened out of the box
 - ✅ Sanctum authentication — session-based auth with CSRF protection
 - ✅ Password reset — forgot/reset flow that never reveals whether an address is registered
+- ✅ Built-in API keys — Sanctum-backed, scoped abilities, expiry (or never-expires), managed from the admin UI
 
 **Real-Time & Background Jobs**
 

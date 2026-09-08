@@ -8,16 +8,19 @@ use App\Health\Checks\ReverbCheck;
 use App\Health\DiscordHealthChannel;
 use App\Health\Listeners\NotifyOnHealthRecovery;
 use App\Health\Listeners\NotifyOnMaintenanceMode;
+use App\Policies\ApiKeyPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Events\MaintenanceModeDisabled;
 use Illuminate\Foundation\Events\MaintenanceModeEnabled;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Horizon\Horizon;
+use Laravel\Sanctum\PersonalAccessToken;
 use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\HorizonCheck;
 use Spatie\Health\Checks\Checks\QueueCheck;
@@ -38,10 +41,21 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
+     * PersonalAccessToken lives in the Sanctum namespace, so Laravel's convention
+     * of finding App\Policies\{Model}Policy for App\Models\{Model} does not reach
+     * it. Without this the policy is silently absent and every ability denies.
+     */
+    private function configurePolicies(): void
+    {
+        Gate::policy(PersonalAccessToken::class, ApiKeyPolicy::class);
+    }
+
+    /**
      * Bootstrap any application services.
      */
     public function boot(): void
     {
+        $this->configurePolicies();
         $this->configurePasswordRules();
         $this->configureRateLimiting();
         $this->configureHealthChecks();

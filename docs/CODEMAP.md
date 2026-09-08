@@ -11,35 +11,37 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 - **User** — HasApiTokens, Notifiable. Fields: name, email, password, timezone, is_active, `role` (UserRole cast), last_seen_at/ip/user_agent. `isOnline()`.
 
-## Enums (app/Enums/ — 1)
+## Enums (app/Enums/ — 2)
 
-- **UserRole** — `canManageAllUsers()`, `canImpersonate()`.
+- **UserRole** — `canManageAllUsers()`, `canImpersonate()`. **ApiAbility** — the closed set of API-key abilities.
 
-## Services (app/Services/ — 2)
+## Services (app/Services/ — 4)
 
 - **Models/ModelService** — abstract base; **Models/UserService** — user CRUD.
+- **ApiKeyService** — issue/list/revoke API keys on Sanctum PATs; **DataTransferObjects/IssuedApiKey** — a key at the one moment its plaintext exists.
 
-## Controllers (app/Http/Controllers/ — 9)
+## Controllers (app/Http/Controllers/ — 10)
 
 - **PageController** — public home; **ReleaseController** — deployed version as JSON; **Auth/SessionController** (login/logout), **Auth/RegisterController**, **Auth/PasswordResetController** (forgot/reset, non-enumerating).
-- **Admin/DashboardController**, **Admin/UserController** (CRUD + `simpleTable`, `prepareIndexFilters`), **Admin/ComponentController** (showcase).
+- **Admin/DashboardController**, **Admin/UserController** (CRUD + `simpleTable`, `prepareIndexFilters`), **Admin/ApiKeyController** (issue/revoke), **Admin/ComponentController** (showcase).
 - Base **Controller**.
 
 ## HTTP Concerns (app/Http/Concerns/ — 1)
 
 - **InertiaDataTableOptions** — data-table state (search, filters, pagination, sorting, session persistence).
 
-## Form Requests (app/Http/Requests/ — 6)
+## Form Requests (app/Http/Requests/ — 7)
 
-- Auth: `LoginRequest`, `RegisterRequest`, `ForgotPasswordRequest`, `ResetPasswordRequest`; User: `StoreUserRequest`, `UpdateUserRequest`.
+- Auth: `LoginRequest`, `RegisterRequest`, `ForgotPasswordRequest`, `ResetPasswordRequest`; User: `StoreUserRequest`, `UpdateUserRequest`; ApiKey: `StoreApiKeyRequest`.
 
-## Middleware (app/Http/Middleware/ — 5)
+## Middleware (app/Http/Middleware/ — 6)
 
-- **HandleInertiaRequests** (shares an allow-listed `user` + `flash.{status,error}`), **TrackLastSeen**, **EnsureUserIsActive**, **EnsureUserIsAdmin** (aliased `admin`, gates the whole admin prefix), **SecurityHeaders**.
+- **HandleInertiaRequests** (shares an allow-listed `user` + `flash.{status,error}`), **TrackLastSeen**, **EnsureUserIsActive**, **EnsureUserIsAdmin** (aliased `admin`, gates the whole admin prefix), **EnsureApiKey** (aliased `api.key`, requires a real PAT and an active owner), **SecurityHeaders**.
 
-## Policies (app/Policies/ — 1)
+## Policies (app/Policies/ — 2)
 
 - **UserPolicy** — viewAny/view/create/update/delete against `UserRole::canManageAllUsers()`; delete also refuses self-deletion.
+- **ApiKeyPolicy** — viewAny/create/delete for API keys; delete also requires the key belong to the actor. Bound explicitly in `AppServiceProvider` (the model is in the Sanctum namespace, so convention discovery misses it).
 
 ## Health (app/Health/ — 5)
 
@@ -64,12 +66,13 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 - **Public:** `GET /` (home), `GET /up` (container gate), `GET /health` (spatie health JSON), `GET /release` (deployed version).
 - **Guest:** `GET /register|/login`, `POST /auth/register|/auth/login`; password reset — `GET /forgot-password` (`password.request`), `POST /auth/forgot-password` (`password.email`), `GET /reset-password/{token}` (`password.reset`), `POST /auth/reset-password` (`password.store`). The three unauthenticated POSTs share one `throttle:auth` bucket (5/min/IP).
 - **Auth (`auth:sanctum`):** `POST /logout`; admin group (additionally `admin` middleware) — `GET /admin/` (dashboard), `/admin/users/*` (resource + `users/table`, `users/filters`), `/admin/components/*` (showcase).
-- **API:** `GET /user` (auth:sanctum, throttle:api). **Broadcast:** `App.Models.User.{id}`.
+- **API:** `GET /user` — `throttle:api` → `auth:sanctum` → `api.key` → `abilities:api:read`. **Broadcast:** `App.Models.User.{id}`.
+- **Admin API keys:** `GET|POST /admin/api-keys`, `DELETE /admin/api-keys/{apiKey}`.
 
-## Pages (resources/js/pages/ — 59 .vue)
+## Pages (resources/js/pages/ — 60 .vue)
 
 - **Public:** `Index.vue`, `Login.vue`, `Register.vue`, `ForgotPassword.vue`, `ResetPassword.vue`. **Errors:** `errors/{404,500,503}.vue`.
-- **Admin:** `admin/Index.vue`, `admin/users/{Index,Show}.vue`.
+- **Admin:** `admin/Index.vue`, `admin/users/{Index,Show}.vue`, `admin/api-keys/Index.vue`.
 - **Component showcase** (`admin/components/`): `forms/` (Input, InputMasks, Textarea, Select, Checkbox, Combobox, Switch, Slider, Fields, Editor, Upload, PinInput, input/Tags, calendar/{DateInput,DateRangeInput}), `actions/` (Button, Command, Dialog, Menu, Sheet), `display/` (Alert, Card, Badge, Avatar, Tooltip, Popover, Loading, Tabs, Accordion, Toast, Carousel, Resizable, CodeBlock, ViewToggle), `data/` (Table, Actions, Pagination), `charts/` (Bar, Line, Area, Pie).
 
 ## UI Components (resources/js/components/ui/ — 49)
@@ -126,7 +129,7 @@ Notable: `release.php` (reads `version` from `composer.json`, served by `/releas
 
 ## Testing
 
-- **Backend (Pest — 18 test files: Feature 10, Unit 8):** Feature — AgentInstructions, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, PasswordReset, ReleaseVersion, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
+- **Backend (Pest — 19 test files: Feature 11, Unit 8):** Feature — AgentInstructions, ApiKey, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, PasswordReset, ReleaseVersion, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
 - **Frontend (Vitest + Vue Test Utils, happy-dom — resources/js/tests/, 41 test files):** UI component helpers, composables, and utils.
 
 ## Code Quality

@@ -206,6 +206,20 @@ and add the index row in the same change as the page.
   renumbered. None ship here.
 - Nothing lints `docs/`. Correctness is a review concern.
 
+## Delegation and review
+
+Delegate to keep this context clear — not to avoid thinking. If you were delegated this task, execute
+it; don't sub-delegate.
+
+- **Delegate** a large, self-contained subtask — a broad search, an independent slice, a review pass.
+  Brief it with the rules, the task, write access, and what done looks like. Keep the decisions and
+  the distilled result here, never the raw dumps. Match the model to the work.
+- **Don't delegate** skill selection, routine reading, or anything finished in a couple of steps.
+- **Review scales with risk.** Mechanical or docs-only: none. Contained code: one reviewer. Shared,
+  structural, security- or data-touching: several in parallel — correctness, duplication and test
+  coverage are separate lenses. Reviewers are read-only and advisory; verify a finding against the
+  code before acting on it, and say what you rejected.
+
 ## Definition of done
 
 1. `pnpm check` passes (Pint, Larastan level 5, Pest, ESLint, Stylelint, tsc, Vitest, the release and

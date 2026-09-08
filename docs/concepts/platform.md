@@ -13,7 +13,7 @@ upgrades back in.
 flowchart LR
   subgraph Foundation["Foundation — what every fork inherits"]
     auth["Authentication<br/><i>register · login · password reset</i>"]
-    admin["Admin surface<br/><i>dashboard · users</i>"]
+    admin["Admin surface<br/><i>dashboard · users · API keys</i>"]
     kit["Component library<br/><i>ui · app · site + showcase</i>"]
   end
   subgraph Runtime["Runtime — how it runs"]
@@ -36,9 +36,10 @@ flowchart LR
 | Layer | What it gives a fork |
 |---|---|
 | Authentication | Register, login, password reset and session handling wired out of the box |
-| Admin surface | A dashboard and user management behind auth — the shape most products extend first |
+| Admin surface | A dashboard, user management and API keys behind auth — the shape most products extend first |
 | Component library | A `ui/` → `app/` → `site/` shadcn-vue kit with a live showcase to reuse before building anything |
 | Background jobs | Redis and Horizon configured for queued work and caching |
+| API keys | Sanctum-backed keys with scoped abilities and expiry — see [api-keys.md](./api-keys.md) |
 | Devops endpoints | `/up`, `/health` and `/release` — see [deployment-endpoints.md](./deployment-endpoints.md) |
 | Deployment | An optional Docker/Coolify setup whose managed core tracks this template |
 | Release process | A versioned `production` branch and a tag published only after a verified deploy |

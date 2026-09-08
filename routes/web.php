@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ApiKeyController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -70,6 +71,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('users/table', [UserController::class, 'simpleTable'])->name('users.table');
         Route::resource('users', UserController::class);
         Route::post('/users/filters', [UserController::class, 'prepareIndexFilters'])->name('users.index.filters');
+
+        // API keys. Issuance renders rather than redirects so the plaintext never
+        // reaches the session store — see ApiKeyController::store().
+        Route::get('api-keys', [ApiKeyController::class, 'index'])->name('api-keys.index');
+        Route::post('api-keys', [ApiKeyController::class, 'store'])->name('api-keys.store');
+        Route::delete('api-keys/{apiKey}', [ApiKeyController::class, 'destroy'])->name('api-keys.destroy');
 
         // Component Showcase
         Route::prefix('components')->name('components.')->group(base_path('routes/components.php'));
