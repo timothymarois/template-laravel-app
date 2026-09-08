@@ -76,7 +76,7 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 |-------|------|-------|----------|
 | **Build** | once, when the image is built | `Dockerfile` | composer install, `pnpm build-ssr` |
 | **Pre-deploy** | before the swap, in the **OLD** container (old code) | `docker/deploy/pre-deployment.sh` (Coolify **Pre-deployment Command**) | maintenance mode, backups — **never migrations** |
-| **Post-deploy** | once per deploy, in the **NEW** container (new code), after build | `docker/deploy/post-deployment.sh` (Coolify **Post-deployment Command**) | `migrate --force`, `tenants:migrate --force` |
+| **Post-deploy** | once per deploy, in the **NEW** container (new code), after build | `docker/deploy/post-deployment.sh` (Coolify **Post-deployment Command**) | `migrate --force` |
 | **Start** | every container boot (restarts/scaling) | `docker/deploy/entrypoint.sh` (automatic) | `ensure-storage`, `optimize`, `storage:link` |
 
 **Migrations go in the Post-deployment phase** — the new container has the new

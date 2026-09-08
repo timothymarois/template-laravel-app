@@ -39,28 +39,6 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'user' => $request->user(),
-            ...$this->tenancyShared(),
         ]);
-    }
-
-    /**
-     * Tenancy props are emitted only when a tenant is active. In the disabled
-     * state (and in central-domain requests when tenancy is enabled), the
-     * helper returns an empty array — Inertia props look identical to v4.4.0.
-     *
-     * @return array<string, mixed>
-     */
-    protected function tenancyShared(): array
-    {
-        $tenant = tenant();
-
-        if ($tenant === null) {
-            return [];
-        }
-
-        return [
-            'currentTenant' => $tenant,
-            'tenantUser' => tenant_user(),
-        ];
     }
 }

@@ -6,12 +6,11 @@ use App\Enums\UserRole;
 
 /*
 |--------------------------------------------------------------------------
-| UserRole enum — central-level role capability rules
+| UserRole enum — role capability rules
 |--------------------------------------------------------------------------
 |
-| Pure-unit tests — no DB, no framework boot needed. UserRole is the
-| central counterpart to TenantRole: it describes a User's central-system
-| authority (admin / non-admin), distinct from tenant-scoped authority.
+| Pure-unit tests — no DB, no framework boot needed. UserRole describes a
+| User's application-level authority (admin / non-admin).
 |
 */
 
@@ -23,9 +22,9 @@ it('User backs to the string "user"', function () {
     expect(UserRole::User->value)->toBe('user');
 });
 
-it('only SuperAdmin can manage all tenants', function () {
-    expect(UserRole::SuperAdmin->canManageAllTenants())->toBeTrue();
-    expect(UserRole::User->canManageAllTenants())->toBeFalse();
+it('only SuperAdmin can manage all users', function () {
+    expect(UserRole::SuperAdmin->canManageAllUsers())->toBeTrue();
+    expect(UserRole::User->canManageAllUsers())->toBeFalse();
 });
 
 it('only SuperAdmin can impersonate', function () {

@@ -28,10 +28,6 @@ Production-grade applications require more than just code—they need authentica
 - ✅ Reverb WebSockets + Echo — real-time events, zero external dependencies
 - ✅ Horizon queues — Redis-powered job processing with dashboard
 
-**Multi-Tenancy (Optional)**
-
-- ✅ stancl/tenancy ^3.10 — DB-per-tenant isolation, off by default. Enable with `php artisan tenancy:enable`. See [`docs/guides/tenancy-using.md`](docs/guides/tenancy-using.md).
-
 **Developer Experience**
 
 - ✅ Solo dev runner — all processes in one terminal

@@ -8,8 +8,6 @@ use App\Health\Checks\ReverbCheck;
 use App\Health\DiscordHealthChannel;
 use App\Health\Listeners\NotifyOnHealthRecovery;
 use App\Health\Listeners\NotifyOnMaintenanceMode;
-use App\Tenancy\Contracts\ExistingDataMigrator;
-use App\Tenancy\NullExistingDataMigrator;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Events\MaintenanceModeDisabled;
 use Illuminate\Foundation\Events\MaintenanceModeEnabled;
@@ -36,16 +34,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Default binding for the tenancy data-migration contract. Only registered
-        // when tenancy is enabled — keeps the disabled-state DI container clean.
-        // Forks adopting tenancy on an existing dataset replace this with their
-        // own concrete implementation. See docs/guides/tenancy-migrating.md.
-        if (config('tenancy.enabled')) {
-            $this->app->bind(
-                ExistingDataMigrator::class,
-                NullExistingDataMigrator::class,
-            );
-        }
+        //
     }
 
     /**

@@ -30,7 +30,8 @@ the answer.
 
 - **Covers:** the Laravel app itself — auth, the admin dashboard and user management, the Vue/Inertia UI
   and shadcn-vue component showcase, health checks, the release and versioning process, and testing.
-  Multi-tenancy ships but is inert by default.
+  Multi-tenancy is not shipped — it is a documented add-on
+  (`docs/guides/adding-tenancy.md`).
 - **Refuses:** product-specific features (each fork owns those), and any cross-fork bookkeeping
   (which fork runs which template version — that lives in the workspace tracker).
 - **Reference:** the app deploys on the sibling `docker-laravel-base` PHP-FPM image (published to GHCR);

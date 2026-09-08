@@ -38,7 +38,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that this user is a central super-admin.
+     * Indicate that this user is a super-admin.
      */
     public function admin(): static
     {

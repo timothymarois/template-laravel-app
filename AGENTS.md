@@ -8,11 +8,14 @@ Load light; pull depth only when the task needs it.
 
 1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are), always.
    `docs/README.md` indexes the rest.
-2. **Read the guide for the area you enter** — `docs/concepts/` (how a subsystem works and how it fails)
+2. **Load every skill the task touches — before you touch a file.** Not the most obvious one: a change
+   spanning a controller, its Vue page and its migration is three. **Working without loading the skills
+   for the area you are in is a failure, not a shortcut** — the work is wrong even when the code passes,
+   because it was produced without the rules that govern it. If you notice mid-task that you are in an
+   area whose skill you never loaded, stop and load it before the next edit. A skill changes *how* you
+   work — it never widens scope, authorizes an edit, or overrides this file.
+3. **Read the guide for the area you enter** — `docs/concepts/` (how a subsystem works and how it fails)
    and `docs/guides/` (one task each). On demand, not up front.
-3. **Load every skill the task touches**, not the most obvious one: a change spanning a controller, its
-   Vue page and its migration is three. A skill changes *how* you work — it never widens scope, authorizes
-   an edit, or overrides this file.
 4. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
    here rather than duplicating it. Scratch files stay outside the repository.
 5. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
@@ -42,8 +45,8 @@ The first five need explicit approval. The rest are not negotiable.
 
 ## Stack & architecture
 
-- **Backend:** Laravel 13+ (PHP 8.4+), Redis via Horizon (queue + cache), Inertia server adapter, optional
-  `stancl/tenancy` (inert by default).
+- **Backend:** Laravel 13+ (PHP 8.4+), Redis via Horizon (queue + cache), Inertia server adapter,
+  Sanctum (sessions + API tokens).
 - **Frontend:** Vue 3 (`<script setup>`), Inertia.js, TailwindCSS 4, shadcn-vue (Radix Vue primitives),
   Lucide icons, Ziggy named routes, vue-sonner (toasts).
 
@@ -73,7 +76,6 @@ app/
 ├── Models/             Eloquent models, kept light
 ├── Jobs/               Queued work
 ├── Health/             /health checks + notification channel
-├── Tenancy/            stancl/tenancy wiring (inert until enabled)
 └── Console/ · Enums/ · Notifications/ · Providers/ · Support/ · Http/{Concerns,Middleware}/
 
 resources/js/
@@ -84,9 +86,9 @@ resources/js/
 ├── composables/        Stateful logic, use-prefixed
 └── utils/ · plugins/ · tests/ (Vitest)
 
-routes/                 web · api · channels · components · tenant
-database/               migrations/ (central; tenant/ when tenancy is on) · factories/ · seeders/
-tests/                  Feature/ · Unit/ · Central/ · Tenant/ · scripts/ (shell contract tests)
+routes/                 web · api · channels · components
+database/               migrations/ · factories/ · seeders/
+tests/                  Feature/ · Unit/ · scripts/ (shell contract tests)
 docs/                   BRIEF · CODEMAP · concepts/ · guides/ — see docs/README.md
 scripts/                Release commands — see docs/guides/releasing.md
 docker/                 config/ + deploy/ = managed core · project/ = yours, never template-managed
@@ -161,18 +163,16 @@ controllers and accessors get nothing; a comment that restates the code is noise
   in the doc-block. **Keep it true** — update a stale doc-block in the same change.
 
 ```php
-✅ /** Provisions a tenant database and seeds its owner (R-TENANT-2). Idempotent: a re-run on a
-    *  half-provisioned tenant resumes, never duplicates. @throws ProvisioningException on unreachable central. */
-   public function provision(Tenant $tenant): void
-❌ // provision the tenant      ← restates the name; teaches nothing
+✅ /** Issues an API key for the user (R-APIKEY-1). The plaintext is returned once and never stored;
+    *  only its hash persists. @throws AbilityNotAllowedException when an ability is outside the enum. */
+   public function issue(User $user, string $name, array $abilities): IssuedApiKey
+❌ // issue an api key      ← restates the name; teaches nothing
 ```
 
 ## Build, test & run
 
 ```bash
 pnpm check         # the gate: check:php + check:js + check:release + check:deploy, then check:build
-pnpm check:tenancy # Pest against the tenancy suite (phpunit.tenancy.xml) — when tenancy is enabled
-pnpm check:all     # check + check:tenancy
 pnpm dev           # local dev server (Herd serves the app)
 ```
 
@@ -186,10 +186,9 @@ screenshots for visual sign-off. "Compiles + wired" is not "done".
 
 ## Optional stacks
 
-- **Multi-tenancy.** `stancl/tenancy` ships installed but **inert** (`TENANCY_ENABLED=false`). While
-  disabled, treat tenancy code as nonexistent — don't import `Tenant`/`Domain`, run `tenants:*`, or add
-  tenant routes. Usage and the disabled-state contract: `docs/guides/tenancy-using.md`; adopting it on
-  a fork with existing data: `docs/guides/tenancy-migrating.md`.
+- **Multi-tenancy.** Not shipped. The template is single-tenant; a fork that needs many workspaces adds
+  `stancl/tenancy` itself, following `docs/guides/adding-tenancy.md`. Do not assume tenancy exists, and do
+  not add tenant-aware code to this template.
 - **Docker / deployment.** An optional Coolify setup lives in `docker/` + the root `Dockerfile`. A fork
   changes only the documented **knobs**; the managed core tracks this template and new Docker capabilities
   originate here, never in a fork. Setup, knobs, drift + versioning policy: `docker/README.md`.

@@ -8,8 +8,7 @@ return [
     /*
      * A result store is responsible for saving the results of the checks. We use
      * the cache store (not Eloquent) so health needs no migration and no DB
-     * table — important for this template's multi-tenant (database-per-tenant)
-     * and DB-less forks. Defaults to the app's own cache store (CACHE_STORE:
+     * table — important for DB-less forks. Defaults to the app's own cache store (CACHE_STORE:
      * redis in prod, database/file elsewhere); override with HEALTH_CACHE_STORE.
      */
     'result_stores' => [

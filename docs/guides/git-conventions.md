@@ -10,7 +10,7 @@
 <type>/<short-kebab-slug>
 ```
 
-`fix/reject-mixed-batches` · `feat/tenant-invoice-export` · `docs/clarify-release-steps`
+`fix/reject-mixed-batches` · `feat/csv-invoice-export` · `docs/clarify-release-steps`
 
 - **Slug:** lowercase kebab-case, a few words describing *the change*. Never a ticket number, a date, or
   an initial — those tell a reader nothing the branch list doesn't already show.
@@ -24,7 +24,7 @@
 
 ```
 fix(batch): reject mixed-model batches
-feat(billing): expose invoice export to tenant admins
+feat(billing): expose invoice export to account admins
 docs(releasing): say what happens when the deploy never reports live
 ```
 
