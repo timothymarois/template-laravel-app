@@ -8,11 +8,14 @@ use App\Health\Checks\ReverbCheck;
 use App\Health\DiscordHealthChannel;
 use App\Health\Listeners\NotifyOnHealthRecovery;
 use App\Health\Listeners\NotifyOnMaintenanceMode;
+use App\Listeners\LogBackgroundFailures;
 use App\Policies\ApiKeyPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Events\ScheduledTaskFailed;
 use Illuminate\Foundation\Events\MaintenanceModeDisabled;
 use Illuminate\Foundation\Events\MaintenanceModeEnabled;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
@@ -81,6 +84,12 @@ class AppServiceProvider extends ServiceProvider
         // Discord pings when the app enters/leaves maintenance mode (artisan down/up).
         Event::listen(MaintenanceModeEnabled::class, [NotifyOnMaintenanceMode::class, 'enabled']);
         Event::listen(MaintenanceModeDisabled::class, [NotifyOnMaintenanceMode::class, 'disabled']);
+
+        // Background failures are otherwise invisible to a stderr log sink: a failed job
+        // only reaches failed_jobs and Horizon's UI, and a failed scheduled task is
+        // recorded nowhere at all.
+        Event::listen(JobFailed::class, [LogBackgroundFailures::class, 'jobFailed']);
+        Event::listen(ScheduledTaskFailed::class, [LogBackgroundFailures::class, 'scheduledTaskFailed']);
 
         Health::checks([
             UsedDiskSpaceCheck::new(),

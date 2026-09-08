@@ -89,6 +89,34 @@ Other server(s): Alloy agent  ───────────▶ pushes to the
 
 To add a server: (1) expose the central Loki to it — give the `loki` service a domain with **Basic Auth** (Loki has no auth of its own), or push to the primary's private IP `http://<private-ip>:3100` over a shared private network; (2) deploy an Alloy agent on the other server (collector only) pointed at that Loki URL, tagging logs with a `server` label so you can filter per host: `{app="my-app", server="server-b"}`. Apps on that server still just need `LOG_CHANNEL=stderr`.
 
+## Background work
+
+Supervisor runs Horizon and `schedule:work` as long-running processes and pipes both to
+stdout/stderr (`docker/config/supervisord.conf`), so their output reaches the same sink as
+web requests. **No host cron is involved** — `schedule:work` is the scheduler, and
+`health:schedule-check-heartbeat` proves it is still ticking.
+
+Failures need help to get there:
+
+| Failure | Recorded natively in | Reaches the log sink because |
+|---|---|---|
+| Queued job | `failed_jobs` + Horizon's UI | `LogBackgroundFailures::jobFailed` logs `job.failed` with the job name, queue, attempts and uuid |
+| Scheduled task | **nothing** | `LogBackgroundFailures::scheduledTaskFailed` logs `schedule.failed` with the task summary and expression |
+
+Both are registered in `AppServiceProvider`. Query the sink on `event=job.failed` or
+`event=schedule.failed`; under `LOG_CHANNEL=stderr` the context is one-line JSON, so each
+key is a queryable field.
+
+**The timeout invariant:** a worker's `timeout` must stay **below** the connection's
+`retry_after`, or the queue releases a job back while it is still running and it executes
+twice. Here that is Horizon `timeout: 60` against `REDIS_QUEUE_RETRY_AFTER: 90`
+(`config/horizon.php`, `config/queue.php`). Raise one and you must raise the other.
+Horizon's `tries: 1` is Laravel's own default and deliberate — a retry of a non-idempotent
+job is worse than a failure — so set `$tries`/`$backoff` per job class rather than globally.
+
+Supervisor gives Horizon `stopwaitsecs=3600` with `stopasgroup`/`killasgroup`, so a deploy
+lets an in-flight job finish instead of killing the worker mid-job.
+
 ## How it fails
 
 - Don't point the container health check at anything but `/up`; logging is separate from health.
