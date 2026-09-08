@@ -16,75 +16,55 @@ Removes built-in multi-tenancy, completes authentication, authorizes the admin a
 
 ### Added
 
-- **Password reset** — the four conventional `password.*` routes, one controller, two Form Requests, and the two pages. Neither endpoint reveals whether an address is registered.
-- **API keys** on Sanctum personal access tokens — a closed `ApiAbility` enum, expiry (or explicit never-expires), hard-delete revocation, and an admin screen that shows the plaintext exactly once.
-- **`flash` shared prop** — nothing shared it, so every `->with('status')`/`->with('error')` in the app was written to the session and dropped, including the deactivation message.
-- **`user:create --admin`** and a seeded operator — `/admin` is gated on the role, so a fresh `migrate --seed` previously produced an install nobody could administer.
-- **Role on the user form**, options built from `UserRole::cases()`; `role` is validated with `Rule::enum` on both user Form Requests.
-- **`config/seo.php` + `SeoHead`** — head defaults, per-page `robots`, and `SEO_INDEXABLE`, which sends `X-Robots-Tag: noindex`.
-- **`GET /api/users`** — a real collection endpoint so a key can be exercised against pagination and authorization, not just its own record. The ability and the policy are independent gates: a read key held by a non-admin is refused.
-- **Structured background-failure logs** — `job.failed` and `schedule.failed` with queryable fields. Laravel already reports both to the exception handler; what was missing was shape, since the job class lives only inside the trace string.
-- **`scripts/preflight-php`** — turns `env: php: No such file or directory` into the `export PATH=…` line you need. It probes Herd, Lerd, Homebrew and the system paths and names only a PHP that exists on that machine.
-- **`docs/guides/troubleshooting.md`** — the traps this stack has already sprung, opening with the instruction to send a template-managed fix upstream as a PR rather than patching one fork.
-- **`docs/guides/adding-tenancy.md`**, **`docs/concepts/api-keys.md`**, **`docs/concepts/seo.md`**, **`docs/concepts/ui-kit.md`**.
+- **Password reset**, the four conventional `password.*` routes and their pages.
+- **API keys** on Sanctum tokens — closed ability enum, expiry, plaintext shown once, admin screen, and `GET /api/users` to exercise a key against.
+- **`user:create --admin`** and **`api-key:create`** for headless setup.
+- **`config/seo.php` + `SeoHead`**, and a `flash` shared prop that nothing previously shared.
+- **New pages:** `adding-tenancy`, `api-keys`, `seo`, `ui-kit`, `troubleshooting`.
 
 ### Changed
 
-- **Removed: multi-tenancy** — 57 files, `stancl/tenancy`, `config/tenancy.php`, the `central/`+`tenant/` migration dirs, the `Central`/`Tenant` suites, `phpunit.tenancy.xml`, the tenancy CI job, and `check:tenancy`/`check:all`. It is a guide now.
-- **Removed: `atlas-php/atlas`** — declared and imported nowhere. Also drops the orphaned `storage/debugbar/` and its ziggy exclusion.
-- ⚠️ **`UserRole::canManageAllTenants()` → `canManageAllUsers()`** — no deprecation shim.
-- **Dependencies to latest, PHP majors included** — Laravel 13.31, Pest 5, PHPUnit 13, spatie/laravel-sitemap 8. JS toolchain majors are deliberately deferred.
-- **`AGENTS.md`/`CLAUDE.md`** — "Before you work" cut to five points, skill loading hardened into a failure condition, and a "Delegation and review" section added.
+- **Removed: multi-tenancy** — 57 files, the package, both migration dirs, the second suite and its CI job. It is a guide now.
+- **Removed: `atlas-php/atlas`**, declared and imported nowhere.
+- ⚠️ **`UserRole::canManageAllTenants()` → `canManageAllUsers()`**, no shim.
+- **PHP dependencies to latest, majors included.** JS toolchain majors deferred.
+- **`typecheck` is now `vue-tsc` and `lint` covers `.ts`** — both gates previously passed without reading most of what they name.
 
 ### Fixed
 
-- ⚠️ **`/admin` was gated by `auth:sanctum` alone** — no policy, no role check — so any authenticated user could list, create, edit and delete every user. All three known forks had patched this independently.
-- **`EnsureApiKey` did not re-attach the validated key**, so `abilities:` could still be answered by a session's `TransientToken`, whose `can()` is true for everything.
-- **`HEALTH_SECRET_TOKEN` was never enforced** — `/health` carried no middleware — and `always_send_fresh_results` was left `true`, so every request to that unauthenticated URL ran every check inline.
-- **`og:url` shipped empty and `og:image` relative** under SSR, there was no canonical at all, and two `<title>` tags meant every page was titled `APP_NAME`.
-- **Session fixation on registration**, a deactivated user completing a login POST, and a `min:8` login rule that locked out pre-policy passwords.
-- **UI kit** — `isPageActive` dead under SSR, `useDataTableOptions` silently dropping every filter, `SheetForm` off-screen on mobile and violating the dialog a11y contract, and 13 components missing from the barrel.
-- **The API-key screen did not work** — nothing linked to it, and its list rendered no columns because `DataTable`'s required `activeColumnList` was never passed.
-- **Enter did nothing on the auth forms** (the submit control sits outside the `<form>`, so browsers performed no implicit submission), and a confirmation dialog closed on click but not on Enter.
-- ⚠️ **A deactivated user got a 500 on `/admin`, not a redirect.** Behind `auth:sanctum`, `Authenticate` has already called `shouldUse('sanctum')`, so a bare `Auth::logout()` reached Sanctum's `RequestGuard`, which has no `logout()`. Every existing case used `/`, a session-only route, so the broken path was never exercised.
-- ⚠️ **A 200 from `/health` was treated as proof a deploy was healthy.** `always_send_fresh_results` is false, so the endpoint serves the last stored snapshot — and a cold container has none, answering 200 with an empty body. The publisher could tag a release whose every check was about to fail; it now requires a non-empty `checkResults`.
-- ⚠️ **`typecheck` never read a single component.** `tsc` cannot parse `.vue`, and `env.d.ts` declared every SFC as `Record<string, never>`, which also suppressed every real error inside one. Now `vue-tsc`, with the 103 errors it surfaced fixed — among them a `placeholder` overwritten by `v-bind` (quick-nav could not move the calendar), tiptap v2's three-argument `setContent` silently dropping `emitUpdate` and `preserveWhitespace`, and an import of an export that does not exist.
-- **`lint` skipped 156 `.ts` files** — the glob was `*.{js,vue}` while the ESLint config already had a TS block.
-- **Dates rendered blank or a day early.** `parseUtcDate` appended `Z` to `+00:00`, producing an invalid date; a date-only value rendered west of UTC moved back a day; and an unknown time zone threw `RangeError`, crashing every date on the page.
-- **`useModal`'s `v-model` wiped modal data** when an overlay synced its open state back, re-firing every `onOpen` listener with `null`.
-- **`text-md` is not a Tailwind utility** and emitted no CSS at all — 5 usages, 4 on auth pages. A conventions test now fails the build on names that read as Tailwind and emit nothing.
-- **`LabelField` had no `help` prop**, so a passed `help` fell through onto the wrapper and rendered nowhere; **`Input` had no `inputmode`**, so mobile got the wrong keyboard. Both adopted from forks that had already paid for them.
+- ⚠️ **`/admin` was gated by `auth:sanctum` alone**, so any authenticated user could manage every user. All three forks had patched it independently.
+- ⚠️ **A deactivated user got a 500 on `/admin`**, and **a 200 from `/health` was treated as proof a deploy was healthy**.
+- **`HEALTH_SECRET_TOKEN` was never enforced**; `og:url`, `og:image` and the canonical were wrong under SSR.
+- **Dates rendered blank or a day early**, and an unknown time zone crashed the render.
+- **103 type errors** the old gate could not see, plus UI-kit defects adopted from the forks.
 
 ### Migration
 
-See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–T. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
+See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md) — Parts A–T, each labelled by audience, with the reasoning and the verification for every change above. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
 
 ## v5.7.0 - 09/08/2026
 
-`Docker:` Vendors this stack's agent skills into `.claude/skills/`, adds `docker/project/` so a fork can configure nginx and PHP without editing managed core, and puts the production image under a `check:deploy` gate plus a built-image CI workflow. Minor: no schema or dependency change.
+`Docker:` Vendors this stack's agent skills, adds `docker/project/` so a fork can configure nginx and PHP without editing managed core, and puts the production image under a `check:deploy` gate. Minor: no schema or dependency change.
 
 > ⚠️ Managed core moves — `Dockerfile` and `docker/config/nginx.conf`. Every fork acts.
 
 ### Added
 
-- **14 vendored agent skills** in `.claude/skills/`, matched to this stack and its delivery workflow, plus `.agents/skills` for the neutral path.
-- **`docker/project/`** — `nginx/http/`, `nginx/server/` and `php/`, baked into the image and never template-managed. Ships empty; a wildcard include matching nothing is a no-op, so a fork that adds nothing gets byte-identical behavior. Closes #18.
-- **`docker/config/nginx-snippets/`** — `laravel-fastcgi.conf` and `laravel-front-controller.conf`, so a project location reaches PHP-FPM without copying managed-core wiring or losing its ceiling to `try_files`.
-- **`check:deploy` and `.github/workflows/docker-config.yml`** — file-agreement contracts inside `pnpm check`, and a built-image proof in CI: `nginx -t`, effective context, and a real oversized POST refused on a default route and accepted on the elevated one.
-- **`docs/guides/git-conventions.md`** — branch and commit naming, the canonical type set, and the no-machine-authorship-branding rule.
-- **`.lerd.yaml`** — the [Lerd](https://lerd.sh/) counterpart to `herd.yml`; both coexist, each tool ignores the other's.
-- **Issue and pull-request templates** in `.github/`, so a filed issue or PR carries the same headings whoever writes it.
+- **14 vendored agent skills** in `.claude/skills/`, plus `.agents/skills` for the neutral path.
+- **`docker/project/`** — nginx and PHP config a fork owns, baked into the image and never template-managed. Ships empty and is a no-op until used. Closes #18.
+- **`docker/config/nginx-snippets/`** — reach PHP-FPM from a project location without copying managed-core wiring.
+- **`check:deploy` + `docker-config.yml`** — file-agreement contracts in `pnpm check`, and a built-image proof in CI including a real oversized POST.
+- **`docs/guides/git-conventions.md`**, **`.lerd.yaml`**, and issue/PR templates.
 
 ### Changed
 
-- **`client_max_body_size` stays 25M** — route-scoped capacity goes in `docker/project/`, whose include is last in the server block so a project regex can shadow neither the PHP handler nor the dotfile deny.
-- **`CLAUDE.md` is a byte-identical copy of `AGENTS.md`**, enforced by a Pest test in the existing suite.
-- **`AGENTS.md` restructured** — a skills step and a scope rule in "Before you work", "Hard gates" and "Never" folded into one "Hard rules" list, "Tech stack" and "Architecture" merged, tree trimmed.
-- **`.gitignore` ignores `/.claude/settings.local.json`** — the skills are committed, per-machine permissions are not.
+- **`client_max_body_size` stays 25M** — route-scoped capacity belongs in `docker/project/`, whose include is last so a project regex can shadow nothing.
+- **`CLAUDE.md` is a byte-identical copy of `AGENTS.md`**, enforced by a test.
+- **`AGENTS.md` restructured** — skills and scope in "Before you work", hard rules folded into one list.
 
 ### Fixed
 
-- **`herd.yml` pinned PHP 8.3 while `composer.json` requires `^8.4`** — `composer install` refused on a Herd site built from the shipped file.
+- **`herd.yml` pinned PHP 8.3 while `composer.json` requires `^8.4`**, so `composer install` refused on a Herd site built from the shipped file.
 
 ### Migration
 
@@ -92,60 +72,59 @@ See [`migrations/template-v5.7.0.md`](migrations/template-v5.7.0.md). Parts A-D 
 
 ## v5.6.0 - 08/26/2026
 
-Replaces the `.knowledge/` documentation payload with a plain **`docs/`** tree in the standard layout, and adds a **production release process** with a `/release` endpoint so a deploy can be polled instead of guessed at. Minor: no schema, dependency, or Docker-core change. `pnpm check` swaps its `check:docs` step for `check:release`.
+Replaces the `.knowledge/` payload with a plain **`docs/`** tree, and adds a **production release process** with a `/release` endpoint so a deploy can be polled instead of guessed at. Minor: no schema, dependency, or Docker-core change.
 
 > ⚠️ Every fork acts: convert `.knowledge/` to `docs/`, and fill in the new `deploy` block in `template-manifest.json` before its first release.
 
 ### Added
 
-- **`docs/` documentation home** — `BRIEF.md` + `CODEMAP.md` at the root, `concepts/` (how a subsystem works and how it fails) and `guides/` (one task each), every home carrying a `README.md` index. No payload, no linter, no version stamp: the writing standards live in the `structuring-project-docs` skill, so there is nothing to version again.
-- **Production release process** — `scripts/{prepare,publish}-production-release`, `production-release-version`, `assert-neutral-main-version`. `production` is the deployed branch, `main` stays at version `0.0.0`, and a tag is published only after the deploy is verified live. Full procedure in `docs/guides/releasing.md`.
-- **`GET /release`** — reports the deployed version as JSON with `Cache-Control: no-store`, the endpoint the publish script and any external deployment monitor poll. Joins `/up` and `/health`; the three are documented together in `docs/concepts/deployment-endpoints.md`.
-- **`deploy` block in `template-manifest.json`** — `repository`, `productionUrl`, `productionBranch`, read by the release scripts. An unedited placeholder is refused rather than polled.
-- **`check:release`** — the four release suites, with stubbed `gh` and `curl` so nothing reaches the network; wired into `pnpm check` and CI alongside a neutral-version guard for main-bound changes.
+- **`docs/` documentation home** — `BRIEF.md` + `CODEMAP.md`, `concepts/` and `guides/`, each home carrying an index. No payload, no linter, no version stamp.
+- **Production release process** — `scripts/{prepare,publish}-production-release` and friends. `production` is the deployed branch, `main` stays at `0.0.0`, and a tag is published only after the deploy is verified live.
+- **`GET /release`** — the deployed version as JSON, `no-store`. Joins `/up` and `/health`.
+- **`deploy` block in `template-manifest.json`** — an unedited placeholder is refused rather than polled.
+- **`check:release`** — the release suites with `gh` and `curl` stubbed, plus a neutral-version guard for main-bound changes.
 
 ### Changed
 
-- **`AGENTS.md`** rewired onto `docs/`, and the `✅`/`❌` code galleries folded back in as a closing appendix — reversing that part of v5.5.0, which had extracted them. 208 → 698 lines, all always-loaded.
-- **Guides renamed to the paths the code already cites** — `tenancy-usage.md` → `guides/tenancy-using.md`, `tenancy-migrations.md` → `guides/tenancy-migrating.md`, `write-tests.md` → `guides/writing-tests.md`; `health-checks.md`, `logging.md` and `ziggy-routes.md` → `concepts/`.
-- **Workflows trigger on `production` as well as `main`** — without it a release pull request arrives with no checks.
-- **Removed: `.knowledge/`** — the seven `docs-*.md` standards, `doc-lint` and its teeth-test, `.version`, `.payload-manifest`, and the four homes that only ever held a "none yet" row. `MEMORY.md` is not carried forward; friction now goes in the page that owns the subsystem, under how it fails.
-- **Removed: `check:docs` and `.github/workflows/doc-lint.yml`** — nothing replaces them. `docs/` correctness is a review concern, and `AGENTS.md` says so.
+- **`AGENTS.md`** rewired onto `docs/`, with the code galleries folded back in as an appendix — reversing that part of v5.5.0.
+- **Guides renamed to the paths the code already cited**, which is what fixed most of the dangling links below.
+- **Workflows trigger on `production`** — without it a release pull request arrives with no checks.
+- **Removed: `.knowledge/`**, `check:docs` and `doc-lint`. Nothing replaces them; `docs/` correctness is a review concern. Friction now goes in the page that owns the subsystem.
 
 ### Fixed
 
-- **18 dangling `docs/guidelines/*` citations**, in shipped runtime output, `README.md`, `docker/README.md`, `.env.example`, and two test assertions. That directory has not existed since v5.4.0 removed the VitePress site; the tests passed throughout because they assert on the string, not on a file existing. Naming the new guides after the paths the code already used fixes 16 of the 18 by construction.
+- **18 dangling `docs/guidelines/*` citations** in runtime output, `README.md`, `.env.example` and two tests. That directory had not existed since v5.4.0; the tests passed because they assert on the string, not on a file.
 
 ### Migration
 
-See [`migrations/template-v5.6.0.md`](migrations/template-v5.6.0.md). Every fork: convert its docs home, fill in the `deploy` block, and drop the retired gate. Docs, tooling and one additive route — no schema or deploy-time work.
+See [`migrations/template-v5.6.0.md`](migrations/template-v5.6.0.md). Every fork: convert its docs home, fill in the `deploy` block, drop the retired gate. No schema or deploy-time work.
 
 ## v5.5.0 - 07/20/2026
 
-Replaces the `.ai/` knowledge system with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) (adopts its v1.0.0) — restructures `AGENTS.md` onto it, and folds in several small bug fixes and guide improvements sourced from fork friction. Minor: no schema, dependency, or Docker-core change. `pnpm check` regains a `check:docs` step.
+Replaces `.ai/` with **`.knowledge/`** — the versioned, linted payload from [knowledge-template](https://github.com/timothymarois/knowledge-template) — restructures `AGENTS.md` onto it, and folds in bug fixes sourced from fork friction. Minor: no schema, dependency, or Docker-core change.
+
+> ⚠️ **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; come straight here.
 
 ### Added
 
-- **`.knowledge/` knowledge system** — homes (`prd/`, `prd-drafts/`, `research/`, `references/`, `tmp/`), writing standards (`guides/docs-*.md`), a stdlib `doc-lint` + teeth-test, the orientation trio + `OVERVIEW.md`, a `.version` stamp, and a `.payload-manifest` that checksums the shipped files so a repo can prove it runs the version it claims. Versioned separately from the template, by [knowledge-template](https://github.com/timothymarois/knowledge-template).
-- **`check:docs`** back in the gate — `pnpm check` runs the knowledge linter (teeth-test + `doc-lint`) alongside PHP and JS; a new `.github/workflows/doc-lint.yml` runs it in CI.
-- **`guides/stack-examples.md`** — the full PHP + Vue `✅`/`❌` code galleries, pulled out of `AGENTS.md`.
+- **`.knowledge/` knowledge system** — homes, writing standards, a linter with a teeth-test, and a manifest that checksums the shipped files so a repo can prove the version it claims. Versioned separately from the template.
+- **`check:docs`** in `pnpm check` and a CI workflow to match.
+- **`guides/stack-examples.md`** — the PHP + Vue code galleries, pulled out of `AGENTS.md`.
 
 ### Changed
 
-- **`AGENTS.md`** restructured onto `.knowledge/` and cut from ~900 to ~205 lines — every rule kept, the two code-example galleries moved to `guides/stack-examples.md`, all `.ai/` paths now `.knowledge/`.
-- **`README.md`** points at `.knowledge/` and credits knowledge-template.
-- **Removed: `.ai/`** — the orientation trio and project guides moved into `.knowledge/`, reshaped to the new standards; placeholder `TEMPLATE.md`/`README.md` files dropped.
-- **Guide improvements from fork friction** — `write-tests.md` and `tenancy-usage.md` now warn that the default `phpunit.xml` disables tenancy (a green run hides tenant behavior; run `check:tenancy`), and that a new tenant table must not reuse a framework/central table name. New `guides/ziggy-routes.md` documents the Ziggy operational gotchas that repeatedly tripped agents (never hand-edit the generated `ziggy.js`; regenerate when `route()` can't find a new route; `route()` is SSR-safe); `AGENTS.md` carries the one-line rule.
+- **`AGENTS.md`** restructured onto `.knowledge/` and cut from ~900 to ~205 lines, every rule kept.
+- **Removed: `.ai/`** — its content moved into `.knowledge/` and reshaped to the new standards.
+- **Guide improvements from fork friction** — the default `phpunit.xml` disables tenancy, so a green run hides tenant behaviour; a new tenant table must not reuse a central table name; and new Ziggy guidance for the gotchas that repeatedly tripped agents.
 
 ### Fixed
 
-- **500 crash on the admin data-table routes when `filters` is a scalar.** A non-array `filters` query param reached the array-typed caster and threw; any authenticated user could 500 the admin users page (and the simple-table endpoint), and a scalar submitted via `POST /admin/users/filters` persisted into the session and crashed the next load. `app/Http/Concerns/InertiaDataTableOptions.php` now coerces a non-array `filters` back to the default before casting; regression tests added.
-- **`viewFields` accepted a scalar and returned untyped.** The same concern now guards `viewFields` the way it guards `filters` (no crash, but it kept a scalar through); regression test added.
-- **`PhoneNumber::normalize()` kept a stray non-leading `+`.** `415-555-019+` used to format as `(415) 555-019+`; it now strips every non-digit before validating the 10-digit number. Test added. *(Both surfaced from fork friction logs.)*
+- **500 on the admin data-table routes when `filters` is a scalar** — any authenticated user could crash the admin users page, and a scalar submitted via `POST /admin/users/filters` persisted into the session and crashed the next load. `viewFields` had the same hole without the crash.
+- **`PhoneNumber::normalize()` kept a stray non-leading `+`** — `415-555-019+` formatted as `(415) 555-019+`.
 
 ### Migration
 
-See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). **Forks on v5.3.0 or below skip v5.4.0 entirely** — do not adopt `.ai/` only to delete it; go straight to v5.5.0 (Path 2, fresh adoption). Mostly docs; the code changes are three small bug fixes in Part F (data-table scalar guards, `PhoneNumber` normalize).
+See [`migrations/template-v5.5.0.md`](migrations/template-v5.5.0.md). Mostly docs; the code changes are three small bug fixes in Part F.
 
 ## v5.4.0 - 07/13/2026
 
