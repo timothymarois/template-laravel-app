@@ -1,0 +1,102 @@
+# Configuration Best Practices
+
+## `env()` Only in Config Files
+
+Direct `env()` calls may return `null` when config is cached.
+
+Incorrect:
+```php
+$key = env('API_KEY');
+```
+
+Correct:
+```php
+// config/services.php
+'key' => env('API_KEY'),
+
+// Application code
+$key = config('services.key');
+```
+
+## Use Encrypted Env or External Secrets
+
+Never store production secrets in plain `.env` files in version control.
+
+Incorrect:
+```bash
+
+# .env committed to repo or shared in Slack
+
+PAYMENT_SECRET=payment-secret-placeholder
+CLOUD_SECRET_ACCESS_KEY=cloud-secret-placeholder
+```
+
+Correct:
+```bash
+php artisan env:encrypt --env=production --readable
+php artisan env:decrypt --env=production
+```
+
+For cloud deployments, prefer the platform's native secret store (AWS Secrets Manager, Vault, etc.) and inject at runtime.
+
+## Use `App::environment()` for Environment Checks
+
+Incorrect:
+```php
+if (env('APP_ENV') === 'production') {
+```
+
+Correct:
+```php
+if (app()->isProduction()) {
+// or
+if (App::environment('production')) {
+```
+
+## Use Constants and Language Files
+
+Use class constants instead of hardcoded magic strings for model states, types, and statuses.
+
+```php
+// Incorrect
+return $this->type === 'normal';
+
+// Correct
+return $this->type === self::TYPE_NORMAL;
+```
+
+If the application already uses language files for localization, use `__()` for user-facing strings too. Do not introduce language files purely for English-only apps — simple string literals are fine there.
+
+```php
+// Only when lang files already exist in the project
+return back()->with('message', __('app.article_added'));
+```
+
+## Read Literal Dotted Keys Without Path Parsing
+
+Laravel parses dots in `config()` keys as nested paths. An external identifier containing a literal
+dot can therefore return the wrong value.
+
+Incorrect when `$version` is `api.v2`:
+
+```php
+$schema = config("features.schemas.$version");
+```
+
+Correct:
+
+```php
+$schemas = config('features.schemas');
+$schema = $schemas[$version] ?? null;
+```
+
+Load the known owning array before indexing an externally defined literal key.
+
+## Keep Debug Output Off in Production
+
+```dotenv
+APP_DEBUG=false
+```
+
+Production debug pages can expose configuration and request details. Verify the deployed value, not
+only the committed example environment file.

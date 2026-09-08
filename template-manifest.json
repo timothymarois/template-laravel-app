@@ -1,8 +1,8 @@
 {
     "template": "template-laravel-app",
     "repo": "https://github.com/timothymarois/template-laravel-app",
-    "version": "5.6.0",
-    "updated": "2026-08-26",
+    "version": "5.7.0",
+    "updated": "2026-09-08",
     "deploy": {
         "repository": "owner/repo",
         "productionUrl": "https://example.com",

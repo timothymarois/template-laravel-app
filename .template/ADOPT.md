@@ -10,7 +10,8 @@ rules live.
 > from itself.
 
 > **One version line.** As of v5.6.0 the documentation standards live in a skill
-> (`structuring-project-docs`), not in a versioned payload each repo carries. There is no
+> (`maintaining-project-docs`, shipped in `.claude/skills/` since v5.7.0), not in a versioned payload
+> each repo carries. There is no
 > `.knowledge/.version` to keep current any more — a fork tracks exactly one version, this template's, in
 > `template-manifest.json`.
 

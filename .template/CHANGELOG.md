@@ -8,6 +8,25 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v5.7.0 - 09/08/2026
+
+Vendors the **agent skills** this stack needs into `.claude/skills/`, so a clone carries its own guidance instead of depending on what happens to be installed on one machine — including the documentation-standards skill `.template/ADOPT.md` has named since v5.6.0 without any fork carrying it. Minor: no schema, dependency, or Docker-core change.
+
+### Added
+
+- **`.claude/skills/` — 13 vendored skills**, every one from the `rundesk-team-development` catalog, matched to the stack: `using-laravel`, `using-inertia`, `using-vuejs`, `using-tailwindcss`, `using-mysql`, `using-postgres`, `using-sqlite`, `designing-apis`, `designing-databases`, `designing-ui-ux`, `testing-code`, `debugging-code`, `maintaining-project-docs`. An agent started in the repository root discovers them with no configuration. Both relational engines ship because a fork picks one — the template defaults to MySQL, several forks run Postgres — and a fork drops the one it does not use.
+- **`.agents/skills`** — a repository-relative symlink to `.claude/skills`, so a provider reading the neutral path gets the same set with no second copy to keep in sync.
+
+### Changed
+
+- **Vendored copies are trimmed to this stack** — `debugging-code` drops its React, Python, and C++ references along with the routing, citations, and `description` that named them; the Python and JSX examples in `testing-code` and `using-tailwindcss`, the Node/JDBC driver note in `using-postgres`, and the Rails-only column traps in `designing-databases` are restated for Pest, Vue, PDO, and Eloquent.
+- **`structuring-project-docs` renamed `maintaining-project-docs` and rescoped to ongoing documentation work** — it loads for writing a page or recording what a change altered, not only for standing up or converting a docs home, and gains the routine that keeps a page moving with the code it describes.
+- **`.gitignore` ignores `/.claude/settings.local.json`** — the vendored skills are committed, per-machine permission rules are not.
+
+### Migration
+
+See [`migrations/template-v5.7.0.md`](migrations/template-v5.7.0.md). Every fork: copy the two directories in, add the ignore rule, and trim the set to its own stack. No schema, dependency, or deploy-time work.
+
 ## v5.6.0 - 08/26/2026
 
 Replaces the `.knowledge/` documentation payload with a plain **`docs/`** tree in the standard layout, and adds a **production release process** with a `/release` endpoint so a deploy can be polled instead of guessed at. Minor: no schema, dependency, or Docker-core change. `pnpm check` swaps its `check:docs` step for `check:release`.
