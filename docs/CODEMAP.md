@@ -130,7 +130,7 @@ Notable: `release.php` (reads `version` from `composer.json`, served by `/releas
 
 ## Testing
 
-- **Backend (Pest — 21 test files: Feature 13, Unit 8):** Feature — AgentInstructions, ApiKey, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, HealthEndpoint, PasswordReset, ReleaseVersion, Seo, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
+- **Backend (Pest — 24 test files: Feature 16, Unit 8):** Feature — AgentInstructions, ApiKey, AuthenticationFlow, CreateApiKeyCommand, CreateUserCommand, EnsureStorage, EnsureUserIsActive, Example, GenerateSitemap, GoogleAnalytics, HealthEndpoint, PasswordReset, ReleaseVersion, Seo, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
 - **Frontend (Vitest + Vue Test Utils, happy-dom — resources/js/tests/, 41 test files):** UI component helpers, composables, and utils.
 
 ## Code Quality
