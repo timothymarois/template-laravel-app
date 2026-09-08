@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\PageController;
@@ -23,12 +24,37 @@ Route::get('health', HealthCheckJsonResultsController::class)->name('health');
 // deployment monitor. Never cached. See docs/concepts/deployment-endpoints.md.
 Route::get('release', ReleaseController::class)->name('release.version');
 
-// Guest routes (login/register)
+// Guest routes (login/register/password reset)
 Route::middleware(['guest'])->group(function () {
     Route::get('register', [RegisterController::class, 'registerView'])->name('register');
     Route::get('login', [SessionController::class, 'loginView'])->name('login');
-    Route::post('auth/register', [RegisterController::class, 'store'])->name('auth.register');
+    Route::post('auth/register', [RegisterController::class, 'store'])
+        ->middleware('throttle:auth')
+        ->name('auth.register');
     Route::post('auth/login', [SessionController::class, 'authenticate'])->name('auth.login');
+
+    // Password reset. Route NAMES follow Laravel's convention rather than the local
+    // auth.* scheme, deliberately: Illuminate\Auth\Notifications\ResetPassword builds
+    // its link with route('password.reset', ...), so the framework notification needs
+    // no customization; GenerateSitemap already excludes `password.*`. URIs follow the
+    // local scheme — bare paths for views, auth/ for state-changing POSTs.
+    //
+    // Both POSTs carry throttle:auth. Named limiters key on the limiter NAME + IP only
+    // (ThrottleRequests::handleRequestUsingNamedLimiter), so every route using
+    // throttle:auth shares ONE 5/min/IP bucket. That is the intended budget for
+    // unauthenticated writes. Login stays out of it — LoginRequest runs its own
+    // per-email limiter, and sharing this bucket would let failed logins lock a user
+    // out of password reset, which is exactly backwards.
+    Route::get('forgot-password', [PasswordResetController::class, 'requestView'])
+        ->name('password.request');
+    Route::post('auth/forgot-password', [PasswordResetController::class, 'sendLink'])
+        ->middleware('throttle:auth')
+        ->name('password.email');
+    Route::get('reset-password/{token}', [PasswordResetController::class, 'resetView'])
+        ->name('password.reset');
+    Route::post('auth/reset-password', [PasswordResetController::class, 'update'])
+        ->middleware('throttle:auth')
+        ->name('password.store');
 });
 
 // Authenticated routes

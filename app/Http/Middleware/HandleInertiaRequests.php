@@ -39,6 +39,13 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'user' => $request->user(),
+            // One-request session messages. Without this share every ->with('status')
+            // and ->with('error') in the app is written to the session and dropped on
+            // the floor — the UI has no way to read it.
+            'flash' => [
+                'status' => $request->session()->get('status'),
+                'error' => $request->session()->get('error'),
+            ],
         ]);
     }
 }

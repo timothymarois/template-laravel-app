@@ -12,7 +12,7 @@ upgrades back in.
 ```mermaid
 flowchart LR
   subgraph Foundation["Foundation — what every fork inherits"]
-    auth["Authentication<br/><i>register · login · sessions</i>"]
+    auth["Authentication<br/><i>register · login · password reset</i>"]
     admin["Admin surface<br/><i>dashboard · users</i>"]
     kit["Component library<br/><i>ui · app · site + showcase</i>"]
   end
@@ -35,7 +35,7 @@ flowchart LR
 
 | Layer | What it gives a fork |
 |---|---|
-| Authentication | Register, login and session handling wired out of the box |
+| Authentication | Register, login, password reset and session handling wired out of the box |
 | Admin surface | A dashboard and user management behind auth — the shape most products extend first |
 | Component library | A `ui/` → `app/` → `site/` shadcn-vue kit with a live showcase to reuse before building anything |
 | Background jobs | Redis and Horizon configured for queued work and caching |

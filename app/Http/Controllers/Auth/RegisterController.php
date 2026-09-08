@@ -35,6 +35,10 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
+        // Matches SessionController::authenticate(). Without it, the one route that
+        // hands a brand-new user a session is open to session fixation.
+        $request->session()->regenerate();
+
         return redirect('/');
     }
 }

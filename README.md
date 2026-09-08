@@ -22,6 +22,7 @@ Production-grade applications require more than just code—they need authentica
 - ✅ SSR enabled by default — SEO-friendly, fast first paint
 - ✅ Security headers, CORS, rate limiting — hardened out of the box
 - ✅ Sanctum authentication — session-based auth with CSRF protection
+- ✅ Password reset — forgot/reset flow that never reveals whether an address is registered
 
 **Real-Time & Background Jobs**
 
@@ -360,10 +361,15 @@ Pre-configured in `AppServiceProvider`:
 | Limiter | Limit | Use case |
 |---------|-------|----------|
 | `api` | 60/min per user | General API |
-| `auth` | 5/min per IP | Login, registration |
+| `auth` | 5/min per IP | Registration and both password-reset POSTs |
 | `uploads` | 10/min per user | File uploads |
 
-Apply to routes: `Route::middleware('throttle:auth')->post('/login', ...)`
+Apply to routes: `Route::middleware('throttle:auth')->post('/auth/register', ...)`
+
+Named limiters key on the limiter name + IP, not the route, so every route using
+`throttle:auth` shares one bucket. Login is deliberately outside it — `LoginRequest`
+runs its own per-email limiter, and sharing this bucket would let failed logins lock
+a user out of password reset.
 
 ### CORS
 

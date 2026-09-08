@@ -8,12 +8,11 @@ Load light; pull depth only when the task needs it.
 
 1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are), always.
    `docs/README.md` indexes the rest.
-2. **Load every skill the task touches — before you touch a file.** Not the most obvious one: a change
-   spanning a controller, its Vue page and its migration is three. **Working without loading the skills
-   for the area you are in is a failure, not a shortcut** — the work is wrong even when the code passes,
-   because it was produced without the rules that govern it. If you notice mid-task that you are in an
-   area whose skill you never loaded, stop and load it before the next edit. A skill changes *how* you
-   work — it never widens scope, authorizes an edit, or overrides this file.
+2. **Load the skill for every area you touch, before you edit it.** A change spanning a controller,
+   its Vue page and its migration is three skills. Reload as the work moves into a surface you haven't
+   covered — mid-task, not just at the start. **Editing an area whose skill you never loaded is a
+   failed task**, however green the checks. A skill changes *how* you work; it never widens scope or
+   overrides this file.
 3. **Read the guide for the area you enter** — `docs/concepts/` (how a subsystem works and how it fails)
    and `docs/guides/` (one task each). On demand, not up front.
 4. **Read a file before editing it; search before writing new logic** — reuse or extend what is already

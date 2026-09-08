@@ -19,9 +19,9 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 - **Models/ModelService** — abstract base; **Models/UserService** — user CRUD.
 
-## Controllers (app/Http/Controllers/ — 8)
+## Controllers (app/Http/Controllers/ — 9)
 
-- **PageController** — public home; **ReleaseController** — deployed version as JSON; **Auth/SessionController** (login/logout), **Auth/RegisterController**.
+- **PageController** — public home; **ReleaseController** — deployed version as JSON; **Auth/SessionController** (login/logout), **Auth/RegisterController**, **Auth/PasswordResetController** (forgot/reset, non-enumerating).
 - **Admin/DashboardController**, **Admin/UserController** (CRUD + `simpleTable`, `prepareIndexFilters`), **Admin/ComponentController** (showcase).
 - Base **Controller**.
 
@@ -29,13 +29,13 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 
 - **InertiaDataTableOptions** — data-table state (search, filters, pagination, sorting, session persistence).
 
-## Form Requests (app/Http/Requests/ — 4)
+## Form Requests (app/Http/Requests/ — 6)
 
-- Auth: `LoginRequest`, `RegisterRequest`; User: `StoreUserRequest`, `UpdateUserRequest`.
+- Auth: `LoginRequest`, `RegisterRequest`, `ForgotPasswordRequest`, `ResetPasswordRequest`; User: `StoreUserRequest`, `UpdateUserRequest`.
 
 ## Middleware (app/Http/Middleware/ — 4)
 
-- **HandleInertiaRequests** (shared data), **TrackLastSeen**, **EnsureUserIsActive**, **SecurityHeaders**.
+- **HandleInertiaRequests** (shares `user` + `flash.{status,error}`), **TrackLastSeen**, **EnsureUserIsActive**, **SecurityHeaders**.
 
 ## Health (app/Health/ — 5)
 
@@ -58,13 +58,13 @@ Laravel 13 (PHP 8.4) + Vue 3.5 + Inertia + Tailwind 4 + shadcn-vue + Vite 7 + Ty
 `web.php`, `components.php`, `api.php`, `channels.php`.
 
 - **Public:** `GET /` (home), `GET /up` (container gate), `GET /health` (spatie health JSON), `GET /release` (deployed version).
-- **Guest:** `GET /register|/login`, `POST /auth/register|/auth/login`.
+- **Guest:** `GET /register|/login`, `POST /auth/register|/auth/login`; password reset — `GET /forgot-password` (`password.request`), `POST /auth/forgot-password` (`password.email`), `GET /reset-password/{token}` (`password.reset`), `POST /auth/reset-password` (`password.store`). The three unauthenticated POSTs share one `throttle:auth` bucket (5/min/IP).
 - **Auth (`auth:sanctum`):** `POST /logout`; admin group — `GET /admin/` (dashboard), `/admin/users/*` (resource + `users/table`, `users/filters`), `/admin/components/*` (showcase).
 - **API:** `GET /user` (auth:sanctum, throttle:api). **Broadcast:** `App.Models.User.{id}`.
 
-## Pages (resources/js/pages/ — 57 .vue)
+## Pages (resources/js/pages/ — 59 .vue)
 
-- **Public:** `Index.vue`, `Login.vue`, `Register.vue`. **Errors:** `errors/{404,500,503}.vue`.
+- **Public:** `Index.vue`, `Login.vue`, `Register.vue`, `ForgotPassword.vue`, `ResetPassword.vue`. **Errors:** `errors/{404,500,503}.vue`.
 - **Admin:** `admin/Index.vue`, `admin/users/{Index,Show}.vue`.
 - **Component showcase** (`admin/components/`): `forms/` (Input, InputMasks, Textarea, Select, Checkbox, Combobox, Switch, Slider, Fields, Editor, Upload, PinInput, input/Tags, calendar/{DateInput,DateRangeInput}), `actions/` (Button, Command, Dialog, Menu, Sheet), `display/` (Alert, Card, Badge, Avatar, Tooltip, Popover, Loading, Tabs, Accordion, Toast, Carousel, Resizable, CodeBlock, ViewToggle), `data/` (Table, Actions, Pagination), `charts/` (Bar, Line, Area, Pie).
 
@@ -122,7 +122,7 @@ Notable: `release.php` (reads `version` from `composer.json`, served by `/releas
 
 ## Testing
 
-- **Backend (Pest — 17 test files: Feature 9, Unit 8):** Feature — AgentInstructions, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, ReleaseVersion, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
+- **Backend (Pest — 18 test files: Feature 10, Unit 8):** Feature — AgentInstructions, AuthenticationFlow, EnsureStorage, EnsureUserIsActive, Example, GoogleAnalytics, PasswordReset, ReleaseVersion, TrackLastSeen, UserController. Unit — Example, PhoneNumber, Services/UserService, Enums/UserRole, Health/{DiscordHealthChannel, NotifyOnHealthRecovery, NotifyOnMaintenanceMode, ReverbCheck}.
 - **Frontend (Vitest + Vue Test Utils, happy-dom — resources/js/tests/, 41 test files):** UI component helpers, composables, and utils.
 
 ## Code Quality

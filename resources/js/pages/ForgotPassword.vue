@@ -1,25 +1,22 @@
 <template>
-    <SiteLayout title="Login">
+    <SiteLayout title="Forgot password">
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <Card>
                 <template #header>
                     <div class="font-semibold text-gray-900 dark:text-gray-100 text-md flex items-center space-x-2">
-                        <div>Login</div>
+                        <div>Forgot your password?</div>
                     </div>
                 </template>
                 <template #content>
-                    <Alert v-if="flash.error" variant="destructive" class="mb-4">
-                        <AlertDescription>{{ flash.error }}</AlertDescription>
+                    <Alert v-if="status" variant="success" class="mb-4">
+                        <AlertDescription>{{ status }}</AlertDescription>
                     </Alert>
-                    <Alert v-else-if="flash.status" variant="success" class="mb-4">
-                        <AlertDescription>{{ flash.status }}</AlertDescription>
-                    </Alert>
+                    <p class="text-sm text-muted-foreground mb-4">
+                        Enter your email address and we'll send you a link to choose a new password.
+                    </p>
                     <form class="space-y-4 w-full">
                         <LabelField name="email" label="Email address" required :error="form.errors.email">
                             <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
-                        </LabelField>
-                        <LabelField name="password" label="Password" required :error="form.errors.password">
-                            <InputText v-model="form.password" type="password" fluid :invalid="!!form.errors.password" />
                         </LabelField>
                     </form>
                 </template>
@@ -29,20 +26,15 @@
                         <div class="w-full">
                             <Button
                                 fluid
-                                label="Login"
+                                label="Email password reset link"
                                 :disabled="form.processing"
                                 :loading="form.processing"
                                 @click="submit"
                             />
                         </div>
                         <div class="text-center">
-                            <Link :href="$route('password.request')" class="cursor-pointer hover:underline">
-                                Forgot your password?
-                            </Link>
-                        </div>
-                        <div class="text-center">
-                            <Link :href="$route('register')" class="cursor-pointer hover:underline">
-                                Don't have an account? Register
+                            <Link :href="$route('login')" class="cursor-pointer hover:underline">
+                                Back to login
                             </Link>
                         </div>
                     </div>
@@ -61,14 +53,13 @@ import { useFormSubmit } from '@/composables/useFormSubmit';
 const { submitForm } = useFormSubmit();
 
 const page = usePage();
-const flash = computed(() => page.props.flash ?? {});
+const status = computed(() => page.props.flash?.status);
 
 const form = useForm({
     email: null,
-    password: null,
 });
 
 const submit = () => {
-    submitForm(form, 'post', route('auth.login'));
+    submitForm(form, 'post', route('password.email'));
 };
 </script>
