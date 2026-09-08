@@ -83,28 +83,41 @@ auto-merge are separate mutations and require their own authority.
 
 ## Write the merge case
 
-A pull-request body is a scan-friendly review map, not an implementation diary, design archive, or
-test transcript. Use the repository template when one applies. Otherwise complete the
-[fallback pull-request template](pull-request-template.md).
+A pull-request body is a **scan map for a reviewer**, not an implementation diary. A reviewer decides
+in under a minute whether to read the diff and what to watch for. Write for that minute.
 
-Keep the body proportionate:
+**Budget: aim for 200 words, hard-stop at 400 outside code blocks.** Past that, a body stops being
+read and becomes something scrolled. Use the repository template when one applies; otherwise the
+[fallback template](pull-request-template.md).
 
-- State the current problem and its impact in one or two lines.
-- Explain three to six important solution decisions, their rationale, boundaries, and preserved
-  behavior. Link deeper artifacts rather than pasting algorithms or chronology.
-- Give concise before-and-after evidence when the diff alone cannot establish the result.
-- Map acceptance criteria to observable outcomes proven by the exact head.
-- Name material compatibility and risk; group exact validation commands with observed results.
-- Give the shortest representative manual path, normally no more than five steps.
-- Make blockers, unrun checks, and readiness visible.
+Per section:
 
-Delete generic filler, repeated request text, changed-file inventories, and claims such as “works as
-expected.” Preserve a repository's required identity block. With none, append nothing.
+| Section | Budget | Shape |
+|---|---|---|
+| Problem | 1-2 sentences | What is wrong now and what it costs. No history. |
+| Solution | 3-6 bullets, one line each | One decision per bullet. Non-obvious rationale only. |
+| Evidence | 2-4 items | Numbers, output, before/after. Only what the diff cannot show. |
+| Acceptance / Validation | a checklist | Command and observed result. No prose. |
+
+**If a reviewer can see it in the diff, do not write it.** No changed-file inventories, no
+restatement of the request, no narration of how the work went, no "as expected", no summarising a
+function the reviewer is about to read.
+
+Prefer a bullet, a table, or a two-line code block over a paragraph. Never write three paragraphs
+where three bullets do. Cut every sentence that survives being deleted. One idea per bullet, and no
+bullet that only exists to introduce the next.
+
+State risk and incompatibility in **one bolded line** each, where a reviewer cannot miss it — a
+breaking change buried in paragraph four has not been communicated. Link deeper artifacts rather than
+pasting algorithms, logs, or chronology.
+
+Delete generic filler and claims such as "works as expected". Preserve a repository's required
+identity block; with none, append nothing.
 
 Never mark a commit, branch, or pull request as machine-authored: no provider, model, tool, session,
 vendor link, generated-by footer, agent identity block, robot emoji, or provider-style co-author
-trailer. The work is judged on the diff, not on who typed it. Follow the repository title convention; use an imperative title only when no
-convention exists.
+trailer. The work is judged on the diff, not on who typed it. Follow the repository title convention;
+use an imperative title only when no convention exists.
 
 Reconcile every issue named by the assignment or pull request before opening, updating, or merging
 the pull request:

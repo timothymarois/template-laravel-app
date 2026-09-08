@@ -1,22 +1,26 @@
+<!-- Aim for 200 words, hard-stop 400 outside code blocks. If a reviewer can see
+     it in the diff, do not write it. Bullets over paragraphs. -->
+
 ## Problem
 
-<!-- State the current behavior or limitation, who or what it affects, and the consequence. -->
+<!-- One or two sentences: what is wrong now, and what it costs. -->
 
-## Proposed solution
+## Solution
 
-<!-- Describe the implemented outcome, important decisions and rationale, its boundary, and preserved behavior. -->
+<!-- 3-6 bullets, one line each. One decision per bullet, non-obvious rationale only. -->
+
+-
 
 ## Evidence
 
-<!-- Give concise before-and-after observations, source locations, measurements, or contract links. Distinguish evidence from validation. -->
+<!-- 2-4 items the diff cannot show: numbers, output, before/after. -->
 
-## Acceptance criteria
-
-- [ ] <!-- Independently checkable outcome proven by this exact head. -->
+-
 
 ## Validation
 
-- [ ] `<exact command or manual check>` — `<observed result>`
-- [ ] Required GitHub checks pass for the exact head commit.
+- [ ] `<command>` — `<observed result>`
+- [ ] Required GitHub checks pass for this head.
 
-<!-- Use one standalone `Closes #<number>.` line per completed issue. Use `Refs` for partial work. -->
+<!-- Bold any breaking change or risk on its own line — buried, it has not been communicated.
+     One standalone `Closes #<number>.` per completed issue; `Refs` for partial work. -->
