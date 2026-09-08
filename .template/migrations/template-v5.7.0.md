@@ -30,7 +30,7 @@ self-sufficient. That skill ships here as `maintaining-project-docs`; it was cal
 
 ## Part A — Vendor the skills (every fork)
 
-Copy the directory wholesale. These are the thirteen matched to this stack: `using-laravel`, `using-inertia`, `using-vuejs`, `using-tailwindcss`, `using-mysql`, `using-postgres`, `using-sqlite`, `designing-apis`, `designing-databases`, `designing-ui-ux`, `testing-code`, `debugging-code`, `maintaining-project-docs`. Both relational engines ship deliberately; Part D says which to drop.
+Copy the directory wholesale. These are the fourteen matched to this stack: `using-laravel`, `using-inertia`, `using-vuejs`, `using-tailwindcss`, `using-mysql`, `using-postgres`, `using-sqlite`, `designing-apis`, `designing-databases`, `designing-ui-ux`, `testing-code`, `debugging-code`, `maintaining-project-docs`, `managing-github`. Both relational engines ship deliberately; Part D says which to drop.
 
 ```bash
 mkdir -p .claude
@@ -79,7 +79,7 @@ git rm --cached .claude/settings.local.json
 
 ## Part D — Trim the set to your fork (fork-specific)
 
-The thirteen are the template's stack, not yours — every one of them from the `rundesk-team-development` catalog, which is the line this set holds to. Adjust deliberately — each skill's `description` is loaded
+The fourteen are the template's stack and its delivery workflow, not yours. That is the line the set holds to: guidance this repository's own work touches. Thirteen come from the `rundesk-team-development` catalog, `managing-github` from the CLI catalog, because this repo files issues and ships releases through GitHub. Adjust deliberately — each skill's `description` is loaded
 on every agent request, so an unused one is a running cost.
 
 | Your fork | Do |
@@ -216,10 +216,39 @@ convention with something enforcing it.
 > But know what you are choosing: the pointer only works if the runtime reading it follows the link every
 > time, and a rule that reaches one runtime and not the other fails silently.
 
+## Part H — Take the issue and pull-request templates (every fork)
+
+`managing-github` falls back to its own templates only when a repository has none. Shipping them makes the
+repository's version the one that wins, so an issue or pull request carries the same headings whoever — or
+whatever — files it.
+
+```bash
+mkdir -p .github/ISSUE_TEMPLATE
+cp <t>/.github/ISSUE_TEMPLATE/bug.md      .github/ISSUE_TEMPLATE/bug.md
+cp <t>/.github/ISSUE_TEMPLATE/feature.md  .github/ISSUE_TEMPLATE/feature.md
+cp <t>/.github/pull_request_template.md   .github/pull_request_template.md
+```
+
+If your fork already has templates, keep them — a divergent template people actually use beats a replaced
+one. The `bug` and `enhancement` labels in the front matter are GitHub defaults present in every
+repository; change them if your fork uses its own.
+
+**No machine-authorship branding.** The shipped PR template has no agent identity block, and the vendored
+`managing-github` no longer appends one when a repository has none. Add the matching `Hard rules` line to
+your `AGENTS.md` so it binds whether or not that skill loads:
+
+```
+- **Never brand a commit, branch, or pull request as machine-authored.** No provider or model name,
+  generated-by footer, agent identity block, robot emoji, or provider-style co-author trailer.
+```
+
+If your fork has commits or pull requests carrying such a footer, leave them — rewriting published history
+costs more than the inconsistency.
+
 ## Verify
 
 ```bash
-# 1. Thirteen skills, each with a SKILL.md
+# 1. Fourteen skills, each with a SKILL.md
 ls .claude/skills | wc -l
 for d in .claude/skills/*/; do test -f "$d/SKILL.md" || echo "MISSING $d"; done
 
@@ -236,20 +265,23 @@ grep -rhoE '^```[A-Za-z0-9+#_-]+' .claude/skills | sort -u
 # 5. Nothing links outside a skill except the known validation record
 grep -rn '\.\./\.\./\.\.' .claude/skills
 
-# 6. The two agent instruction files are one document
+# 6. The templates are in place
+ls .github/ISSUE_TEMPLATE/ .github/pull_request_template.md
+
+# 7. The two agent instruction files are one document
 cmp AGENTS.md CLAUDE.md && echo "identical"
 
-# 7. The deploy gate, and the baseline
+# 8. The deploy gate, and the baseline
 pnpm check:deploy
 pnpm check
 ```
 
-Step 1 prints `13`, step 2 prints `13`, step 3 names the ignore rule and counts the skill files git will
-carry — 166 in the template, and non-zero in any fork whether or not they are committed yet, and step 4 prints only fences this stack uses — `bash`, `blade`, `css`, `dotenv`, `html`, `http`,
+Step 1 prints `14`, step 2 prints `14`, step 3 names the ignore rule and counts the skill files git will
+carry — 173 in the template, and non-zero in any fork whether or not they are committed yet, and step 4 prints only fences this stack uses — `bash`, `blade`, `css`, `dotenv`, `html`, `http`,
 `ini`, `js`, `json`, `md`, `php`, `pseudocode`, `sh`, `sql`, `text`, `ts`, `typescript`, `vue`. A
 `python`, `cpp`, or `jsx` in that list means an untrimmed copy.
 
-Then open an agent in the repository root and confirm the thirteen appear in its available skills. A skill that
+Then open an agent in the repository root and confirm the fourteen appear in its available skills. A skill that
 does not appear is almost always a `SKILL.md` that is missing, malformed, or over the size limit — not a
 path problem.
 

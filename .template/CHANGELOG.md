@@ -16,7 +16,8 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ### Added
 
-- **13 vendored agent skills** in `.claude/skills/`, matched to this stack, plus `.agents/skills` for the neutral path.
+- **14 vendored agent skills** in `.claude/skills/`, matched to this stack and its delivery workflow, plus `.agents/skills` for the neutral path.
+- **Issue and pull-request templates** in `.github/` — bug, feature, and PR — so a filed issue or PR carries the same headings whoever writes it.
 - **`docker/project/`** — nginx fragments a fork owns, baked into the image and never template-managed. Ships empty.
 - **`check:deploy`** — contract tests over `php.ini`, the nginx server config, and the deploy scripts, wired into `pnpm check`.
 
@@ -25,6 +26,7 @@ This is the change history for `template-laravel-app` — the migration log fork
 - **`client_max_body_size` stays low**; route-scoped upload capacity goes in `docker/project/` instead of the server block.
 - **`CLAUDE.md` is a byte-identical copy of `AGENTS.md`**, enforced by a Pest test in the existing suite.
 - **`AGENTS.md` restructured** — a skills step and a scope rule in "Before you work", "Hard gates" and "Never" folded into one "Hard rules" list, "Tech stack" and "Architecture" merged, tree trimmed.
+- **No commit, branch, or pull request is branded as machine-authored** — a `Hard rules` line, and the identity block is gone from the shipped PR template and from `managing-github`'s own fallback.
 - **`.gitignore` ignores `/.claude/settings.local.json`** — the skills are committed, per-machine permissions are not.
 
 ### Migration
