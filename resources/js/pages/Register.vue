@@ -8,7 +8,7 @@
                     </div>
                 </template>
                 <template #content>
-                    <form class="space-y-4 w-full">
+                    <form class="space-y-4 w-full" @submit.prevent="submit">
                         <LabelField name="name" label="Name" required :error="form.errors.name">
                             <InputText id="name" v-model="form.name" type="text" fluid :invalid="!!form.errors.name" />
                         </LabelField>
@@ -21,6 +21,7 @@
                         <LabelField name="password_confirmation" label="Password confirmation" required :error="form.errors.password_confirmation">
                             <InputText id="password_confirmation" v-model="form.password_confirmation" type="password" fluid :invalid="!!form.errors.password_confirmation" />
                         </LabelField>
+                        <button type="submit" class="hidden" tabindex="-1" aria-hidden="true"></button>
                     </form>
                 </template>
                 <template #footer>

@@ -127,6 +127,24 @@ languages are the appendix at the end of this file — read the rule first, then
 
 ### Frontend
 
+**Any UI or UX work loads the `designing-ui-ux` skill first** — a new page or component, a change to a
+flow, states, copy on a control, keyboard or focus behaviour, responsive or accessible behaviour. It
+is not only for visual design; naming a button and choosing what a confirmation says are in it.
+
+**Keyboard conventions, everywhere, no exceptions:**
+
+- **Enter submits, Escape cancels.** Every form, every dialog. A user who has typed the last field
+  should never have to reach for the mouse, and Escape must always be the way out.
+- A form whose submit control sits **outside** the `<form>` (in a Card footer, say) needs
+  `@submit.prevent` **and** a hidden `<button type="submit">` inside it — browsers only do implicit
+  submission when the form contains a submit control, so Enter otherwise does nothing.
+- A confirmation dialog confirms on Enter and closes on Escape, and **the keyboard and pointer paths
+  must end in the same state.** Use `DialogConfirmation`, which already does this; if you build
+  another, note that a listener in the template never fires for a portalled dialog — bind it to the
+  document while open.
+- Enter must not fire while an action is in flight, and must not hijack Enter raised from an input,
+  textarea or select. `shouldConfirmOnEnter` in `ui/dialog/dialogUtils.ts` is the shared guard.
+
 - **Do** put `<template>` above `<script setup>`, PascalCase components, 4-space indent, `lang="ts"` only for
   reusable `ui/` components. **`useForm` for anything with fields; `router.<verb>(route(...))` for an
   input-less action.** **Don't** hand-roll refs for fields/errors/processing, or reach for fetch/axios.

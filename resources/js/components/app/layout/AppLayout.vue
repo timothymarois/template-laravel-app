@@ -78,7 +78,7 @@
 import SeoHead from '../SeoHead.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-import { House, User, Palette, Gauge, LogOut } from 'lucide-vue-next';
+import { House, User, Palette, Gauge, KeyRound, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
 import ModeToggle from '../navigation/ModeToggle.vue';
@@ -157,6 +157,7 @@ const profileMenuItems = computed(() => [
 const topBarItems = computed(() => [
     { href: '/admin', label: 'Home' },
     { href: '/admin/users', label: 'Users', parent: null },
+    { href: '/admin/api-keys', label: 'API keys', parent: null },
     {
         label: 'Overview',
         children: [
@@ -181,6 +182,7 @@ const sideBarItems = computed(() => [
         children: [
             { label: 'Home', href: '/admin', exact: true, icon: House, activeIcon: House },
             { label: 'Users', href: '/admin/users', parent: null, icon: User, activeIcon: User },
+            { label: 'API keys', href: '/admin/api-keys', parent: null, icon: KeyRound, activeIcon: KeyRound },
             { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: Palette, activeIcon: Palette, count: 24 }
         ],
     },

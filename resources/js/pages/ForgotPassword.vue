@@ -14,10 +14,11 @@
                     <p class="text-sm text-muted-foreground mb-4">
                         Enter your email address and we'll send you a link to choose a new password.
                     </p>
-                    <form class="space-y-4 w-full">
+                    <form class="space-y-4 w-full" @submit.prevent="submit">
                         <LabelField name="email" label="Email address" required :error="form.errors.email">
                             <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
                         </LabelField>
+                        <button type="submit" class="hidden" tabindex="-1" aria-hidden="true"></button>
                     </form>
                 </template>
                 <template #footer>

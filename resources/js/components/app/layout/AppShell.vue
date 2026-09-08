@@ -162,7 +162,7 @@ const props = defineProps({
     },
     toastPosition: {
         type: String,
-        default: 'bottom-left',
+        default: 'bottom-center',
     },
     toastCloseButton: {
         type: Boolean,

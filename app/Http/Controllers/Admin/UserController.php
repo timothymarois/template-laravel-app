@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Concerns\InertiaDataTableOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
@@ -43,6 +44,12 @@ class UserController extends Controller
         return $this->inertia->render('admin/users/Index', [
             'users' => $this->userService->listPaginated($options['perPage'], $options),
             'options' => $options,
+            // The role picker's options come from the enum, so adding a role is a
+            // one-line change there rather than a list duplicated in the UI.
+            'roles' => array_map(
+                fn (UserRole $role): array => ['value' => $role->value, 'label' => $role->label()],
+                UserRole::cases(),
+            ),
         ]);
     }
 

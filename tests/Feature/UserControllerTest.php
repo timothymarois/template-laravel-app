@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\UserRole;
 use App\Models\User;
 
 /*
@@ -21,6 +22,7 @@ it('allows user to be created', function () {
     $response = $this->actingAs($authUser)->post('/admin/users', [
         'name' => 'New User',
         'email' => 'new@example.com',
+        'role' => UserRole::User->value,
     ]);
 
     $createdUser = User::where('email', 'new@example.com')->first();
@@ -52,6 +54,7 @@ it('allows user to be updated', function () {
         ->put("/admin/users/{$targetUser->id}", [
             'name' => 'Updated User',
             'email' => 'updated@example.com',
+            'role' => UserRole::User->value,
         ]);
 
     $response->assertRedirect("/admin/users/{$targetUser->id}");
@@ -59,6 +62,7 @@ it('allows user to be updated', function () {
         'id' => $targetUser->id,
         'name' => 'Updated User',
         'email' => 'updated@example.com',
+        'role' => UserRole::User->value,
     ]);
 });
 
@@ -131,10 +135,12 @@ it('refuses a non-admin every admin user route', function () {
     $this->actingAs($user)->post('/admin/users', [
         'name' => 'Nope',
         'email' => 'nope@example.com',
+        'role' => UserRole::User->value,
     ])->assertForbidden();
     $this->actingAs($user)->put("/admin/users/{$target->id}", [
         'name' => 'Nope',
         'email' => 'nope@example.com',
+        'role' => UserRole::User->value,
     ])->assertForbidden();
     $this->actingAs($user)->delete("/admin/users/{$target->id}")->assertForbidden();
 
@@ -156,4 +162,38 @@ it('does not let an operator delete their own account', function () {
     $this->actingAs($admin)->delete("/admin/users/{$admin->id}")->assertForbidden();
 
     $this->assertDatabaseHas('users', ['id' => $admin->id]);
+});
+
+it('sets the role when creating and updating a user', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->post('/admin/users', [
+        'name' => 'New Operator',
+        'email' => 'operator@example.com',
+        'role' => UserRole::SuperAdmin->value,
+    ]);
+
+    $created = User::firstWhere('email', 'operator@example.com');
+    expect($created->role)->toBe(UserRole::SuperAdmin)
+        ->and($created->isAdmin())->toBeTrue();
+
+    $this->actingAs($admin)->put("/admin/users/{$created->id}", [
+        'name' => 'New Operator',
+        'email' => 'operator@example.com',
+        'role' => UserRole::User->value,
+    ]);
+
+    expect($created->fresh()->role)->toBe(UserRole::User);
+});
+
+it('refuses a role outside the enum', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->post('/admin/users', [
+        'name' => 'Nope',
+        'email' => 'nope@example.com',
+        'role' => 'superuser',
+    ])->assertSessionHasErrors('role');
+
+    $this->assertDatabaseMissing('users', ['email' => 'nope@example.com']);
 });

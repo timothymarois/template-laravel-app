@@ -2,7 +2,6 @@
     <SheetForm
         v-model="showModal"
         :title="form.id ? 'Edit user' : 'Add user'"
-        :tabs="[{title: 'Details'}, {title: 'Line items'}, {title: 'Roles', disabled: true}]"
         position="right"
         width="600px"
         :loading="form.processing"
@@ -29,34 +28,58 @@
                                 <InputText id="email" v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
                             </LabelField>
                         </div>
+                        <div class="w-full">
+                            <LabelField
+                                name="role"
+                                label="Role"
+                                required
+                                :error="form.errors.role"
+                                help="An administrator can reach /admin and manage every user."
+                            >
+                                <Select
+                                    v-model="form.role"
+                                    :options="roleOptions"
+                                    option-label="label"
+                                    option-value="value"
+                                    fluid
+                                    :invalid="!!form.errors.role"
+                                />
+                            </LabelField>
+                        </div>
                     </div>
                 </form>
             </template>
         </Card>
-        <template #tab-1>
-            <Card>
-                <template #content>
-                    <div>This is line items</div>
-                </template>
-            </Card>
-        </template>
     </SheetForm>
 </template>
 
 <script setup>
-import { SheetForm, Card, TooltipIcon, LabelField, Input as InputText } from '@/components/ui';
+import { SheetForm, Card, TooltipIcon, LabelField, Input as InputText, Select } from '@/components/ui';
+import { computed } from 'vue';
 import { useModal } from '@/composables';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { useFormSubmit } from '@/composables/useFormSubmit';
 const { activeState, onOpen, onClose } = useModal();
 const { submitForm } = useFormSubmit();
 
 const showModal = activeState('ADD_EDIT_USER');
 
+const page = usePage();
+
+// Read from the page rather than taken as a prop: this modal is mounted by
+// AppLayout, so a prop would have to be threaded through every page that uses
+// the layout. Falls back to the roles the template ships when a page does not
+// supply them.
+const roleOptions = computed(() => page.props.roles ?? [
+    { value: 'admin', label: 'Administrator' },
+    { value: 'user', label: 'User' },
+]);
+
 const form = useForm({
     id: null,
     name: null,
     email: null,
+    role: 'user',
 });
 
 const submit = () => {
@@ -74,6 +97,7 @@ onOpen('ADD_EDIT_USER', (data) => {
         form.id = data.id;
         form.name = data.name;
         form.email = data.email;
+        form.role = data.role ?? 'user';
     }
 });
 

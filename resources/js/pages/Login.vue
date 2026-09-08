@@ -14,13 +14,14 @@
                     <Alert v-else-if="flash.status" variant="success" class="mb-4">
                         <AlertDescription>{{ flash.status }}</AlertDescription>
                     </Alert>
-                    <form class="space-y-4 w-full">
+                    <form class="space-y-4 w-full" @submit.prevent="submit">
                         <LabelField name="email" label="Email address" required :error="form.errors.email">
                             <InputText v-model="form.email" type="text" fluid :invalid="!!form.errors.email" />
                         </LabelField>
                         <LabelField name="password" label="Password" required :error="form.errors.password">
                             <InputText v-model="form.password" type="password" fluid :invalid="!!form.errors.password" />
                         </LabelField>
+                        <button type="submit" class="hidden" tabindex="-1" aria-hidden="true"></button>
                     </form>
                 </template>
                 <template #footer>
