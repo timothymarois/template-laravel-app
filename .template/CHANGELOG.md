@@ -10,26 +10,25 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ## v5.7.0 - 09/08/2026
 
-`Docker:` Vendors this stack's agent skills into `.claude/skills/`, adds `docker/project/` for nginx configuration a fork owns, and puts the production image's own configuration under a `check:deploy` gate. Minor: no schema or dependency change.
+`Docker:` Vendors this stack's agent skills into `.claude/skills/`, adds `docker/project/` so a fork can configure nginx and PHP without editing managed core, and puts the production image under a `check:deploy` gate plus a built-image CI workflow. Minor: no schema or dependency change.
 
 > ⚠️ Managed core moves — `Dockerfile` and `docker/config/nginx.conf`. Every fork acts.
 
 ### Added
 
 - **14 vendored agent skills** in `.claude/skills/`, matched to this stack and its delivery workflow, plus `.agents/skills` for the neutral path.
-- **`docs/guides/git-conventions.md`** — branch and commit naming, the canonical type set, imperative summaries, and the no-machine-authorship-branding rule. Versions stay in `releasing.md`.
-- **`.lerd.yaml`** — the [Lerd](https://lerd.sh/) counterpart to `herd.yml`, so the free, cross-platform local environment is a first-class option. Both files coexist; each tool ignores the other's.
-- **Issue and pull-request templates** in `.github/` — bug, feature, and PR — so a filed issue or PR carries the same headings whoever writes it.
-- **`docker/project/`** — nginx fragments a fork owns, baked into the image and never template-managed. Ships empty.
-- **`check:deploy`** — contract tests over `php.ini`, the nginx server config, and the deploy scripts, wired into `pnpm check`.
+- **`docker/project/`** — `nginx/http/`, `nginx/server/` and `php/`, baked into the image and never template-managed. Ships empty; a wildcard include matching nothing is a no-op, so a fork that adds nothing gets byte-identical behavior. Closes #18.
+- **`docker/config/nginx-snippets/`** — `laravel-fastcgi.conf` and `laravel-front-controller.conf`, so a project location reaches PHP-FPM without copying managed-core wiring or losing its ceiling to `try_files`.
+- **`check:deploy` and `.github/workflows/docker-config.yml`** — file-agreement contracts inside `pnpm check`, and a built-image proof in CI: `nginx -t`, effective context, and a real oversized POST refused on a default route and accepted on the elevated one.
+- **`docs/guides/git-conventions.md`** — branch and commit naming, the canonical type set, and the no-machine-authorship-branding rule.
+- **`.lerd.yaml`** — the [Lerd](https://lerd.sh/) counterpart to `herd.yml`; both coexist, each tool ignores the other's.
+- **Issue and pull-request templates** in `.github/`, so a filed issue or PR carries the same headings whoever writes it.
 
 ### Changed
 
-- **`client_max_body_size` stays low**; route-scoped upload capacity goes in `docker/project/` instead of the server block.
+- **`client_max_body_size` stays 25M** — route-scoped capacity goes in `docker/project/`, whose include is last in the server block so a project regex can shadow neither the PHP handler nor the dotfile deny.
 - **`CLAUDE.md` is a byte-identical copy of `AGENTS.md`**, enforced by a Pest test in the existing suite.
 - **`AGENTS.md` restructured** — a skills step and a scope rule in "Before you work", "Hard gates" and "Never" folded into one "Hard rules" list, "Tech stack" and "Architecture" merged, tree trimmed.
-
-- **No commit, branch, or pull request is branded as machine-authored** — stated in `git-conventions.md`, and the identity block is gone from the shipped PR template and from `managing-github`'s own fallback.
 - **`.gitignore` ignores `/.claude/settings.local.json`** — the skills are committed, per-machine permissions are not.
 
 ### Fixed
@@ -38,7 +37,7 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ### Migration
 
-See [`migrations/template-v5.7.0.md`](migrations/template-v5.7.0.md). Parts A-D and G: every fork. Parts E-F: Docker forks.
+See [`migrations/template-v5.7.0.md`](migrations/template-v5.7.0.md). Parts A-D and G-J: every fork. Parts E-F: Docker forks.
 
 ## v5.6.0 - 08/26/2026
 

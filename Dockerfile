@@ -109,23 +109,24 @@ ENV HOME=/var/www/html
 # App with vendor/, public/build, bootstrap/ssr and pruned node_modules
 COPY --from=build --chown=www-data:www-data /app /var/www/html
 
-# Service configuration
-COPY docker/config/nginx.conf       /etc/nginx/sites-available/default
-COPY docker/config/php.ini          /usr/local/etc/php/conf.d/zz-app.ini
-COPY docker/config/supervisord.conf /etc/supervisor/conf.d/app.conf
-COPY docker/deploy/entrypoint.sh    /usr/local/bin/entrypoint
+# Service configuration (MANAGED CORE — the template owns these)
+COPY docker/config/nginx.conf          /etc/nginx/sites-available/default
+COPY docker/config/nginx-snippets/     /etc/nginx/snippets/
+COPY docker/config/php.ini             /usr/local/etc/php/conf.d/zz-app.ini
+COPY docker/config/supervisord.conf    /etc/supervisor/conf.d/app.conf
+COPY docker/deploy/entrypoint.sh       /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
 
-# Fork-owned nginx fragments (docker/project/ — never template-managed, so an
-# upgrade never conflicts on them). The http/ set lands in conf.d, which the base
-# image includes inside http context, because nginx rejects limit_req_zone and
-# limit_conn_zone anywhere else; the server/ set lands in snippets/, included from
-# the server block in docker/config/nginx.conf. Both directories ship empty and
-# the include is a wildcard, so this is a no-op until a fork adds a file. The
-# directories are copied whole rather than by *.conf glob, which would fail the
-# build when a fork has added nothing.
-COPY docker/project/nginx/http/   /etc/nginx/conf.d/
-COPY docker/project/nginx/server/ /etc/nginx/snippets/
+# Project configuration (KNOB — this fork owns these; empty by default).
+# nginx: http-context files (shared-memory zones, maps) and server-context files
+# (locations needing their own client_max_body_size). A wildcard include that
+# matches nothing is not an error, so an empty directory changes nothing.
+# php:   loaded from conf.d AFTER zz-app.ini, so a `zzz-`-prefixed project file
+#        wins on any directive it repeats. PHP scans conf.d in filename order.
+# See docker/README.md -> "Project configuration".
+COPY docker/project/nginx/http/        /etc/nginx/project/http/
+COPY docker/project/nginx/server/      /etc/nginx/project/server/
+COPY docker/project/php/               /usr/local/etc/php/conf.d/
 
 EXPOSE 80
 

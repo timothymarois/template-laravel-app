@@ -67,7 +67,7 @@ actually reads while upgrading. A changelog that explains itself is a guide nobo
 
 - **One short line per bullet.** Name the change and why it matters to a developer — not how it works.
 - No code walkthroughs, file-by-file lists, "why this matters" essays, or `> Note:` asides.
-- **An entry runs to roughly 25 lines.** Past that it is carrying migration-guide content; move it. v5.7.0 is a large release and fits in 22.
+- **Keep an entry to about a dozen bullets.** Past that it is carrying migration-guide content; move it. Count bullets, not lines — a long release is long because it shipped a lot, not because its entry rambles.
 - Backtick file paths and symbols. Drop filler ("now", "the ability to"). Fold tightly-coupled changes into one bullet.
 
 ---

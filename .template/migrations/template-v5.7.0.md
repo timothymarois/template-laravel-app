@@ -99,47 +99,55 @@ Skills that are not specific to this stack — `reviewing-code`, `managing-devel
 `writing-plans`, `managing-github`, `naming-grammar-conventions` — belong in the machine-wide
 `~/.claude/skills`, not vendored into every repository, where each one has to be updated separately.
 
-## Part E — Take the nginx extension point (Docker forks)
+## Part E — Take the project configuration directory (Docker forks)
 
-Before this release a fork that needed more upload capacity had one move: raise `client_max_body_size` on
-the server block. That is a trap. It applies to **every** route, and nginx buffers a request body to temp
-disk **before PHP is reached** — so the global hands every endpoint, unauthenticated ones included, that
-much temp disk and inbound bandwidth per concurrent request. `docker/project/` is where the capacity goes
-instead, and the template never writes into it, so it never conflicts on an upgrade.
+Before this release a fork that needed a bigger upload had two bad options: edit managed core, or raise
+`client_max_body_size` on the server block. The second is the trap — it applies to **every** route, and
+nginx buffers a request body to temp disk **before PHP is reached**, so the global hands every endpoint,
+unauthenticated ones included, that much temp disk and inbound bandwidth per concurrent request.
+`docker/project/` is the third option, and the template never writes into it.
 
-Copy the directory and its README from `<t>`:
+Copy the new directories and the shared FastCGI snippets from `<t>`:
 
 ```bash
-cp -R <t>/docker/project docker/project
+cp -R <t>/docker/project              docker/project
+cp -R <t>/docker/config/nginx-snippets docker/config/nginx-snippets
 ```
 
-Then apply the two managed-core changes. In `Dockerfile`, after the `entrypoint` `chmod`:
+Then take `docker/config/nginx.conf` and the `docker/` block of the `Dockerfile` from `<t>` wholesale —
+both are managed core, and this release rewrites them:
 
-```diff
- COPY docker/deploy/entrypoint.sh    /usr/local/bin/entrypoint
- RUN chmod +x /usr/local/bin/entrypoint
-+
-+COPY docker/project/nginx/http/   /etc/nginx/conf.d/
-+COPY docker/project/nginx/server/ /etc/nginx/snippets/
-```
+| Path | Baked to | Context |
+|---|---|---|
+| `docker/project/nginx/http/*.conf` | `/etc/nginx/project/http/` | http — `limit_req_zone`, `limit_conn_zone`, `map`, `geo` |
+| `docker/project/nginx/server/*.conf` | `/etc/nginx/project/server/` | server — `location` blocks |
+| `docker/project/php/*.ini` | `/usr/local/etc/php/conf.d/` | loaded **after** `zz-app.ini`, so a `zzz-` name wins |
 
-Copy the directories whole, not by `*.conf` glob — a glob fails the build when a fork has added nothing.
+Three things about `nginx.conf` are load-bearing, and a fork that hand-merges rather than copying should
+check each one:
 
-In `docker/config/nginx.conf`, immediately **before** `location ~ \.php$`:
+1. **The http include sits above `server {`.** Shared-memory zones cannot be declared inside a server
+   block, and this file is included from nginx's http context.
+2. **The server include is the LAST line in the block.** nginx tries regex locations in configuration
+   order, so everything the template ships wins a tie — a project regex can shadow neither
+   `location ~ \.php$` nor the dotfile `deny all`.
+3. **`location ~ \.php$` now includes `laravel-fastcgi.conf`** instead of inlining its body, so a project
+   location can reuse the same wiring rather than copying it.
 
-```diff
-+    include /etc/nginx/snippets/*.conf;
-+
-     location ~ \.php$ {
-```
+A project location must terminate in FastCGI **itself**: `try_files $uri /index.php` issues an internal
+redirect, nginx re-runs location matching, and the elevated ceiling is lost before the body is read. End
+the block with `include /etc/nginx/snippets/laravel-front-controller.conf;` and bound it with `limit_conn`
+and `limit_req`, which run before the body is read. Worked example and the temp-disk arithmetic:
+`docker/README.md` -> "Project configuration".
 
-Position is the whole point: nginx matches regex locations in file order, so a fork's location must be
-seen before the PHP one or that block wins the URI and replaces every directive the fork set — before the
-request body is read.
+> ⚠️ **One fork-visible break.** Moving the FastCGI body into a snippet moves `fastcgi_read_timeout` with
+> it, so a fork whose test asserts on that directive **in `nginx.conf`** must now read
+> `docker/config/nginx-snippets/laravel-fastcgi.conf`. `aprillaneart-site`'s `ProductFeedCeilingsTest` is
+> the known case.
 
-**If your fork carries its own upload exception**, this is where it retires. Move the values into
-`docker/project/nginx/`, restore the managed-core globals to the template's, and delete the exception note
-from your `docker/README.md`. `aprillaneart-site` is the worked example.
+**If your fork carries its own upload exception**, this is where it retires: move the values into
+`docker/project/`, restore every managed-core file to the template's, and delete the exception note from
+your `docker/README.md`.
 
 ## Part F — Take the deploy gate (Docker forks)
 
@@ -160,7 +168,23 @@ chmod +x tests/scripts/php-ini.sh tests/scripts/nginx-config.sh tests/scripts/po
 +"check": "concurrently -g \"pnpm check:php\" \"pnpm check:js\" \"pnpm check:release\" \"pnpm check:deploy\" && pnpm check:build",
 ```
 
-These assert **agreement between files**, not runtime behavior: that the `Dockerfile` still installs
+Then take the built-image proof, which is the half `pnpm check` cannot do — it needs Docker, so it runs
+in CI:
+
+```bash
+mkdir -p tests/docker
+cp -R <t>/tests/docker/.               tests/docker/
+cp <t>/.github/workflows/docker-config.yml .github/workflows/docker-config.yml
+chmod +x tests/docker/*.sh
+```
+
+It builds the image twice through the same `Dockerfile` — once with `docker/project/` empty, once with the
+fixtures — and asserts against the **running container**: `nginx -t` passes, the effective `nginx -T` shows
+each include in its intended context exactly once, `ini_get()` reports the project values, and a real
+oversized POST is refused on a default route and accepted on the elevated one. That last assertion is the
+only one that proves the feature rather than its wiring.
+
+The shell contracts assert **agreement between files**, not runtime behavior: that the `Dockerfile` still installs
 `php.ini` where PHP reads it last (the `zz-` prefix — conf.d loads alphabetically, so a rename leaves the
 file loaded and then silently overridden), that the snippets include still precedes the PHP location, that
 the nginx and PHP transport ceilings can be reached, and that `post-deployment.sh` still runs
