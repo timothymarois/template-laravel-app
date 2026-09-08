@@ -9,6 +9,7 @@
         <InputBase
             ref="inputRef"
             :type="type"
+            :inputmode="inputmode"
             :modelValue="displayValue"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -36,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+import type { HTMLAttributes } from 'vue';
 import { computed, ref } from 'vue';
 import { InputBase } from '@/components/ui/input';
 import { X } from 'lucide-vue-next';
@@ -54,8 +56,16 @@ interface Props {
     invalid?: boolean;
     clearable?: boolean;
     size?: 'small' | 'large' | 'default';
-    class?: string;
+    class?: HTMLAttributes['class'];
     maxlength?: number | string;
+    /**
+     * Which on-screen keyboard a mobile browser opens.
+     *
+     * `type` alone is not enough: `type="text"` on a phone-number field gives a full
+     * QWERTY keyboard, and `type="number"` brings spinners and swallows leading zeros.
+     * `inputmode="numeric"` gets the digit pad without either.
+     */
+    inputmode?: 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
     /**
      * Custom input formatter for text transformations.
      *
