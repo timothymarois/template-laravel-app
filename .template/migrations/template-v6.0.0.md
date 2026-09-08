@@ -351,6 +351,15 @@ it has been in your git history for as long as it has existed.
 - `AGENTS.md` **and** `CLAUDE.md` — byte-identical, enforced by a test. Edit both in the same commit or
   the suite fails. v6.0.0 also restructures "Before you work" to five points, hardens the skill-loading
   rule, and adds a "Delegation and review" section; take those if your fork tracks the template's rules.
+- **Copy `docs/guides/troubleshooting.md` from `<t>` and add its `docs/guides/README.md` row.** ⚠️ Take it
+  even if you skip every other doc in this part. It carries the traps this stack has already sprung —
+  several of which each fork rediscovered independently — and it opens by telling whoever reads it that a
+  defect in template-managed code (`ui/`, `composables/`, `utils/`, the gates, `scripts/`, `docker/config/`,
+  the docs) gets a PR against the template, not just a local patch. That instruction is the point: three
+  forks paying separately for the same bug is what this release is correcting. Append your own fork's traps
+  under it; keep product-specific ones out of any PR you send upstream.
+- Copy `docs/concepts/ui-kit.md` and its `docs/concepts/README.md` row if your fork carries the shared kit —
+  it is the index that stops a fourth near-duplicate component being written.
 
 
 ---

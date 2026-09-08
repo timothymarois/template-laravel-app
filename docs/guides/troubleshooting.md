@@ -3,6 +3,15 @@
 **When to use:** Something failed in a way that wasted your time, and you want to know whether it is a known trap before you debug it.
 **Prerequisites:** None.
 
+> **Found something the template itself gets wrong? Fix it upstream.**
+> If the friction is in template-managed code — the `ui/` kit, `composables/`, `utils/`, the gates,
+> `scripts/`, `docker/config/`, or these docs — the fix belongs in
+> [`template-laravel-app`](https://github.com/timothymarois/template-laravel-app), not only in this fork.
+> Patch it locally to unblock yourself, then open a PR against the template with the same change and a
+> regression test, so the next project on this template never pays for it again. A fix that lives only in
+> one fork is a fix three other forks will each rediscover — every entry below is evidence of exactly that.
+> Product-specific code (your own pages, services, migrations) stays in the fork.
+
 Every entry here was paid for by a real failed run in this repository or a fork of it. Most of them fail
 **quietly** — a gate passes, a class does nothing, a test proves nothing — which is why they cost an hour
 rather than a minute. Delete an entry once the trap is genuinely gone; a long page means something was
