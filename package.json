@@ -8,7 +8,7 @@
     },
     "scripts": {
         "dev": "php artisan ziggy:generate && vite",
-        "build": "php artisan ziggy:generate && vite build",
+        "build": "scripts/preflight-php && php artisan ziggy:generate && vite build",
         "build-ssr": "php artisan ziggy:generate && vite build && vite build --ssr",
         "test": "vitest run",
         "test:watch": "vitest",
@@ -17,7 +17,7 @@
         "lint:fix": "eslint \"resources/js/**/*.{js,ts,vue}\" --fix",
         "lint:css": "stylelint \"resources/css/**/*.css\"",
         "lint:css:fix": "stylelint \"resources/css/**/*.css\" --fix",
-        "check:php": "./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && php -d memory_limit=512M ./vendor/bin/pest",
+        "check:php": "scripts/preflight-php && ./vendor/bin/pint --test && ./vendor/bin/phpstan analyse --memory-limit=512M && php -d memory_limit=512M ./vendor/bin/pest",
         "check:js": "pnpm lint && pnpm lint:css && pnpm typecheck && pnpm test",
         "check:release": "bash tests/scripts/prepare-production-release.sh && bash tests/scripts/production-release-version.sh && bash tests/scripts/publish-production-release.sh && bash tests/scripts/assert-neutral-main-version.sh",
         "check:deploy": "bash tests/scripts/php-ini.sh && bash tests/scripts/nginx-config.sh && bash tests/scripts/post-deployment.sh",

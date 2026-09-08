@@ -10,8 +10,9 @@ it('allows active users to access the application', function () {
         'is_active' => true,
     ]);
 
-    $this->actingAs($user)->get('/');
+    $response = $this->actingAs($user)->get('/');
 
+    $response->assertOk();
     $this->assertAuthenticatedAs($user);
 });
 
@@ -54,12 +55,14 @@ it('redirects a deactivated user off an auth:sanctum route instead of erroring',
     $this->assertGuest('web');
 });
 
-it('deactivated user cannot log back in while deactivated', function () {
+it('answers 403 rather than a redirect when a deactivated user calls with XHR', function () {
+    // The middleware has two exits and only the redirect was covered. AGENTS.md directs
+    // background calls through axios, so this is the branch a deactivated user's XHR takes;
+    // a silent 302 to the login HTML would look like a success to the caller.
     $user = User::factory()->inactive()->create();
 
-    // Simulate login attempt (user is logged in by test, then middleware catches it)
-    $response = $this->actingAs($user)->get('/');
+    $response = $this->actingAs($user)->getJson('/');
 
-    $response->assertRedirect(route('login'));
-    $this->assertGuest();
+    $response->assertForbidden();
+    $response->assertJsonPath('message', 'Your account has been deactivated.');
 });

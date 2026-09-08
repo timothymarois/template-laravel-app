@@ -252,7 +252,14 @@ Three fixes, each small, each closing something real:
 2. `LoginRequest::authenticate()` — after a successful `Auth::attempt`, refuse an inactive user
    explicitly (see `<t>`). `EnsureUserIsActive` only ejects on the *next* request, leaving one fully
    authenticated request in between.
-3. `LoginRequest::rules()` — change `'password' => 'required|string|min:8'` to `'required|string'`.
+3. `EnsureUserIsActive::handle()` — change `Auth::logout()` to `Auth::guard('web')->logout()`. ⚠️ On any
+   route behind `auth:sanctum` — which is every `/admin/*` route — `Authenticate` has already called
+   `shouldUse('sanctum')`, so the default guard is Sanctum's `RequestGuard`, which has no `logout()`.
+   A deactivated user hitting the admin area got a **500**, not a redirect. Every case in the template's
+   own `EnsureUserIsActiveTest` used `/`, a session-only route, so the broken path was never exercised.
+   Copy the two new cases from `<t>` with it: one on `admin.users.index`, one asserting the JSON/XHR
+   branch answers 403 (that branch had no coverage at all).
+4. `LoginRequest::rules()` — change `'password' => 'required|string|min:8'` to `'required|string'`.
    Length policy belongs on the routes that set a password; on login it locks out pre-policy passwords
    and advertises the minimum to a prober.
 
@@ -398,6 +405,50 @@ from `<t>` file by file; each is small.
 | `resources/js/components/app/layout/AppLayout.vue` | Read `page.props.user` by value, so the avatar did not update on a partial reload. |
 | `resources/js/components/ui/index.ts` | Omitted 13 shipped components with nothing saying why. Nine are now exported; the four that pull optional deps or clash by name are excluded **with a comment naming the reason**. |
 | `resources/js/components/app/layout/AppShell.vue` | `defineAsyncComponent()` on the Toaster could not split, because the barrel exports it statically — Vite warned on every build. |
+
+---
+
+## Part J2 — Gates that were passing without checking (every fork) ⚠️
+
+Two gates in every fork name work they never did. Both fixes are one line; the second surfaces real
+errors that then have to be fixed, so budget for it.
+
+1. **`typecheck` never read a single component.** `tsc --noEmit` cannot parse `.vue` at all, and it only
+   exited 0 because `resources/js/env.d.ts` declared every SFC as `Record<string, never>` — a shim that
+   also suppressed every real error inside a component. Copy `<t>/resources/js/env.d.ts` (no `*.vue`
+   shim; it declares Ziggy's `$route` on `ComponentCustomProperties` instead), set
+   `"typecheck": "vue-tsc --noEmit"`, and add `"noImplicitAny": false` to `tsconfig.json` — `ui/` is
+   `lang="ts"` while `app/` and `site/` are plain JS, so a typed component importing an untyped SFC is
+   the architecture, not a defect. Expect errors: this template had **103**. Prove the gate afterwards by
+   putting `const x: number = 'a'` in a `.vue` and watching it fail.
+2. **`lint` skipped every `.ts` file.** The glob was `resources/js/**/*.{js,vue}` while the ESLint config
+   already had a `**/*.{ts,tsx}` block — 156 files went unchecked with ESLint exiting 0. Add `ts` to the
+   glob in both `lint` and `lint:fix`, run `pnpm lint:fix`, then copy the `vue/one-component-per-file`
+   override for `resources/js/tests/**` from `<t>/eslint.config.js` (inline stubs in specs are not SFC
+   authoring).
+
+**Fixes the type gate then surfaces**, all in `<t>` — take them if you have the shared kit:
+
+| File | What was wrong |
+|---|---|
+| `components/ui/calendar/Calendar.vue`, `range-calendar/RangeCalendar.vue` | `:placeholder` was bound **before** `v-bind="forwarded"`, which still carried `placeholder` — so the external prop overwrote the internal one and quick navigation could not move the grid. Add `"placeholder"` to `reactiveOmit`. |
+| `components/ui/editor/Editor.vue` | Called tiptap v2's `setContent(content, false, parseOptions)`. v3 takes `(content, options)`, so `emitUpdate: false` **and** `preserveWhitespace` were both dropped and every programmatic set re-emitted an update. |
+| `components/ui/tags-input/TagsInputItem.vue` | Imported `TagsInputVariant` from `TagsInput.vue`, which does not export it. It lives in `./types`. |
+| `components/ui/button/Button.vue` | `class?: string` rejected the object and array forms callers pass. Widen to `HTMLAttributes['class']` — this alone cleared 17 errors. |
+| `components/ui/data-table/TableActions.vue` | Read `.tooltip` off an untyped `Array` prop, and `menuItem` was optional but dereferenced. |
+| Date components | `DateValue`/`DateRange` are unions of **classes**; `ref()` applies `UnwrapRef`, which distributes over the union and strips class identity. Use `shallowRef`. |
+| 5 files using `text-md` | Not a Tailwind utility — it emitted no CSS rule at all. Replace with `text-base` (identical rendering; the elements were inheriting 1rem anyway). |
+
+**Then make the traps unrepeatable** — three preventions, all in `<t>`:
+
+- `resources/js/tests/setup.js` + `setupFiles` in `vite.config.js`: `enableAutoUnmount(afterEach)`. Without
+  it a component bound to `window`/`document` keeps answering the **next** case's events, so an assertion
+  reports the leftover component's behaviour.
+- `resources/js/tests/conventions/tailwindClasses.test.js`: fails the build on names that read as real
+  Tailwind and emit nothing.
+- `scripts/preflight-php` on `check:php` and `build`: turns `env: php: No such file or directory` into the
+  `export PATH=...` line you actually need. It probes Herd, Lerd, Homebrew and the system paths and only
+  names one where a PHP actually exists on that machine — it never edits PATH and hardcodes no location.
 
 ---
 

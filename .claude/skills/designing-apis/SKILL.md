@@ -1,6 +1,6 @@
 ---
 name: designing-apis
-description: Use when designing, reviewing, documenting, or evolving an HTTP or RESTful API, including resource and URL modelling, method and status-code choice, request and response payloads, error formats, collections and pagination, filtering, idempotency and concurrency control, rate limits, authentication and authorization boundaries, versioning and deprecation, and the OpenAPI contract. Do not use for implementing a specific framework's routing, for consuming somebody else's API inside application code, or for GraphQL, gRPC, or event-stream schema design.
+description: Use when designing, reviewing, documenting, or evolving an HTTP or RESTful API, including resource and URL modelling, method and status-code choice, request and response payloads, error formats, collections and pagination, filtering, idempotency and concurrency control, rate limits, authentication and authorization boundaries, versioning and deprecation, renaming, moving or retiring a path that already ships and that external callers poll such as a health, status or webhook URL, and the OpenAPI contract. Do not use for implementing a specific framework's routing, for consuming somebody else's API inside application code, or for GraphQL, gRPC, or event-stream schema design.
 ---
 
 # Design APIs
