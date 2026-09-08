@@ -1,20 +1,28 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, inject } from 'vue';
 import { mount } from '@vue/test-utils';
-import { Ziggy } from '@/ziggy';
+
+// `ziggy` is a Vite alias to vendor/tightenco/ziggy/src/js — delivered by Composer,
+// not npm. The Vitest CI job is deliberately node-only (no PHP, no composer, no
+// vendor/), so the real library cannot be imported here and is faked.
+//
+// That also sets the right unit boundary: URL generation belongs to Ziggy and is its
+// own tested library. What this file pins is the contract the plugin owns — that the
+// helper is reachable three ways, and that it forwards `absolute` and the config.
+const ziggyRoute = vi.fn(() => '/login');
+
+vi.mock('ziggy', () => ({ route: (...args) => ziggyRoute(...args) }));
+
 import ZiggyPlugin from '@/plugins/inertia/ziggy';
 
-// These pin the contract the whole app relies on: route() must exist in three
-// places, must return a RELATIVE path, and must fail loudly with the route name
-// when the generated route list is stale.
-
-const mountWithPlugin = (setup) =>
+const mountWithPlugin = (setup = () => {}) =>
     mount(defineComponent({ setup, render: () => null }), {
         global: { plugins: [ZiggyPlugin] },
     });
 
 beforeEach(() => {
-    globalThis.Ziggy = Ziggy;
+    vi.clearAllMocks();
+    globalThis.Ziggy = { url: 'https://example.test', routes: {} };
 });
 
 afterEach(() => {
@@ -24,7 +32,7 @@ afterEach(() => {
 
 describe('ziggy plugin', () => {
     it('exposes route() on globalThis for module-level scripts', () => {
-        mountWithPlugin(() => {});
+        mountWithPlugin();
 
         expect(typeof globalThis.route).toBe('function');
         expect(globalThis.route('login')).toBe('/login');
@@ -49,33 +57,50 @@ describe('ziggy plugin', () => {
         expect(wrapper.find('a').attributes('href')).toBe('/login');
     });
 
-    it('returns a relative path by default so the bundle is host-portable', () => {
-        // Ziggy itself defaults to absolute:true. The plugin flips it, which is what
-        // keeps a built bundle from leaking the build-time host into every href.
-        mountWithPlugin(() => {});
+    it('asks for a relative URL by default', () => {
+        // Ziggy's own default is absolute:true. The plugin flips it, which is what keeps
+        // the build-time host out of every href and makes one bundle portable across hosts.
+        mountWithPlugin();
 
-        expect(globalThis.route('login')).not.toMatch(/^https?:\/\//);
+        globalThis.route('login');
+
+        expect(ziggyRoute).toHaveBeenCalledWith('login', undefined, false, globalThis.Ziggy);
     });
 
-    it('still returns an absolute URL when explicitly asked', () => {
-        mountWithPlugin(() => {});
+    it('passes an explicit absolute request straight through', () => {
+        mountWithPlugin();
 
-        expect(globalThis.route('login', undefined, true)).toMatch(/^https?:\/\//);
+        globalThis.route('login', undefined, true);
+
+        expect(ziggyRoute).toHaveBeenCalledWith('login', undefined, true, globalThis.Ziggy);
     });
 
-    it('substitutes route parameters', () => {
-        mountWithPlugin(() => {});
+    it('forwards route parameters', () => {
+        mountWithPlugin();
 
-        expect(globalThis.route('admin.users.show', 7)).toBe('/admin/users/7');
+        globalThis.route('admin.users.show', 7);
+
+        expect(ziggyRoute).toHaveBeenCalledWith('admin.users.show', 7, false, globalThis.Ziggy);
     });
 
-    it('names the missing route when the generated list is stale', () => {
-        // This is the message an agent sees after adding a route without running
-        // `php artisan ziggy:generate`. It must name the route, or the cause is a guess.
-        mountWithPlugin(() => {});
+    it('reads the config from globalThis.Ziggy at call time, not at install time', () => {
+        // setup.js assigns globalThis.Ziggy; a config captured at install would go stale
+        // and, under SSR, could leak one request's config into another.
+        mountWithPlugin();
+        const replacement = { url: 'https://other.test', routes: {} };
+        globalThis.Ziggy = replacement;
 
-        expect(() => globalThis.route('route.added.but.not.generated')).toThrow(
-            /route 'route\.added\.but\.not\.generated' is not in the route list/,
-        );
+        globalThis.route('login');
+
+        expect(ziggyRoute).toHaveBeenCalledWith('login', undefined, false, replacement);
+    });
+
+    it('lets an explicit config override the global', () => {
+        mountWithPlugin();
+        const override = { url: 'https://override.test', routes: {} };
+
+        globalThis.route('login', undefined, false, override);
+
+        expect(ziggyRoute).toHaveBeenCalledWith('login', undefined, false, override);
     });
 });

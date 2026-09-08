@@ -32,6 +32,7 @@ fixed and never pruned.
 |---|---|
 | A type error inside a `.vue` file reaches production | `tsc` cannot read `.vue` at all. The gate is `vue-tsc --noEmit`; if `env.d.ts` ever regains a `declare module '*.vue'` shim, it overrides every component's real props and suppresses the errors again. |
 | A `.ts` file is never linted | `pnpm lint` globs `resources/js/**/*.{js,ts,vue}`. Drop `ts` from that list and 156 files stop being checked while ESLint still exits 0. |
+| A Vitest file passes locally and fails CI with `Failed to resolve import` | It reached something only Composer provides — `@/ziggy` (generated, git-ignored) or `'ziggy'` (a Vite alias into `vendor/`). The unit-test job is node-only by design, so neither exists there. Reproduce it with `mv vendor /tmp/v && pnpm test; mv /tmp/v vendor`. |
 | A Tailwind class does nothing and no tool complains | Tailwind emits a class only if its literal text appears in a scanned source file, and emits nothing for a name that is not a utility — `text-md` shipped in 5 places and produced no rule. `resources/js/tests/conventions/tailwindClasses.test.js` now fails the build on the names that read as real and are not; add to that list when you find another. A class built by interpolation is still never generated. |
 | A middleware test is green and the middleware is broken | `tests/Feature/EnsureUserIsActiveTest.php` used only `/`, a session-only route, so the `auth:sanctum` path was never exercised — and a deactivated user was getting a 500 there. Cover each **branch and route group**, not each method. |
 

@@ -34,6 +34,11 @@ export default defineConfig({
         exclude: ['vue'],
     },
     test: {
+        // `ziggy` lives in vendor/ (Composer, not npm). The unit-test job runs without
+        // PHP, so the specifier cannot resolve there — point it at a stub for tests only.
+        alias: {
+            ziggy: path.resolve(__dirname, 'resources/js/tests/stubs/ziggy.js'),
+        },
         globals: true,
         environment: 'happy-dom',
         setupFiles: ['resources/js/tests/setup.js'],

@@ -76,6 +76,11 @@ Both are regenerated from the same `routes/*.php`, so they agree at build/deploy
 - **A new route "missing" in JS** is a stale bundle, not a bug — regenerate / restart dev.
 - **Don't hardcode a URL** to dodge a stale route — fix the generation, keep the name.
 - **`from 'ziggy-js'` does not resolve.** The specifier is `'ziggy'`, and it needs `vendor/` present.
+- **A unit test must not import `@/ziggy` or, unaliased, `'ziggy'`.** Both are absent in CI: the route list
+  is generated and git-ignored, and the `Lint, types, tests` job is deliberately node-only, with no PHP and
+  no `vendor/`. Either import passes locally and fails there with `Failed to resolve import`. `vite.config.js`
+  aliases `ziggy` to `resources/js/tests/stubs/ziggy.js` for `test` only, so the plugin can be unit-tested
+  without Composer. Reproduce the CI condition before pushing: `mv vendor /tmp/v && pnpm test; mv /tmp/v vendor`.
 
 ## Verify
 
