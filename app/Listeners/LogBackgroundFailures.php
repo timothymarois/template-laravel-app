@@ -9,15 +9,21 @@ use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Log;
 
 /**
- * Writes a structured log line whenever background work fails.
+ * Adds a queryable log line whenever background work fails.
  *
- * Without this, background failures are invisible to the production log sink. A failed
- * job lands in `failed_jobs` and Horizon's UI, neither of which a stderr-based shipper
- * reads; a failed *scheduled task* is recorded nowhere at all, so a task that has been
- * throwing for a week looks identical to one that simply had nothing to do.
+ * **Laravel already logs these.** `Queue\Worker` calls `exceptions->report()` on a failed
+ * job and `ScheduleRunCommand` calls `handler->report()` on a failed task, so the sink
+ * already receives the exception and its stack trace. This listener does not fix a gap in
+ * coverage — it fixes a gap in *shape*.
  *
- * Production logs to stderr as one-line JSON (`LOG_CHANNEL=stderr`), so the context
- * array below is what becomes queryable in the sink — hence the flat, named keys.
+ * The framework's entry is the exception message plus a trace blob. The job class, queue,
+ * attempt count and uuid appear only inside that trace string, so a sink cannot filter on
+ * them. Under `LOG_CHANNEL=stderr` the context below is emitted as one-line JSON, which
+ * makes each key a field: `event="job.failed"`, `job="App\Jobs\SendInvoice"`, and so on.
+ *
+ * The cost is a second ERROR line per failure — the trace in one, the metadata in the
+ * other. A fork that does not query its logs by field can drop this listener and lose
+ * nothing but the filtering.
  */
 class LogBackgroundFailures
 {

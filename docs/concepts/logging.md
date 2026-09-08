@@ -96,16 +96,25 @@ stdout/stderr (`docker/config/supervisord.conf`), so their output reaches the sa
 web requests. **No host cron is involved** — `schedule:work` is the scheduler, and
 `health:schedule-check-heartbeat` proves it is still ticking.
 
-Failures need help to get there:
+**Laravel already logs both failures.** `Queue\Worker` reports a failed job to the
+exception handler, and `ScheduleRunCommand` does the same for a failed task, so the
+exception and its stack trace reach the sink without any help. A failed job additionally
+lands in `failed_jobs` and Horizon's UI.
 
-| Failure | Recorded natively in | Reaches the log sink because |
-|---|---|---|
-| Queued job | `failed_jobs` + Horizon's UI | `LogBackgroundFailures::jobFailed` logs `job.failed` with the job name, queue, attempts and uuid |
-| Scheduled task | **nothing** | `LogBackgroundFailures::scheduledTaskFailed` logs `schedule.failed` with the task summary and expression |
+What the framework does **not** give you is shape. Its entry is the message plus a trace
+blob, so the job class, queue, attempt count and uuid exist only as text inside that trace
+and cannot be filtered on. `App\Listeners\LogBackgroundFailures` adds one structured line
+alongside it:
 
-Both are registered in `AppServiceProvider`. Query the sink on `event=job.failed` or
-`event=schedule.failed`; under `LOG_CHANNEL=stderr` the context is one-line JSON, so each
-key is a queryable field.
+| Event key | Fields |
+|---|---|
+| `job.failed` | `job`, `connection`, `queue`, `attempts`, `job_uuid`, `exception`, `message` |
+| `schedule.failed` | `task`, `expression`, `exception`, `message` |
+
+Under `LOG_CHANNEL=stderr` those become one-line JSON fields, so the sink can answer "how
+often did `App\Jobs\SendInvoice` fail this week". The cost is a second ERROR line per
+failure — trace in one, metadata in the other. A fork that never queries by field can
+delete the two `Event::listen` calls in `AppServiceProvider` and lose only the filtering.
 
 **The timeout invariant:** a worker's `timeout` must stay **below** the connection's
 `retry_after`, or the queue releases a job back while it is still running and it executes
