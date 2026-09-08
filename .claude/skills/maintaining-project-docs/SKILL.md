@@ -239,6 +239,19 @@ fact, not by somebody starting at the top.
 - **One idea per paragraph, one question per heading.** A section past a screen has become two.
 - **Cut the run-up, the restatement, the tour, and the hedge.** They are most of the length.
 - **Split a page over its budget** rather than trimming it evenly. A long page is usually two pages.
+- **Budgets: a guide under ~150 lines, a concept under ~120.** Past that, check whether it is two.
+
+**Guides and concepts each have one fixed shape**, so a reader who has followed one does not have to
+learn a new layout for the next:
+
+| Page | Headings, in this order |
+|---|---|
+| Guide | `When to use` · `Prerequisites` · `Steps` (numbered, imperative, each ending in a check) · `Verify` (paste-runnable) · `Pitfalls` (a table) |
+| Concept | one paragraph of what it is · `How it works` · `How it fails` (a table) · `Verify` |
+
+Add a heading outside those only when it genuinely applies — a `Decide first` above a guide's steps
+when a choice is expensive to reverse, or `What this does not cover` at the foot. Everything else is
+a section somebody invented, and it is why two guides in the same repository read differently.
 
 Character is not the enemy of concision. A line carrying both an invariant and the failure it
 prevents earns its length; a line carrying only tone does not.

@@ -67,20 +67,9 @@ an `abilities:` check passes for any signed-in user carrying no key at all. Requ
 key belonging to a deactivated user would otherwise keep authenticating — deactivating an account has
 to disable its keys in the same act.
 
-## How it fails
+## Configure
 
-| Symptom | Cause |
-|---|---|
-| A signed-in user reaches an `abilities:`-gated route with no key | `api.key` is missing from that route's middleware. It is not optional; `auth:sanctum` alone accepts a session. |
-| A deactivated user's integration keeps working | Same — `EnsureUserIsActive` never runs on `api` routes. |
-| A key stops working after ~90 days | Working as designed — that is the default lifetime. Issue a replacement, or use "Never expires" if the caller cannot rotate. |
-| A key meant to be permanent expired anyway | The lifetime reached the service as `null` rather than `0`. Anything that coerces falsy values (`?:`) turns NEVER_EXPIRES back into the default. |
-| The plaintext appears in `storage/logs` | Something logged the `IssuedApiKey` or the request. Neither may be logged. |
-| A leaked key is still valid after "deleting" it | Revocation must be a hard delete. A soft-deleted key that still resolves authenticates as a downgraded user rather than as nobody. |
-| Adding an ability to the enum changes nothing | An ability is only a scope once a route enforces it with `abilities:`. Add the case and the route in the same change. |
-| `abilities:` routes 500 or never match | The `abilities`/`ability` aliases are registered in `bootstrap/app.php`. Sanctum ships the middleware but does not register them in Laravel 11+. |
-
-## Issuing from the console
+### Issue from the console
 
 `php artisan api-key:create` covers the cases with no browser — seeding an environment,
 provisioning CI, scripting a deploy:
@@ -94,10 +83,32 @@ php artisan api-key:create --user=ops@example.com --name=Integration --never-exp
 Like the screen, it prints the plaintext once. It refuses an unknown owner, a deactivated owner (the
 key would be refused at request time anyway) and an ability outside the enum, listing the valid ones.
 
-## Adding an ability
+### Add an ability
 
 1. Add the case to `App\Enums\ApiAbility` with a `label()`.
 2. Put `abilities:<value>` on the routes it governs — in the same change.
 3. Cover the refusal: a key without the ability must be rejected.
 
 Existing keys are unaffected; abilities are stored per key at issue time.
+
+## How it fails
+
+| Symptom | Cause |
+|---|---|
+| A signed-in user reaches an `abilities:`-gated route with no key | `api.key` is missing from that route's middleware. It is not optional; `auth:sanctum` alone accepts a session. |
+| A deactivated user's integration keeps working | Same — `EnsureUserIsActive` never runs on `api` routes. |
+| A key stops working after ~90 days | Working as designed — that is the default lifetime. Issue a replacement, or use "Never expires" if the caller cannot rotate. |
+| A key meant to be permanent expired anyway | The lifetime reached the service as `null` rather than `0`. Anything that coerces falsy values (`?:`) turns NEVER_EXPIRES back into the default. |
+| The plaintext appears in `storage/logs` | Something logged the `IssuedApiKey` or the request. Neither may be logged. |
+| A leaked key is still valid after "deleting" it | Revocation must be a hard delete. A soft-deleted key that still resolves authenticates as a downgraded user rather than as nobody. |
+| Adding an ability to the enum changes nothing | An ability is only a scope once a route enforces it with `abilities:`. Add the case and the route in the same change. |
+| `abilities:` routes 500 or never match | The `abilities`/`ability` aliases are registered in `bootstrap/app.php`. Sanctum ships the middleware but does not register them in Laravel 11+. |
+
+## Verify
+
+```sh
+php artisan route:list --path=api | grep abilities   # every gated route shows api.key + abilities:
+KEY=$(php artisan api-key:create --user=you@example.com --name=Smoke --ability=api:read --days=1 | tail -1)
+curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $KEY" https://<host>/api/user   # 200
+curl -s -o /dev/null -w '%{http_code}\n' https://<host>/api/user                                   # 401
+```

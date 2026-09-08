@@ -3,7 +3,9 @@
 **When to use:** You added or changed a feature and need the tests it requires, or you want to run the suites before committing.
 **Prerequisites:** Deps installed (`composer install`, `pnpm install`). PHP tests use Pest (`tests/`); JS/Vue tests use Vitest (`resources/js/tests/`).
 
-## What requires a test
+## Decide first
+
+What the change owes:
 
 | Change | Required test |
 |--------|----------------|
@@ -17,24 +19,26 @@ Quality bars enforced alongside tests: Larastan **level 5** minimum, TypeScript 
 
 ## Steps
 
-### Run the suites
+### 1. Run the suites
 
 ```bash
 pnpm check           # everything: PHP + JS + SSR build (run before committing)
 
 # PHP only
+
 ./vendor/bin/pest    # or: composer test
 pnpm check:php       # Pint + Larastan + Pest
 
 # JS only
+
 pnpm test            # run once
 pnpm test:watch      # watch mode
 pnpm check:js        # ESLint + Stylelint + Vitest + build
 ```
 
-### PHP — Pest
+### 2. Write a PHP test — Pest
 
-Feature test (HTTP endpoints and workflows) live in `tests/Feature/`:
+Feature tests (HTTP endpoints and workflows) live in `tests/Feature/`:
 
 ```php
 test('users can be created', function () {
@@ -50,7 +54,7 @@ test('users can be created', function () {
 });
 ```
 
-Unit test (Services and isolated logic) live in `tests/Unit/`:
+Unit tests (services and isolated logic) live in `tests/Unit/`:
 
 ```php
 test('user service creates user with hashed password', function () {
@@ -67,31 +71,10 @@ test('user service creates user with hashed password', function () {
 });
 ```
 
-Use factories for model creation:
+Build model state with factories (`User::factory()->has(Post::factory()->count(3))->create()`), never
+with hand-written inserts.
 
-```php
-test('user can have many posts', function () {
-    $user = User::factory()
-        ->has(Post::factory()->count(3))
-        ->create();
-
-    expect($user->posts)->toHaveCount(3);
-});
-```
-
-PHP test layout:
-
-```
-tests/
-├── Feature/           # HTTP and workflow tests
-│   ├── Auth/          # Authentication tests
-│   └── Admin/         # Admin feature tests
-├── Unit/              # Isolated unit tests
-│   └── Services/      # Service tests
-└── TestCase.php       # Base test case
-```
-
-### JavaScript — Vitest
+### 3. Write a JS test — Vitest
 
 Component test (Vue components in isolation):
 
@@ -111,7 +94,6 @@ describe('Button', () => {
 
     it('emits click event', async () => {
         const wrapper = mount(Button)
-
         await wrapper.trigger('click')
 
         expect(wrapper.emitted('click')).toBeTruthy()
@@ -136,25 +118,20 @@ describe('useCounter', () => {
 })
 ```
 
-JS test layout:
-
-```
-resources/js/tests/
-├── components/        # Component tests
-│   └── ui/            # UI component tests
-├── composables/       # Composable tests
-└── utils/             # Utility tests
-```
-
 ## Verify
 
-- `pnpm check` exits green — PHP suite, JS suite, and the SSR build all pass.
-- A new bug-fix test fails on the pre-fix code and passes on the fixed code.
+```bash
+pnpm check                       # PHP suite, JS suite and the SSR build all green
+git stash && ./vendor/bin/pest --filter='<your new test>'   # a regression test fails without the fix
+git stash pop
+```
 
 ## Pitfalls
 
-- Don't test framework internals.
-- Don't write tests that depend on execution order — keep them focused and independent.
-- Don't use production data in tests; use factories.
-- Don't ignore flaky tests — fix them.
-- Write tests that describe behavior, not implementation, with descriptive names covering edge cases and error conditions.
+| Symptom | Fix |
+|---|---|
+| A test passes whether or not the fix is present | It asserts the implementation, not the behavior. Revert the fix and watch it fail before you trust it. |
+| Tests pass alone but fail in the suite | Shared or order-dependent state. Use factories and per-test setup; never rely on a prior test's rows. |
+| A flaky test gets re-run until green | That is a defect in the test or the code. Fix the cause; a retry hides it. |
+| A test breaks on a harmless refactor | It reaches into internals. Assert rendered output, emitted events and stored state. |
+| A test needs production data to pass | Use factories. Production data is not reproducible and does not belong in the suite. |

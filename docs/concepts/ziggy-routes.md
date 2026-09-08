@@ -47,7 +47,7 @@ so this only bites in a running dev session.
 
 Both are regenerated from the same `routes/*.php`, so they agree at build/deploy time.
 
-## Pitfalls
+## How it fails
 
 - **Don't commit or hand-edit `resources/js/ziggy.js`** — it's generated and git-ignored.
 - **Don't guard `route()` as client-only** — it resolves on SSR too. (Do still keep `window`/`location`/

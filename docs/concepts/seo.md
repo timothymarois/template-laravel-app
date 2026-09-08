@@ -59,7 +59,7 @@ route and appears whenever the command is run locally.
 | A crawler sees an empty page | The `inertia-ssr` process is not running. `config/inertia.php` sets `throw_on_error => false`, so the app silently falls back to client-only rendering — nothing alerts on this. |
 | `/sitemap.xml` 404s in production | It is git-ignored and generated. Nothing generates it by default. |
 
-## Verify a deployment
+## Verify
 
 ```sh
 curl -sS https://your-host/ | grep -icE '<title'            # expect 1

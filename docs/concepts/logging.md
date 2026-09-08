@@ -20,12 +20,12 @@ LOG_STDERR_FORMATTER=          # empty = Monolog's default LineFormatter
 
 Local dev is unaffected — it uses the `daily` file channel.
 
-## Steps — read locally
+## Read logs locally
 
 1. Tail the current day's file: `tail -f storage/logs/laravel-*.log`
 2. Or stream live with Pail: `php artisan pail`
 
-## Steps — centralize in production
+## Configure — centralize in production
 
 You wire up **one** sink. Common choices: **Loki + Grafana** (self-hosted, cheapest storage on S3/Spaces, you operate it), **Axiom** (managed, zero infra, native Coolify Log Drain), or **Better Stack / Grafana Cloud** (managed, hosted UI). All separate apps by **labels** (e.g. `app="my-app"`), so one sink serves every project — never one stack per app.
 
@@ -89,14 +89,14 @@ Other server(s): Alloy agent  ───────────▶ pushes to the
 
 To add a server: (1) expose the central Loki to it — give the `loki` service a domain with **Basic Auth** (Loki has no auth of its own), or push to the primary's private IP `http://<private-ip>:3100` over a shared private network; (2) deploy an Alloy agent on the other server (collector only) pointed at that Loki URL, tagging logs with a `server` label so you can filter per host: `{app="my-app", server="server-b"}`. Apps on that server still just need `LOG_CHANNEL=stderr`.
 
-## Verify
-
-- Local: `tail -f storage/logs/laravel-*.log` shows new lines as you exercise the app.
-- Production: querying `{app="<your-app>"}` in Grafana returns the container's log stream with parsed JSON fields.
-
-## Pitfalls
+## How it fails
 
 - Don't point the container health check at anything but `/up`; logging is separate from health.
 - Don't run a second single-binary Loki against a shared bucket — it corrupts the index.
 - Run Loki + Grafana + Alloy as Coolify-managed resources (ideally one Compose stack) so the UI controls their lifecycle. A raw `docker run`/compose outside Coolify isn't tracked, and deleting it from the UI leaves the container running.
 - Logs ≠ error tracking. Logging is for searchable, high-volume output; for grouped exceptions and alerting the template ships **Sentry** — set `SENTRY_LARAVEL_DSN`. Use both; they're complementary.
+
+## Verify
+
+- Local: `tail -f storage/logs/laravel-*.log` shows new lines as you exercise the app.
+- Production: querying `{app="<your-app>"}` in Grafana returns the container's log stream with parsed JSON fields.

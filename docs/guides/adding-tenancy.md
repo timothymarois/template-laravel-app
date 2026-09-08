@@ -2,24 +2,17 @@
 
 **When to use:** Your product needs isolated workspaces — many customers, each with their own data — and
 you have decided the template's single-tenant default is not enough.
-**Prerequisites:** A green `pnpm check`. A reachable PostgreSQL or MySQL server (SQLite cannot do
-database-per-tenant). Read the whole page before running anything: step 1 is a decision you should not
-reverse later.
+**Prerequisites:** A green `pnpm check`, and PostgreSQL or MySQL (SQLite cannot do
+database-per-tenant). Read *Decide first* before running anything.
 
-> **This template does not ship multi-tenancy.** It was built in until v6.0.0 and removed there, because
-> almost no fork enabled it and every fork carried it. What follows rebuilds it deliberately, in your fork,
-> where you own it. Nothing here is template-managed: once you follow this guide, upgrades will not touch
-> your tenancy code and you maintain it yourself.
-
-> **Guide budget exception.** This page is deliberately longer than the ~200-line guide budget. Tenancy
-> used to be spread over two cross-referencing guides plus a migration document, and the scattering was
-> the problem. One page that runs long beats three that disagree — keep it that way.
+> **This is not template-managed.** Tenancy was removed in v6.0.0. What you build here is yours —
+> template upgrades will not touch it, and you maintain it.
 
 ---
 
-## 1. Choose the shape — before you install anything
+## Decide first
 
-Two independent decisions. Both are expensive to reverse once you have customers.
+Two decisions, both expensive to reverse once you have customers.
 
 ### Path vs subdomain
 
@@ -28,8 +21,8 @@ Two independent decisions. Both are expensive to reverse once you have customers
 | **Path** (recommended) | `app.example.com/t/acme/dashboard` | **Low.** One domain, one session cookie, no special config. | None — works on any domain you already serve. |
 | **Subdomain** | `acme.example.com/dashboard` | **Higher.** The session cookie must be scoped to `.example.com` to carry across subdomains; cross-subdomain CSRF; signed URLs need host rewriting. | Wildcard DNS (`*.example.com`) **and** a wildcard TLS certificate. |
 
-**Path mode is permanently viable.** There is no technical graduation to subdomains — choose them for a
-marketing reason (vanity URLs, white-labeling), never because you assume you will outgrow paths.
+**Path mode is permanently viable.** Choose subdomains for a marketing reason, never because you
+assume you will outgrow paths.
 
 ### One tenant per user, or many
 
@@ -38,14 +31,12 @@ marketing reason (vanity URLs, white-labeling), never because you assume you wil
 | **Single** | One personal workspace per signup, no team invites | Attach the user to their tenant at signup; login redirects straight in. |
 | **Multiple** | Users join several workspaces (teams, agencies, marketplaces) | Same pivot, several rows per user; login routes through a picker when a user has 2+. |
 
-Both use the same `tenant_user` pivot, so this is not an install-time switch — it is what your code does
-with the pivot. Build for single, and the move to multiple is additive.
+Both use the same `tenant_user` pivot, so this is not an install-time switch. Build for single; the
+move to multiple is additive.
 
----
+## Steps
 
-## 2. Install and wire it
-
-### 2.1 The package
+### 1. Install the package
 
 ```bash
 composer require stancl/tenancy:^3.10
@@ -53,28 +44,12 @@ php artisan tenancy:install
 ```
 
 `tenancy:install` publishes `config/tenancy.php`, a `TenancyServiceProvider`, the tenants/domains
-migrations, and `routes/tenant.php`. Register the provider in `bootstrap/providers.php`:
+migrations, and `routes/tenant.php`. Add `TenancyServiceProvider::class` to `bootstrap/providers.php`.
 
-```php
-use App\Providers\TenancyServiceProvider;
+### 2. Split the migrations
 
-return [
-    AppServiceProvider::class,
-    HorizonServiceProvider::class,
-    TenancyServiceProvider::class,
-];
-```
-
-### 2.2 Split the migrations
-
-The package expects central and tenant migrations in separate directories. Laravel's default
-`database/migrations/` stays central; add a tenant directory:
-
-```bash
-mkdir -p database/migrations/tenant
-```
-
-Move the published `tenants` and `domains` migrations into `database/migrations/central/`, and load that
+Central and tenant migrations live in separate directories. `mkdir -p database/migrations/tenant`,
+move the published `tenants`/`domains` migrations into `database/migrations/central/`, and load that
 directory from `TenancyServiceProvider::boot()`:
 
 ```php
@@ -90,7 +65,7 @@ Point the package at the tenant directory in `config/tenancy.php`:
 ],
 ```
 
-**Which table goes where** — get this list right before you write a migration:
+**Which table goes where** — settle this before writing a migration:
 
 | Category | Examples | Goes |
 |---|---|---|
@@ -100,15 +75,15 @@ Point the package at the tenant directory in `config/tenancy.php`:
 | Domain data | `projects`, `tasks`, `orders` — anything a customer owns | Tenant |
 | App config | `settings` (per-customer → tenant; global → central), `feature_flags` | Depends |
 
-Commit that list to your fork. It is the single most-consulted decision in a tenanted codebase.
+Commit that list to your fork; it is the most-consulted decision in a tenanted codebase.
 
-### 2.3 Pin the central models
+### 3. Pin the central models
 
-Every model that must always read the central database — `User` above all — needs an explicit connection,
-or it will silently follow whatever tenant context happens to be active:
+Any model that must always read the central database — `User` above all — needs an explicit
+connection, or it silently follows whatever tenant context is active:
 
 ```php
-// app/Models/Concerns/CentralConnection.php
+// app/Models/Concerns/CentralConnection.php — then `use CentralConnection;` on User
 trait CentralConnection
 {
     public function getConnectionName(): ?string
@@ -118,25 +93,16 @@ trait CentralConnection
 }
 ```
 
-Apply it to `User` and to anything else in the central list above:
+Apply it to everything in the central list above. Add the tenant relationship and the `tenant_user`
+pivot migration (`user_id`, `tenant_id`, `role`, `joined_at`).
 
-```php
-class User extends Authenticatable
-{
-    use CentralConnection, HasApiTokens, HasFactory, Notifiable;
-```
+### 4. Add the central connection
 
-Add the tenant relationship and the pivot migration (`tenant_user`: `user_id`, `tenant_id`, `role`,
-`joined_at`) if you chose the many-tenants pattern.
+Copy your `pgsql`/`mysql` block in `config/database.php`, rename it `pgsql_central`, drive it from
+`DB_CENTRAL_*`, and set `tenancy.database.central_connection` to it. In development it may point at
+the same database; in production give it its own.
 
-### 2.4 Central database connection
-
-Add a dedicated central connection in `config/database.php` (copy your existing `pgsql`/`mysql` block,
-rename it `pgsql_central`, and drive it from `DB_CENTRAL_*` env vars), then set
-`tenancy.database.central_connection` to it. In development it is fine to point the central connection at
-the same database you already use; in production give it its own.
-
-### 2.5 Routes and middleware
+### 5. Wire routes and middleware
 
 Tenant routes live in `routes/tenant.php`, registered from the provider. A path-mode group:
 
@@ -151,24 +117,19 @@ Route::middleware([
 });
 ```
 
-`EnsureUserBelongsToTenant` is yours to write — it checks the pivot and 403s otherwise. **Write it before
-you write a single tenant route**: without it, tenant identification only proves which tenant was asked
-for, not that the caller is entitled to it. That is the whole security boundary.
+`EnsureUserBelongsToTenant` is yours to write: check the pivot, 403 otherwise. **Write it before the
+first tenant route** — identification proves which tenant was asked for, not that the caller is
+entitled to it. That is the whole security boundary.
 
-Login, registration and password reset stay on the **central** domain. A tenant subdomain has no login page
-unless you build one.
+Login, registration and password reset stay on the **central** domain.
 
-### 2.6 Run the central migrations
+### 6. Run the central migrations
 
 ```bash
 php artisan migrate --database=pgsql_central
 ```
 
----
-
-## 3. Use it
-
-### Provisioning and the lifecycle
+### 7. Provision and use a tenant
 
 | State | Means | Set by |
 |---|---|---|
@@ -176,62 +137,61 @@ php artisan migrate --database=pgsql_central
 | `$tenant->hasFailed()` | Provisioning errored | Your own `markFailed($reason)` on a `TenantCreationFailed` listener |
 | `$tenant->trashed()` | Soft-deleted; the database still exists | Eloquent `SoftDeletes` |
 
-**The race worth knowing about.** If you queue the creation pipeline (`shouldBeQueued(true)`, which you
-want in production), the signing-up user is redirected to their tenant *before* the database exists. Guard
-the tenant route group with a readiness middleware that returns 503 + `Retry-After` while `isReady()` is
-false, and show a polling loader. Skip this and every production signup is a race you lose sometimes.
+**The race to know about.** A queued creation pipeline (`shouldBeQueued(true)`, which you want in
+production) redirects the new user to their tenant *before* the database exists. Guard the route
+group with a readiness middleware returning 503 + `Retry-After` while `isReady()` is false. Skip
+this and every production signup is a race you sometimes lose.
 
-**Deletion:** `delete()` soft-deletes and keeps the database; `forceDelete()` drops it permanently. Put a
-grace window between them — a scheduled command that force-deletes tenants soft-deleted more than N hours
-ago — so an accidental deletion is recoverable.
+**Deletion:** `delete()` soft-deletes and keeps the database; `forceDelete()` drops it. Put a grace
+window between them — a scheduled purge of tenants soft-deleted over N hours ago — so an accidental
+deletion is recoverable.
 
-### In code
+`tenant()` returns the current tenant or `null`; `tenancy()->initialize($tenant)` / `->end()` enter
+and leave context by hand, which is what commands, jobs and tests need. Queries in a tenant-routed
+request are scoped; queries anywhere else are not.
 
-- `tenant()` — the current tenant, or `null` in central context.
-- `tenancy()->initialize($tenant)` / `tenancy()->end()` — enter and leave tenant context by hand, which is
-  what you need in commands, jobs and tests.
-- Queries in a tenant-routed request are already scoped; queries anywhere else are not.
+### 8. Add the tenancy test suite
 
----
-
-## 4. Test it
-
-Tenant behavior needs its own suite. The default `phpunit.xml` has no tenant context, so tenant routes
-404 and tenant tables are never touched — **a green default run proves nothing about tenant code.**
-
-Add a second config (`phpunit.tenancy.xml`) with tenancy enabled, base test cases that initialize and tear
-down tenant context, and a script to run it:
+**A green default run proves nothing about tenant code:** `phpunit.xml` has no tenant context, so
+tenant routes 404 and tenant tables are never touched. Add `phpunit.tenancy.xml` with tenancy
+enabled, base test cases that initialise and tear down context, and a script:
 
 ```json
 "check:tenancy": "php -d memory_limit=512M ./vendor/bin/pest --configuration=phpunit.tenancy.xml",
 "check:all": "pnpm check && pnpm check:tenancy"
 ```
 
-Run `check:all` — not `check` — before committing anything tenant-scoped, and run the tenancy suite in CI
-as its own job.
+Run `check:all` — not `check` — before committing anything tenant-scoped, and as its own CI job.
 
----
-
-## 5. Adopting it on an app that already has data
-
-Green-field is the easy case. If you already have customers, the import is the risky part.
+### 9. Adopt it on existing data
 
 1. **Categorize every existing table** using the table above. Write the list down.
-2. **Audit every `App\Models\User` reference.** Cross-database foreign keys cannot span databases — drop
-   those constraints and denormalize to a `central_user_id` column, keeping integrity in the application.
-3. **Write the migrator**: for each existing account, create a tenant, provision its database, copy that
-   account's rows across, and attach the user to the pivot. Make it **idempotent and resumable** — it will
-   fail partway at least once.
-4. **Dry-run against a restored production copy.** Repeat until the audit log is clean for every single
-   user. This is the step people skip and regret.
-5. **Staging**, full run, with the app up. Then **production cutover** in maintenance mode.
-6. **Have a rollback plan written down before cutover** — the central database untouched, per-tenant
-   databases droppable, and a tested path back.
+2. **Audit every `App\Models\User` reference.** Foreign keys cannot span databases — drop those
+   constraints, denormalize to `central_user_id`, keep integrity in the application.
+3. **Write the migrator** — create a tenant, provision, copy that account's rows, attach the pivot.
+   Make it **idempotent and resumable**; it will fail partway at least once.
+4. **Dry-run against a restored production copy** until the audit log is clean for every user. This
+   is the step people skip and regret.
+5. **Staging**, full run, app up. Then **production cutover** in maintenance mode.
+6. **Write the rollback plan before cutover** — central untouched, tenant databases droppable, a
+   tested path back.
 
-What this guide cannot do for you: Cashier billing stays central (verify, don't assume), OAuth tokens need
-tenant scoping, and the multi-workspace UX — picker, invites, in-session switcher — is entirely yours.
+## What this does not cover
 
----
+Cashier billing stays central (verify, don't assume), OAuth tokens need tenant scoping, and the
+multi-workspace UX — picker, invites, in-session switcher — is entirely yours.
+
+## Verify
+
+```sh
+php artisan tinker --execute="var_dump(config('tenancy.enabled'));"   # true
+php artisan migrate:status --database=pgsql_central                   # central tables Ran
+php artisan route:list | grep -c 't/{tenant}'                         # > 0
+pnpm check:all                                                        # both suites green
+```
+
+Then request a tenant path as a user who does **not** belong to it. A 403 is
+`EnsureUserBelongsToTenant` working; a 200 means identification is wired and authorization is not.
 
 ## Pitfalls
 
@@ -240,9 +200,9 @@ tenant scoping, and the multi-workspace UX — picker, invites, in-session switc
 | A `Tenant` query from central context returns nothing | Tenancy is not initialized there. `tenancy()->initialize($tenant)` first, or move the query into a tenant-routed request. |
 | Queue jobs hit the wrong database | `QueueTenancyBootstrapper` is missing from `bootstrappers` in `config/tenancy.php`. |
 | Broadcasts leak across tenants | `routes/channels.php` channel names must include `tenant()?->id`. |
-| A tenant-scoped change passes CI but breaks in production | You ran the default suite. Run the tenancy suite (§4). |
+| A tenant-scoped change passes CI but breaks in production | You ran the default suite. Run the tenancy suite (step 8). |
 | A new tenant model errors about a missing or duplicate table | Its inferred table name collides with a central/framework table. Set an explicit `protected $table`. |
-| Users see another tenant's data | Identification without authorization. `EnsureUserBelongsToTenant` (§2.5) is missing or not on that route group. |
+| Users see another tenant's data | Identification without authorization. `EnsureUserBelongsToTenant` (step 5) is missing or not on that route group. |
 | Session lost when moving between subdomains | `SESSION_DOMAIN` must be `.example.com`, not the bare host. |
 
 Package documentation: <https://tenancyforlaravel.com/docs/v3/>.

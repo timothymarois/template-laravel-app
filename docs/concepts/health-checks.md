@@ -30,7 +30,9 @@ Registered in `app/Providers/AppServiceProvider.php` → `configureHealthChecks(
 
 `ReverbCheck` (`app/Health/Checks/ReverbCheck.php`) is a small custom check — spatie ships none for Reverb. It TCP-connects to the address Reverb **binds** to (`reverb.servers.reverb`, default `0.0.0.0:8080`, probed over loopback at `127.0.0.1:8080`) — the process's own listener, not the client/publish endpoint (`REVERB_HOST`) — so it tests Reverb directly and can't be fooled by a connect that lands on nginx.
 
-## Steps — enable only the checks a project needs
+## Configure
+
+### Enable only the checks a project needs
 
 Not every project runs every service. Only the checks that make sense should be active. Two mechanisms, in order of preference:
 
@@ -49,7 +51,7 @@ Not every project runs every service. Only the checks that make sense should be 
 
    The check list is project-specific, not managed core. Prefer leaving `->if()` gating in place (it self-disables cleanly); remove a check outright only when it will never apply.
 
-## Steps — scheduling
+### Scheduling
 
 `bootstrap/app.php` → `withSchedule()` runs three commands every minute:
 
@@ -59,7 +61,7 @@ Not every project runs every service. Only the checks that make sense should be 
 
 If a fork removes `QueueCheck` or `ScheduleCheck`, drop the matching heartbeat command too.
 
-## Steps — notifications (optional)
+### Notifications — optional
 
 Health notifications are **off by default** (`HEALTH_NOTIFICATIONS_ENABLED=false`) because the template ships **Sentry** for exceptions — set `SENTRY_LARAVEL_DSN`. Sentry is for code errors, health notifications for infrastructure state. To get a message when a check flips to failing, set `HEALTH_NOTIFICATIONS_ENABLED=true` and configure a channel. Each channel fires only when its destination is set, so an enabled-but-unconfigured channel never errors:
 
@@ -83,14 +85,14 @@ Discord is wired in because spatie ships only mail + slack — registered via `N
   the env var and the endpoint requires `X-Secret-Token`; leave it unset and the endpoint is open.
 - **Maintenance-mode pings.** `NotifyOnMaintenanceMode` listens for `MaintenanceModeEnabled` / `MaintenanceModeDisabled` and posts to Discord when the app enters (amber) or leaves (green) maintenance — handy for bracketing deploy windows.
 
+## How it fails
+
+- Never repoint the container health check from `/up` to `/health` — one flaky dependency would restart the whole multi-process container.
+- Don't leave a check active for a service the project doesn't run — a permanently-failing (or noisy) check trains everyone to ignore `/health`.
+- These checks run **inside** the app, so a fully-down app (crashed container, host offline) can't notify anyone. For true "app is unreachable" alerting, point an **external** uptime monitor (Better Stack, Oh Dear, Sentry Uptime, UptimeRobot) at `/health` (or `/up`). That's the one piece that must live outside the app.
+
 ## Verify
 
 - **HTTP:** `GET /health` → JSON of every check with status + meta. `200` when all-clear, `503` when any check failed (`config/health.php` → `json_results_failure_status`). Point an uptime monitor at it.
 - **CLI:** `php artisan health:check` runs and prints them; `php artisan health:list` shows the last stored run.
 - **Protect it (optional):** set `HEALTH_SECRET_TOKEN` and the endpoint requires that value in the `X-Secret-Token` header.
-
-## Pitfalls
-
-- Never repoint the container health check from `/up` to `/health` — one flaky dependency would restart the whole multi-process container.
-- Don't leave a check active for a service the project doesn't run — a permanently-failing (or noisy) check trains everyone to ignore `/health`.
-- These checks run **inside** the app, so a fully-down app (crashed container, host offline) can't notify anyone. For true "app is unreachable" alerting, point an **external** uptime monitor (Better Stack, Oh Dear, Sentry Uptime, UptimeRobot) at `/health` (or `/up`). That's the one piece that must live outside the app.
