@@ -58,4 +58,12 @@ export default [
             'indent': ['error', 4],
         }
     },
+    {
+        // Test files declare inline stub components to isolate the unit under test.
+        // vue/one-component-per-file governs how SFCs are authored and does not apply.
+        files: ['resources/js/tests/**/*.{js,ts}'],
+        rules: {
+            'vue/one-component-per-file': 'off',
+        }
+    },
 ]

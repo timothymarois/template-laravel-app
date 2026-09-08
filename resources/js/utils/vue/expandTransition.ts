@@ -13,7 +13,8 @@
  * </transition>
  */
 export function createExpandTransition(duration: number = 200) {
-    const expandEnter = (el: HTMLElement) => {
+    const expandEnter = (element: Element) => {
+        const el = element as HTMLElement;
         el.style.height = '0';
         el.style.overflow = 'hidden';
         // Force reflow to ensure transition triggers
@@ -22,7 +23,8 @@ export function createExpandTransition(duration: number = 200) {
         el.style.height = `${el.scrollHeight}px`;
     };
 
-    const expandLeave = (el: HTMLElement) => {
+    const expandLeave = (element: Element) => {
+        const el = element as HTMLElement;
         el.style.height = `${el.scrollHeight}px`;
         el.style.overflow = 'hidden';
         // Force reflow to ensure transition triggers

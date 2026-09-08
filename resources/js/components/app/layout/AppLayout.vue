@@ -1,24 +1,12 @@
 <template>
-    <Head :title="title">
-        <!-- Standard meta -->
-        <meta v-if="description" name="description" :content="description" />
-
-        <!-- Open Graph (Facebook, LinkedIn, etc.) -->
-        <meta v-if="title" property="og:title" :content="title" />
-        <meta v-if="description" property="og:description" :content="description" />
-        <meta v-if="ogImage" property="og:image" :content="absoluteOgImage" />
-        <meta v-if="ogImage" property="og:image:alt" :content="ogImageAlt || title" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" :content="canonicalUrl" />
-        <meta v-if="siteName" property="og:site_name" :content="siteName" />
-
-        <!-- Twitter/X -->
-        <meta name="twitter:card" :content="ogImage ? 'summary_large_image' : 'summary'" />
-        <meta v-if="title" name="twitter:title" :content="title" />
-        <meta v-if="description" name="twitter:description" :content="description" />
-        <meta v-if="ogImage" name="twitter:image" :content="absoluteOgImage" />
-        <meta v-if="ogImage" name="twitter:image:alt" :content="ogImageAlt || title" />
-    </Head>
+    <SeoHead
+        :title="title"
+        :description="description"
+        :ogImage="ogImage"
+        :ogImageAlt="ogImageAlt"
+        :siteName="siteName"
+        :robots="robots"
+    />
     <AppShell
         :isSideNav="true"
         :pageTitle="pageTitle"
@@ -87,9 +75,10 @@
 </template>
 
 <script setup>
+import SeoHead from '../SeoHead.vue';
 import { computed } from 'vue';
-import { Head, usePage } from '@inertiajs/vue3';
-import { House, User, Palette, Gauge, LogOut } from 'lucide-vue-next';
+import { usePage } from '@inertiajs/vue3';
+import { House, User, Palette, Gauge, KeyRound, LogOut } from 'lucide-vue-next';
 import AppShell from './AppShell.vue';
 import ProfileMenu from '../navigation/ProfileMenu.vue';
 import ModeToggle from '../navigation/ModeToggle.vue';
@@ -97,7 +86,9 @@ import EditUserModal from '../modals/EditUserModal.vue';
 import DeleteUserModal from '../modals/DeleteUserModal.vue';
 
 const page = usePage();
-const user = page.props.user;
+// Computed, not a plain read: a partial reload or an impersonation swap changes
+// the shared user under a mounted layout, and a by-value read keeps the old one.
+const user = computed(() => page.props.user);
 
 const props = defineProps({
     title: {
@@ -117,6 +108,10 @@ const props = defineProps({
         default: ''
     },
     siteName: {
+        type: String,
+        default: ''
+    },
+    robots: {
         type: String,
         default: ''
     },
@@ -150,17 +145,7 @@ const props = defineProps({
     }
 });
 
-const canonicalUrl = computed(() => {
-    if (typeof window === 'undefined') return '';
-    return window.location.origin + page.url;
-});
 
-const absoluteOgImage = computed(() => {
-    if (!props.ogImage) return '';
-    if (props.ogImage.startsWith('http')) return props.ogImage;
-    if (typeof window === 'undefined') return props.ogImage;
-    return window.location.origin + (props.ogImage.startsWith('/') ? '' : '/') + props.ogImage;
-});
 
 const profileMenuItems = computed(() => [
     { separator: true },
@@ -172,6 +157,7 @@ const profileMenuItems = computed(() => [
 const topBarItems = computed(() => [
     { href: '/admin', label: 'Home' },
     { href: '/admin/users', label: 'Users', parent: null },
+    { href: '/admin/api-keys', label: 'API keys', parent: null },
     {
         label: 'Overview',
         children: [
@@ -196,6 +182,7 @@ const sideBarItems = computed(() => [
         children: [
             { label: 'Home', href: '/admin', exact: true, icon: House, activeIcon: House },
             { label: 'Users', href: '/admin/users', parent: null, icon: User, activeIcon: User },
+            { label: 'API keys', href: '/admin/api-keys', parent: null, icon: KeyRound, activeIcon: KeyRound },
             { label: 'Components', href: '/admin/components', parent: '/admin/components', icon: Palette, activeIcon: Palette, count: 24 }
         ],
     },

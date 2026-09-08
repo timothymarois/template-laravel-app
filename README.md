@@ -22,15 +22,13 @@ Production-grade applications require more than just code—they need authentica
 - ✅ SSR enabled by default — SEO-friendly, fast first paint
 - ✅ Security headers, CORS, rate limiting — hardened out of the box
 - ✅ Sanctum authentication — session-based auth with CSRF protection
+- ✅ Password reset — forgot/reset flow that never reveals whether an address is registered
+- ✅ Built-in API keys — Sanctum-backed, scoped abilities, expiry (or never-expires), managed from the admin UI
 
 **Real-Time & Background Jobs**
 
 - ✅ Reverb WebSockets + Echo — real-time events, zero external dependencies
 - ✅ Horizon queues — Redis-powered job processing with dashboard
-
-**Multi-Tenancy (Optional)**
-
-- ✅ stancl/tenancy ^3.10 — DB-per-tenant isolation, off by default. Enable with `php artisan tenancy:enable`. See [`docs/guides/tenancy-using.md`](docs/guides/tenancy-using.md).
 
 **Developer Experience**
 
@@ -53,9 +51,11 @@ Production-grade applications require more than just code—they need authentica
 
 **SEO & Social**
 
-- ✅ Open Graph + Twitter Cards — social sharing just works
-- ✅ Sitemap generation — auto-generates from your routes
-- ✅ Meta tag management — per-page title, description, images
+- ✅ Open Graph + Twitter Cards — absolute URLs built server-side, so they survive SSR
+- ✅ Canonical URLs + per-page `robots` — auth and error pages ship `noindex`
+- ✅ `SEO_INDEXABLE=false` — one switch keeps staging out of the search index
+- ✅ Sitemap command — excludes admin, auth and utility routes (schedule it; the output is git-ignored)
+- ✅ Meta tag management — one `SeoHead` component, defaults from `config/seo.php`
 
 ---
 
@@ -364,10 +364,15 @@ Pre-configured in `AppServiceProvider`:
 | Limiter | Limit | Use case |
 |---------|-------|----------|
 | `api` | 60/min per user | General API |
-| `auth` | 5/min per IP | Login, registration |
+| `auth` | 5/min per IP | Registration and both password-reset POSTs |
 | `uploads` | 10/min per user | File uploads |
 
-Apply to routes: `Route::middleware('throttle:auth')->post('/login', ...)`
+Apply to routes: `Route::middleware('throttle:auth')->post('/auth/register', ...)`
+
+Named limiters key on the limiter name + IP, not the route, so every route using
+`throttle:auth` shares one bucket. Login is deliberately outside it — `LoginRequest`
+runs its own per-email limiter, and sharing this bucket would let failed logins lock
+a user out of password reset.
 
 ### CORS
 

@@ -108,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, shallowRef } from 'vue';
 import type { DateValue, DateRange } from 'reka-ui';
 import { Button } from '@/components/ui/button';
 import { PopoverBase, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -165,7 +165,7 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = ref(false);
-const internalValue = ref<DateRange | undefined>(props.modelValue);
+const internalValue = shallowRef<DateRange | undefined>(props.modelValue);
 
 // Resolve presets based on prop value
 const resolvedPresets = computed<DateRangePreset[]>(() => {

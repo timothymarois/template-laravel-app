@@ -53,3 +53,31 @@ describe('formatDatetime', () => {
         expect(formatDatetime('2024-99-99')).toBe('');
     });
 });
+
+describe('formatDatetime — time zones', () => {
+    it('converts a real instant into the viewer zone', () => {
+        expect(formatDatetime('2026-01-01T23:30:00Z', 'UTC')).toBe('1/1/2026, 11:30 PM');
+        expect(formatDatetime('2026-01-01T23:30:00Z', 'America/New_York')).toBe('1/1/2026, 6:30 PM');
+        expect(formatDatetime('2026-01-01T23:30:00Z', 'Asia/Tokyo')).toBe('1/2/2026, 8:30 AM');
+    });
+
+    it('handles a US daylight-saving boundary', () => {
+        // 2026-03-08 07:00 UTC is 02:00 EST; the US spring-forward is at 07:00 UTC.
+        expect(formatDatetime('2026-03-08T06:59:00Z', 'America/New_York')).toBe('3/8/2026, 1:59 AM');
+        expect(formatDatetime('2026-03-08T07:00:00Z', 'America/New_York')).toBe('3/8/2026, 3:00 AM');
+    });
+
+    it('does not shift a date-only value', () => {
+        expect(formatDatetime('2026-01-01', 'America/New_York')).toBe('1/1/2026, 12:00 AM');
+    });
+
+    it('falls back to UTC instead of throwing on an unknown zone', () => {
+        expect(() => formatDatetime('2026-01-01T12:00:00Z', 'Not/AZone')).not.toThrow();
+        expect(formatDatetime('2026-01-01T12:00:00Z', 'Not/AZone')).toBe('1/1/2026, 12:00 PM');
+    });
+
+    it('accepts an ISO8601 offset, not only a trailing Z', () => {
+        expect(formatDatetime('2026-01-01T23:30:00+00:00', 'UTC')).toBe('1/1/2026, 11:30 PM');
+        expect(formatDatetime('2026-01-01T18:30:00-05:00', 'UTC')).toBe('1/1/2026, 11:30 PM');
+    });
+});

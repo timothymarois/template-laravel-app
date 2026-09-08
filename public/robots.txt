@@ -6,7 +6,9 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 Disallow: /horizon
-Disallow: /log-viewer
 
-# Sitemap location (update domain in production)
+# Sitemap location — set this to your production domain.
+# Staging should NOT be kept out of the index with a Disallow here: that stops
+# crawling, not indexing, so a linked page still appears. Set SEO_INDEXABLE=false
+# instead, which sends X-Robots-Tag: noindex.
 # Sitemap: https://example.com/sitemap.xml

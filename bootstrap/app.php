@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\EnsureApiKey;
 use App\Http\Middleware\EnsureUserIsActive;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\TrackLastSeen;
@@ -10,6 +12,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use Sentry\Laravel\Integration;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +34,15 @@ return Application::configure(basePath: dirname(__DIR__))
             | Request::HEADER_X_FORWARDED_HOST
             | Request::HEADER_X_FORWARDED_PORT
             | Request::HEADER_X_FORWARDED_PROTO);
+
+        // Sanctum ships these but does not register them in Laravel 11+ bootstrap;
+        // without the alias an `abilities:` route silently fails to resolve.
+        $middleware->alias([
+            'admin' => EnsureUserIsAdmin::class,
+            'api.key' => EnsureApiKey::class,
+            'abilities' => CheckAbilities::class,
+            'ability' => CheckForAnyAbility::class,
+        ]);
 
         $middleware->web(append: [
             SecurityHeaders::class,

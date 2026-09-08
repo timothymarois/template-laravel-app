@@ -51,6 +51,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentPublicInstance, PropType } from 'vue';
+import type { Editor } from '@tiptap/vue-3';
 import { ref, computed, watch, nextTick } from 'vue';
 import { isValidURL } from '@/utils/validate';
 import { IconLink } from '@tabler/icons-vue';
@@ -65,12 +67,15 @@ import {
 } from '@/components/ui/tooltip';
 
 const props = defineProps({
-    editor: Object
+    editor: {
+        type: Object as PropType<Editor>,
+        required: true,
+    },
 });
 
 const isPopoverOpen = ref(false);
 const linkText = ref('');
-const inputRef = ref(null);
+const inputRef = ref<ComponentPublicInstance | null>(null);
 
 const isValidUrl = computed(() => isValidURL(linkText.value));
 

@@ -53,6 +53,28 @@ describe('parseUtcDate', () => {
         expect(parseUtcDate('2024-99-99')).toBeNull();
     });
 
+    it('keeps a numeric UTC offset instead of appending Z to it', () => {
+        // Laravel's toIso8601String() ends `+00:00`. Appending `Z` produced
+        // `...+00:00Z` — an invalid date, so the field rendered blank with nothing
+        // thrown. Fixtures ending in `Z` never exercised this.
+        const parsed = parseUtcDate('2026-08-16T21:20:05+00:00');
+
+        expect(parsed).not.toBeNull();
+        expect(parsed!.toISOString()).toBe('2026-08-16T21:20:05.000Z');
+    });
+
+    it('keeps a non-zero offset and converts it to the right instant', () => {
+        const parsed = parseUtcDate('2026-08-16T21:20:05-04:00');
+
+        expect(parsed!.toISOString()).toBe('2026-08-17T01:20:05.000Z');
+    });
+
+    it('still reads a zoneless string as UTC', () => {
+        const parsed = parseUtcDate('2026-08-16T21:20:05');
+
+        expect(parsed!.toISOString()).toBe('2026-08-16T21:20:05.000Z');
+    });
+
     it('returns null for non-string non-Date input', () => {
         expect(parseUtcDate(12345 as unknown as string)).toBeNull();
         expect(parseUtcDate({} as unknown as string)).toBeNull();

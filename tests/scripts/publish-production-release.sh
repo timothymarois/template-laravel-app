@@ -94,6 +94,25 @@ if (
 fi
 ! grep -q '^create ' "$unhealthy_fixture/release.log"
 
+# A cold container answers /health with 200 and no stored results, because
+# always_send_fresh_results is false and the scheduler has not ticked yet. Tagging on
+# that would publish a release whose every check is about to fail.
+unchecked_case=0
+for empty_body in '' '{"finishedAt":1,"checkResults":[]}' '{"finishedAt":1}'; do
+    unchecked_case=$((unchecked_case + 1))
+    unchecked_fixture="$(new_fixture "unchecked${unchecked_case}")"
+    if (
+        export RELEASE_TEST_HEALTH_STATUS=200
+        export RELEASE_TEST_HEALTH_BODY="$empty_body"
+        run_publisher "$unchecked_fixture" --confirm >/dev/null 2>&1
+    ); then
+        echo "Expected a 200 from /health with no stored checkResults to fail" >&2
+        exit 1
+    fi
+    # The publisher refuses before any gh call, so release.log may not exist at all.
+    ! grep -q '^create ' "$unchecked_fixture/release.log" 2>/dev/null
+done
+
 dirty_fixture="$(new_fixture dirty)"
 printf 'dirty\n' >> "$dirty_fixture/package.json"
 if run_publisher "$dirty_fixture" --confirm >/dev/null 2>&1; then

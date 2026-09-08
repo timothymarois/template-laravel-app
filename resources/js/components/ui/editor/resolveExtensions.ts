@@ -1,17 +1,17 @@
-import type { Extension } from '@tiptap/core';
+import type { Extensions } from '@tiptap/core';
 
 /**
  * Options for resolving editor extensions.
  */
 export interface ResolveExtensionsOptions {
     /** Custom extensions to add or use exclusively */
-    customExtensions?: Extension[] | null;
+    customExtensions?: Extensions | null;
     /** When true, use only customExtensions (ignore defaults) */
     replaceDefaults?: boolean;
     /** Default extensions for text-only mode */
-    textOnlyDefaults: Extension[];
+    textOnlyDefaults: Extensions;
     /** Default extensions for full editor mode */
-    fullDefaults: Extension[];
+    fullDefaults: Extensions;
     /** Whether the editor is in text-only mode */
     textOnly?: boolean;
 }
@@ -53,7 +53,7 @@ export interface ResolveExtensionsOptions {
  * }); // Returns [Document, Paragraph, CustomExtension]
  * ```
  */
-export function resolveExtensions(options: ResolveExtensionsOptions): Extension[] {
+export function resolveExtensions(options: ResolveExtensionsOptions): Extensions {
     const {
         customExtensions,
         replaceDefaults = false,

@@ -244,7 +244,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, shallowRef } from 'vue';
 import type { DateValue } from 'reka-ui';
 import AppLayout from '@/components/app/layout/AppLayout.vue';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -268,43 +268,43 @@ const nativeTime = ref('');
 const nativeMonth = ref('');
 
 // DateInput examples
-const dateInputEmpty = ref<DateValue>();
-const dateInputClearable = ref<DateValue>();
-const dateInputValue = ref<DateValue>(today(getLocalTimeZone()));
-const dateInputInvalid = ref<DateValue>(today(getLocalTimeZone()));
-const dateInputDisabled = ref<DateValue>(today(getLocalTimeZone()));
+const dateInputEmpty = shallowRef<DateValue>();
+const dateInputClearable = shallowRef<DateValue>();
+const dateInputValue = shallowRef<DateValue>(today(getLocalTimeZone()));
+const dateInputInvalid = shallowRef<DateValue>(today(getLocalTimeZone()));
+const dateInputDisabled = shallowRef<DateValue>(today(getLocalTimeZone()));
 
 // DatePicker examples
-const datePickerEmpty = ref<DateValue>();
-const datePickerClearable = ref<DateValue>();
-const datePickerValue = ref<DateValue>(today(getLocalTimeZone()));
-const datePickerInvalid = ref<DateValue>(today(getLocalTimeZone()));
-const datePickerDisabled = ref<DateValue>(today(getLocalTimeZone()));
+const datePickerEmpty = shallowRef<DateValue>();
+const datePickerClearable = shallowRef<DateValue>();
+const datePickerValue = shallowRef<DateValue>(today(getLocalTimeZone()));
+const datePickerInvalid = shallowRef<DateValue>(today(getLocalTimeZone()));
+const datePickerDisabled = shallowRef<DateValue>(today(getLocalTimeZone()));
 
 // Inline calendar
-const calendarInline = ref<DateValue>();
-const calendarMultiMonth = ref<DateValue>();
+const calendarInline = shallowRef<DateValue>();
+const calendarMultiMonth = shallowRef<DateValue>();
 
 // Quick navigation
-const quickNavDate = ref<DateValue>();
-const birthDate = ref<DateValue>();
-const quickNavPicker = ref<DateValue>();
-const quickNavInput = ref<DateValue>();
+const quickNavDate = shallowRef<DateValue>();
+const birthDate = shallowRef<DateValue>();
+const quickNavPicker = shallowRef<DateValue>();
+const quickNavInput = shallowRef<DateValue>();
 const currentYear = new Date().getFullYear();
 
 // Disabled dates
-const noWeekendsDate = ref<DateValue>();
-const noWednesdaysDate = ref<DateValue>();
-const noPastDate = ref<DateValue>();
-const noFutureDate = ref<DateValue>();
-const weekdaysFutureDate = ref<DateValue>();
-const blockedDatesDate = ref<DateValue>();
+const noWeekendsDate = shallowRef<DateValue>();
+const noWednesdaysDate = shallowRef<DateValue>();
+const noPastDate = shallowRef<DateValue>();
+const noFutureDate = shallowRef<DateValue>();
+const weekdaysFutureDate = shallowRef<DateValue>();
+const blockedDatesDate = shallowRef<DateValue>();
 
 // Pickers with disabled dates
-const pickerNoWeekends = ref<DateValue>();
-const pickerNoPast = ref<DateValue>();
-const inputNoWeekends = ref<DateValue>();
-const inputNoPast = ref<DateValue>();
+const pickerNoWeekends = shallowRef<DateValue>();
+const pickerNoPast = shallowRef<DateValue>();
+const inputNoWeekends = shallowRef<DateValue>();
+const inputNoPast = shallowRef<DateValue>();
 
 // Disable functions
 const todayDate = today(getLocalTimeZone());

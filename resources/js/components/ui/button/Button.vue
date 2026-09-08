@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import type { HTMLAttributes } from 'vue';
 import { computed } from 'vue';
 import type { ButtonVariants } from '.';
 import ButtonBase from './ButtonBase.vue';
@@ -48,7 +49,7 @@ interface Props {
     raised?: boolean;
     rounded?: boolean;
     type?: 'button' | 'submit' | 'reset';
-    class?: string;
+    class?: HTMLAttributes['class'];
     asChild?: boolean;
 }
 

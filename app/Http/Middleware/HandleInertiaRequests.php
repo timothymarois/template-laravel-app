@@ -38,29 +38,26 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'user' => $request->user(),
-            ...$this->tenancyShared(),
+            // Allow-listed on purpose. Sharing the model serializes every column not
+            // in $hidden into page props AND into history.state on every visit —
+            // including columns a fork adds later without thinking about this file.
+            'user' => $request->user()?->only(['id', 'name', 'email', 'role']),
+            // Absolute base URL for the document head. The SSR bundle has no
+            // window, so canonical/og:url/og:image must come from the server or
+            // they ship empty in exactly the render crawlers read.
+            'appUrl' => rtrim((string) config('app.url'), '/'),
+            'seo' => [
+                'siteName' => config('seo.site_name'),
+                'description' => config('seo.description'),
+                'image' => config('seo.image'),
+            ],
+            // One-request session messages. Without this share every ->with('status')
+            // and ->with('error') in the app is written to the session and dropped on
+            // the floor — the UI has no way to read it.
+            'flash' => [
+                'status' => $request->session()->get('status'),
+                'error' => $request->session()->get('error'),
+            ],
         ]);
-    }
-
-    /**
-     * Tenancy props are emitted only when a tenant is active. In the disabled
-     * state (and in central-domain requests when tenancy is enabled), the
-     * helper returns an empty array — Inertia props look identical to v4.4.0.
-     *
-     * @return array<string, mixed>
-     */
-    protected function tenancyShared(): array
-    {
-        $tenant = tenant();
-
-        if ($tenant === null) {
-            return [];
-        }
-
-        return [
-            'currentTenant' => $tenant,
-            'tenantUser' => tenant_user(),
-        ];
     }
 }

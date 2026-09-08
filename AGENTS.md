@@ -6,19 +6,20 @@ Rules for every agent working in this repository.
 
 Load light; pull depth only when the task needs it.
 
-1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are), always.
-   `docs/README.md` indexes the rest.
-2. **Read the guide for the area you enter** — `docs/concepts/` (how a subsystem works and how it fails)
-   and `docs/guides/` (one task each). On demand, not up front.
-3. **Load every skill the task touches**, not the most obvious one: a change spanning a controller, its
-   Vue page and its migration is three. A skill changes *how* you work — it never widens scope, authorizes
-   an edit, or overrides this file.
-4. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
+1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are),
+   always; then the page for the area you enter — `docs/concepts/` (how a subsystem works and how it
+   fails) or `docs/guides/` (one task each). `docs/README.md` indexes the rest.
+2. **Load the skill for every area you touch, before you edit it.** A change spanning a controller,
+   its Vue page and its migration is three skills. Reload as the work moves into a surface you haven't
+   covered — mid-task, not just at the start. **Editing an area whose skill you never loaded is a
+   failed task**, however green the checks. A skill changes *how* you work; it never widens scope or
+   overrides this file.
+3. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
    here rather than duplicating it. Scratch files stay outside the repository.
-5. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
+4. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
    rename, or reformat what the task did not send you to. Improvements are **mentioned, not made**, and
    scope never widens unless directed — if the smallest correct change is a large one, say why first.
-6. **Do not contradict the user without evidence.** Investigate, then answer with what you found — not a
+5. **Do not contradict the user without evidence.** Investigate, then answer with what you found — not a
    hunch, and not agreement you have not checked.
 
 ## Hard rules
@@ -42,8 +43,8 @@ The first five need explicit approval. The rest are not negotiable.
 
 ## Stack & architecture
 
-- **Backend:** Laravel 13+ (PHP 8.4+), Redis via Horizon (queue + cache), Inertia server adapter, optional
-  `stancl/tenancy` (inert by default).
+- **Backend:** Laravel 13+ (PHP 8.4+), Redis via Horizon (queue + cache), Inertia server adapter,
+  Sanctum (sessions + API tokens).
 - **Frontend:** Vue 3 (`<script setup>`), Inertia.js, TailwindCSS 4, shadcn-vue (Radix Vue primitives),
   Lucide icons, Ziggy named routes, vue-sonner (toasts).
 
@@ -73,7 +74,6 @@ app/
 ├── Models/             Eloquent models, kept light
 ├── Jobs/               Queued work
 ├── Health/             /health checks + notification channel
-├── Tenancy/            stancl/tenancy wiring (inert until enabled)
 └── Console/ · Enums/ · Notifications/ · Providers/ · Support/ · Http/{Concerns,Middleware}/
 
 resources/js/
@@ -84,9 +84,9 @@ resources/js/
 ├── composables/        Stateful logic, use-prefixed
 └── utils/ · plugins/ · tests/ (Vitest)
 
-routes/                 web · api · channels · components · tenant
-database/               migrations/ (central; tenant/ when tenancy is on) · factories/ · seeders/
-tests/                  Feature/ · Unit/ · Central/ · Tenant/ · scripts/ (shell contract tests)
+routes/                 web · api · channels · components
+database/               migrations/ · factories/ · seeders/
+tests/                  Feature/ · Unit/ · scripts/ (shell contract tests)
 docs/                   BRIEF · CODEMAP · concepts/ · guides/ — see docs/README.md
 scripts/                Release commands — see docs/guides/releasing.md
 docker/                 config/ + deploy/ = managed core · project/ = yours, never template-managed
@@ -127,6 +127,24 @@ languages are the appendix at the end of this file — read the rule first, then
 
 ### Frontend
 
+**Any UI or UX work loads the `designing-ui-ux` skill first** — a new page or component, a change to a
+flow, states, copy on a control, keyboard or focus behaviour, responsive or accessible behaviour. It
+is not only for visual design; naming a button and choosing what a confirmation says are in it.
+
+**Keyboard conventions, everywhere, no exceptions:**
+
+- **Enter submits, Escape cancels.** Every form, every dialog. A user who has typed the last field
+  should never have to reach for the mouse, and Escape must always be the way out.
+- A form whose submit control sits **outside** the `<form>` (in a Card footer, say) needs
+  `@submit.prevent` **and** a hidden `<button type="submit">` inside it — browsers only do implicit
+  submission when the form contains a submit control, so Enter otherwise does nothing.
+- A confirmation dialog confirms on Enter and closes on Escape, and **the keyboard and pointer paths
+  must end in the same state.** Use `DialogConfirmation`, which already does this; if you build
+  another, note that a listener in the template never fires for a portalled dialog — bind it to the
+  document while open.
+- Enter must not fire while an action is in flight, and must not hijack Enter raised from an input,
+  textarea or select. `shouldConfirmOnEnter` in `ui/dialog/dialogUtils.ts` is the shared guard.
+
 - **Do** put `<template>` above `<script setup>`, PascalCase components, 4-space indent, `lang="ts"` only for
   reusable `ui/` components. **`useForm` for anything with fields; `router.<verb>(route(...))` for an
   input-less action.** **Don't** hand-roll refs for fields/errors/processing, or reach for fetch/axios.
@@ -161,18 +179,16 @@ controllers and accessors get nothing; a comment that restates the code is noise
   in the doc-block. **Keep it true** — update a stale doc-block in the same change.
 
 ```php
-✅ /** Provisions a tenant database and seeds its owner (R-TENANT-2). Idempotent: a re-run on a
-    *  half-provisioned tenant resumes, never duplicates. @throws ProvisioningException on unreachable central. */
-   public function provision(Tenant $tenant): void
-❌ // provision the tenant      ← restates the name; teaches nothing
+✅ /** Issues an API key for the user (R-APIKEY-1). The plaintext is returned once and never stored;
+    *  only its hash persists. @throws AbilityNotAllowedException when an ability is outside the enum. */
+   public function issue(User $user, string $name, array $abilities): IssuedApiKey
+❌ // issue an api key      ← restates the name; teaches nothing
 ```
 
 ## Build, test & run
 
 ```bash
 pnpm check         # the gate: check:php + check:js + check:release + check:deploy, then check:build
-pnpm check:tenancy # Pest against the tenancy suite (phpunit.tenancy.xml) — when tenancy is enabled
-pnpm check:all     # check + check:tenancy
 pnpm dev           # local dev server (Herd serves the app)
 ```
 
@@ -186,10 +202,9 @@ screenshots for visual sign-off. "Compiles + wired" is not "done".
 
 ## Optional stacks
 
-- **Multi-tenancy.** `stancl/tenancy` ships installed but **inert** (`TENANCY_ENABLED=false`). While
-  disabled, treat tenancy code as nonexistent — don't import `Tenant`/`Domain`, run `tenants:*`, or add
-  tenant routes. Usage and the disabled-state contract: `docs/guides/tenancy-using.md`; adopting it on
-  a fork with existing data: `docs/guides/tenancy-migrating.md`.
+- **Multi-tenancy.** Not shipped. The template is single-tenant; a fork that needs many workspaces adds
+  `stancl/tenancy` itself, following `docs/guides/adding-tenancy.md`. Do not assume tenancy exists, and do
+  not add tenant-aware code to this template.
 - **Docker / deployment.** An optional Coolify setup lives in `docker/` + the root `Dockerfile`. A fork
   changes only the documented **knobs**; the managed core tracks this template and new Docker capabilities
   originate here, never in a fork. Setup, knobs, drift + versioning policy: `docker/README.md`.
@@ -208,6 +223,20 @@ and add the index row in the same change as the page.
 - **Requirement contracts** live in `docs/requirements/` under the closed schema; an ID is never reused or
   renumbered. None ship here.
 - Nothing lints `docs/`. Correctness is a review concern.
+
+## Delegation and review
+
+Delegate to keep this context clear — not to avoid thinking. If you were delegated this task, execute
+it; don't sub-delegate.
+
+- **Delegate** a large, self-contained subtask — a broad search, an independent slice, a review pass.
+  Brief it with the rules, the task, write access, and what done looks like. Keep the decisions and
+  the distilled result here, never the raw dumps. Match the model to the work.
+- **Don't delegate** skill selection, routine reading, or anything finished in a couple of steps.
+- **Review scales with risk.** Mechanical or docs-only: none. Contained code: one reviewer. Shared,
+  structural, security- or data-touching: several in parallel — correctness, duplication and test
+  coverage are separate lenses. Reviewers are read-only and advisory; verify a finding against the
+  code before acting on it, and say what you rejected.
 
 ## Definition of done
 

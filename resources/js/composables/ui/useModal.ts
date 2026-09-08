@@ -54,7 +54,21 @@ export function useModal() {
     const activeState = (name: string): WritableComputedRef<boolean> => computed({
         get: () => modals.get(name)?.open === true,
         set: (value: boolean) => {
-            value ? open(name) : close(name);
+            if (!value) {
+                close(name);
+
+                return;
+            }
+
+            // Writing `true` while already open is deliberately a no-op. An overlay syncs
+            // its own open state back through v-model as it appears; without this guard that
+            // write reaches open(name) with no data, re-firing every onOpen listener with
+            // null and wiping whatever the caller passed a moment earlier.
+            if (modals.get(name)?.open === true) {
+                return;
+            }
+
+            open(name, modals.get(name)?.data ?? null);
         }
     });
 

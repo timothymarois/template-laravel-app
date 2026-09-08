@@ -24,7 +24,11 @@ class EnsureUserIsActive
                 abort(403, 'Your account has been deactivated.');
             }
 
-            Auth::logout();
+            // Log out of the session guard by name, never the default. On an
+            // `auth:sanctum` route Authenticate has already called shouldUse('sanctum'),
+            // so a bare Auth::logout() reaches Sanctum's RequestGuard — which has no
+            // logout() — and the deactivated user gets a 500 instead of a redirect.
+            Auth::guard('web')->logout();
 
             $request->session()->invalidate();
             $request->session()->regenerateToken();

@@ -75,8 +75,14 @@ both, then trim `config/supervisord.conf` and set Coolify to agree.
 | Phase | When | Where | Examples |
 |-------|------|-------|----------|
 | **Build** | once, when the image is built | `Dockerfile` | composer install, `pnpm build-ssr` |
+> **Stages.** `base` → `build` (composer, pnpm, Vite) and `base` → `runtime-config` → `runtime`.
+> `runtime-config` is the image without the application: the same configuration COPY directives the
+> shipped image uses, with the app copied in afterwards. Configuration layers therefore sit before the
+> app copy, so a source change no longer invalidates them, and CI can prove the effective web-tier
+> configuration without running a full application build. Build `--target runtime` for anything real.
+
 | **Pre-deploy** | before the swap, in the **OLD** container (old code) | `docker/deploy/pre-deployment.sh` (Coolify **Pre-deployment Command**) | maintenance mode, backups — **never migrations** |
-| **Post-deploy** | once per deploy, in the **NEW** container (new code), after build | `docker/deploy/post-deployment.sh` (Coolify **Post-deployment Command**) | `migrate --force`, `tenants:migrate --force` |
+| **Post-deploy** | once per deploy, in the **NEW** container (new code), after build | `docker/deploy/post-deployment.sh` (Coolify **Post-deployment Command**) | `migrate --force` |
 | **Start** | every container boot (restarts/scaling) | `docker/deploy/entrypoint.sh` (automatic) | `ensure-storage`, `optimize`, `storage:link` |
 
 **Migrations go in the Post-deployment phase** — the new container has the new
@@ -118,7 +124,7 @@ DB-less project? Set `SESSION_DRIVER=file`, `CACHE_STORE=file`,
 - **Mark secrets** (`APP_KEY`, `MAIL_PASSWORD`, `AWS_*`) as **Runtime only** so they aren't baked into image layers.
 - **Resources:** add Postgres/MySQL + Redis only if the project's setup uses them.
 - **Domains** with `https://` → automatic Let's Encrypt SSL (issued once, cached, auto-renewed). Wildcard needs Traefik DNS-01.
-- **Logs:** `LOG_CHANNEL=stderr` → every process logs to stdout/stderr as **one-line JSON by default** (Coolify **Logs** tab + the feed for centralized logging). Ship those streams to one central sink — the recommended default is Coolify → Loki/Grafana via Alloy (see the [Logging guide](../docs/guidelines/logging.md)). Set `LOG_STDERR_FORMATTER=` (empty) for human-readable lines. The container is ephemeral with no log file to browse. **Uploads:** S3, or a volume on `/var/www/html/storage/app/public`.
+- **Logs:** `LOG_CHANNEL=stderr` → every process logs to stdout/stderr as **one-line JSON by default** (Coolify **Logs** tab + the feed for centralized logging). Ship those streams to one central sink — the recommended default is Coolify → Loki/Grafana via Alloy (see the [Logging guide](../docs/concepts/logging.md)). Set `LOG_STDERR_FORMATTER=` (empty) for human-readable lines. The container is ephemeral with no log file to browse. **Uploads:** S3, or a volume on `/var/www/html/storage/app/public`.
 
 ## Base image & extensions
 

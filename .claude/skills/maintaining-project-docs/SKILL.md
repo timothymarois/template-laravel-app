@@ -1,6 +1,6 @@
 ---
 name: maintaining-project-docs
-description: Use whenever repository documentation is written, placed, or maintained — writing or revising a page, deciding where a new document belongs, recording what a change that just landed altered, keeping an index level with its tree, auditing docs that have drifted from the code, or standing up or converting a documentation home. It supplies one repository layout, a template for every home, the shape of a page somebody can scan, and the routine that keeps documentation true as work lands. Do not use for product requirement content, or for a repository that already publishes its own documentation template.
+description: Use whenever repository documentation is written, placed, or maintained — writing or revising a page, deciding where a new document belongs, recording what a change that just landed altered, planning a change that will alter a name, path, count, command, or guarantee that some page already records, keeping an index level with its tree, auditing docs that have drifted from the code, or standing up or converting a documentation home. It supplies one repository layout, a template for every home, the shape of a page somebody can scan, and the routine that keeps documentation true as work lands. Do not use for product requirement content, or for a repository that already publishes its own documentation template.
 ---
 
 # Maintain a repository's documentation
@@ -239,6 +239,19 @@ fact, not by somebody starting at the top.
 - **One idea per paragraph, one question per heading.** A section past a screen has become two.
 - **Cut the run-up, the restatement, the tour, and the hedge.** They are most of the length.
 - **Split a page over its budget** rather than trimming it evenly. A long page is usually two pages.
+- **Budgets: a guide under ~150 lines, a concept under ~120.** Past that, check whether it is two.
+
+**Guides and concepts each have one fixed shape**, so a reader who has followed one does not have to
+learn a new layout for the next:
+
+| Page | Headings, in this order |
+|---|---|
+| Guide | `When to use` · `Prerequisites` · `Steps` (numbered, imperative, each ending in a check) · `Verify` (paste-runnable) · `Pitfalls` (a table) |
+| Concept | one paragraph of what it is · `How it works` · `How it fails` (a table) · `Verify` |
+
+Add a heading outside those only when it genuinely applies — a `Decide first` above a guide's steps
+when a choice is expensive to reverse, or `What this does not cover` at the foot. Everything else is
+a section somebody invented, and it is why two guides in the same repository read differently.
 
 Character is not the enemy of concision. A line carrying both an invariant and the failure it
 prevents earns its length; a line carrying only tone does not.

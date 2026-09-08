@@ -41,6 +41,14 @@ class GenerateSitemap extends Command
         'horizon',
         'sanctum',
         'up',
+        // Utility endpoints. /health answers 503 whenever any check fails, so
+        // listing it puts a 5xx URL in the sitemap; /release is JSON; _inertia is
+        // the dev-tools route, present whenever the command is run locally.
+        'health',
+        'release',
+        '_inertia',
+        '_debugbar',
+        'storage',
     ];
 
     /**
@@ -53,6 +61,8 @@ class GenerateSitemap extends Command
         'register',
         'password.*',
         'verification.*',
+        'health',
+        'release.version',
     ];
 
     /**

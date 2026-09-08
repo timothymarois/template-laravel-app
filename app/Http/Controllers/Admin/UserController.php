@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Concerns\InertiaDataTableOptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
@@ -36,16 +37,26 @@ class UserController extends Controller
 
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', User::class);
+
         $options = $this->resolveIndexOptions($request, true, 'admin.users.index');
 
         return $this->inertia->render('admin/users/Index', [
             'users' => $this->userService->listPaginated($options['perPage'], $options),
             'options' => $options,
+            // The role picker's options come from the enum, so adding a role is a
+            // one-line change there rather than a list duplicated in the UI.
+            'roles' => array_map(
+                fn (UserRole $role): array => ['value' => $role->value, 'label' => $role->label()],
+                UserRole::cases(),
+            ),
         ]);
     }
 
     public function prepareIndexFilters(Request $request): RedirectResponse
     {
+        $this->authorize('viewAny', User::class);
+
         $this->resolveIndexOptions($request, true, 'admin.users.index');
 
         return redirect()->route('admin.users.index');
@@ -53,6 +64,8 @@ class UserController extends Controller
 
     public function simpleTable(Request $request): Response
     {
+        $this->authorize('viewAny', User::class);
+
         $options = $this->resolveIndexOptions($request);
 
         if (! isset($options['filters']['user_id'])) {
@@ -69,6 +82,8 @@ class UserController extends Controller
 
     public function show(User $user): Response
     {
+        $this->authorize('view', $user);
+
         return $this->inertia->render('admin/users/Show', [
             'item' => $user,
         ]);
@@ -90,6 +105,8 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('delete', $user);
+
         $this->userService->delete($user);
 
         return back();

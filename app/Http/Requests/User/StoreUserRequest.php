@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\User;
 
+use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUserRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return $this->user()?->can('create', User::class) === true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -19,6 +27,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+            'role' => ['required', Rule::enum(UserRole::class)],
         ];
     }
 }

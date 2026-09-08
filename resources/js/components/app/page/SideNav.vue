@@ -75,6 +75,7 @@
 </template>
 
 <script setup>
+import { toRefs } from 'vue';
 import { ScrollFrame } from '@/components/ui';
 import { Lock } from 'lucide-vue-next';
 import { isPageActive } from '@/utils/vue/inertia';
@@ -95,7 +96,9 @@ const props = defineProps({
     },
 });
 
-const { items, linkComponent } = props;
+// toRefs, not a destructure: `items` is often computed (permissions, badge
+// counts) and a by-value capture at setup never re-renders when it changes.
+const { items, linkComponent } = toRefs(props);
 
 const isActive = (item) =>
     item.parent ? isPageActive(item.parent) : isPageActive(item.href, undefined, true);

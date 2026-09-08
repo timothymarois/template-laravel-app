@@ -86,9 +86,22 @@ RUN NODE_OPTIONS=--max-old-space-size=4096 pnpm build-ssr
 RUN rm -f .env
 
 ###############################################################################
-# 3. Runtime — app + Node (for the SSR server) + supervisord
+# 3a. Runtime configuration — everything the image is EXCEPT the application
 ###############################################################################
-FROM base AS runtime
+# Split out so the configuration layers sit BEFORE the app copy. Two reasons:
+#
+#   1. Caching. The app changes on every commit and the configuration almost
+#      never does. With the app copied first, one source change invalidated
+#      every configuration layer behind it on every single build.
+#   2. Proof. `tests/docker/verify-*.sh` assert the EFFECTIVE web-tier
+#      configuration — they start nginx and php-fpm directly, bypassing the
+#      entrypoint, because (in their own words) that configuration is settled
+#      before any application code runs. Targeting this stage lets CI prove the
+#      real configuration layers without composer, pnpm or two Vite builds.
+#
+# These are the same COPY directives the shipped image uses, not a copy of them,
+# so the two cannot drift.
+FROM base AS runtime-config
 
 # Node runtime is required to run the Inertia SSR server.
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
@@ -105,9 +118,6 @@ WORKDIR /var/www/html
 # horizon/scheduler/reverb can't reach the DB. Pointing HOME at the app dir
 # (readable, has no .postgresql) makes that probe a harmless no-op.
 ENV HOME=/var/www/html
-
-# App with vendor/, public/build, bootstrap/ssr and pruned node_modules
-COPY --from=build --chown=www-data:www-data /app /var/www/html
 
 # Service configuration (MANAGED CORE — the template owns these)
 COPY docker/config/nginx.conf          /etc/nginx/sites-available/default
@@ -132,3 +142,11 @@ EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+
+###############################################################################
+# 3b. Runtime — the configured image plus the built application
+###############################################################################
+FROM runtime-config AS runtime
+
+# App with vendor/, public/build, bootstrap/ssr and pruned node_modules
+COPY --from=build --chown=www-data:www-data /app /var/www/html

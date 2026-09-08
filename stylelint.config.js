@@ -13,6 +13,12 @@ export default {
             ignoreFunctions: ['theme', 'hsl']
         }],
 
+        // @apply takes Tailwind utility names, not CSS values, so stylelint's
+        // prelude validator flags every one of them as invalid.
+        'at-rule-prelude-no-invalid': [true, {
+            ignoreAtRules: ['apply', 'variant', 'custom-variant', 'theme', 'source']
+        }],
+
         // Disable overly strict rules
         'import-notation': null,
         'no-descending-specificity': null,

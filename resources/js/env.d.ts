@@ -1,9 +1,19 @@
 /// <reference types="vite/client" />
 
-declare module '*.vue' {
-    import type { DefineComponent } from 'vue';
+// No `declare module '*.vue'` shim here on purpose. `vue-tsc` resolves single-file
+// components natively and infers their real props; a shim declaring them as
+// `Record<string, never>` overrides that inference and reports every prop passed to
+// every component as an error. The shim is only needed under plain `tsc`, which
+// cannot read `.vue` at all — and a type gate that cannot read the components is
+// not a gate.
 
-    const component: DefineComponent<Record<string, never>, Record<string, never>, unknown>;
+import type { route as ziggyRoute } from 'ziggy-js';
 
-    export default component;
+declare module 'vue' {
+    interface ComponentCustomProperties {
+        /** Ziggy's route helper, registered globally in `app.js` for use in templates. */
+        $route: typeof ziggyRoute;
+    }
 }
+
+export {};

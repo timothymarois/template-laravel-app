@@ -127,20 +127,33 @@ verified=false
 for ((attempt = 1; attempt <= attempts; attempt++)); do
     deployed_version="$({ curl --fail --silent --show-error --max-time 15 "${production_url}/release" || true; } | python3 -c 'import json, sys; data=json.load(sys.stdin); print(data.get("version", ""))' 2>/dev/null || true)"
     up_status="$(curl --output /dev/null --silent --max-time 15 --write-out '%{http_code}' "${production_url}/up" || true)"
+    health_body="$({ curl --silent --max-time 15 "${production_url}/health" || true; })"
     health_status="$(curl --output /dev/null --silent --max-time 15 --write-out '%{http_code}' "${production_url}/health" || true)"
 
-    if [[ "$deployed_version" == "$version" && "$up_status" == "200" && "$health_status" == "200" ]]; then
+    # A 200 from /health is NOT proof of health. `always_send_fresh_results` is false, so
+    # the endpoint serves the snapshot the scheduler last stored — and on a cold container
+    # that snapshot does not exist yet, which answers 200 with an empty body (or an empty
+    # checkResults). Accepting that would tag a release whose every check is about to fail.
+    # Keep waiting until the scheduler has actually stored a result.
+    health_checked="$(printf '%s' "$health_body" | python3 -c 'import json,sys
+try:
+    results = json.load(sys.stdin).get("checkResults") or []
+except Exception:
+    results = []
+print("yes" if results else "no")' 2>/dev/null || echo no)"
+
+    if [[ "$deployed_version" == "$version" && "$up_status" == "200" && "$health_status" == "200" && "$health_checked" == "yes" ]]; then
         verified=true
         break
     fi
 
     if ((attempt < attempts)); then
-        echo "Waiting for ${tag}: deployed=${deployed_version:-unavailable}, up=${up_status:-unavailable}, health=${health_status:-unavailable} (${attempt}/${attempts})"
+        echo "Waiting for ${tag}: deployed=${deployed_version:-unavailable}, up=${up_status:-unavailable}, health=${health_status:-unavailable}, checks-stored=${health_checked:-no} (${attempt}/${attempts})"
         sleep "$interval"
     fi
 done
 
-[[ "$verified" == true ]] || fail "${tag} was not verified live and healthy within the allowed time"
+[[ "$verified" == true ]] || fail "${tag} was not verified live and healthy within the allowed time (a 200 from /health with no stored checkResults does not count as healthy)"
 
 if [[ -n "$tag_commit" ]]; then
     echo "Verified existing tag ${tag} at ${production_branch} commit ${head_commit}."

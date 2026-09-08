@@ -6,17 +6,22 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRole;
-use App\Models\Concerns\CentralConnection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property bool $is_active
+ * @property UserRole $role
+ */
 class User extends Authenticatable
 {
-    use CentralConnection, HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,20 +67,16 @@ class User extends Authenticatable
     }
 
     /**
-     * The tenants this user can access. Resolves via the central `tenant_user`
-     * pivot table — see database/migrations/central/2026_05_24_000010_create_tenant_user_table.php.
+     * Does this user hold the operator role?
      *
-     * Always declared, regardless of whether tenancy is enabled. When tenancy
-     * is disabled the table doesn't exist; the method itself is harmless until
-     * something actually calls `->tenants()` or `->tenants` on a User instance.
-     *
-     * Pivot columns: `role` (owner|admin|member, fork-customizable) and `joined_at`.
+     * The one-line form every fork of this template wrote for itself. It asks
+     * the enum rather than comparing a string, so the definition stays in
+     * UserRole. For a specific permission, prefer the capability —
+     * `$user->role->canManageAllUsers()` — or a Policy.
      */
-    public function tenants(): BelongsToMany
+    public function isAdmin(): bool
     {
-        return $this->belongsToMany(Tenant::class, 'tenant_user', 'user_id', 'tenant_id')
-            ->withPivot('role', 'joined_at')
-            ->withTimestamps();
+        return $this->role->canAccessAdmin();
     }
 
     /**

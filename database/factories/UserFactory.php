@@ -33,12 +33,12 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'timezone' => fake()->timezone(),
             'is_active' => true,
-            'role' => UserRole::User,
+            'role' => UserRole::default(),
         ];
     }
 
     /**
-     * Indicate that this user is a central super-admin.
+     * Indicate that this user is a super-admin.
      */
     public function admin(): static
     {

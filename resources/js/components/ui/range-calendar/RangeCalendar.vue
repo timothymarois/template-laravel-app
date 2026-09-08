@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { RangeCalendarRootEmits, RangeCalendarRootProps, DateValue } from "reka-ui";
 import type { HTMLAttributes } from "vue";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, shallowRef } from "vue";
 import { reactiveOmit } from "@vueuse/core";
 import { RangeCalendarRoot, useForwardPropsEmits } from "reka-ui";
 import { cn } from "@/utils";
@@ -46,12 +46,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<RangeCalendarRootEmits>();
 
-const delegatedProps = reactiveOmit(props, "class", "quickNavigation", "minYear", "maxYear");
+// "placeholder" is omitted deliberately: the template binds :placeholder="internalPlaceholder"
+// BEFORE v-bind="forwarded", so leaving it in forwarded lets the external prop overwrite the
+// internal one and quick navigation silently stops moving the calendar.
+const delegatedProps = reactiveOmit(props, "class", "quickNavigation", "minYear", "maxYear", "placeholder");
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 // Internal placeholder for quick nav
-const internalPlaceholder = ref<DateValue | undefined>(props.placeholder);
+const internalPlaceholder = shallowRef<DateValue | undefined>(props.placeholder);
 
 // Sync with external placeholder
 watch(() => props.placeholder, (newVal) => {

@@ -67,14 +67,23 @@ export function useDataTableOptions(routeConfig, options = {}, config = {}) {
 
     const mergedOnly = only.includes('options') ? only : ['options', ...only];
 
+    // PHP serializes an empty `filters` array as JSON `[]`, not `{}`. Letting that
+    // land on form.filters means later mutations (`filters.foo = 1`) add non-numeric
+    // props to an Array — which JSON.stringify drops silently, so the request loses
+    // every filter and the table looks broken with no error anywhere. Note this must
+    // sit AFTER the spread, or `...options` puts the array straight back.
+    const isPlainObject = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
+
     const form = useForm({
         search: '',
         perPage: 15,
-        sortField: 'name',
+        // `id`, not a guessed column name: every table has one, and a default that
+        // names a column the model lacks is a 500 on first load.
+        sortField: 'id',
         sortOrder: 1,
-        filters: {},
         viewFields: [],
-        ...options
+        ...options,
+        filters: isPlainObject(options.filters) ? options.filters : {},
     });
 
     const fetchData = () => {

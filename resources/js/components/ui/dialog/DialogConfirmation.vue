@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onBeforeUnmount, watch } from 'vue';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -36,6 +36,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Loader2 } from 'lucide-vue-next';
+import { shouldConfirmOnEnter } from './dialogUtils';
 
 interface Props {
     modelValue?: boolean;
@@ -65,7 +66,43 @@ const isOpen = computed({
     set: (val) => emit('update:modelValue', val),
 });
 
+/**
+ * Closes as well as emitting. Clicking AlertDialogAction closes the dialog by
+ * itself, so a keyboard confirm that only emitted left the dialog open over a
+ * completed action — the same gesture with two different outcomes.
+ */
 const handleConfirm = () => {
     emit('confirm');
+    isOpen.value = false;
 };
+
+/**
+ * Enter confirms; Escape closes (reka's AlertDialog already handles Escape).
+ *
+ * Bound to the document while open rather than to the template. reka renders the
+ * content through a portal whose wrapper root is AlertDialogPortal — a component
+ * that emits no DOM node — so a listener placed in this template never received
+ * the event, and Enter activated the focused Cancel button instead.
+ */
+const onKeydown = (event: KeyboardEvent) => {
+    if (event.key !== 'Enter') return;
+    if (! shouldConfirmOnEnter(event.target, props.loading)) return;
+
+    // Stops the focused control activating as well: reka focuses Cancel by
+    // default on a destructive dialog, so Enter would otherwise cancel.
+    event.preventDefault();
+    event.stopPropagation();
+    handleConfirm();
+};
+
+const stopListening = () => document.removeEventListener('keydown', onKeydown, true);
+
+watch(() => props.modelValue, (open) => {
+    stopListening();
+
+    // Capture phase, so this runs before reka's own key handling.
+    if (open) document.addEventListener('keydown', onKeydown, true);
+}, { immediate: true });
+
+onBeforeUnmount(stopListening);
 </script>

@@ -426,7 +426,7 @@ const toggleAllUsers = () => {
     }
 };
 
-const toggleUser = (id: number, checked: boolean | 'indeterminate') => {
+const toggleUser = (id: number, checked: boolean | string[] | 'indeterminate') => {
     if (checked === true) {
         selectedUsers.value = [...selectedUsers.value, id];
     } else {

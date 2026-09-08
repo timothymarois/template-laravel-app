@@ -4,6 +4,10 @@
         "module": "ESNext",
         "moduleResolution": "bundler",
         "strict": true,
+        // The kit under components/ui is `lang="ts"`; components/app and components/site
+        // are deliberately plain JS (AGENTS.md). Importing an untyped SFC from a typed one
+        // is therefore by design, not a defect — without this every such import is TS7016.
+        "noImplicitAny": false,
         "jsx": "preserve",
         "noEmit": true,
         "isolatedModules": true,

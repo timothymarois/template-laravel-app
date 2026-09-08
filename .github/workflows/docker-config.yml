@@ -13,6 +13,9 @@ on:
       - 'docker/**'
       - 'tests/docker/**'
       - '.github/workflows/docker-config.yml'
+      # Markdown under docker/ documents the setup; it cannot alter the image.
+      # Without this exclusion a README edit triggers two full image builds.
+      - '!docker/**.md'
   push:
     branches: [main, production]
     paths:
@@ -21,12 +24,23 @@ on:
       - 'docker/**'
       - 'tests/docker/**'
       - '.github/workflows/docker-config.yml'
+      # Markdown under docker/ documents the setup; it cannot alter the image.
+      # Without this exclusion a README edit triggers two full image builds.
+      - '!docker/**.md'
+
+# The image build is the most expensive job in the matrix; a superseded run
+# must not keep a runner busy while the run that replaced it queues behind it.
+concurrency:
+  group: docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   effective-config:
     name: Effective built-image configuration
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    # Config-only build: this must stay fast. If it approaches the limit,
+    # something has started pulling the application build back in.
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -39,11 +53,23 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          target: runtime
+          # runtime-config, not runtime: this job proves the effective web-tier
+          # configuration, which verify-*.sh establishes by starting nginx and
+          # php-fpm directly, before any application code runs. Targeting the
+          # config stage skips composer, pnpm and both Vite builds — the same
+          # COPY directives, without a full application build.
+          target: runtime-config
           load: true
           tags: template-app:default
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          # A fixed scope. type=gha keys its cache per-branch by default, so every
+          # branch rebuilt the whole image from cold — which is why this job took
+          # 400-635s on every run including main. A shared scope lets a PR branch
+          # reuse the layers main already built.
+          cache-from: type=gha,scope=docker-config
+          cache-to: type=gha,mode=max,scope=docker-config
+          # No SLSA attestation: nothing consumes it here, and it adds an export
+          # step to a job that only inspects configuration.
+          provenance: false
 
       # ── Image 2: the fixture project files, through the SAME Dockerfile ────
       # Only the three project COPY layers re-run; the app build is cached.
@@ -57,10 +83,16 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          target: runtime
+          # runtime-config, not runtime: this job proves the effective web-tier
+          # configuration, which verify-*.sh establishes by starting nginx and
+          # php-fpm directly, before any application code runs. Targeting the
+          # config stage skips composer, pnpm and both Vite builds — the same
+          # COPY directives, without a full application build.
+          target: runtime-config
           load: true
           tags: template-app:project
-          cache-from: type=gha
+          cache-from: type=gha,scope=docker-config
+          provenance: false
 
       - name: Restore a clean tree
         run: git checkout -- docker/project && git clean -fd docker/project

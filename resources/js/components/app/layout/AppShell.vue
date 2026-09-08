@@ -127,6 +127,7 @@
 </template>
 
 <script setup>
+import { Toaster } from '@/components/ui/sonner';
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, useSlots, watch, provide, defineAsyncComponent } from 'vue';
 import { hasSlotContent } from '@/utils';
 import PageHeader from '../page/Header.vue';
@@ -140,7 +141,10 @@ import AppTopbar from './AppTopbar.vue';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 // Lazy load components that aren't needed on initial render
-const Toaster = defineAsyncComponent(() => import('@/components/ui/sonner/Sonner.vue'));
+// Imported statically. It was defineAsyncComponent(), but ui/index.ts also exports
+// Sonner statically, so Vite could not move it into its own chunk — the lazy wrapper
+// bought nothing and only produced a build warning.
+
 const NavTopbar = defineAsyncComponent(() => import('../navigation/Topbar.vue'));
 
 const props = defineProps({
@@ -158,7 +162,7 @@ const props = defineProps({
     },
     toastPosition: {
         type: String,
-        default: 'bottom-left',
+        default: 'bottom-center',
     },
     toastCloseButton: {
         type: Boolean,

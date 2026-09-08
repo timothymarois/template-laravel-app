@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import type { PropType } from 'vue';
 import { defineComponent, h } from 'vue';
 import { formatNumber } from '@/utils';
 import { X, ChevronDown } from 'lucide-vue-next';
@@ -59,13 +60,24 @@ import {
 
 const emit = defineEmits(['action']);
 
+/** One bulk action. `children` turns the entry into a dropdown instead of a button. */
+interface TableAction {
+    label?: string;
+    tooltip?: string;
+    action?: unknown;
+    disabled?: boolean;
+    separator?: boolean;
+    children?: TableAction[];
+    [key: string]: unknown;
+}
+
 const { selectedCount, menuItems } = defineProps({
     selectedCount: {
         type: Number,
         default: null,
     },
     menuItems: {
-        type: Array,
+        type: Array as PropType<TableAction[]>,
         default: () => []
     },
 });
@@ -78,12 +90,19 @@ const actionClick = (item: any) => {
 
 const ActionItem = defineComponent({
     props: {
-        menuItem: Object
+        menuItem: {
+            type: Object as PropType<TableAction>,
+            required: true,
+        },
     },
     emits: ['action'],
     setup(props, { emit }) {
         return () => {
-            if (props.menuItem?.children && props.menuItem.children.length) {
+            // Bind children to a local: the nested render closures below run outside this
+            // guard, so TypeScript's narrowing of props.menuItem.children does not reach them.
+            const children = props.menuItem?.children;
+
+            if (children && children.length) {
                 // Render dropdown menu for items with children
                 return h(DropdownMenu, {}, {
                     default: () => [
@@ -96,7 +115,7 @@ const ActionItem = defineComponent({
                             ])
                         }),
                         h(DropdownMenuContent, { align: 'start' }, {
-                            default: () => props.menuItem.children.map((child: any, idx: number) => {
+                            default: () => children.map((child: TableAction, idx: number) => {
                                 if (child.separator) {
                                     return h(DropdownMenuSeparator, { key: `sep-${idx}` });
                                 }

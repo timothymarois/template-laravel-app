@@ -17,8 +17,6 @@ set -e
 
 php artisan migrate --force
 
-# Multi-tenant apps also migrate every tenant database:
-# php artisan tenants:migrate --force
 
 # Storage scaffolding (app:ensure-storage) is handled in entrypoint.sh, which runs
 # BEFORE this — so storage/framework + storage/logs already exist for migrate.

@@ -4,6 +4,7 @@ export * from './formatDate';
 export * from './formatDatetime';
 export * from './formatDateValue';
 export * from './parseUtcDate';
+export * from './timezone';
 export * from './formatNumber';
 export * from './formatPercentage';
 export * from './formatSlug';

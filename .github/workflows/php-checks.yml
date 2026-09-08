@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main, production]
 
+# A newer push supersedes an in-flight run for the same ref.
+concurrency:
+  group: php-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   php:
     name: PHP Checks
@@ -44,3 +49,12 @@ jobs:
 
       - name: Run Pest (Tests)
         run: ./vendor/bin/pest
+
+      # check:deploy asserts the production image's own configuration. The
+      # application suite runs under a different ini and never executes the
+      # deploy scripts, so nothing else checks what the container ships.
+      - name: Run deployment contract checks
+        run: |
+          bash tests/scripts/php-ini.sh
+          bash tests/scripts/nginx-config.sh
+          bash tests/scripts/post-deployment.sh

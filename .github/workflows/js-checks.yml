@@ -6,9 +6,19 @@ on:
   pull_request:
     branches: [main, production]
 
+# A newer push supersedes an in-flight run for the same ref. Without this, a
+# branch pushed three times keeps three full runs alive and the last one queues
+# behind the first two.
+concurrency:
+  group: js-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  js:
-    name: JavaScript Checks
+  # Lint, types and unit tests. Deliberately node-only: none of these read the
+  # generated resources/js/ziggy.js, so this job needs neither PHP nor composer
+  # — which is what used to make it the slowest in the matrix.
+  quality:
+    name: Lint, types, tests
     runs-on: ubuntu-latest
 
     steps:
@@ -21,16 +31,49 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # Must match .nvmrc and package.json engines (>=22.12).
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # PHP + composer are needed because `pnpm build` runs
-      # `php artisan ziggy:generate` (and composer's post-autoload-dump
-      # generates the initial `resources/js/ziggy.js` that the Vite bundle
-      # imports). Without this, vite build fails on the bundled Ziggy import.
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run Stylelint
+        run: pnpm lint:css
+
+      # tsc is part of `pnpm check` locally but was missing from CI, so a type
+      # error could reach main behind a green badge.
+      - name: Run TypeScript
+        run: pnpm typecheck
+
+      - name: Run Vitest
+        run: pnpm test
+        env:
+          LARAVEL_BYPASS_ENV_CHECK: 1
+
+  # The builds are the only JS work that needs PHP: `pnpm build` runs
+  # `php artisan ziggy:generate`, and composer's post-autoload-dump writes the
+  # initial resources/js/ziggy.js that the bundle imports.
+  build:
+    name: Client + SSR build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -46,14 +89,38 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-composer-nodev-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-nodev-
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --no-dev
 
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Build
+        run: pnpm build
+
+      - name: Run SSR Build
+        run: pnpm exec vite build --ssr
+        env:
+          LARAVEL_BYPASS_ENV_CHECK: 1
+
+  # Pure bash with stubbed gh/curl — no node, no PHP, no install. Seconds.
+  release-scripts:
+    name: Release script contracts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Test the production release scripts
-        run: pnpm check:release
+        run: |
+          bash tests/scripts/prepare-production-release.sh
+          bash tests/scripts/production-release-version.sh
+          bash tests/scripts/publish-production-release.sh
+          bash tests/scripts/assert-neutral-main-version.sh
 
       # main must never carry a release version: scripts/prepare-production-release
       # requires both manifests at 0.0.0 and pins the release branch to origin/main,
@@ -63,22 +130,3 @@ jobs:
       - name: Require neutral package versions on main
         if: github.base_ref == 'main' || github.ref_name == 'main'
         run: scripts/assert-neutral-main-version
-
-      - name: Run ESLint
-        run: pnpm lint
-
-      - name: Run Stylelint
-        run: pnpm lint:css
-
-      - name: Run Vitest (Tests)
-        run: pnpm test
-        env:
-          LARAVEL_BYPASS_ENV_CHECK: 1
-
-      - name: Run Build
-        run: pnpm build
-
-      - name: Run SSR Build
-        run: pnpm exec vite build --ssr
-        env:
-          LARAVEL_BYPASS_ENV_CHECK: 1

@@ -19,8 +19,8 @@ use Spatie\Health\Events\CheckEndedEvent;
  * streak in the cache; pings once when a confirmed outage clears, then resets.
  *
  * Listens to CheckEndedEvent (fired per check on every scheduled health:check) and
- * runs in central context (the scheduler), so the cache is shared/central — never
- * tenant-scoped. Gated on the same Discord webhook + notifications-enabled flags.
+ * runs in the scheduler, so the cache it reads is the shared application cache.
+ * Gated on the same Discord webhook + notifications-enabled flags.
  */
 class NotifyOnHealthRecovery
 {

@@ -16,7 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Extension } from '@tiptap/core';
+import type { PropType } from 'vue';
+import type { Extensions } from '@tiptap/core';
 import { EditorContent, useEditor } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -52,7 +53,7 @@ const props = defineProps({
         default: true,
     },
     toolbarOptions: {
-        type: Array,
+        type: Array as PropType<string[]>,
         default: () => ['bold', 'italic', 'strike', 'bullet', 'ordered', 'link', 'clear'],
     },
     textOnly: {
@@ -75,7 +76,7 @@ const props = defineProps({
      * <Editor :extensions="[Underline, Image]" />
      */
     extensions: {
-        type: Array as () => Extension[],
+        type: Array as () => Extensions,
         default: null,
     },
     /**
@@ -173,7 +174,10 @@ defineExpose({
 
 watch(() => props.modelValue, (newValue) => {
     if (editorInstance.value && ((!props.textOnly && newValue !== editorInstance.value.getHTML()) || (props.textOnly && newValue !== editorInstance.value.getText()))) {
-        editorInstance.value.commands.setContent(newValue, false, { preserveWhitespace: 'full' });
+        editorInstance.value.commands.setContent(newValue, {
+            emitUpdate: false,
+            parseOptions: { preserveWhitespace: 'full' },
+        });
     }
 });
 </script>

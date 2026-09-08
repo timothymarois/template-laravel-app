@@ -20,12 +20,12 @@ LOG_STDERR_FORMATTER=          # empty = Monolog's default LineFormatter
 
 Local dev is unaffected — it uses the `daily` file channel.
 
-## Steps — read locally
+## Read logs locally
 
 1. Tail the current day's file: `tail -f storage/logs/laravel-*.log`
 2. Or stream live with Pail: `php artisan pail`
 
-## Steps — centralize in production
+## Configure — centralize in production
 
 You wire up **one** sink. Common choices: **Loki + Grafana** (self-hosted, cheapest storage on S3/Spaces, you operate it), **Axiom** (managed, zero infra, native Coolify Log Drain), or **Better Stack / Grafana Cloud** (managed, hosted UI). All separate apps by **labels** (e.g. `app="my-app"`), so one sink serves every project — never one stack per app.
 
@@ -89,14 +89,51 @@ Other server(s): Alloy agent  ───────────▶ pushes to the
 
 To add a server: (1) expose the central Loki to it — give the `loki` service a domain with **Basic Auth** (Loki has no auth of its own), or push to the primary's private IP `http://<private-ip>:3100` over a shared private network; (2) deploy an Alloy agent on the other server (collector only) pointed at that Loki URL, tagging logs with a `server` label so you can filter per host: `{app="my-app", server="server-b"}`. Apps on that server still just need `LOG_CHANNEL=stderr`.
 
-## Verify
+## Background work
 
-- Local: `tail -f storage/logs/laravel-*.log` shows new lines as you exercise the app.
-- Production: querying `{app="<your-app>"}` in Grafana returns the container's log stream with parsed JSON fields.
+Supervisor runs Horizon and `schedule:work` as long-running processes and pipes both to
+stdout/stderr (`docker/config/supervisord.conf`), so their output reaches the same sink as
+web requests. **No host cron is involved** — `schedule:work` is the scheduler, and
+`health:schedule-check-heartbeat` proves it is still ticking.
 
-## Pitfalls
+**Laravel already logs both failures.** `Queue\Worker` reports a failed job to the
+exception handler, and `ScheduleRunCommand` does the same for a failed task, so the
+exception and its stack trace reach the sink without any help. A failed job additionally
+lands in `failed_jobs` and Horizon's UI.
+
+What the framework does **not** give you is shape. Its entry is the message plus a trace
+blob, so the job class, queue, attempt count and uuid exist only as text inside that trace
+and cannot be filtered on. `App\Listeners\LogBackgroundFailures` adds one structured line
+alongside it:
+
+| Event key | Fields |
+|---|---|
+| `job.failed` | `job`, `connection`, `queue`, `attempts`, `job_uuid`, `exception`, `message` |
+| `schedule.failed` | `task`, `expression`, `exception`, `message` |
+
+Under `LOG_CHANNEL=stderr` those become one-line JSON fields, so the sink can answer "how
+often did `App\Jobs\SendInvoice` fail this week". The cost is a second ERROR line per
+failure — trace in one, metadata in the other. A fork that never queries by field can
+delete the two `Event::listen` calls in `AppServiceProvider` and lose only the filtering.
+
+**The timeout invariant:** a worker's `timeout` must stay **below** the connection's
+`retry_after`, or the queue releases a job back while it is still running and it executes
+twice. Here that is Horizon `timeout: 60` against `REDIS_QUEUE_RETRY_AFTER: 90`
+(`config/horizon.php`, `config/queue.php`). Raise one and you must raise the other.
+Horizon's `tries: 1` is Laravel's own default and deliberate — a retry of a non-idempotent
+job is worse than a failure — so set `$tries`/`$backoff` per job class rather than globally.
+
+Supervisor gives Horizon `stopwaitsecs=3600` with `stopasgroup`/`killasgroup`, so a deploy
+lets an in-flight job finish instead of killing the worker mid-job.
+
+## How it fails
 
 - Don't point the container health check at anything but `/up`; logging is separate from health.
 - Don't run a second single-binary Loki against a shared bucket — it corrupts the index.
 - Run Loki + Grafana + Alloy as Coolify-managed resources (ideally one Compose stack) so the UI controls their lifecycle. A raw `docker run`/compose outside Coolify isn't tracked, and deleting it from the UI leaves the container running.
 - Logs ≠ error tracking. Logging is for searchable, high-volume output; for grouped exceptions and alerting the template ships **Sentry** — set `SENTRY_LARAVEL_DSN`. Use both; they're complementary.
+
+## Verify
+
+- Local: `tail -f storage/logs/laravel-*.log` shows new lines as you exercise the app.
+- Production: querying `{app="<your-app>"}` in Grafana returns the container's log stream with parsed JSON fields.

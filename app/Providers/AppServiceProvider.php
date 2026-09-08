@@ -8,18 +8,22 @@ use App\Health\Checks\ReverbCheck;
 use App\Health\DiscordHealthChannel;
 use App\Health\Listeners\NotifyOnHealthRecovery;
 use App\Health\Listeners\NotifyOnMaintenanceMode;
-use App\Tenancy\Contracts\ExistingDataMigrator;
-use App\Tenancy\NullExistingDataMigrator;
+use App\Listeners\LogBackgroundFailures;
+use App\Policies\ApiKeyPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Events\ScheduledTaskFailed;
 use Illuminate\Foundation\Events\MaintenanceModeDisabled;
 use Illuminate\Foundation\Events\MaintenanceModeEnabled;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Horizon\Horizon;
+use Laravel\Sanctum\PersonalAccessToken;
 use Spatie\Health\Checks\Checks\DatabaseCheck;
 use Spatie\Health\Checks\Checks\HorizonCheck;
 use Spatie\Health\Checks\Checks\QueueCheck;
@@ -36,16 +40,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Default binding for the tenancy data-migration contract. Only registered
-        // when tenancy is enabled — keeps the disabled-state DI container clean.
-        // Forks adopting tenancy on an existing dataset replace this with their
-        // own concrete implementation. See docs/guides/tenancy-migrating.md.
-        if (config('tenancy.enabled')) {
-            $this->app->bind(
-                ExistingDataMigrator::class,
-                NullExistingDataMigrator::class,
-            );
-        }
+        //
+    }
+
+    /**
+     * PersonalAccessToken lives in the Sanctum namespace, so Laravel's convention
+     * of finding App\Policies\{Model}Policy for App\Models\{Model} does not reach
+     * it. Without this the policy is silently absent and every ability denies.
+     */
+    private function configurePolicies(): void
+    {
+        Gate::policy(PersonalAccessToken::class, ApiKeyPolicy::class);
     }
 
     /**
@@ -53,6 +58,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configurePolicies();
         $this->configurePasswordRules();
         $this->configureRateLimiting();
         $this->configureHealthChecks();
@@ -79,6 +85,12 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(MaintenanceModeEnabled::class, [NotifyOnMaintenanceMode::class, 'enabled']);
         Event::listen(MaintenanceModeDisabled::class, [NotifyOnMaintenanceMode::class, 'disabled']);
 
+        // Background failures are otherwise invisible to a stderr log sink: a failed job
+        // only reaches failed_jobs and Horizon's UI, and a failed scheduled task is
+        // recorded nowhere at all.
+        Event::listen(JobFailed::class, [LogBackgroundFailures::class, 'jobFailed']);
+        Event::listen(ScheduledTaskFailed::class, [LogBackgroundFailures::class, 'scheduledTaskFailed']);
+
         Health::checks([
             UsedDiskSpaceCheck::new(),
 
@@ -91,8 +103,12 @@ class AppServiceProvider extends ServiceProvider
                 ->if(fn () => in_array('redis', [config('cache.default'), config('queue.default'), config('session.driver')], true)),
 
             // Horizon master supervisor is running (needs the queue worker stack).
+            // Gated on the queue driver, not on class_exists(): laravel/horizon is a
+            // hard composer requirement, so the class is always present — including
+            // in a fork that deleted the horizon process from supervisord, where the
+            // check would then fail forever.
             HorizonCheck::new()
-                ->if(fn () => class_exists(Horizon::class)),
+                ->if(fn () => config('queue.default') === 'redis'),
 
             // Jobs are actually being processed (heartbeat job — see schedule).
             QueueCheck::new()
