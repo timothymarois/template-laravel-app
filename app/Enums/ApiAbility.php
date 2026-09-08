@@ -13,7 +13,8 @@ use ArchTech\Enums\Values;
  * scope nothing checks: `ApiKeyService` validates against these cases, and the
  * `abilities:` middleware on a route names one of them. A fork adds a case here
  * and the route that enforces it in the same change — an ability with no
- * enforcing route is decoration, and a route with no ability is unscoped.
+ * enforcing route is decoration, and a route with no ability is unscoped. The
+ * one deliberate exception is Write, documented on the case itself.
  */
 enum ApiAbility: string
 {
@@ -22,7 +23,14 @@ enum ApiAbility: string
     /** Read the authenticated identity and other read-only resources. */
     case Read = 'api:read';
 
-    /** Create or modify resources. */
+    /**
+     * Create or modify resources.
+     *
+     * No route in the template enforces this yet — the template ships no
+     * write API. It is here as the second half of the read/write pair every
+     * fork needs, so the first write route has an ability waiting rather than
+     * inventing one. Put `abilities:api:write` on that route when you add it.
+     */
     case Write = 'api:write';
 
     public function label(): string

@@ -36,3 +36,29 @@ it('can be reconstructed from its backing value', function () {
     expect(UserRole::from('admin'))->toBe(UserRole::SuperAdmin);
     expect(UserRole::from('user'))->toBe(UserRole::User);
 });
+
+it('exposes a default role used by the migration and the factory', function () {
+    expect(UserRole::default())->toBe(UserRole::User);
+});
+
+it('labels every case', function () {
+    // A missing arm in label()'s match would be a runtime error, not a warning.
+    foreach (UserRole::cases() as $role) {
+        expect($role->label())->toBeString()->not->toBeEmpty();
+    }
+});
+
+it('answers every capability for every case', function () {
+    // Guards the rule that capabilities, not case comparisons, are the contract:
+    // a new case must make a decision about each one.
+    foreach (UserRole::cases() as $role) {
+        expect($role->canManageAllUsers())->toBeBool()
+            ->and($role->canAccessAdmin())->toBeBool()
+            ->and($role->canImpersonate())->toBeBool();
+    }
+});
+
+it('only SuperAdmin can reach the admin surface', function () {
+    expect(UserRole::SuperAdmin->canAccessAdmin())->toBeTrue();
+    expect(UserRole::User->canAccessAdmin())->toBeFalse();
+});

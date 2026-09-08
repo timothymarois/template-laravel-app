@@ -23,7 +23,7 @@ class EnsureUserIsAdmin
     {
         $user = $request->user();
 
-        abort_unless($user !== null && $user->role->canManageAllUsers(), 403);
+        abort_unless($user !== null && $user->role->canAccessAdmin(), 403);
 
         return $next($request);
     }

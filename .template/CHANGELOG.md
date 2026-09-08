@@ -41,7 +41,7 @@ Removes built-in multi-tenancy, completes authentication, authorizes the admin a
 
 ### Migration
 
-See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–L. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
+See [`migrations/template-v6.0.0.md`](migrations/template-v6.0.0.md). Parts A–N. **Forks on v5.0.0–v5.3.0: skip the tenancy setup in those releases entirely — v6.0.0 deletes everything they install.**
 
 ## v5.7.0 - 09/08/2026
 

@@ -13,6 +13,9 @@ on:
       - 'docker/**'
       - 'tests/docker/**'
       - '.github/workflows/docker-config.yml'
+      # Markdown under docker/ documents the setup; it cannot alter the image.
+      # Without this exclusion a README edit triggers two full image builds.
+      - '!docker/**.md'
   push:
     branches: [main, production]
     paths:
@@ -21,6 +24,15 @@ on:
       - 'docker/**'
       - 'tests/docker/**'
       - '.github/workflows/docker-config.yml'
+      # Markdown under docker/ documents the setup; it cannot alter the image.
+      # Without this exclusion a README edit triggers two full image builds.
+      - '!docker/**.md'
+
+# The image build is the most expensive job in the matrix; a superseded run
+# must not keep a runner busy while the run that replaced it queues behind it.
+concurrency:
+  group: docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   effective-config:

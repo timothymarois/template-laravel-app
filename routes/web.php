@@ -76,7 +76,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('users/table', [UserController::class, 'simpleTable'])->name('users.table');
-        Route::resource('users', UserController::class);
+        // except(create, edit): this is an Inertia app with modal forms, so there
+        // are no create/edit screens. Registering the routes anyway means those
+        // URLs reach a controller with no such method — a 500, not a 404.
+        Route::resource('users', UserController::class)->except(['create', 'edit']);
         Route::post('/users/filters', [UserController::class, 'prepareIndexFilters'])->name('users.index.filters');
 
         // API keys. Issuance renders rather than redirects so the plaintext never

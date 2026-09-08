@@ -67,6 +67,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Does this user hold the operator role?
+     *
+     * The one-line form every fork of this template wrote for itself. It asks
+     * the enum rather than comparing a string, so the definition stays in
+     * UserRole. For a specific permission, prefer the capability —
+     * `$user->role->canManageAllUsers()` — or a Policy.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role->canAccessAdmin();
+    }
+
+    /**
      * Check if the user is currently online (seen within last 5 minutes).
      */
     public function isOnline(): bool

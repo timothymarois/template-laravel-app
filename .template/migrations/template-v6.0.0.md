@@ -436,12 +436,60 @@ Verified by running the built SSR bundle and reading the head it returns.
 
 6. `resources/views/app.blade.php` referenced `/favicon.svg`, which does not exist — a 404 on every page
    load.
+7. **Three more files change with this part**, easy to miss: `resources/js/app.js` and
+   `resources/js/ssr.js` both change the Inertia `title` callback from a bare passthrough to
+   `` `${title} — ${appName}` `` (with `appName` read from `import.meta.env.VITE_APP_NAME`), and
+   `public/robots.txt` drops a stale `Disallow: /log-viewer` and rewrites the sitemap comment.
 
 Copy `tests/Feature/SeoTest.php` from `<t>`.
 
 ---
 
-## Part L — Dependencies (every fork)
+## Part L — Standardized roles (every fork)
+
+The role model is unchanged in behaviour but now has one obvious API, because every
+fork had invented its own (`$user->is_admin`, `$user->isAdmin()`, an inline string
+compare).
+
+- `UserRole::default()` — the role a new user gets. The users migration and the
+  factory reference it instead of hardcoding a case.
+- `UserRole::label()` — display name, for a UI that lets an operator pick a role.
+- `UserRole::canAccessAdmin()` — "may reach the admin surface", distinct from
+  `canManageAllUsers()`. `EnsureUserIsAdmin` asks this one.
+- `User::isAdmin()` — delegates to the enum. This is the accessor your fork
+  probably already has; point yours at the enum and delete the string compare.
+
+**The rule the template now states explicitly: ask a capability, not a role.**
+`$user->role === UserRole::SuperAdmin` scattered across call sites means the day
+you add a third role you have to find every one of them. Nothing in the template
+compares cases outside the enum.
+
+If your fork added roles, add a `label()` arm and a decision for each capability —
+the new tests iterate `UserRole::cases()`, so a missing arm fails rather than
+surfacing at runtime.
+
+---
+
+## Part M — Route and CI corrections (every fork)
+
+- **`Route::resource('users', ...)` registered `create` and `edit`**, which
+  `Admin/UserController` does not implement — those URLs returned a 500, not a 404.
+  Add `->except(['create', 'edit'])`. (This app uses modal forms; a fork that built
+  real create/edit screens keeps them and skips this.)
+- **CI ran Node 20** while `package.json` engines requires `>=22.12` and `.nvmrc`
+  says 22, and **never ran `tsc`** — so a type error could reach main behind a green
+  badge. The JS workflow is now three parallel jobs (quality / build / release
+  scripts); only the build half needs PHP, because lint, types and Vitest do not
+  read the generated `ziggy.js`. Every workflow gained a `concurrency` group so a
+  superseded push stops burning a runner.
+- **The Docker workflow no longer triggers on markdown** under `docker/`. It builds
+  the production image twice, and a README edit cannot change the image.
+
+---
+
+---
+
+## Part N — Dependencies (every fork)
 
 PHP is fully current on this template, majors included: **Laravel 13.31**, plus **Pest 5** and
 **PHPUnit 13** (upgrade together — Pest 5 requires PHPUnit 13) and **spatie/laravel-sitemap 8**
@@ -469,7 +517,8 @@ after each, rather than in a single `pnpm up --latest`.
 ```sh
 # 1. No tenancy reference survives. Every remaining hit should be "maintenance".
 # Every surviving hit should be the substring "main-tenan-ce", or a deliberate
-# pointer to adding-tenancy.md in AGENTS.md / CLAUDE.md / BRIEF.md.
+# pointer to adding-tenancy.md — in AGENTS.md, CLAUDE.md, docs/BRIEF.md and
+# docs/guides/README.md (its index row).
 grep -rniE "tenan|stancl|TENANCY_ENABLED|DB_CENTRAL" --exclude-dir=vendor \
   --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.template \
   --exclude-dir=.claude --exclude=adding-tenancy.md . | grep -vi maintenance
@@ -491,8 +540,11 @@ grep -rn "check:tenancy\|check:all" --exclude-dir=vendor --exclude-dir=node_modu
 php artisan route:list --name=password                 # expect 4 routes
 php artisan ziggy:generate
 
-# 6. Admin is actually gated. This MUST be 403, not 200.
+# 6. At least one operator exists, or Part D locks everyone out.
 php artisan tinker --execute="echo App\Models\User::where('role','admin')->count().PHP_EOL;"  # expect >= 1
+#    Then prove the gate itself — this is the check that matters, and it is an
+#    HTTP one. Log in as a NON-admin and request /admin: a 403 is the fix working,
+#    a 200 means Part D is not wired and the hole is still open.
 
 # 7. API keys resolve end to end.
 php artisan route:list --name=api-keys                 # expect 3 routes

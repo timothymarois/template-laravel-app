@@ -42,9 +42,6 @@ class HandleInertiaRequests extends Middleware
             // in $hidden into page props AND into history.state on every visit —
             // including columns a fork adds later without thinking about this file.
             'user' => $request->user()?->only(['id', 'name', 'email', 'role']),
-            // One-request session messages. Without this share every ->with('status')
-            // and ->with('error') in the app is written to the session and dropped on
-            // the floor — the UI has no way to read it.
             // Absolute base URL for the document head. The SSR bundle has no
             // window, so canonical/og:url/og:image must come from the server or
             // they ship empty in exactly the render crawlers read.
@@ -54,6 +51,9 @@ class HandleInertiaRequests extends Middleware
                 'description' => config('seo.description'),
                 'image' => config('seo.image'),
             ],
+            // One-request session messages. Without this share every ->with('status')
+            // and ->with('error') in the app is written to the session and dropped on
+            // the floor — the UI has no way to read it.
             'flash' => [
                 'status' => $request->session()->get('status'),
                 'error' => $request->session()->get('error'),

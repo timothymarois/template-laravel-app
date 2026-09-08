@@ -31,3 +31,8 @@ it('searches users by name and email', function () {
     expect($byEmail)->toHaveCount(1)
         ->and($byEmail->contains($jane))->toBeTrue();
 });
+
+it('reports admin status from the role, not a string comparison', function () {
+    expect(User::factory()->admin()->make()->isAdmin())->toBeTrue();
+    expect(User::factory()->make()->isAdmin())->toBeFalse();
+});
