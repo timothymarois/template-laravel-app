@@ -111,3 +111,5 @@ Every release that needs fork action ships a guide at `migrations/template-vX.Y.
 - **Docker-core changes** carry a `Docker:` tag on the lead line and follow `AGENTS.md` → "Optional Docker / Deployment" for the bump.
 
 A release that touches the managed core also updates `template-manifest.json` (`version`) and the workspace `VERSION_TEMPLATE.md` tracker.
+
+**Publishing.** Tag the release commit annotated, then `gh release create --generate-notes` with this release's changelog entry prepended via `--notes-file` — the entry says whether upgrading takes work, the generated section says what went out. Both, never one instead of the other.

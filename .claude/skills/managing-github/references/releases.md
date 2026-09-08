@@ -120,7 +120,18 @@ gh release create "$tag" --repo <owner/repo> \
 ```
 
 Add `--prerelease` when approved. Add `--notes-start-tag <previous-tag>` when GitHub would compare the
-wrong release line. Inspect the draft and correct missing breaking changes, migrations, security
+wrong release line.
+
+**Never hand-write the body in place of generation.** `--notes` and `--notes-file` compose with
+`--generate-notes` — what you supply is *prepended*, and the generated section is kept below it. A
+repository that maintains a changelog therefore leads with that release's entry and still carries the
+generated comparison, rather than choosing between them.
+
+**The generated list is built from merged pull requests.** A release whose commits went straight to the
+release branch generates only a `Full Changelog` compare link, because there are no pull requests to
+enumerate — the notes are not broken, there is nothing to list. When that list is part of the release's
+value, land the work through a pull request; when it is not, the compare link is the honest output and no
+hand-written substitute should be passed off as generated. Inspect the draft and correct missing breaking changes, migrations, security
 instructions, or misleading summaries through a reviewed notes file:
 
 ```sh
