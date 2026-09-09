@@ -1,6 +1,6 @@
 ---
 name: managing-github
-description: "Use before opening, updating or merging a pull request, pushing a branch for review, getting finished work up for review, filing or closing an issue, submitting a review, cutting a release, or moving a tag — load it before the `gh` command, not after. Applies once development is finished and delivery is the next step, and when work uncovers a repository defect that may warrant an issue; loading it authorizes nothing. Not for local Git or branch work, GitHub Actions authoring, or repository and organization settings."
+description: "Use before opening, updating or merging a pull request, pushing a branch for review, getting finished work up for review, filing or closing an issue, submitting a review, cutting a release, or moving a tag — load it before the `gh` command, not after. Also for inspecting hosted state read-only: whether a pull request is in good shape, whether its checks passed, what an issue says. Applies once development is finished and delivery is the next step, and when work uncovers a repository defect that may warrant an issue; loading it authorizes nothing. Not for reviewing code with no pull request in play, local Git or branch work, GitHub Actions authoring, or repository settings."
 ---
 
 # Manage GitHub
