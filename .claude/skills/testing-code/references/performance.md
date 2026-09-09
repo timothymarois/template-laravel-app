@@ -79,7 +79,12 @@ examples, not permission to add a dependency or replace established tooling.
 ### PHP, PHPUnit, Pest, and Laravel
 
 - Pest exposes `--profile`, parallel workers, and time-balanced CI sharding in current releases.
-  Profile first; choose `--processes` from measurements on the real CI runner.
+  Profile first; choose `--processes` from measurements on the real CI runner. Parallel is usually
+  the largest single win available to a Laravel suite — one measured 46.15s serial against 8.91s
+  parallel with the same 2031 passing — and paratest ships as a hard requirement of Pest 5, so it
+  costs no new dependency. Expect it to surface a real defect rather than just apply a flag: any
+  code reaching a process-shared path, temp prefix, cache key or fixture file must be segmented by
+  the process token first, and a suite that only passes serially was relying on that sharing.
 - Laravel's parallel runner allocates a test database per process. Segment any other shared resource
   with the process token, and recreate parallel databases only when schema freshness requires it.
 - Prefer Laravel's transaction-based `RefreshDatabase` when it matches the repository's isolation
@@ -128,12 +133,36 @@ examples, not permission to add a dependency or replace established tooling.
 - Use CTest load and resource controls when the runner would otherwise oversubscribe. Preserve the
   full required run after a focused local selection and keep failure output available.
 
+## Keep the feedback loop inside a stated budget
+
+A slow gate is not a neutral cost. It is paid on every push by every contributor, it pushes
+people to batch changes and skip local runs, and it converts a green suite from a signal into a
+wait. Decide the number the repository will hold — the gate's wall clock on the pull-request path —
+and treat a run that exceeds it as a defect with an owner, not as weather.
+
+Budget the **worst case, not the median.** Hosted runners vary roughly twofold for the same work, so
+a median sitting on the limit fails routinely. One repository measured its PHP job at 214, 227, 235
+and 236 seconds and then 482 on a slow runner; against a four-minute limit the median looked fine
+and the gate still broke. Targeting a median near half the limit is what puts the worst case inside
+it.
+
 ## Shorten CI's critical path
 
 After optimizing the test work itself, inspect the workflow graph:
 
 - run independent required checks concurrently, but do not duplicate checkout, dependency install,
   build, or service startup inside one job without measuring the tradeoff against artifact transfer;
+- **declare a service only in the job that needs it.** A database, cache or queue container is paid
+  for on every run of every job that declares it, whether or not a case connects. Where most of a
+  suite runs on an in-process store and only a few files need the real engine, splitting those files
+  into their own job removes that startup from the critical path entirely — one repository was
+  spending 31-38 seconds per run booting MySQL for three files;
+- **look for the same work running twice before tuning what runs once.** Duplicate execution is
+  usually the largest single cost and it hides in configuration, not in the suite: an environment
+  variable that un-skips a gated group in the general step, while a dedicated step runs that group
+  again. Count what actually executes rather than reading the workflow; in the case above roughly 35
+  scratch-database create-migrate-drop cycles per run were about half the gap between a 46-second
+  local suite and a 101-273 second CI one;
 - distinguish wall-clock feedback from runner consumption: removing an identical job that ran beside
   another reduces cost, not the successful-path critical path, unless queue or shared-resource
   contention was observed;

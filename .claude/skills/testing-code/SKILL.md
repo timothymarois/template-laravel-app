@@ -121,6 +121,8 @@ not claim more than the evidence covers.
 - [assessing-a-suite.md](references/assessing-a-suite.md) — judging what an existing suite protects
   and what it leaves unguarded, when the task is to assess coverage rather than to add a case.
 - [performance.md](references/performance.md) — measuring and reducing local test and CI feedback
-  time without weakening coverage, isolation, or failure evidence.
+  time without weakening coverage, isolation, or failure evidence. Read it whenever a gate is slow
+  enough to be worth waiting on: a slow suite is paid on every push, and it is what makes people
+  batch changes and skip local runs.
 
 Read [the source map](references/sources.md) when auditing, changing, or extending these rules.
