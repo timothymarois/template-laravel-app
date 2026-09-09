@@ -1,6 +1,6 @@
 ---
 name: designing-databases
-description: Use when shaping or reviewing a relational data model before or across engine choice, including normalization, identity and keys, relationships, constraints, many-to-many, parent-child, polymorphic, hierarchical and temporal data, audit trails, soft deletes, optimistic locking, keyset pagination, whether data belongs in columns, JSON, or separate tables, and choosing a shape against the queries and growth it must survive. Do not use for engine-specific SQL, index tuning, or database operations, which the engine packages own.
+description: Use before writing or changing a migration, adding or altering a table or column, choosing which index a query needs, or naming a table, column, key or index — and when shaping or reviewing a relational data model before or across engine choice, including normalization, identity and keys, relationships, constraints, many-to-many, parent-child, polymorphic, hierarchical and temporal data, audit trails, soft deletes, optimistic locking, keyset pagination, whether data belongs in columns, JSON, or separate tables, and choosing a shape against the queries and growth it must survive. Load the engine package alongside it for anything the engine decides: identifier length caps, index tuning, engine-specific SQL, and database operations.
 ---
 
 # Design databases
