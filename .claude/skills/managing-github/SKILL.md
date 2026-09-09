@@ -85,7 +85,9 @@ silently.
   duplicates; route security reports.
 - [Pull requests](references/pull-requests.md): inspect the review range, prepare or open a pull
   request, select explicit base and head, apply its template, inspect hosted review state, submit an
-  authorized comment, approval, or change request, link issues, and verify stored content and checks.
+  authorized comment, approval, or change request, link issues, verify stored content and checks,
+  **merge an authorized pull request, and clean up after it** — the branch-role, ref and worktree
+  review that `gh pr merge --delete-branch` skips.
 - [Releases](references/releases.md): discover the repository release contract, choose a compatible
   version and exact tag, prepare or publish a release, verify its target and assets, recover from a
   failed attempt, or reconcile a live deployment branch.
