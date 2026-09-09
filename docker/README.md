@@ -124,7 +124,7 @@ DB-less project? Set `SESSION_DRIVER=file`, `CACHE_STORE=file`,
 - **Mark secrets** (`APP_KEY`, `MAIL_PASSWORD`, `AWS_*`) as **Runtime only** so they aren't baked into image layers.
 - **Resources:** add Postgres/MySQL + Redis only if the project's setup uses them.
 - **Domains** with `https://` → automatic Let's Encrypt SSL (issued once, cached, auto-renewed). Wildcard needs Traefik DNS-01.
-- **Logs:** `LOG_CHANNEL=stderr` → every process logs to stdout/stderr as **one-line JSON by default** (Coolify **Logs** tab + the feed for centralized logging). Ship those streams to one central sink — the recommended default is Coolify → Loki/Grafana via Alloy (see the [Logging guide](../docs/concepts/logging.md)). Set `LOG_STDERR_FORMATTER=` (empty) for human-readable lines. The container is ephemeral with no log file to browse. **Uploads:** S3, or a volume on `/var/www/html/storage/app/public`.
+- **Logs:** `LOG_CHANNEL=stderr` → every process logs to stdout/stderr as **one-line JSON by default** (Coolify **Logs** tab + the feed for centralized logging). Ship those streams to one central sink — the recommended default is Coolify → Loki/Grafana via Alloy ([how logging works](../docs/concepts/logging.md), [standing the stack up](../docs/guides/centralized-logging.md)). Set `LOG_STDERR_FORMATTER=` (empty) for human-readable lines. The container is ephemeral with no log file to browse. **Uploads:** S3, or a volume on `/var/www/html/storage/app/public`.
 
 ## Base image & extensions
 

@@ -4,6 +4,7 @@ One task each, start to finish. Steps in order, with the check that confirms eac
 
 | Guide | How to |
 |---|---|
+| [centralized-logging.md](./centralized-logging.md) | Stand up the log stack: DO Spaces, Loki, Grafana and Alloy as Coolify resources |
 | [troubleshooting.md](./troubleshooting.md) | Get unstuck: traps this stack has already sprung, and the way out of each |
 | [releasing.md](./releasing.md) | Cut a production release: version, deploy, verify live, publish the tag |
 | [git-conventions.md](./git-conventions.md) | Name a branch and write a commit: types, slugs, imperative summaries |

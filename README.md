@@ -241,7 +241,7 @@ See `AGENTS.md` for detailed component guidelines.
 |------|-----|---------|
 | [Horizon](https://laravel.com/docs/13.x/horizon) | `/horizon` | Monitor queues and jobs |
 
-For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see the [Logging guide](docs/concepts/logging.md).
+For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see [logging](docs/concepts/logging.md) and the [setup guide](docs/guides/centralized-logging.md).
 
 **Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See the [Health Checks guide](docs/concepts/health-checks.md).
 

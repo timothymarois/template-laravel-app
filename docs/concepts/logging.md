@@ -1,9 +1,10 @@
-# Guide: Read and centralize logs
+# Logging
 
-**When to use:** You need to read application logs locally, or you're deploying and need to ship container logs to a central, searchable store.
-**Prerequisites:** For production, a Docker/Coolify deployment (this template deploys as a Dockerfile build pack). For centralizing, an S3-compatible bucket and a host you can run a collector on.
+Where this application's logs go, what shape they arrive in, and how a central store is reached.
+Standing that store up is a task of its own:
+[`guides/centralized-logging.md`](../guides/centralized-logging.md).
 
-## The model
+## How it works
 
 | Environment | `LOG_CHANNEL` | Where logs go | How you read them |
 |-------------|---------------|---------------|-------------------|
@@ -25,69 +26,26 @@ Local dev is unaffected — it uses the `daily` file channel.
 1. Tail the current day's file: `tail -f storage/logs/laravel-*.log`
 2. Or stream live with Pail: `php artisan pail`
 
-## Configure — centralize in production
+## Centralize in production
 
-You wire up **one** sink. Common choices: **Loki + Grafana** (self-hosted, cheapest storage on S3/Spaces, you operate it), **Axiom** (managed, zero infra, native Coolify Log Drain), or **Better Stack / Grafana Cloud** (managed, hosted UI). All separate apps by **labels** (e.g. `app="my-app"`), so one sink serves every project — never one stack per app.
+You wire up **one** sink, shared by every app on the host and separated by a label (e.g. `app="my-app"`)
+— never one stack per app. Common choices: **Loki + Grafana** (self-hosted, cheapest storage on S3/DO
+Spaces, you operate it), **Axiom** (managed, zero infra, native Coolify Log Drain), or **Better Stack /
+Grafana Cloud** (managed, hosted UI).
 
-The app side needs nothing beyond what ships: `LOG_CHANNEL=stderr` (set in Coolify) + JSON-by-default. Then pick a forwarding mechanism:
+The app side needs nothing beyond what ships: `LOG_CHANNEL=stderr` set in Coolify, JSON by default. Only
+the forwarding mechanism is a decision:
 
-**Host collector — Grafana Alloy / Fluent Bit (recommended).** Run one collector container on the host, mounting the Docker log directory and socket. It auto-discovers every container, attaches labels, and pushes to your sink — capturing all output (nginx, php-fpm, workers), decoupled from any platform feature. Alloy is the current collector (replaces the deprecated Promtail). One collector per host serves every app.
+**Host collector — Grafana Alloy / Fluent Bit (recommended).** One collector container per host, mounting
+the Docker socket. It auto-discovers every container, attaches labels, and pushes to your sink, capturing
+all output (nginx, php-fpm, workers) independently of any platform feature. Alloy replaces the deprecated
+Promtail. The recommended default — Coolify → Loki + Grafana on DigitalOcean Spaces — is built step by
+step in [`guides/centralized-logging.md`](../guides/centralized-logging.md).
 
-**Coolify native Log Drain (fallback).** Under *Server → Log Drains* (Fluent Bit); enable per resource under its *Advanced* tab. Targets Axiom and New Relic natively, or a custom Fluent Bit destination. Caveat: Coolify currently ignores the log-drain definition for **Dockerfile build-pack** resources — and this template deploys as one. Until fixed, prefer the host collector.
-
-### Recommended default — Coolify → Loki + Grafana
-
-Everything below is **one-time host infrastructure**, shared by every app on the server — you do not repeat it per fork.
-
-1. **Object storage (retention).** Create an S3-compatible bucket (e.g. a DigitalOcean Space) + access key/secret. Loki keeps chunks and index here cheaply.
-2. **Loki** (single-binary, `-target=all`) as a Coolify *Docker Compose* resource, pointed at the bucket with retention enforced:
-
-   ```yaml
-   schema_config:
-     configs:
-       - { from: 2024-01-01, store: tsdb, object_store: s3, schema: v13, index: { prefix: index_, period: 24h } }
-   common:
-     storage:
-       s3:
-         endpoint: <region>.digitaloceanspaces.com   # region host only, no bucket
-         bucketnames: <your-bucket>
-         region: <region>
-         access_key_id: ${LOKI_S3_KEY}
-         secret_access_key: ${LOKI_S3_SECRET}
-         s3forcepathstyle: false
-   compactor: { working_directory: /loki/compactor, retention_enabled: true, delete_request_store: s3 }
-   limits_config: { retention_period: 2160h }   # 90 days; compactor enforces it
-   ```
-
-3. **Grafana** as a Coolify resource behind its own domain (admin auth + SSL). Add a Loki datasource at `http://loki:3100`. This is the log UI.
-4. **Grafana Alloy** (collector) — one container on the host, mounting the Docker socket. Auto-discovers every container, labels by app, pushes to Loki. **This is the piece that connects your apps** — no app redeploy:
-
-   ```hcl
-   discovery.docker "all" { host = "unix:///var/run/docker.sock" }
-   loki.source.docker "all" {
-     host = "unix:///var/run/docker.sock"
-     targets = discovery.docker.all.targets
-     forward_to = [loki.write.default.receiver]
-     relabel_rules = loki.relabel.coolify.rules
-   }
-   loki.relabel "coolify" {
-     rule { source_labels = ["__meta_docker_container_label_coolify_serviceName"], target_label = "app" }
-   }
-   loki.write "default" { endpoint { url = "http://loki:3100/loki/api/v1/push" } }
-   ```
-
-In Grafana, query `{app="<your-app>"}` to see each app's logs. One Loki + one Grafana + one bucket serve **all** apps on the host, separated by the `app` label.
-
-### Multiple servers
-
-There is always **one** Loki and **one** bucket. **Never** run a second Loki against the same bucket — single-binary instances don't coordinate; two would corrupt each other's index and their compactors would delete each other's chunks. Every additional server runs **only an Alloy agent** that pushes to the central Loki:
-
-```
-Primary server:  Loki + Grafana + Alloy   ← the only Loki, the only bucket
-Other server(s): Alloy agent  ───────────▶ pushes to the central Loki
-```
-
-To add a server: (1) expose the central Loki to it — give the `loki` service a domain with **Basic Auth** (Loki has no auth of its own), or push to the primary's private IP `http://<private-ip>:3100` over a shared private network; (2) deploy an Alloy agent on the other server (collector only) pointed at that Loki URL, tagging logs with a `server` label so you can filter per host: `{app="my-app", server="server-b"}`. Apps on that server still just need `LOG_CHANNEL=stderr`.
+**Coolify native Log Drain (fallback).** Under *Server → Log Drains* (Fluent Bit); enabled per resource
+under its *Advanced* tab. Targets Axiom and New Relic natively, or a custom Fluent Bit destination.
+Caveat: Coolify currently ignores the log-drain definition for **Dockerfile build-pack** resources — and
+this template deploys as one. Until that is fixed, prefer the host collector.
 
 ## Background work
 
@@ -129,8 +87,7 @@ lets an in-flight job finish instead of killing the worker mid-job.
 ## How it fails
 
 - Don't point the container health check at anything but `/up`; logging is separate from health.
-- Don't run a second single-binary Loki against a shared bucket — it corrupts the index.
-- Run Loki + Grafana + Alloy as Coolify-managed resources (ideally one Compose stack) so the UI controls their lifecycle. A raw `docker run`/compose outside Coolify isn't tracked, and deleting it from the UI leaves the container running.
+- Run the collector and sink as Coolify-managed resources so the UI controls their lifecycle. A raw `docker run` outside Coolify isn't tracked, and deleting it from the UI leaves the container running.
 - Logs ≠ error tracking. Logging is for searchable, high-volume output; for grouped exceptions and alerting the template ships **Sentry** — set `SENTRY_LARAVEL_DSN`. Use both; they're complementary.
 
 ## Verify
