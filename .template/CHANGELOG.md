@@ -10,16 +10,24 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 ## v6.0.2 - 09/08/2026
 
-Makes `AGENTS.md`/`CLAUDE.md` template-managed: a fork no longer customises them. Patch: rules and docs only, no code change.
+Makes `AGENTS.md`/`CLAUDE.md` template-managed, and fixes the skill descriptions that decide when an agent loads a skill at all. Patch: rules, skills and docs only, no application code change.
 
 ### Changed
 
-- **A fork does not customise `AGENTS.md`/`CLAUDE.md`.** Every project on this template runs the same engineering contract, which is what lets an upgrade replace the file wholesale instead of reconciling a fork's edits into it. The only permitted divergence is a genuine **stack** difference — a fork on Postgres, or one not running Horizon, corrects the stack sections to match what it runs. Fork rules move to where they belong: the product's identity to `docs/BRIEF.md`, a subsystem to `docs/concepts/`, a task to `docs/guides/`, a trap to `docs/guides/troubleshooting.md`, and a domain invariant to a test. A rule that resists rehoming belongs in the template for everyone — send it upstream.
-- **v6.0.0's Part H rewritten** to match: take the template's file wholesale, and rehome fork rules against a table rather than merging them in.
+- **A fork does not customise `AGENTS.md`/`CLAUDE.md`.** Every project on this template runs the same engineering contract, which is what lets an upgrade replace the file wholesale instead of reconciling a fork's edits into it. The only permitted divergence is a genuine **stack** difference. Fork rules move to where they belong — identity to `docs/BRIEF.md`, a subsystem to `docs/concepts/`, a task to `docs/guides/`, a trap to `troubleshooting.md`, an invariant to a test. A rule that resists rehoming belongs in the template for everyone; send it upstream.
+- **Skill descriptions now name the act, not the category.** A description is what routes an agent before the body is available, so one describing a category the agent must map onto fires late or not at all. Reworked against the rundesk skills standard and verified with 25 probe runs across trigger and near-miss cases.
+- **`testing-code` treats CI speed as a budget.** A slow gate is paid on every push and is what makes people batch changes and skip local runs. New guidance: state the number, size it for the worst case rather than the median, declare a service only in the job that needs it, and find work running twice before tuning work that runs once.
+
+### Fixed
+
+- ⚠️ **`managing-github` did not fire on delivery.** An agent ran `gh pr create` having never loaded it; a second merged with `--delete-branch`, the one command the skill names as unsafe. It now leads with the acts — opening a PR, getting work up for review, filing an issue, cutting a release — plus read-only inspection, and its operation index names merging and post-merge cleanup so the branch-role, ref and worktree review is discoverable.
+- **`designing-databases` never said migration, column, or naming**, though its own reference owns the naming rules. It now opens with those, and points at the engine package rather than excluding it — which is what makes an agent check the real connection and load both MySQL and SQLite for a migration that runs on each.
+- **`maintaining-project-docs` loaded after the fact.** Documentation is rarely the stated task; it is the tail of another one. It now triggers before editing anything under `docs/`, a README, or a changelog.
+- **A docblock invited deleting a security check.** `ApiKeyService` and `docs/concepts/api-keys.md` both claimed no read path checks token expiry. `EnsureApiKey` does, and must — it resolves the token itself, bypassing the guard's expiry path.
 
 ### Migration
 
-Copy `AGENTS.md` and `CLAUDE.md` (byte-identical — a test enforces it). If your fork carries its own rules in those files, rehome them using the table in Part H **before** overwriting, or you will lose them.
+Copy `AGENTS.md`, `CLAUDE.md` (byte-identical — a test enforces it) and `.claude/skills/`. If your fork carries its own rules in the agent files, rehome them using the table in Part H of the v6.0.0 guide **before** overwriting, or you will lose them.
 
 ## v6.0.1 - 09/08/2026
 
