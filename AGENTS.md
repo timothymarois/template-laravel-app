@@ -9,11 +9,15 @@ Load light; pull depth only when the task needs it.
 1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are),
    always; then the page for the area you enter — `docs/concepts/` (how a subsystem works and how it
    fails) or `docs/guides/` (one task each). `docs/README.md` indexes the rest.
-2. **Load the skill for every area you touch, before you edit it.** A change spanning a controller,
+2. **Load the skill for every area you touch, before you act on it.** A change spanning a controller,
    its Vue page and its migration is three skills. Reload as the work moves into a surface you haven't
-   covered — mid-task, not just at the start. **Editing an area whose skill you never loaded is a
+   covered — mid-task, not just at the start. **Acting on an area whose skill you never loaded is a
    failed task**, however green the checks. A skill changes *how* you work; it never widens scope or
    overrides this file.
+   **"Area" is not only files.** Opening a pull request, filing an issue, submitting a review, cutting a
+   release or moving a tag are areas too — `managing-github` loads *before* the `gh` call, not after it.
+   The same holds for any outward-facing act. Loading the skill afterwards to check what you broke is
+   the failure, not the remedy.
 3. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
    here rather than duplicating it. Scratch files stay outside the repository.
 4. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
