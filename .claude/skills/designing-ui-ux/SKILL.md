@@ -1,6 +1,6 @@
 ---
 name: designing-ui-ux
-description: Use when designing, implementing, or critiquing web UI and UX, including pages, applications, dashboards, forms, navigation, components, design systems, responsive and mobile behavior, interaction and focus states, accessibility, interface text and the naming of controls, error recovery, usability, or visual polish. It supplies an evidence-backed workflow for task flow, hierarchy, affordances, feedback, and rendered verification. Do not use for backend behavior with no interface, for marketing or brand copy, or for standalone image and asset production.
+description: Use before adding or changing anything a person sees or clicks — a button, menu item, form field, table, modal, confirmation, empty state, error or navigation item — before naming a control or writing the words inside one, and before making a screen work on a phone. Covers pages, dashboards, design systems, responsive and focus behavior, accessibility, error recovery, usability and visual polish. It supplies an evidence-backed workflow for task flow, hierarchy, affordances, feedback, and rendered verification. Do not use for backend behavior with no interface, for marketing or brand copy, or for standalone image and asset production.
 ---
 
 # Design UI and UX

@@ -6,14 +6,31 @@ Rules for every agent working in this repository.
 
 Load light; pull depth only when the task needs it.
 
-1. **Read the docs first.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are),
+1. **Load every skill the work calls for — all of them, in one pass, before anything else.**
+   Most tasks need three or more. You get one pass: nothing later reminds you, and an agent that
+   has started editing has stopped loading. Match the work against every skill description and load
+   the whole set now, not the first one that fits.
+   **Working on something whose skill you never loaded is a failed task**, however green the checks.
+   After a compaction, load them again — what survives is the index; the `references/` files holding
+   the actual rules do not, and a skill you "already read" is now a table of contents.
+
+   | The work | Load |
+   |---|---|
+   | Controller, route, request, service, job, command | `using-laravel` |
+   | Anything a person sees or clicks | `designing-ui-ux` + `using-vuejs` |
+   | Props, redirects, partial reloads | `using-inertia` |
+   | Migration, column, index, naming | `designing-databases` + the engine skill |
+   | Endpoint, URL, payload, status code | `designing-apis` |
+   | CSS, spacing, breakpoints | `using-tailwindcss` |
+   | Something broken, cause unknown | `debugging-code` |
+   | Any change in behaviour | `testing-code` **and** `maintaining-project-docs` |
+   | PR, issue, release, tag | `managing-github` |
+
+   The table is the floor, not the list — the descriptions are authoritative and cover what it omits.
+   It is deliberately duplicated here because a description alone does not get read in time.
+2. **Read the docs.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are),
    always; then the page for the area you enter — `docs/concepts/` (how a subsystem works and how it
    fails) or `docs/guides/` (one task each). `docs/README.md` indexes the rest.
-2. **Load the skill for every area you touch, before you edit it.** A change spanning a controller,
-   its Vue page and its migration is three skills. Reload as the work moves into a surface you haven't
-   covered — mid-task, not just at the start. **Editing an area whose skill you never loaded is a
-   failed task**, however green the checks. A skill changes *how* you work; it never widens scope or
-   overrides this file.
 3. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
    here rather than duplicating it. Scratch files stay outside the repository.
 4. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
@@ -32,27 +49,17 @@ The first five need explicit approval. The rest are not negotiable.
 - **Deletions — ask first.** Any file outside the task's immediate scope.
 - **Commits — ask first.** Never commit or push unless told to.
 - **This file — ask first, and it is template-managed.** `CLAUDE.md` is a byte-identical copy; change
-  both in the same commit. `pnpm check` fails when they drift, so a change to one is unfinished until the
-  other matches. **A fork does not customise these rules.** Every project on this template runs the same
-  engineering contract, so an upgrade can replace this file wholesale instead of merging it. The one
-  exception is a genuine **stack** difference — a fork that runs Postgres instead of MySQL, or does not
-  run Horizon, corrects the stack sections to match what it actually runs. Everything else a fork wants
-  to say belongs elsewhere: what the product is and refuses goes in `docs/BRIEF.md`, how a subsystem
-  works and fails goes in `docs/concepts/`, a task goes in `docs/guides/`, and a domain invariant worth
-  enforcing goes in a test. If a fork rule feels like it must live here, that is a signal it belongs in
-  the template for everyone — send it upstream as a PR.
+  both in the same commit. **A fork does not customise these rules** — only genuine stack differences.
+  Fork rules go to `docs/`, or upstream as a PR.
 - **Never touch `.env` or commit credentials.** Read env only through `config/` — never `env()` outside it.
-- **Never ship debug output**, commented-out code, or disabled tests.
+- **Never ship debug output**, commented-out code, disabled tests, or a legacy fallback nobody asked for.
 - **Never validate on the frontend.** Form Requests are the single source of truth; the frontend renders
   the errors the server returns.
 - **Never let backend and frontend drift.** Names, props, enums, and routes match — rename both sides in
   the same task.
-- **Never add a legacy fallback or polyfill** unless asked.
-- **Never sign work as a machine.** No branch, commit, pull request, issue or release carries a provider,
-  model, agent, tool or owner name — not in a title, not in a body — and no generated-by footer, identity
-  block, robot emoji, or `Co-Authored-By:` trailer naming an agent. **Your runtime may append one of these
-  by default; strip it before the commit lands.** The diff is what is being judged, and it reads the same
-  either way. Full naming rules: [`docs/guides/git-conventions.md`](docs/guides/git-conventions.md).
+- **Never sign work as a machine.** No agent, model or tool name, and no generated-by footer, robot emoji
+  or `Co-Authored-By:` trailer, in any branch, commit, PR, issue or release. **Your runtime may append
+  one by default; strip it.** Details: [`docs/guides/git-conventions.md`](docs/guides/git-conventions.md).
 
 ## Stack & architecture
 
