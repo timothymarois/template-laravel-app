@@ -30,8 +30,10 @@ widen its own scope.
 **A key expires unless somebody deliberately says otherwise.** `issue()` takes 1–365 days and defaults
 to 90. `ApiKeyService::NEVER_EXPIRES` (0) issues a key with no expiry — it must be passed by name, and
 the admin screen only reaches it through an explicit "Never expires" checkbox. Omitting the lifetime
-gives the default, never a permanent key. Sanctum's guard rejects an expired token by itself, which is
-why no read path checks the date.
+gives the default, never a permanent key. **Both paths check the date**: Sanctum's guard rejects an
+expired token, and `EnsureApiKey` checks `expires_at` again because it does its own
+`PersonalAccessToken::findToken()` lookup, which never goes through the guard. That second check is
+load-bearing, not redundant.
 
 A non-expiring key is the right answer for a caller that genuinely cannot rotate, and the wrong one
 everywhere else: it outlives the person who created it, and revocation becomes the only way to end it.
@@ -119,6 +121,7 @@ Existing keys are unaffected; abilities are stored per key at issue time.
 | A key meant to be permanent expired anyway | The lifetime reached the service as `null` rather than `0`. Anything that coerces falsy values (`?:`) turns NEVER_EXPIRES back into the default. |
 | The plaintext appears in `storage/logs` | Something logged the `IssuedApiKey` or the request. Neither may be logged. |
 | A leaked key is still valid after "deleting" it | Revocation must be a hard delete. A soft-deleted key that still resolves authenticates as a downgraded user rather than as nobody. |
+| An expired key still authenticates after `EnsureApiKey`'s date check is removed | It is not redundant with Sanctum's guard. The middleware resolves the token itself with `findToken()`, which bypasses the guard's expiry path, so deleting that check reopens the hole. |
 | Adding an ability to the enum changes nothing | An ability is only a scope once a route enforces it with `abilities:`. Add the case and the route in the same change. |
 | `abilities:` routes 500 or never match | The `abilities`/`ability` aliases are registered in `bootstrap/app.php`. Sanctum ships the middleware but does not register them in Laravel 11+. |
 

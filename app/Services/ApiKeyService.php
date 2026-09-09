@@ -22,8 +22,10 @@ use Laravel\Sanctum\PersonalAccessToken;
  *     send its own abilities list could widen its own scope.
  *   - A key expires unless the issuer deliberately says otherwise. NEVER_EXPIRES
  *     has to be passed explicitly; omitting the lifetime gives the default, not a
- *     permanent key. Sanctum's guard rejects an expired token by itself, which is
- *     why no read path checks the date.
+ *     permanent key. Both paths check the date: Sanctum's guard rejects an
+ *     expired token, and `EnsureApiKey` checks `expires_at` again because it does its
+ *     own `PersonalAccessToken::findToken()` lookup, which never goes through the
+ *     guard. That second check is load-bearing, not redundant — do not delete it.
  *   - The plaintext is returned exactly once, in an IssuedApiKey, and is never
  *     stored, logged or flashed. Only its SHA-256 hash persists.
  *
