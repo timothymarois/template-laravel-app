@@ -121,7 +121,8 @@ customizations; stop and ask before any hard gate. Start by reading AGENTS.md.
 
 ## Documentation
 
-The documentation is a [wiki-builder](https://github.com/timothymarois/wiki-builder) wiki under
+The documentation is a [wiki-builder](https://wiki-builder.marois.dev/) wiki
+([source](https://github.com/timothymarois/wiki-builder)) under
 [`docs/wiki/`](docs/wiki/): every page is written from the code and every sentence cites the file and
 function it came from. Start at [`docs/wiki/pages/index.md`](docs/wiki/pages/index.md), or read
 [`docs/wiki/pages/brief.md`](docs/wiki/pages/brief.md) for what this is and who it serves. Build and browse
