@@ -80,6 +80,14 @@ as a diff somebody reviews.
 **If your fork removed `.agents/skills`**, `sync` writes into `.claude/skills/` instead. Either way, the
 folder must be committed.
 
+Then delete the `maintaining-project-docs` skill, which this release removes: it prescribes the old
+`docs/` layout and contradicts `writing-wiki-pages` on every wiki page. If your fork edited it, the merge
+reports it `deleted by them`; take the deletion.
+
+```bash
+git rm -r .claude/skills/maintaining-project-docs
+```
+
 ---
 
 ## Part B — The gate and CI (every fork)
@@ -218,8 +226,8 @@ and name the part of the system that acts.
 byte-identical. The file is template-managed: the only permitted divergence is a genuine **stack**
 difference. What changed:
 
-- The skill table routes `Any page under docs/wiki/` to `writing-wiki-pages`, `docs/CODEMAP.md` to
-  `maintaining-project-docs`, and `Any change in behaviour` to `testing-code` **and** `writing-wiki-pages`.
+- The skill table routes `Any page under docs/wiki/` to `writing-wiki-pages`, `docs/CODEMAP.md` to no
+  skill but *Documentation duties*, and `Any change in behaviour` to `testing-code` **and** `writing-wiki-pages`.
 - "Read the docs" names `docs/wiki/pages/brief.md` and `docs/CODEMAP.md`, then the wiki page for the area.
 - A new **`## Git conventions`** section carries what `docs/guides/git-conventions.md` held; the one-line
   no-machine-authorship rule stays in Hard rules on purpose.
@@ -324,6 +332,7 @@ cmp AGENTS.md CLAUDE.md && echo identical
 grep -c "check:wiki" package.json             # 2 (the script, and its place in `check`)
 test -f .github/workflows/wiki.yml && grep -c "wiki-builder@v0.5.0" .github/workflows/wiki.yml   # 1
 test -d .claude/skills/writing-wiki-pages && ls .claude/skills/writing-wiki-pages/references | wc -l  # 7
+test ! -e .claude/skills/maintaining-project-docs && echo removed   # removed
 git status --short docs/wiki/UPDATED.toml     # committed, not dirty, after the last build
 pnpm check                                    # includes check:wiki and AgentInstructionsTest
 ```

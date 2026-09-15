@@ -24,7 +24,7 @@ Load light; pull depth only when the task needs it.
    | CSS, spacing, breakpoints | `using-tailwindcss` |
    | Something broken, cause unknown | `debugging-code` |
    | Any page under `docs/wiki/` | `writing-wiki-pages` |
-   | `docs/CODEMAP.md` | `maintaining-project-docs` |
+   | `docs/CODEMAP.md` | no skill — *Documentation duties* below |
    | Any change in behaviour | `testing-code` **and** `writing-wiki-pages` |
    | PR, issue, release, tag | `managing-github` |
 
