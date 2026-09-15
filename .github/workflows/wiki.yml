@@ -1,0 +1,27 @@
+name: Wiki
+
+# The wiki is checked once per change: on every pull request, and on a push to
+# main. A branch push alone is not checked, so a PR branch is not checked twice.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push supersedes an in-flight run for the same ref.
+concurrency:
+  group: wiki-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wiki:
+    name: Wiki check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Pinned to the same release scripts/dev-wiki.sh runs, so CI and a
+      # developer machine enforce the same rules.
+      - name: Check the wiki
+        uses: timothymarois/wiki-builder@v0.3.2

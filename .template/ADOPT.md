@@ -9,11 +9,11 @@ rules live.
 > by reading the template's `.template/` (this file + `migrations/`) from a fresh clone of the template, not
 > from itself.
 
-> **One version line.** As of v5.6.0 the documentation standards live in a skill
-> (`maintaining-project-docs`, shipped in `.claude/skills/` since v5.7.0), not in a versioned payload
-> each repo carries. There is no
-> `.knowledge/.version` to keep current any more — a fork tracks exactly one version, this template's, in
-> `template-manifest.json`.
+> **One version line.** The documentation is a [wiki-builder](https://github.com/timothymarois/wiki-builder)
+> wiki under `docs/wiki/`, written to the `writing-wiki-pages` skill that `wiki sync` puts in
+> `.claude/skills/`, and pinned to one wiki-builder release in `scripts/dev-wiki.sh`. A fork tracks
+> exactly one template version, in `template-manifest.json`; the wiki-builder release is a line in the
+> wrapper script, bumped by a template release when the tool moves.
 
 ---
 
@@ -37,42 +37,55 @@ infer rather than guessing.
    - template-manifest.json STAYS: it records which template version we forked from, so we can pull upgrades.
      Leave its "version" as-is; do not bump it.
 
-3. MAKE THE DOCS OURS. docs/ currently describes the starter. Rewrite it for OUR product:
-   - docs/BRIEF.md and docs/CODEMAP.md describe the TEMPLATE. Rewrite both for us, researching THIS
-     codebase rather than guessing. CODEMAP maps the real tree with counts of artifacts, not lines; BRIEF
-     says what we are, who we serve, and what we refuse.
-   - Scope and external systems are in the code. WHO IT IS FOR and WHAT IT REFUSES are not — ask me, do not
-     infer them. An invented audience reads exactly as confidently as a sourced one and nobody re-checks it.
-   - docs/concepts/ and docs/guides/ describe the shared stack (health checks, logging, Ziggy, releasing,
-     tenancy, testing). They stay true in a fork — keep them. If we will not use a stack, you MAY delete its
-     guide and its index row, but see step 4 before touching any code.
-   - Keep every home's README.md level with its directory: one row per page, and a row lands in the same
-     change as the page. A page belongs to exactly one index. Never create a home with no page in it.
+3. MAKE THE DOCS OURS. The documentation is a wiki-builder wiki under docs/wiki/, and every page of it
+   describes THE TEMPLATE. Load the writing-wiki-pages skill (in .claude/skills/) and follow it; run the
+   tool through ./scripts/dev-wiki.sh (needs uv). Rewrite the wiki for OUR product:
+   - docs/wiki/wiki.toml: site.name becomes OUR product name.
+   - docs/wiki/pages/brief.md and index.md describe the template. Rewrite both for us from THIS codebase.
+     Scope and external systems are in the code. WHO IT IS FOR and WHAT IT REFUSES are not — ask me, do
+     not infer them. An invented audience reads exactly as confidently as a sourced one and nobody
+     re-checks it. A statement only I can make that I have not made is marked {missing}, not guessed.
+   - Every other page describes the shared stack (accounts, the admin area, API keys, health checks,
+     releases, deployment, logging, SEO, the component kit, the commands). Read each one against OUR
+     code, sentence by sentence, and correct what differs: a route we renamed, a check we removed, a
+     default we changed, a screen we do not ship. A page for something our code does not have is deleted,
+     with its wiki.toml entry. A page whose intent no longer says what that part is for in OUR product
+     gets a new intent, which I approve — list every intent you changed.
+   - The goal pages (those without goals = false) say what the TEMPLATE is for. Which pages define OUR
+     product is my decision: propose the set, and set goals = false on the rest.
+   - docs/CODEMAP.md is the one document written for builders. Bring it in line with OUR tree: count
+     artifacts, not lines, and drop what we removed.
+   - Run ./scripts/dev-wiki.sh build, then ./scripts/dev-wiki.sh check, until it reports 0 problems, and
+     commit docs/wiki/UPDATED.toml with the pages. Cite every sentence to OUR code; a page that says
+     goals = false is not citation-checked, so cite it by hand anyway.
 
 4. SET UP THE RELEASE PROCESS. Fill in template-manifest.json -> deploy with OUR values: repository
    (owner/name), productionUrl (the deployed origin), productionBranch. The release scripts refuse to run
    against the shipped placeholders, so this is required before our first release, not optional. Confirm
    both composer.json and package.json read version "0.0.0" — main never carries a release version. Full
-   procedure: docs/guides/releasing.md.
+   procedure: docs/wiki/pages/releases.md.
 
 5. MATCH THE DOCS TO WHAT WE SHIP — don't rip out code during adoption. The template documents optional
-   stacks (multi-tenancy installed-but-inert; Docker/Coolify):
-   - The docs must describe the code THAT EXISTS. While the tenancy code is still present (even inert),
-     CODEMAP/AGENTS keep it — marked inert/optional, not deleted. Do NOT remove a feature from the docs
-     while its code still ships; that makes the docs lie about the repo.
-   - If we won't use a stack, you MAY delete its how-to GUIDES now (e.g. the tenancy guides + their
-     guides/README.md rows) and trim BRIEF/OVERVIEW to our product — those are docs-only.
-   - Actually removing a stack's CODE, config, migrations, and dependency (e.g. stancl/tenancy) is a
-     SEPARATE, hard-gated change (schema + dependency + deletion). Do NOT do it during adoption — raise it
-     and I'll run it as its own task. Only once the code is gone do CODEMAP/AGENTS drop the feature.
+   stacks (Docker/Coolify; the Cloudflare Worker documentation site; multi-tenancy as a guide a fork
+   follows, docs/wiki/pages/setup/tenancy.md):
+   - The wiki must describe the code THAT EXISTS. Do NOT remove a page for a feature while its code
+     still ships; that makes the wiki lie about the repo. A page for a stack we will never adopt (the
+     tenancy guide, the documentation site) MAY go now — it is docs-only — together with its wiki.toml
+     entry and any link to it.
+   - Actually removing a stack's CODE, config, migrations, and dependency is a SEPARATE, hard-gated
+     change (schema + dependency + deletion). Do NOT do it during adoption — raise it and I'll run it as
+     its own task. Only once the code is gone do its wiki page and CODEMAP drop the feature.
+   - wrangler.jsonc is the documentation site's Worker: set "name" to OUR Worker's name in the Cloudflare
+     dashboard if we will publish the wiki there, or delete the file and docs/wiki/worker.js if we won't.
 
-6. VERIFY. No "template-laravel-app" reference remains in docs/, AGENTS.md, or README except in
-   template-manifest.json. Every relative link in docs/ resolves and every page appears in exactly one
-   index. `scripts/assert-neutral-main-version` passes. Run `pnpm check` if the toolchain is set up — it
-   includes check:release, which proves the release scripts still work after we edited the manifest.
+6. VERIFY. No "template-laravel-app" reference remains in docs/, AGENTS.md, wrangler.jsonc or README
+   except in template-manifest.json. ./scripts/dev-wiki.sh check reports 0 problems.
+   `scripts/assert-neutral-main-version` passes. Run `pnpm check` if the toolchain is set up — it
+   includes check:release, which proves the release scripts still work after we edited the manifest, and
+   check:wiki, which proves the wiki still describes the code.
 
-Then stop and show me: what you renamed, what you removed, the component ontology you propose, and anything
-you had to infer.
+Then stop and show me: what you renamed, what you removed, every wiki page you changed and every intent
+you rewrote, the goal pages you propose, every {missing} mark, and anything you had to infer.
 ```
 
 ---
@@ -111,6 +124,10 @@ Never delete or rewrite a doc for a feature the code still ships.
    - Managed vs. ours: template-owned "core" files upgrade to the new version; the documented "knobs" and
      everything WE built stay ours. If a migration touches a file we've customized, show me the conflict
      before resolving it.
+   - The docs are a wiki-builder wiki under docs/wiki/. A migration that changes behaviour names the
+     wiki page it changes; apply that change to OUR copy of the page, re-read the page against OUR code,
+     and finish the release with ./scripts/dev-wiki.sh check at 0 problems. A page we deleted at adoption
+     stays deleted.
    - Persisted-state, schema, dependency, or deletion changes are HARD GATES — get my approval before each.
 
 4. STAMP + VERIFY per release: update template-manifest.json "version" as each migration's Verify section

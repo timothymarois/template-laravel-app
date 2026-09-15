@@ -101,7 +101,9 @@ return [
             'handler' => StreamHandler::class,
             // Default to one-line JSON so a log collector (Alloy/Fluent Bit) can ship
             // structured fields to Loki/Grafana out of the box. Set LOG_STDERR_FORMATTER
-            // to an empty string or another formatter class for human-readable lines.
+            // to Monolog\Formatter\LineFormatter for human-readable lines. An empty value
+            // is not "no formatter": the channel fails to build and every record falls
+            // back to the emergency file logger, so nothing reaches stderr at all.
             'formatter' => env('LOG_STDERR_FORMATTER', JsonFormatter::class),
             'with' => [
                 'stream' => 'php://stderr',

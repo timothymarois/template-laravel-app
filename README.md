@@ -104,7 +104,7 @@ flow you want — it reads the detailed prompt from there and follows it.
 ```
 Set this repo up as our own product from the template-laravel-app starter. Read .template/ADOPT.md and
 follow the "Start a new project" prompt end to end — rename the project to <OUR NAME>, strip the template
-machinery, and rewrite docs/BRIEF.md and docs/CODEMAP.md for our product. Ask me anything you must
+machinery, and rewrite the wiki under docs/wiki/ and docs/CODEMAP.md for our product. Ask me anything you must
 infer. Start by reading AGENTS.md.
 ```
 
@@ -121,12 +121,15 @@ customizations; stop and ask before any hard gate. Start by reading AGENTS.md.
 
 ## Documentation
 
-Contributor and agent documentation lives in [`docs/`](docs/) — start at
-[`docs/README.md`](docs/README.md) for the index, [`docs/BRIEF.md`](docs/BRIEF.md) for what this is and who
-it serves, or [`docs/CODEMAP.md`](docs/CODEMAP.md) for where each layer lives.
-[`docs/concepts/`](docs/concepts/) explains how each subsystem works and fails;
-[`docs/guides/`](docs/guides/) is one task per page. The rules every agent follows — and the worked
-`✅`/`❌` code galleries — are in [`AGENTS.md`](AGENTS.md).
+The documentation is a [wiki-builder](https://github.com/timothymarois/wiki-builder) wiki under
+[`docs/wiki/`](docs/wiki/): every page is written from the code and every sentence cites the file and
+function it came from. Start at [`docs/wiki/pages/index.md`](docs/wiki/pages/index.md), or read
+[`docs/wiki/pages/brief.md`](docs/wiki/pages/brief.md) for what this is and who it serves. Build and browse
+it locally with `./scripts/dev-wiki.sh serve` (needs [`uv`](https://docs.astral.sh/uv/)); `pnpm check`
+runs `wiki check` so an uncited or stale page fails the gate. [`docs/CODEMAP.md`](docs/CODEMAP.md) is the
+one document written for builders — where each layer lives, with counts, and the traps this stack has
+sprung. The rules every agent follows — and the worked `✅`/`❌` code galleries — are in
+[`AGENTS.md`](AGENTS.md).
 
 ### Quick Links
 - [Tech Stack](#tech-stack) — Core technologies and why they're chosen
@@ -241,9 +244,9 @@ See `AGENTS.md` for detailed component guidelines.
 |------|-----|---------|
 | [Horizon](https://laravel.com/docs/13.x/horizon) | `/horizon` | Monitor queues and jobs |
 
-For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see [logging](docs/concepts/logging.md) and the [setup guide](docs/guides/centralized-logging.md).
+For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/guides/laravel/) integrates directly with Jira and git commits. Application logs go to `stderr` and are shipped to a central log store of your choice — see [logging](docs/wiki/pages/logging.md) and the [central store](docs/wiki/pages/logging/central-store.md).
 
-**Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See the [Health Checks guide](docs/concepts/health-checks.md).
+**Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See [health checks](docs/wiki/pages/health.md).
 
 ### Solo (Dev Runner)
 

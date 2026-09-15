@@ -29,7 +29,7 @@ Route::get('health', HealthCheckJsonResultsController::class)
 
 // Deployed release version. Read by scripts/publish-production-release to prove a
 // production deploy is live before the tag is published, and by any external
-// deployment monitor. Never cached. See docs/concepts/deployment-endpoints.md.
+// deployment monitor. Never cached. See docs/wiki/pages/releases.md.
 Route::get('release', ReleaseController::class)->name('release.version');
 
 // Guest routes (login/register/password reset)

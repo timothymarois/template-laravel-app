@@ -1,0 +1,165 @@
+# When each page last changed, what it hashed to then, and when it was last audited.
+#
+# Written by `wiki build` and `wiki audit`, never by hand. A page is re-rendered, and its date
+# moves, only when its own content has changed -- so the date on a page means something, and a
+# build that changed nothing writes nothing. An audit keeps its day through later edits.
+
+["accounts"]
+updated = "2026-09-14"
+digest = "66ad333c6fbcafac4351b161ece8ed62fa31453ece2c0bd3328c5ce3fd7e1f47"
+
+["accounts/password-reset"]
+updated = "2026-09-14"
+digest = "29da39f5c0ea674fa501a12206e39b56e59ca9826ea14e3c1e6e0c365a791b6a"
+
+["admin"]
+updated = "2026-09-14"
+digest = "c097152333f2f7e492d40ed4b4d9f234c436b3fe459e2b1b6ecffa68ffd3b9b3"
+
+["admin/users"]
+updated = "2026-09-14"
+digest = "2ac6e6f35e8a873dffa8c2046b6f68cd8f71a8721e0bda4b60b0999fdc968d74"
+
+["api"]
+updated = "2026-09-14"
+digest = "208528b8818721fa521ac28bc4ba9e70d146ad99a9060b2da1ea174ee90226d8"
+
+["api-keys"]
+updated = "2026-09-14"
+digest = "5f2f1194aaa2db50032967e940d8dbc4751bad4463c397f4ef910fda606a31ad"
+
+["api-keys/issuing"]
+updated = "2026-09-14"
+digest = "dd9594e1f062017a2ebccfa5219c8a832a4798cb9a2060b635b167eb3b0aef00"
+
+["api/user"]
+updated = "2026-09-14"
+digest = "711973532436fe153430bc7f38b816513c38cc4eb68435c7e738176b99cd8ed2"
+
+["api/users"]
+updated = "2026-09-14"
+digest = "a44bb9d1b0444805453206b91bce1b00fd9095aba2a9e1088be4e93927f4095b"
+
+["background-work"]
+updated = "2026-09-14"
+digest = "7e6775b41f36f632532e0c64d808a47112e5fa0d4d160363e68c18451ba19de2"
+
+["brief"]
+updated = "2026-09-14"
+digest = "ef3b76135a84216022598da5906a87103aadb04d75b7ca4d92a9904252aa0eff"
+
+["commands"]
+updated = "2026-09-14"
+digest = "0b897cd8abe3aac27cfca01af91da281105f4dd20c76125151eed3e3b06dcfc7"
+
+["commands/api-key-create"]
+updated = "2026-09-14"
+digest = "07f3fa69436be802b36669521ac0fc85c9ede89347bf10751d77782b2e7c281b"
+
+["commands/app-ensure-storage"]
+updated = "2026-09-14"
+digest = "9ed28d5d7ad4c8530da0df66849ee0729ba31bcde427a67f11421fef651e614e"
+
+["commands/sitemap-generate"]
+updated = "2026-09-14"
+digest = "bc777e51ff594fe77f08b697a4732a0a5a14bef1760431391e6ff72fa069d2b0"
+
+["commands/start-fresh"]
+updated = "2026-09-14"
+digest = "69ec879fc4310fa34d675ed077a1ff2b840341866e5bd06382f9573b44c4ea98"
+
+["commands/user-create"]
+updated = "2026-09-14"
+digest = "ab6fbc802344842be07180703620242058156df53ec9ac80fe03cb0075439050"
+
+["components"]
+updated = "2026-09-14"
+digest = "25e25b76f42dace7b401c3222f2c164a510f71fbdd8a0b21fb0e9eb23035cd32"
+
+["components/data-tables"]
+updated = "2026-09-14"
+digest = "cdfc72334aefc4f4240b0c111524d74679767338f83978122107f629bb241baf"
+
+["components/dates"]
+updated = "2026-09-14"
+digest = "7b0046db5eee388f5254a844a0353f417173e94e1e579e36ef9b40b8d273fe7a"
+
+["components/dialogs"]
+updated = "2026-09-14"
+digest = "552a78e328c9d0f0ac84899b452ec9bc5e91d07c90669917dbf696d53a241b23"
+
+["deployment"]
+updated = "2026-09-14"
+digest = "b5bed5fcec485eeae12f6386bb69c9978cbbd80596682ef6e3b6620d1ff60a44"
+
+["goals"]
+updated = "2026-09-14"
+digest = "ac8f71eed60c7c85f9b92c6c778ad3167156ddbf5db95f84b3c1145c3602b7bd"
+
+["health"]
+updated = "2026-09-14"
+digest = "882a1a48190e5408bd15b46a821679c3d1d2316471ccd82e4916675f495c5497"
+
+["health/notifications"]
+updated = "2026-09-14"
+digest = "03cc31a631932d64ca3ca6a3126d9313c89c0d13ea9b4b1fbafc0c08c28bed52"
+
+["index"]
+updated = "2026-09-14"
+digest = "f00f530680e7824f440ab5929af57b9ae61fb094b32b2df672356f749ed2ae29"
+
+["logging"]
+updated = "2026-09-14"
+digest = "9d98a69813123978c647cd25c76be1d3a8c01ee3eb82675bf0334cda1280e4fb"
+
+["logging/central-store"]
+updated = "2026-09-14"
+digest = "227ca9cdc789b5d38b0f2612acd2a6b9bf70e2a0d9a42f5cbfa121f1ed5baaea"
+
+["releases"]
+updated = "2026-09-14"
+digest = "398c88a521054bcf00fb5312c28a31ec719edae917a6230128751cbeab0cd342"
+
+["releases/01-preparation"]
+updated = "2026-09-14"
+digest = "24026d7a4778e4250917ab8bbfe0f2296d8977c465991ee4a43f06056d19170b"
+
+["releases/02-production-pull-request"]
+updated = "2026-09-14"
+digest = "f15e795befcab33aa4531bb11a380d8e0f0b2b17157361bb45643aaef5fea9bd"
+
+["releases/03-publication"]
+updated = "2026-09-14"
+digest = "7947639dc1758365bdfd894c9db32a40446f10fefa46acbc4a6c4115662cec98"
+
+["releases/04-reconciliation"]
+updated = "2026-09-14"
+digest = "63b22ec30a3ebca5eebc1cb0b5855464d3f99bcf89cb20c5923403892b54144d"
+
+["seo"]
+updated = "2026-09-14"
+digest = "fe0868dd3faa476981fba19d4671ab76bb49795728e8e1f6f7e3e3024e745cdf"
+
+["seo/sitemap"]
+updated = "2026-09-14"
+digest = "9719b70e6196f6c647a69f3420a098469f6850a572ae3a0dee3baf572eaf2426"
+
+["setup"]
+updated = "2026-09-14"
+digest = "533590a4cb7be5d5e66431930298bc7c39ad918832a42b41851ad9079bb73f19"
+
+["setup/documentation-site"]
+updated = "2026-09-14"
+digest = "e1425e3e85657e531a8b0c87f2d3d2e812871d7e3d7dbcf70fde7613e424bee0"
+
+["setup/tenancy"]
+updated = "2026-09-14"
+digest = "c9f552ec826e53182136a623d5f8baa26fa8be1f2f0ca9228b42e26759445fc2"
+
+["setup/tenancy/adoption"]
+updated = "2026-09-14"
+digest = "c13d27a7c359adcee1f5466df3a99012e11c30ef27eb52da12c0ae3cbfa17b23"
+
+["site"]
+updated = "2026-09-14"
+digest = "4700a266d15a8d305868abfcbf1ff1c830144d5bb585ef32e597a1be64e6283e"
