@@ -12,15 +12,15 @@ its way, because a release branch is versioned on purpose.
 [[infobox]]
 group = "Identity"
 rows = [
-  { label = "Base branch", value = "production", cite = "manifest" },
-  { label = "Head branch", value = "release/vMAJOR.MINOR.PATCH", cite = "branch" },
+  { label = "Production branch", value = "production", cite = "manifest" },
+  { label = "Release branch", value = "release/vMAJOR.MINOR.PATCH", cite = "branch" },
 ]
 
 [[infobox]]
 group = "Rules"
 rows = [
   { label = "Checks", value = "PHP, JavaScript, Docker configuration", cite = "workflows" },
-  { label = "Neutral-version guard", value = "not run", cite = "guard" },
+  { label = "Guard runs", value = "not run", cite = "guard" },
   { label = "Deploy", value = "the merged production branch", missing = true },
 ]
 +++

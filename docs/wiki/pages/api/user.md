@@ -19,6 +19,7 @@ rows = [
 [[infobox]]
 group = "Rules"
 rows = [
+  { label = "Returns", value = "the caller's own account", cite = "route" },
   { label = "Fields", value = "id, name, email, role", cite = "route" },
 ]
 +++
@@ -28,21 +29,30 @@ and their refusals, are described on [API](../api.md).
 
 ## Request
 
-The request carries the key as a bearer token and nothing else.[^route]
 ```http
 GET /api/user
 Authorization: Bearer KEY
 Accept: application/json
 ```
 
+## Authentication
+
+The request carries the key as a bearer token and nothing else, and the key passes the checks
+[API](../api.md) describes.[^route]
+
 ## Responses
 
 | Status | When | Body |
 |---|---|---|
 | `200` | the key passed every check[^route] | the owner's `id`, `name`, `email` and `role` |
-| `401` | no key, an unknown, expired or foreign key[^refusals] | `{"message":"Unauthenticated."}` |
-| `403` | a deactivated owner, or a key without `api:read`[^refusals] | `{"message":"Your account has been deactivated."}` or `{"message":"Invalid ability provided."}` |
-| `429` | the 61st request in a minute[^refusals] | `{"message":"Too Many Attempts."}` |
+
+## Errors
+
+| Status | Condition | Message |
+|---|---|---|
+| `401` | no key, an unknown, expired or foreign key[^refusals] | `Unauthenticated.` |
+| `403` | a deactivated owner, or a key without `api:read`[^refusals] | `Your account has been deactivated.` or `Invalid ability provided.` |
+| `429` | the 61st request in a minute[^refusals] | `Too Many Attempts.` |
 
 ## Example
 

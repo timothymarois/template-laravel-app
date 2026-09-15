@@ -17,16 +17,16 @@ rows = [
 [[infobox]]
 group = "Defaults"
 rows = [
-  { label = "Page size", value = "50", cite = "list" },
+  { label = "Page size", value = "50", note = "15, 25, 50 or 100 offered", cite = "defaults" },
   { label = "Sort", value = "by name, ascending", cite = "list" },
 ]
 
 [[infobox]]
 group = "Rules"
 rows = [
-  { label = "Role", value = "required when adding or editing", cite = "rules" },
-  { label = "Own account", value = "not deletable", cite = "self" },
-  { label = "Archive", value = "a permanent delete", cite = "delete" },
+  { label = "Fields", value = "Name, Email, Role, all required", cite = "rules" },
+  { label = "Removal", value = "a permanent delete", cite = "hard" },
+  { label = "Refusal", value = "the operator's own account", cite = "self" },
 ]
 +++
 
@@ -37,18 +37,23 @@ address.[^list] The search, sort, page size and chosen columns are kept for the 
 ## List
 
 `Search user name or email` matches either field.[^search] The page size is chosen at the foot of the
-list, and the columns and sort in the column menu.[^page] A name opens the account's own page at
+list, and the columns and sort in the column menu.[^page] The list starts at 50 rows a page, ordered by
+name, and offers 15, 25, 50 or 100 rows a page.[^defaults] A name opens the account's own page at
 `/admin/users/{id}`.[^show]
 
-## Adding and editing
+## Adding
 
-`Add user` opens a form with `Name`, `Email` and `Role`, and `Edit` in a row's menu opens the same form
-filled in.[^form] All three are required; the address must be unique among accounts, and the role is
-`Administrator` or `User`.[^rules] The form says `An administrator can reach /admin and manage every user.`
-beside the role.[^form] A new account gets a random password its owner never sees, so the owner signs in
-through [Password reset](../accounts/password-reset.md).[^password]
+`Add user` opens a form with `Name`, `Email` and `Role`.[^form] All three are required; the address must be
+unique among accounts, and the role is `Administrator` or `User`.[^rules] The form says
+`An administrator can reach /admin and manage every user.` beside the role.[^form] A new account gets a
+random password its owner never sees, so the owner signs in through
+[Password reset](../accounts/password-reset.md).[^password]
 
-## Archiving
+## Editing
+
+`Edit` in a row's menu opens the same form filled in.[^form]
+
+## Removal
 
 `Archive` in a row's menu asks `Are you sure you want to archive this user? This action can be undone.`
 and, on `Archive`, deletes the account.[^delete] The deletion is permanent.[^hard] An operator cannot
@@ -65,6 +70,9 @@ archive their own account; the server answers `403`.[^self]
     `email`; `resources/js/pages/admin/users/Index.vue` — the placeholder `Search user name or email`.
 [^page]: `resources/js/pages/admin/users/Index.vue` — the `perPage` select in the footer and
     `CustomizeColumns` with its sort.
+[^defaults]: `app/Http/Controllers/Admin/UserController.php` — `$indexDefaults` sets `perPage` 50 and
+    `sortField` `name`; `resources/js/pages/admin/users/Index.vue` — `perPageOptions` lists 15, 25, 50
+    and 100.
 [^show]: `resources/js/pages/admin/users/Index.vue` — the name links to `admin.users.show`;
     `app/Http/Controllers/Admin/UserController.php` — `show()`.
 [^form]: `resources/js/components/app/modals/EditUserModal.vue` — the headers `Add user` and

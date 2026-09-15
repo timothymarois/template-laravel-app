@@ -40,7 +40,7 @@ on that host.{missing} What each application emits is described on [Logging](../
 | Grafana | the same resource, on its own domain | the interface the lines are searched in[^grafana-loki] |
 | Alloy | the same resource, one per host | reads the Docker socket, labels every container and pushes to Loki[^alloy-docker][^alloy-source] |
 
-## Setup
+## Steps
 
 1. Create a private Space in the server's region, and a Spaces key scoped to it.[^spaces-create][^spaces-keys]
 2. Add the Compose file below as one Coolify resource, give the `grafana` service its domain, and enter

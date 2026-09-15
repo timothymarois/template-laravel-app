@@ -1,6 +1,6 @@
 +++
 title = "Adoption"
-subtitle = "moving an existing product's data into tenants, and the traps met on the way"
+subtitle = "moving an existing product's data into tenants, and the pitfalls met on the way"
 status = "approved"
 goals = false
 intent = """
@@ -41,7 +41,7 @@ Deleting a tenant model dispatches `TenantDeleted`, and dropping its database is
 chooses to listen to.[^deleted] A grace window between the two, a scheduled purge of tenants deleted more
 than a set number of hours ago, makes an accidental deletion recoverable.{missing}
 
-## Traps
+## Pitfalls
 
 | Symptom | Cause |
 |---|---|

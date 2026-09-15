@@ -13,8 +13,14 @@ should be refused before a file changes.
 group = "Identity"
 rows = [
   { label = "Command", value = "scripts/prepare-production-release", cite = "usage" },
-  { label = "Argument", value = "vMAJOR.MINOR.PATCH", cite = "usage" },
-  { label = "Branch", value = "release/vMAJOR.MINOR.PATCH", cite = "conditions" },
+  { label = "Arguments", value = "vMAJOR.MINOR.PATCH", cite = "usage" },
+  { label = "Release branch", value = "release/vMAJOR.MINOR.PATCH", cite = "conditions" },
+]
+
+[[infobox]]
+group = "Rules"
+rows = [
+  { label = "Changes", value = "composer.json, package.json", cite = "files" },
 ]
 
 [[infobox]]
@@ -23,12 +29,6 @@ rows = [
   { label = "Success", value = "0", cite = "output" },
   { label = "Refused", value = "1", cite = "fail" },
   { label = "Misuse", value = "2", cite = "usage" },
-]
-
-[[infobox]]
-group = "Rules"
-rows = [
-  { label = "Files changed", value = "composer.json, package.json", cite = "files" },
 ]
 +++
 
@@ -43,24 +43,6 @@ The tag is the only argument, and the script runs on a branch named for it.[^usa
 scripts/prepare-production-release vMAJOR.MINOR.PATCH
 scripts/prepare-production-release v1.2.3
 ```
-
-## Conditions
-
-Every condition is checked before a file changes, and a failed one exits with
-`Release preparation refused:` and the reason.[^fail]
-
-| Condition | Reason printed |
-|---|---|
-| the tag is not `vMAJOR.MINOR.PATCH` without leading zeros | `version must use strict vMAJOR.MINOR.PATCH syntax`[^fail] |
-| the worktree has uncommitted or untracked files | `the worktree must be clean`[^fail] |
-| the checkout is not on a branch | `detached HEAD is not allowed`[^fail] |
-| the branch is not `release/<tag>` | `run on release/v1.2.3, not main`[^conditions] |
-| `origin/main` is not fetched | `origin/main is unavailable; fetch it first`[^conditions] |
-| the branch head differs from `origin/main` | `the release branch must start at current origin/main`[^conditions] |
-| the tag exists locally, or on `origin` | `tag v1.2.3 already exists locally`, `tag v1.2.3 already exists on origin`[^conditions] |
-| `python3` is not installed | `python3 is required`[^fail] |
-| either manifest is not at `0.0.0` | `composer.json must start at version 0.0.0`[^python] |
-| anything but the two manifests changed | `unexpected files changed`[^files] |
 
 ## Output
 
@@ -78,23 +60,51 @@ Release preparation refused: the worktree must be clean
 
 ## Exit codes
 
+A failed condition exits with `Release preparation refused:` and the reason.[^fail] The checks on the tag,
+the repository, both manifests existing, the worktree, the branch, `origin/main`, the existing tags and
+`python3` all run before a file changes.[^setup][^conditions] Each manifest's version, and whether its
+version line can be rewritten, is checked just before that manifest is rewritten, so a `package.json`
+refused on either count is refused after `composer.json` has already been rewritten.[^python] The
+check that nothing but the two manifests changed runs last, after both are rewritten.[^files]
+
 | Code | Condition | Message |
 |---|---|---|
 | `0` | both manifests carry the version[^output] | `Prepared v1.2.3 in composer.json and package.json.` |
-| `1` | a condition above failed[^fail] | `Release preparation refused: …` |
+| `1` | the tag is not `vMAJOR.MINOR.PATCH` without leading zeros | `version must use strict vMAJOR.MINOR.PATCH syntax`[^fail] |
+| `1` | the script is run outside a Git checkout | `run this inside the repository`[^setup] |
+| `1` | `composer.json` or `package.json` does not exist | `composer.json or package.json is missing`[^setup] |
+| `1` | the worktree has uncommitted or untracked files | `the worktree must be clean`[^fail] |
+| `1` | the checkout is not on a branch | `detached HEAD is not allowed`[^fail] |
+| `1` | the branch is not `release/<tag>` | `run on release/v1.2.3, not main`[^conditions] |
+| `1` | `origin/main` is not fetched | `origin/main is unavailable; fetch it first`[^conditions] |
+| `1` | the branch head differs from `origin/main` | `the release branch must start at current origin/main`[^conditions] |
+| `1` | the tag exists locally, or on `origin` | `tag v1.2.3 already exists locally`, `tag v1.2.3 already exists on origin`[^conditions] |
+| `1` | the tags on `origin` cannot be read | `could not verify tags on origin`[^conditions] |
+| `1` | `python3` is not installed | `python3 is required`[^fail] |
+| `1` | either manifest is not at `0.0.0` | `composer.json must start at version 0.0.0`[^python] |
+| `1` | a manifest's `"version"` does not open its own line, so it cannot be rewritten in place | `could not update composer.json safely`, or `package.json`[^python] |
+| `1` | anything but the two manifests changed | `unexpected files changed`[^files] |
 | `2` | no argument, or more than one[^usage] | `Usage: scripts/prepare-production-release vMAJOR.MINOR.PATCH` |
 
 [^files]: `scripts/prepare-production-release` — the Python block rewrites only the `version` line of
-    each manifest, and the script then fails with `unexpected files changed` unless `git diff
+    each manifest, and the lines after it (86 to 88) fail with `unexpected files changed` unless `git diff
     --name-only` lists exactly `composer.json` and `package.json`.
 [^usage]: `scripts/prepare-production-release` — `usage()` prints the usage line to standard error and
     the script exits 2 unless exactly one argument is given.
 [^fail]: `scripts/prepare-production-release` — `fail()` prints `Release preparation refused:` with the
     reason and exits 1; the syntax, clean-tree, detached-head and `python3` checks call it.
-[^conditions]: `scripts/prepare-production-release` — the `expected_branch`, `origin/main`, head-commit
-    and local and remote tag checks, each calling `fail()`.
-[^python]: `scripts/prepare-production-release` — the Python block exits with `Release preparation
-    refused: {filename} must start at version 0.0.0`.
+[^setup]: `scripts/prepare-production-release` — line 27 fails with `run this inside the repository` when
+    `git rev-parse --show-toplevel` fails, and line 30 with `composer.json or package.json is missing`
+    unless both files exist.
+[^conditions]: `scripts/prepare-production-release` — the syntax, clean-tree, detached-head,
+    `expected_branch`, `origin/main`, head-commit, local and remote tag and `python3` checks (lines 21 to
+    55), each calling `fail()` before the Python block runs; lines 49 to 53 fail with `could not verify
+    tags on origin` when `git ls-remote --exit-code` returns anything but 0 or 2.
+[^python]: `scripts/prepare-production-release` — the Python block (lines 57 to 84) loops over
+    `composer.json` then `package.json`, exiting with `Release preparation refused: {filename} must start
+    at version 0.0.0`, or with `Release preparation refused: could not update {filename} safely` when the
+    pattern `(?m)^(\s*"version"\s*:\s*)"0\.0\.0"` matches no line (line 81), or writing that file before
+    it reads the next.
 [^output]: `scripts/prepare-production-release` — the three closing `echo` lines, reached only after
     every check passed.
 [^run]: `scripts/prepare-production-release` — `fail()`; the sample is the output of running the script

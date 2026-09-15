@@ -18,8 +18,8 @@ rows = [
 [[infobox]]
 group = "Lifetime"
 rows = [
-  { label = "Default", value = "90 days", cite = "lifetime" },
-  { label = "Longest", value = "365 days", cite = "lifetime" },
+  { label = "Default lifetime", value = "90 days", cite = "lifetime" },
+  { label = "Longest lifetime", value = "365 days", cite = "lifetime" },
   { label = "No expiry", value = "on request only", cite = "lifetime" },
 ]
 
@@ -33,8 +33,9 @@ rows = [
 +++
 
 An **API key** is a bearer credential an operator issues to themselves for a machine caller; it carries one
-or more abilities and, unless asked otherwise, an expiry date.[^issue] Issuing and revoking are described
-on [Issuing](api-keys/issuing.md), and what a caller does with a key on [API](api.md).
+or more abilities and, unless asked otherwise, an expiry date.[^issue] Issuing and revoking
+on the admin screen are described on [API keys](admin/api-keys.md), and what a caller does with a key on
+[API](api.md).
 
 ## Form
 

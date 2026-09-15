@@ -12,14 +12,15 @@ emptied and the database rebuilt from its migrations. It must be impossible to r
 group = "Identity"
 rows = [
   { label = "Command", value = "start:fresh", cite = "signature" },
+  { label = "Use", value = "clears every cache and rebuilds the database, outside production only", cite = "flow" },
   { label = "Options", value = "--non-interactive", cite = "signature" },
 ]
 
 [[infobox]]
 group = "Rules"
 rows = [
+  { label = "Changes", value = "every cache emptied, every table dropped and migrated again", cite = "flow" },
   { label = "Production", value = "refused", cite = "production" },
-  { label = "Database", value = "dropped and migrated again", cite = "migrate" },
 ]
 
 [[infobox]]
@@ -36,11 +37,17 @@ because running the command empties the database it is pointed at.[^migrate]
 
 ## Usage
 
-The option `--non-interactive` is declared and read by nothing: the command asks no question either way.[^signature]
+The command takes one option and no argument.[^signature]
 ```sh
 start:fresh [--non-interactive]
 php artisan start:fresh
 ```
+
+## Options
+
+| Option | Meaning | Default |
+|---|---|---|
+| `--non-interactive` | declared and read by nothing: the command asks no question either way[^signature] | not given |
 
 ## Output
 
@@ -62,9 +69,9 @@ Database refresh completed successfully!
 | `1` | the migration raised an error[^failure] | `Failed to refresh the database: ` and the error's message |
 
 [^signature]: `app/Console/Commands/StartFresh.php` — `$signature` declares `start:fresh` with
-    `--non-interactive`, and no method reads the option.
-[^flow]: `app/Console/Commands/StartFresh.php` — `handle()` calls `clearCaches()`, then
-    `refreshDatabase()`, then prints `Database refresh completed successfully!`.
+    `--non-interactive` and no argument, and no method reads the option.
+[^flow]: `app/Console/Commands/StartFresh.php` — `handle()` refuses in production, then calls
+    `clearCaches()`, then `refreshDatabase()`, then prints `Database refresh completed successfully!`.
 [^production]: `app/Console/Commands/StartFresh.php` — `handle()` prints
     `Can not execute this command in production!` and returns `Command::FAILURE` when
     `app()->isProduction()`.

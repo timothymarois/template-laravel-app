@@ -13,6 +13,7 @@ stored and there is no second chance to read it.
 group = "Identity"
 rows = [
   { label = "Command", value = "api-key:create", cite = "signature" },
+  { label = "Use", value = "issues an API key where there is no browser, printing it once", cite = "output" },
   { label = "Options", value = "--user, --name, --ability, --days, --never-expires", cite = "signature" },
 ]
 
@@ -25,6 +26,12 @@ rows = [
 ]
 
 [[infobox]]
+group = "Rules"
+rows = [
+  { label = "Changes", value = "one key, only its hash stored", cite = "output" },
+]
+
+[[infobox]]
 group = "Exit codes"
 rows = [
   { label = "Success", value = "0", cite = "exit" },
@@ -34,7 +41,7 @@ rows = [
 
 `api-key:create` issues one key to an existing, active account and prints the plaintext once.[^signature]
 What a key is, which abilities exist and how a key expires is described on [API keys](../api-keys.md);
-the screen that issues one is described on [Issuing](../api-keys/issuing.md).
+the screen that issues one is described on [API keys](../admin/api-keys.md).
 
 ## Usage
 
@@ -87,7 +94,8 @@ Key (shown once, only its hash is stored):
     uses `DEFAULT_LIFETIME_DAYS`, 90, for null and refuses a lifetime that is neither `NEVER_EXPIRES`,
     0, nor within 1 to `MAX_LIFETIME_DAYS`, 365.
 [^output]: `app/Console/Commands/CreateApiKey.php` — `handle()` prints `Issued “%s” for %s — %s, expires %s.`,
-    `Key (shown once, only its hash is stored):` and the plaintext.
+    `Key (shown once, only its hash is stored):` and the plaintext; `app/Services/ApiKeyService.php` —
+    `issue()` returns the plaintext once and persists only its SHA-256 hash.
 [^unknown]: `app/Console/Commands/CreateApiKey.php` — `handle()` prints `No user with the email [{$email}].`
     when no account matches.
 [^inactive]: `app/Console/Commands/CreateApiKey.php` — `handle()` prints

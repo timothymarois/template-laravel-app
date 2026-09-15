@@ -15,16 +15,16 @@ title = "Application"
 pages = ["accounts", "admin", "api-keys", "api"]
 
 [[section]]
-title = "Operations"
-pages = ["health", "releases", "deployment", "background-work", "logging"]
-
-[[section]]
 title = "Site"
 pages = ["site", "seo"]
 
 [[section]]
 title = "Interface"
 pages = ["components"]
+
+[[section]]
+title = "Operations"
+pages = ["health", "releases", "deployment", "background-work", "logging"]
 
 [[section]]
 title = "Setup"

@@ -35,8 +35,8 @@ takes over.[^home][^ssr] What a crawler reads in the head of each page is descri
 The address `/` shows the home page.[^home] A missing address answers `404` with the page titled
 `Page Not Found`, a failure answers `500` with `Server Error`, and maintenance answers `503` with
 `Service Unavailable`; each keeps the site's layout and the first two offer a `Go Home` button.[^errors]
-A request under `/api/` gets the bare status instead of a page.[^errors] All three ask crawlers not to
-index them.[^errors]
+A request under `/api/` gets the bare status instead of a page.[^errors] Their indexing is described on
+[SEO](seo.md).
 
 ## Server rendering
 
@@ -68,8 +68,8 @@ is sent.[^analytics] The browser opens a WebSocket connection to Reverb only whe
     renders the `Index` page.
 [^errors]: `bootstrap/app.php` — `withExceptions()` renders `errors/404`, `errors/500` and
     `errors/503` with that status, and returns the plain response for a request matching `api/*`;
-    `resources/js/pages/errors/404.vue`, `500.vue`, `503.vue` — each sets its title and
-    `robots="noindex"` on the site layout, and the first two link `/` with the label `Go Home`.
+    `resources/js/pages/errors/404.vue`, `500.vue`, `503.vue` — each sets its title on the site layout,
+    and the first two link `/` with the label `Go Home`.
 [^ssr]: `config/inertia.php` — `ssr.enabled` reads `INERTIA_SSR_ENABLED`, true when unset, and
     `ssr.url` defaults to `http://127.0.0.1:13714`; `docker/config/supervisord.conf` — the
     `inertia-ssr` program runs `artisan inertia:start-ssr`; `resources/js/ssr.js` — the server

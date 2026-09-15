@@ -21,7 +21,6 @@ rows = [
 group = "Values"
 rows = [
   { label = "Upload limit", value = "25 MB", cite = "nginx" },
-  { label = "Horizon drain on stop", value = "60 minutes", cite = "processes" },
 ]
 
 [[infobox]]
@@ -48,7 +47,7 @@ stream.[^processes]
 | `php-fpm` | `php-fpm --nodaemonize`[^processes] |
 | `nginx` | on port 80, with uploads limited to 25 MB[^nginx] |
 | `inertia-ssr` | `php artisan inertia:start-ssr`[^processes] |
-| `horizon` | `php artisan horizon`, given 60 minutes to finish in-flight jobs when stopped[^processes] |
+| `horizon` | `php artisan horizon`, stopped as [Background work](background-work.md) describes[^processes] |
 | `scheduler` | `php artisan schedule:work`[^processes] |
 
 A plain queue worker in place of Horizon, and a Reverb server on port 8080, are written in the same file
@@ -83,8 +82,7 @@ build command, base image and which services the deployment requires.[^manifest]
     stage, and the `runtime-config` and `runtime` stages; its header names Coolify as the deploy target
     with `Build Pack = Dockerfile · Port = 80 · Health check = /up`.
 [^processes]: `docker/config/supervisord.conf` — the `php-fpm`, `nginx`, `inertia-ssr`, `horizon` and
-    `scheduler` programs, each with `autorestart=true` and logs to `/dev/stdout` and `/dev/stderr`;
-    `horizon` has `stopwaitsecs=3600`.
+    `scheduler` programs, each with `autorestart=true` and logs to `/dev/stdout` and `/dev/stderr`.
 [^nginx]: `docker/config/nginx.conf` — `listen 80 default_server` and `client_max_body_size 25M`.
 [^optional]: `docker/config/supervisord.conf` — the commented `[program:queue]` and `[program:reverb]`
     blocks under the optional alternatives.

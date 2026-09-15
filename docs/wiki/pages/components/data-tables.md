@@ -12,8 +12,8 @@ the list without a button.
 [[infobox]]
 group = "Defaults"
 rows = [
-  { label = "Rows a page", value = "15", note = "50 on the users list", cite = "defaults" },
-  { label = "Order", value = "by id, ascending", note = "by name on the users list", cite = "defaults" },
+  { label = "Page size", value = "15", cite = "defaults" },
+  { label = "Sort", value = "by id, ascending", cite = "defaults" },
   { label = "Search delay", value = "a quarter of a second", cite = "search" },
 ]
 
@@ -34,8 +34,7 @@ list's view for the rest of the session.[^defaults][^session] It is one part of 
 Typing in the search box refreshes the list a quarter of a second after the last keystroke, so a word
 typed at speed sends one request.[^search] Changing the page size, the sort column or its direction
 refreshes at once, and so does changing a filter or the chosen columns.[^refresh] A list starts at 15
-rows a page, ordered by id ascending; the users list starts at 50 rows ordered by name and offers 15,
-25, 50 or 100.[^defaults]
+rows a page, ordered by id ascending.[^defaults]
 
 ## Memory
 
@@ -50,10 +49,7 @@ the search or a filter changes, because the rows on screen are no longer the row
 and when the person leaves the page.[^selection]
 
 [^defaults]: `resources/js/composables/inertia/useDataTableOptions.js` — `useDataTableOptions()` starts
-    the form with `perPage: 15`, `sortField: 'id'`, `sortOrder: 1`, an empty search and no filters;
-    `app/Http/Controllers/Admin/UserController.php` — `$indexDefaults` sets `perPage` 50 and
-    `sortField` `name`; `resources/js/pages/admin/users/Index.vue` — `perPageOptions` lists 15, 25, 50
-    and 100.
+    the form with `perPage: 15`, `sortField: 'id'`, `sortOrder: 1`, an empty search and no filters.
 [^search]: `resources/js/composables/inertia/useDataTableOptions.js` — the watcher on `search` calls
     a version of `fetchData` debounced by `debounceMs`, 250 milliseconds when unset.
 [^refresh]: `resources/js/composables/inertia/useDataTableOptions.js` — the watchers on `perPage`,

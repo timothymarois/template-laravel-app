@@ -11,13 +11,7 @@ that main returns to 0.0.0 before a versioned main can block preparation.
 [[infobox]]
 group = "Identity"
 rows = [
-  { label = "Command", value = "scripts/assert-neutral-main-version", cite = "guard" },
-]
-
-[[infobox]]
-group = "Values"
-rows = [
-  { label = "Version on main", value = "0.0.0", cite = "guard" },
+  { label = "Guard", value = "scripts/assert-neutral-main-version", cite = "guard" },
 ]
 
 [[infobox]]

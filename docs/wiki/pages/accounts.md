@@ -59,15 +59,14 @@ minutes.[^seen]
 
 An account is an `admin` or a `user`, shown as `Administrator` and `User`.[^roles] An administrator reaches
 the [admin area](admin.md) and manages every account; a user reaches nothing under `/admin`.[^roles] A
-new account is a `user`, and the first administrator is created from the console, as
-[user:create](commands/user-create.md) describes, or by the seed, which creates `admin@example.com` as an
-administrator.[^default-role]
+new account is a `user`.[^default-role] The first administrator is described on [Setup](setup.md).
 
 ## Deactivation
 
 A deactivated account is refused at sign-in with `Your account has been deactivated.`, and a session that
 is deactivated while signed in is ended on its next request and sent to the sign-in page with the same
-message.[^deactivated] An API key the account owns is refused with the same message.[^apikey-inactive]
+message.[^deactivated] An API key the account owns is refused with the same message, as [API](api.md)
+describes.[^apikey-inactive]
 An operator switches an account off through the `is_active` flag on the account itself.{missing}
 
 [^model]: `app/Models/User.php` — `$fillable` and `casts()` hold `name`, `email`, `password`, `is_active`
@@ -86,8 +85,7 @@ An operator switches an account off through the `is_active` flag on the account 
     `configureRateLimiting()` gives `auth` `Limit::perMinute(5)` keyed by IP;
     `vendor/laravel/framework/src/Illuminate/Routing/Middleware/ThrottleRequests.php` —
     `buildException()` raises `Too Many Attempts.`.
-[^default-role]: `app/Enums/UserRole.php` — `default()` returns `User`;
-    `database/seeders/DatabaseSeeder.php` — `run()` creates `admin@example.com` with `SuperAdmin`.
+[^default-role]: `app/Enums/UserRole.php` — `default()` returns `User`.
 [^login]: `routes/web.php` — `GET login` and `POST auth/login`;
     `app/Http/Controllers/Auth/SessionController.php` — `authenticate()` regenerates the session and
     redirects to the intended page or `/`; `resources/js/pages/Login.vue` — the two fields and the

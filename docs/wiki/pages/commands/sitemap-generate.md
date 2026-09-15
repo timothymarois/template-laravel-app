@@ -13,14 +13,14 @@ a deployment runs it rather than shipping it.
 group = "Identity"
 rows = [
   { label = "Command", value = "sitemap:generate", cite = "signature" },
-  { label = "Output file", value = "public/sitemap.xml", cite = "file" },
+  { label = "Use", value = "writes public/sitemap.xml from the public routes", cite = "file" },
+  { label = "Options", value = "none", cite = "signature" },
 ]
 
 [[infobox]]
 group = "Rules"
 rows = [
-  { label = "Included", value = "public GET routes without a parameter", cite = "include" },
-  { label = "Excluded", value = "signed-in, guest-only and utility routes", cite = "exclude" },
+  { label = "Changes", value = "public/sitemap.xml", cite = "file" },
 ]
 
 [[infobox]]
@@ -31,7 +31,7 @@ rows = [
 +++
 
 `sitemap:generate` writes `public/sitemap.xml` from the routes a visitor can open without signing
-in.[^file] Which routes stay out, and why the file is absent on a fresh deploy, is described on
+in.[^file][^routes] Which routes stay out, and why the file is absent on a fresh deploy, is described on
 [Sitemap](../seo/sitemap.md).
 
 ## Usage
@@ -52,9 +52,7 @@ Generating sitemap...
 Sitemap generated at: /Users/marois/Development/Personal/Herd/template-laravel-app/public/sitemap.xml
 ```
 
-The home page is written with priority `1.0` and every other page with `0.8`, all marked as changing
-weekly.[^priority] A route whose address holds a parameter, such as `{id}`, is skipped.[^include] Routes under the admin,
-API, sign-in and utility prefixes, and the sign-in, password and health routes by name, stay out.[^exclude]
+The pages the sitemap lists, and the priority each one carries, are described on [Sitemap](../seo/sitemap.md).
 
 ## Exit codes
 
@@ -66,13 +64,10 @@ API, sign-in and utility prefixes, and the sign-in, password and health routes b
     options or arguments.
 [^file]: `app/Console/Commands/GenerateSitemap.php` — `handle()` writes to `public_path('sitemap.xml')`;
     `.gitignore` — lists `/public/sitemap.xml`.
-[^include]: `app/Console/Commands/GenerateSitemap.php` — `shouldIncludeRoute()` keeps only `GET` routes
-    carrying neither `auth`, `auth:sanctum` nor `guest`; `addStaticRoutes()` skips a URI containing `{`.
-[^exclude]: `app/Console/Commands/GenerateSitemap.php` — `$excludePrefixes` and `$excludeNames`, applied
-    in `shouldIncludeRoute()`.
+[^routes]: `app/Console/Commands/GenerateSitemap.php` — `addStaticRoutes()` keeps the routes
+    `shouldIncludeRoute()` accepts: `GET` routes carrying neither `auth`, `auth:sanctum` nor `guest`
+    middleware, outside `$excludePrefixes` and `$excludeNames`.
 [^output]: `app/Console/Commands/GenerateSitemap.php` — `handle()` prints `Generating sitemap...` and
     `Sitemap generated at: {$path}`; `addStaticRoutes()` prints `  Added: {$url}` for each route.
-[^priority]: `app/Console/Commands/GenerateSitemap.php` — `addStaticRoutes()` sets
-    `CHANGE_FREQUENCY_WEEKLY` and priority `1.0` for `/`, else `0.8`.
 [^exit]: `app/Console/Commands/GenerateSitemap.php` — `handle()` returns `Command::SUCCESS` and has no
     other return.

@@ -9,6 +9,11 @@ authorisation its owner has in the browser. A request without a real key, or wit
 not allowed to use, should be refused before anything else runs.
 """
 
+[family]
+headings = ["Request", "Authentication", "Parameters", "Responses", "Errors", "Example"]
+labels = ["Method", "Path", "Ability", "Page size", "Sort fields", "Returns", "Owner", "Fields"]
+table = ["Ability", "Returns"]
+
 [[infobox]]
 group = "Identity"
 rows = [
@@ -32,7 +37,8 @@ rows = [
 
 Every API request carries a key as a bearer token and passes four checks in order: the request budget,
 the key, its owner's status and its ability.[^chain] Keys themselves are described on
-[API keys](api-keys.md).
+[API keys](api-keys.md). The endpoints, [GET /api/user](api/user.md) and [GET /api/users](api/users.md), each
+have a page covering the request, authentication, parameters, responses, errors and an example.
 
 ## Checks
 
@@ -67,10 +73,7 @@ never by a session.[^session]
 
 ## Endpoints
 
-| Endpoint | Ability | Answer |
-|---|---|---|
-| [GET /api/user](api/user.md) | `api:read` | the caller's own account[^user] |
-| [GET /api/users](api/users.md) | `api:read` | a page of accounts, for an administrator's key[^users] |
+{family-table}
 
 [^chain]: `routes/api.php` — the group carries `throttle:api`, `auth:sanctum` and `api.key`, and each
     route `abilities:api:read`; the comment says each link is load-bearing.
@@ -86,6 +89,3 @@ never by a session.[^session]
     `Your account has been deactivated.` when the owner is not active.
 [^ability]: `vendor/laravel/sanctum/src/Exceptions/MissingAbilityException.php` — the message
     `Invalid ability provided.`, raised by the `abilities` middleware `bootstrap/app.php` aliases.
-[^user]: `routes/api.php` — `GET /user` returns the caller's `id`, `name`, `email` and `role`.
-[^users]: `routes/api.php` — `GET /users`; `app/Http/Requests/Api/ListUsersRequest.php` — `authorize()`
-    asks `viewAny` on users.

@@ -37,8 +37,8 @@ password.[^flow] What a password must contain is described on [Accounts](../acco
 
 The form takes one `Email address` and always answers `We have emailed your password reset link.`, whether
 or not an account holds that address and whether or not a link went out in the last 60 seconds.[^request]
-A link stays valid for 60 minutes.[^expiry] The form allows 5 requests a minute from one connection, a
-budget it shares with registration, and answers the sixth with `Too Many Attempts.`[^throttle]
+A link stays valid for 60 minutes.[^expiry] The form shares its request budget with registration, as
+[Accounts](../accounts.md) describes.[^throttle]
 
 ## Reset
 

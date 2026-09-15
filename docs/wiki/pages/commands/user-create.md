@@ -13,6 +13,7 @@ typed on a command line: the command makes one and prints it once.
 group = "Identity"
 rows = [
   { label = "Command", value = "user:create", cite = "signature" },
+  { label = "Use", value = "creates an account from the terminal, as an operator with --admin", cite = "signature" },
   { label = "Options", value = "--name, --email, --password, --admin", cite = "signature" },
 ]
 
@@ -21,6 +22,12 @@ group = "Values"
 rows = [
   { label = "Generated password", value = "16 characters", cite = "generated" },
   { label = "Default role", value = "user", cite = "role" },
+]
+
+[[infobox]]
+group = "Rules"
+rows = [
+  { label = "Changes", value = "one account", cite = "signature" },
 ]
 
 [[infobox]]

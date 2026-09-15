@@ -61,9 +61,8 @@ pointer.[^escape]
 
 ## Uses
 
-Archiving a user asks `Are you sure you want to archive this user? This action can be undone.` with the
-button `Archive`, and revoking an API key asks `Revoke “NAME”? Any caller using it stops working
-immediately, and this cannot be undone.` with the button `Revoke`.[^uses]
+- [Users](../admin/users.md) confirms archiving a user with the button `Archive`.[^uses]
+- [API keys](../admin/api-keys.md) confirms revoking a key with the button `Revoke`.[^uses]
 
 [^defaults]: `resources/js/components/ui/dialog/DialogConfirmation.vue` — the props default `title` to
     `Confirm`, `message` to `Are you sure?` and `confirmLabel` to `Confirm`; the footer renders

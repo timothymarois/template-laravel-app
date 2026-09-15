@@ -17,7 +17,7 @@ rows = [
 ]
 
 [[infobox]]
-group = "Limits"
+group = "Values"
 rows = [
   { label = "Page size", value = "15", note = "at most 100", cite = "params" },
   { label = "Sort fields", value = "id, name, email, created_at", cite = "params" },
@@ -26,6 +26,7 @@ rows = [
 [[infobox]]
 group = "Rules"
 rows = [
+  { label = "Returns", value = "a page of accounts", cite = "fields" },
   { label = "Owner", value = "administrator only", cite = "owner" },
   { label = "Fields", value = "id, name, email, role, is_active, created_at", cite = "fields" },
 ]
@@ -37,12 +38,17 @@ checks every request passes are described on [API](../api.md).
 
 ## Request
 
-The request carries the key as a bearer token, and every parameter is optional and travels in the query string.[^route][^params]
+Every parameter is optional and travels in the query string.[^params]
 ```http
 GET /api/users?perPage=2&sortField=name
 Authorization: Bearer KEY
 Accept: application/json
 ```
+
+## Authentication
+
+The request carries the key as a bearer token, and the key passes the checks [API](../api.md)
+describes.[^route]
 
 ## Parameters
 

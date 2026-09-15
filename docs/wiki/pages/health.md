@@ -47,8 +47,8 @@ none runs.[^fresh] The response carries `Cache-Control: no-store`, so a monitor 
 answer from a cache.[^fresh]
 
 A container the scheduler has not reached yet answers `200` with an empty `checkResults`, which proves
-nothing about its dependencies; the release scripts wait for a stored result before they trust
-it.[^cold] The answer of a local site whose scheduler had not run, copied from that site:[^cold]
+nothing about its dependencies.[^cold] How a release treats that answer is described on
+[Publication](releases/03-publication.md). The answer of a local site whose scheduler had not run, copied from that site:[^cold]
 ```json
 {"finishedAt":1788899354,"checkResults":[]}
 ```

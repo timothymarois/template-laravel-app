@@ -20,7 +20,6 @@ rows = [
 group = "Rules"
 rows = [
   { label = "Deploy block", value = "filled in before the first release", cite = "placeholder" },
-  { label = "Package versions", value = "0.0.0 on main", cite = "neutral" },
   { label = "Seeded operator", value = "admin@example.com", cite = "seeder" },
 ]
 +++
@@ -34,16 +33,25 @@ clone of the template.[^manifest] Adding workspaces to a product is described on
 ## Identity
 
 The project is renamed in its README, in `composer.json` and `package.json`, and in the application
-name.{missing} The `version` in `composer.json` and `package.json` stays `0.0.0` on `main`: the release
-scripts refuse to prepare a release from a manifest carrying any other version, and a check on every
-change bound for `main` fails when either file carries one.[^neutral]
+name.{missing} The `version` kept at `0.0.0` on `main` is described on
+[Reconciliation](releases/04-reconciliation.md).
 
 ## Deployment target
 
 The `deploy` block of `template-manifest.json` names the GitHub repository, the deployed site's address
-and the branch that deploys.[^deploy] The publishing script refuses to run while the block still holds the
-shipped placeholders, `owner/repo` and `https://example.com`, rather than poll a site that does not
-exist.[^placeholder] Cutting a release once it is filled in is described on [Releases](releases.md).
+and the branch that deploys, and the template ships it as below.[^deploy]
+
+```json
+"deploy": {
+    "repository": "owner/repo",
+    "productionUrl": "https://example.com",
+    "productionBranch": "production"
+}
+```
+
+The publishing script refuses to run while the block still holds the shipped placeholders, `owner/repo`
+and `https://example.com`, rather than poll a site that does not exist.[^placeholder] Cutting a release
+once it is filled in is described on [Releases](releases.md).
 
 ## First operator
 
@@ -59,18 +67,8 @@ The seeded accounts are for a development database; a real deployment creates it
 command, described on [user:create](commands/user-create.md).{missing} A development database is emptied
 and rebuilt with [start:fresh](commands/start-fresh.md), which refuses to run in production.[^fresh]
 
-## Documentation
-
-The wiki under `docs/wiki` is checked by `pnpm check:wiki`, through `scripts/dev-wiki.sh`, which runs a
-pinned release of wiki-builder with `uvx`; so `pnpm check` needs `uv` on the machine.[^wiki] The same
-release checks every pull request in the `Wiki check` job.[^job]
-
 [^manifest]: `template-manifest.json` — `version` and `repo`; `.template/migrations/` — one guide per
     release, applied in order by a fork.
-[^neutral]: `scripts/prepare-production-release` — refuses with
-    `Release preparation refused: {filename} must start at version 0.0.0`; `scripts/assert-neutral-main-version`
-    — fails with `main must stay at 0.0.0 — reset both manifests on the reconciliation branch`, and
-    `.github/workflows/js-checks.yml` runs it for changes bound for `main`.
 [^deploy]: `template-manifest.json` — `deploy.repository`, `deploy.productionUrl` and
     `deploy.productionBranch`; `scripts/publish-production-release` — `manifest_deploy()` reads the three.
 [^placeholder]: `scripts/publish-production-release` — `manifest_deploy()` raises
@@ -84,8 +82,3 @@ release checks every pull request in the `Wiki check` job.[^job]
     `--admin` and prints a generated password once.
 [^fresh]: `app/Console/Commands/StartFresh.php` — `handle()` refuses with
     `Can not execute this command in production!`, then clears the caches and runs `migrate:fresh`.
-[^wiki]: `package.json` — `check:wiki` runs `./scripts/dev-wiki.sh check` and `check` runs it with the
-    other suites; `scripts/dev-wiki.sh` — runs `uvx --from "git+https://github.com/timothymarois/wiki-builder@$WIKI_VERSION" wiki`
-    with `WIKI_VERSION=v0.5.0` and `--root`.
-[^job]: `.github/workflows/wiki.yml` — the `Wiki check` job uses `timothymarois/wiki-builder@v0.5.0` on
-    every pull request and on a push to `main`.

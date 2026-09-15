@@ -13,8 +13,7 @@ address which version is running.
 group = "Identity"
 rows = [
   { label = "Address", value = "/release", cite = "endpoint" },
-  { label = "Branch", value = "production", cite = "manifest" },
-  { label = "Settings", value = "template-manifest.json, deploy block", cite = "manifest" },
+  { label = "Production branch", value = "production", cite = "manifest" },
 ]
 
 [[infobox]]
@@ -28,14 +27,17 @@ group = "Rules"
 rows = [
   { label = "Tag", value = "after a verified deploy", cite = "order" },
   { label = "Version address", value = "never cached", cite = "endpoint" },
-  { label = "Placeholders", value = "refused", cite = "manifest" },
 ]
 +++
 
 A release writes a version on a release branch, merges it into `production`, waits for the deploy to
 prove itself live, and only then publishes the tag.[^order] The version lives in `composer.json` and
 `package.json`; on `main` both read `0.0.0`, and a real version exists only on a release branch and on
-`production`.[^neutral] The four steps, in order, are [Preparation](releases/01-preparation.md),
+`production`.[^neutral] The guard that keeps `main` at `0.0.0` is described on
+[Reconciliation](releases/04-reconciliation.md). A release goes to the repository, address and
+production branch named in the `deploy` block of `template-manifest.json`.[^manifest] Where that block
+is filled in is described on [Setup](setup.md). The four steps, in order, are
+[Preparation](releases/01-preparation.md),
 [Production pull request](releases/02-production-pull-request.md),
 [Publication](releases/03-publication.md) and [Reconciliation](releases/04-reconciliation.md).
 
@@ -50,41 +52,16 @@ site.[^neutral]
 {"version":"0.0.0"}
 ```
 
-## Identity
-
-The publish script reads the repository, the production address and the production branch from the
-`deploy` block of `template-manifest.json`, and refuses the shipped placeholders `owner/repo` and
-`https://example.com`, so a fork fills that block in before its first release.[^manifest]
-
-```json
-"deploy": {
-    "repository": "owner/repo",
-    "productionUrl": "https://example.com",
-    "productionBranch": "production"
-}
-```
-
-## Neutral main
-
-A change bound for `main` whose manifests carry a version is refused by the neutral-version guard with
-`Neutral version check refused: composer.json carries release version '1.2.3'; main must stay at 0.0.0 —
-reset both manifests on the reconciliation branch`.[^neutral] The guard runs for pull requests to `main`
-and pushes to `main`, never for a release branch, which is versioned on purpose.[^ci] A versioned `main`
-blocks the next release, because preparation requires both manifests at `0.0.0` and a branch that starts
-at `origin/main`.[^neutral]
-
 [^order]: `scripts/prepare-production-release` — the closing lines print `Review and commit these
     changes, then open a pull request to production.` and `Do not tag or publish the release until the
     production deployment is approved and verified.`; `scripts/publish-production-release` — the
     verification loop runs before `gh release create`.
 [^neutral]: `scripts/assert-neutral-main-version` — the header comment and the Python block, which
-    exits with that message when either manifest is not `0.0.0`; `composer.json` and `package.json` —
-    `version` is `0.0.0`.
+    refuses when either manifest is not `0.0.0`; `composer.json` and `package.json` — `version` is
+    `0.0.0`.
 [^endpoint]: `app/Http/Controllers/ReleaseController.php` — `__invoke()` returns `config('release.version')`
     as JSON with `Cache-Control: no-store, max-age=0`.
 [^config]: `config/release.php` — reads `version` from `composer.json`, else `missing`.
 [^manifest]: `scripts/publish-production-release` — `manifest_deploy()` reads `deploy.repository`,
-    `deploy.productionUrl` and `deploy.productionBranch` from `template-manifest.json` and exits with
-    `deploy.{key} is still the template placeholder ({value})` for the two placeholders.
-[^ci]: `.github/workflows/js-checks.yml` — the `Require neutral package versions on main` step runs only
-    when `github.base_ref` or `github.ref_name` is `main`.
+    `deploy.productionUrl` and `deploy.productionBranch` from `template-manifest.json`, whose shipped
+    `deploy.productionBranch` is `production`.

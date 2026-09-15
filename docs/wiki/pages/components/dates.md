@@ -43,8 +43,7 @@ A value carrying a time is a moment, and is shown in the viewer's zone: `2026-01
 `1/1/2026` in New York and `1/2/2026` in Tokyo.[^instant] A time with no zone stated is read as UTC,
 which is how the server stores it; a time that states its zone or offset is read as written.[^parse] A
 date is written as `7/22/2024`, and a date with time as `7/22/2025, 4:13 PM`; another locale changes
-the order, so `en-GB` writes `22/07/2024`.[^format] The API keys screen shows when a key was used,
-expires and was created in UTC.[^apikeys]
+the order, so `en-GB` writes `22/07/2024`.[^format]
 
 ## Zones
 
@@ -72,7 +71,5 @@ runs.[^tests]
     that does not parse; `formatDate.ts` and `formatDatetime.ts` — return an empty string for it.
 [^account]: `database/migrations/0001_01_01_000000_create_users_table.php` — the `users` table has a
     nullable `timezone` column; `app/Models/User.php` — `timezone` is fillable.
-[^apikeys]: `resources/js/pages/admin/api-keys/Index.vue` — `formatDatetime()` is called on
-    `last_used_at`, `expires_at` and `created_at` with no zone, so the default `UTC` applies.
 [^tests]: `resources/js/tests/utils/format/formatDate.test.ts` and `timezone.test.ts` — 45 cases,
     all passing on a run of `pnpm exec vitest run` against those two files.

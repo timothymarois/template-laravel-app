@@ -29,7 +29,8 @@ rows = [
 The application logs to a daily file on a developer machine and to standard error in production, where
 every process in the container writes to the same stream.[^daily][^stream] Searching those lines after
 the container is gone is described on [Central store](logging/central-store.md); this page covers what is
-written, where, and in what shape.
+written, where, and in what shape. The fields a failed queued job or scheduled task is logged with are
+described on [Background work](background-work.md).
 
 ## Local file
 
@@ -55,11 +56,6 @@ no log file of its own.[^stream]
 familiar bracketed line instead of JSON.[^formatter] Setting it to an empty value does not give plain
 lines: the channel cannot be built, every record goes to an emergency file logger at
 `storage/logs/laravel.log` inside the container, and nothing reaches standard error.[^empty]
-
-## Background failures
-
-A failed queued job or scheduled task is logged as an error carrying the job or task name, so the store
-can be searched for it; the fields are described on [Background work](background-work.md).
 
 ## Error tracking
 

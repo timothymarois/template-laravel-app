@@ -13,14 +13,21 @@ container start runs it.
 group = "Identity"
 rows = [
   { label = "Command", value = "app:ensure-storage", cite = "signature" },
+  { label = "Use", value = "creates any missing storage folder, on every container start", cite = "entrypoint" },
+  { label = "Options", value = "none", cite = "signature" },
   { label = "Run by", value = "docker/deploy/entrypoint.sh", note = "on every container start", cite = "entrypoint" },
 ]
 
 [[infobox]]
 group = "Values"
 rows = [
-  { label = "Folders", value = "9", note = "under storage/", cite = "folders" },
   { label = "Folder mode", value = "0775", cite = "folders" },
+]
+
+[[infobox]]
+group = "Rules"
+rows = [
+  { label = "Changes", value = "9 folders", note = "under storage/, each only when missing", cite = "folders" },
 ]
 
 [[infobox]]
