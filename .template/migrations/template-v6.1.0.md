@@ -146,6 +146,8 @@ needs goes into the parent's `[family]` list for every member, not onto one page
 
 Rewrite `docs/wiki/pages/brief.md` and `index.md` for **your product**. Scope and external systems are
 in your code; who it is for and what it refuses are not — those are the owner's words, or `{missing}`.
+Both pages, like `goals.md`, say `goals = false`, which exempts them from `wiki check`'s citations but not
+from step 5's proof: every sentence you rewrite there still carries a citation or `{missing}`.
 
 ### 2. Convert your own pages
 
@@ -289,8 +291,13 @@ paths; they are left out of the scan on purpose. Every hit is repointed to the w
 cited page exists:
 
 ```bash
-for p in $(grep -rhoE "docs/wiki/pages/[A-Za-z0-9_./-]+" AGENTS.md README.md docker/README.md .env.example app routes .template | sort -u); do test -e "$p" || echo "MISSING $p"; done
+for p in $(grep -rhoE "docs/wiki/pages/[A-Za-z0-9_./-]+" AGENTS.md README.md docker/README.md .env.example app routes .template | sed 's/\.$//' | sort -u); do test -e "$p" || echo "MISSING $p"; done
 ```
+
+The `sed` drops a sentence's closing full stop, which the pattern would otherwise take as part of the
+path. `AGENTS.md` and `CLAUDE.md` name `docs/wiki/pages/setup/tenancy.md`, the template's Multi-tenancy
+page; both files are template-managed, so a fork that deleted that page leaves them as they are and
+ignores that one `MISSING` line. Every other `MISSING` line is a citation to repoint.
 
 Take `<t>/.template/ADOPT.md` with this release if your fork still carries `.template/`: its adoption
 prompt now rewrites the wiki for the product, and its upgrade prompt applies a migration's page changes
