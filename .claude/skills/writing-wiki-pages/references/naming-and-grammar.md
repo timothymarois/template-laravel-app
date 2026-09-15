@@ -14,12 +14,12 @@ most naming mistakes are one kind treated as the other.
 |---|---|---|
 | Examples | page titles, headings, categories, infobox labels, table columns, captions | commands, options, fields, settings keys, endpoints, error codes, file names |
 | Rule | a noun phrase a reader would say, in plain words | exactly as the software spells it, every time |
-| When the name is poor | rename it | document it as it is, and tell the owner |
+| When the name is poor | rename it | document it as it is, and report it as a finding |
 
 **A page is not a rename.** When a setting is called `retry_mode_flag`, the page says `retry_mode_flag`,
 however much clearer "retry limit" would be. A reader who searches the code, the help or the error log
 for your better word finds nothing. Say what the value means beside the name, and raise the poor name as
-a finding for the owner rather than fixing it in prose.
+a finding rather than fixing it in prose.
 
 ## Names you choose
 
@@ -149,8 +149,8 @@ searches the page for the message they were shown, and a paraphrase is a miss.
 
 ### Poor names
 
-The page documents the name that exists. A writer who can see a poor one tells the owner, because a name
-that misleads the writer will mislead every reader.
+The page documents the name that exists. A writer who can see a poor one reports it as a finding, because a
+name that misleads the writer will mislead every reader.
 
 | Sign | Example | What it costs |
 |---|---|---|
@@ -234,7 +234,7 @@ two ways. These rules settle most cases.
 ### Capitalisation
 
 - **Sentence case** for titles, headings, labels, categories and columns.
-- **A name keeps its owner's case**: a product name as its makers write it, a name the software owns
+- **A name keeps its own case**: a product name as its makers write it, a name the software owns
   exactly as it is spelled.
 
 ### Spelling
@@ -261,7 +261,7 @@ Each of these survives a first draft and carries no fact.
 | Vague references | the one, the ones | the thing itself: the tag, the section, the error. The gate refuses them |
 | Question clauses | what a person writes, how it works, where it lives | the thing itself: page files and their intent. The gate refuses them in headings and subtitles |
 | Pointing elsewhere | see the documentation for details | link the exact page, or state the fact |
-| Vague actors | nobody, somebody, someone, anyone, everyone, no one | name who acts: the reader, the owner, an agent, the build. The gate refuses them |
+| Vague actors | nobody, somebody, someone, anyone, everyone, no one | name who acts: the reader, the engineering team, an agent, the build. The gate refuses them |
 | Empty framing | "the half of the tool that is not code", "at its heart", "the other side of" | say what the thing is and what it does |
 
 ## Last pass

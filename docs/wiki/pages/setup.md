@@ -86,6 +86,6 @@ release checks every pull request in the `Wiki check` job.[^job]
     `Can not execute this command in production!`, then clears the caches and runs `migrate:fresh`.
 [^wiki]: `package.json` — `check:wiki` runs `./scripts/dev-wiki.sh check` and `check` runs it with the
     other suites; `scripts/dev-wiki.sh` — runs `uvx --from "git+https://github.com/timothymarois/wiki-builder@$WIKI_VERSION" wiki`
-    with `WIKI_VERSION=v0.3.2` and `--root`.
-[^job]: `.github/workflows/wiki.yml` — the `Wiki check` job uses `timothymarois/wiki-builder@v0.3.2` on
+    with `WIKI_VERSION=v0.5.0` and `--root`.
+[^job]: `.github/workflows/wiki.yml` — the `Wiki check` job uses `timothymarois/wiki-builder@v0.5.0` on
     every pull request and on a push to `main`.

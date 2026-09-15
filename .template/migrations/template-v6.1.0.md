@@ -43,7 +43,7 @@ cp <t>/scripts/dev-wiki.sh scripts/dev-wiki.sh
 chmod +x scripts/dev-wiki.sh
 ```
 
-It pins one release (`WIKI_VERSION=v0.3.2`) and passes `--root` so it works from any directory. An update
+It pins one release (`WIKI_VERSION=v0.5.0`) and passes `--root` so it works from any directory. An update
 is a one-line change to that script, followed by `./scripts/dev-wiki.sh sync`.
 
 ### 2. The wiki folder
@@ -73,7 +73,7 @@ foot — `wiki sync` writes it. Leave the sections for now; Part C settles which
 ```
 
 It writes `writing-wiki-pages` into `.agents/skills/` (which is a link to `.claude/skills/` in every
-fork on v5.7.0 or later, so the skill lands once) and records `version = "0.3.2"` in `wiki.toml`.
+fork on v5.7.0 or later, so the skill lands once) and records `version = "0.5.0"` in `wiki.toml`.
 Commit the skill: agents read it from the repository, and a change to how pages must be written arrives
 as a diff somebody reviews.
 
@@ -103,7 +103,7 @@ folder must be committed.
 cp <t>/.github/workflows/wiki.yml .github/workflows/wiki.yml
 ```
 
-It runs `timothymarois/wiki-builder@v0.3.2` — the same release the wrapper pins — on every pull request
+It runs `timothymarois/wiki-builder@v0.5.0` — the same release the wrapper pins — on every pull request
 and on a push to `main` only, so a pull-request branch is not checked twice. **If your default branch is
 not `main`**, change the `push.branches` list.
 
@@ -302,7 +302,7 @@ the deploy targets the template's. Everything else in the file is managed. In th
 build command is
 
 ```sh
-pip install "git+https://github.com/timothymarois/wiki-builder@v0.3.2" && wiki check && wiki publish _site
+pip install "git+https://github.com/timothymarois/wiki-builder@v0.5.0" && wiki check && wiki publish _site
 ```
 
 with the root directory left empty. `WIKI_USER` and `WIKI_PASSWORD` are Worker secrets, and the
@@ -322,8 +322,8 @@ uv --version                                  # the machine can run the wrapper
 ls docs                                       # CODEMAP.md  wiki
 cmp AGENTS.md CLAUDE.md && echo identical
 grep -c "check:wiki" package.json             # 2 (the script, and its place in `check`)
-test -f .github/workflows/wiki.yml && grep -c "wiki-builder@v0.3.2" .github/workflows/wiki.yml   # 1
-test -d .claude/skills/writing-wiki-pages && ls .claude/skills/writing-wiki-pages/references | wc -l  # 6
+test -f .github/workflows/wiki.yml && grep -c "wiki-builder@v0.5.0" .github/workflows/wiki.yml   # 1
+test -d .claude/skills/writing-wiki-pages && ls .claude/skills/writing-wiki-pages/references | wc -l  # 7
 git status --short docs/wiki/UPDATED.toml     # committed, not dirty, after the last build
 pnpm check                                    # includes check:wiki and AgentInstructionsTest
 ```

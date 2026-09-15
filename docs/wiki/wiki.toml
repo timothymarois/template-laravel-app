@@ -37,4 +37,4 @@ pages = ["commands"]
 # Written by `wiki sync`. Which release of the tool these pages
 # were written against; `wiki check` says so when they differ.
 [tool]
-version = "0.3.2"
+version = "0.5.0"

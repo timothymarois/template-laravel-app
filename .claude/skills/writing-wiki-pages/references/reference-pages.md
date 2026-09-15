@@ -135,12 +135,12 @@ word, in code formatting.
   does, so it can never show the code disagreeing with what was intended. Copy from the definition; do
   not derive the page from it.
 - **Where the code and an older description disagree**, the page describes the code, and the
-  disagreement goes to the owner. Never average the two into a hedge.
+  disagreement is raised for approval. Never average the two into a hedge.
 
 ## Unbuilt surfaces
 
-When the owner specifies a command or an endpoint that does not exist yet, write its page as the
-contract, with every row that nothing implements marked `{missing}`.
+When a stated requirement specifies a command or an endpoint that does not exist yet, write its page as
+the contract, with every row that nothing implements marked `{missing}`.
 
 - **One condition to a row**: in this situation, this caller can or cannot do this, producing this
   result.

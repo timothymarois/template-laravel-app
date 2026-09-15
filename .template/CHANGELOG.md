@@ -16,7 +16,7 @@ Replaces the hand-written `docs/` tree with a [wiki-builder](https://github.com/
 
 ### Added
 
-- **`docs/wiki/`** — 40 pages written from the code, on wiki-builder v0.3.2; `scripts/dev-wiki.sh` runs the pinned release through `uvx`.
+- **`docs/wiki/`** — 40 pages written from the code, on wiki-builder v0.5.0; `scripts/dev-wiki.sh` runs the pinned release through `uvx`.
 - **`check:wiki`** in `pnpm check`, and a `Wiki check` GitHub job on every pull request and push to `main`.
 - **`writing-wiki-pages` skill** in `.claude/skills/`, installed by `wiki sync`; `AGENTS.md` routes every page under `docs/wiki/` to it.
 - **`wrangler.jsonc` + `docs/wiki/worker.js`** — an optional password-locked documentation site on a Cloudflare Worker; the Worker `name` is a fork knob.

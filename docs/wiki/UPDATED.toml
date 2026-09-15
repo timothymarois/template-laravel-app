@@ -93,8 +93,8 @@ updated = "2026-09-14"
 digest = "b5bed5fcec485eeae12f6386bb69c9978cbbd80596682ef6e3b6620d1ff60a44"
 
 ["goals"]
-updated = "2026-09-14"
-digest = "ac8f71eed60c7c85f9b92c6c778ad3167156ddbf5db95f84b3c1145c3602b7bd"
+updated = "2026-09-15"
+digest = "b0947acc4bcca3fba419e11af54b412aa4b342d7c24c09a31ba0c3e42232a634"
 
 ["health"]
 updated = "2026-09-14"
@@ -145,12 +145,12 @@ updated = "2026-09-14"
 digest = "9719b70e6196f6c647a69f3420a098469f6850a572ae3a0dee3baf572eaf2426"
 
 ["setup"]
-updated = "2026-09-14"
-digest = "533590a4cb7be5d5e66431930298bc7c39ad918832a42b41851ad9079bb73f19"
+updated = "2026-09-15"
+digest = "7b6e5ced35e108c8a39c4e5f01fde95e4f77e579d5810e27a35ad3a1587e6276"
 
 ["setup/documentation-site"]
-updated = "2026-09-14"
-digest = "e1425e3e85657e531a8b0c87f2d3d2e812871d7e3d7dbcf70fde7613e424bee0"
+updated = "2026-09-15"
+digest = "056f71e61eeb44991af362ad845f04394b19c4c710062d545a6d77914d8ec24b"
 
 ["setup/tenancy"]
 updated = "2026-09-14"
