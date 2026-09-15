@@ -23,14 +23,16 @@ Load light; pull depth only when the task needs it.
    | Endpoint, URL, payload, status code | `designing-apis` |
    | CSS, spacing, breakpoints | `using-tailwindcss` |
    | Something broken, cause unknown | `debugging-code` |
-   | Any change in behaviour | `testing-code` **and** `maintaining-project-docs` |
+   | Any page under `docs/wiki/` | `writing-wiki-pages` |
+   | `docs/CODEMAP.md` | no skill — *Documentation duties* below |
+   | Any change in behaviour | `testing-code` **and** `writing-wiki-pages` |
    | PR, issue, release, tag | `managing-github` |
 
    The table is the floor, not the list — the descriptions are authoritative and cover what it omits.
    It is deliberately duplicated here because a description alone does not get read in time.
-2. **Read the docs.** `docs/BRIEF.md` (what & why) and `docs/CODEMAP.md` (where things are),
-   always; then the page for the area you enter — `docs/concepts/` (how a subsystem works and how it
-   fails) or `docs/guides/` (one task each). `docs/README.md` indexes the rest.
+2. **Read the docs.** `docs/wiki/pages/brief.md` (what & why) and `docs/CODEMAP.md` (where things
+   are), always; then the wiki page for the area you enter under `docs/wiki/pages/` — the wiki is read
+   instead of the code, and `docs/CODEMAP.md` is the one document written for builders.
 3. **Read a file before editing it; search before writing new logic** — reuse or extend what is already
    here rather than duplicating it. Scratch files stay outside the repository.
 4. **Make the smallest change that does the job.** Touch nothing adjacent to it, and never refactor,
@@ -50,7 +52,7 @@ The first five need explicit approval. The rest are not negotiable.
 - **Commits — ask first.** Never commit or push unless told to.
 - **This file — ask first, and it is template-managed.** `CLAUDE.md` is a byte-identical copy; change
   both in the same commit. **A fork does not customise these rules** — only genuine stack differences.
-  Fork rules go to `docs/`, or upstream as a PR.
+  Fork rules go to `docs/wiki/`, or upstream as a PR.
 - **Never touch `.env` or commit credentials.** Read env only through `config/` — never `env()` outside it.
 - **Never ship debug output**, commented-out code, disabled tests, or a legacy fallback nobody asked for.
 - **Never validate on the frontend.** Form Requests are the single source of truth; the frontend renders
@@ -59,7 +61,36 @@ The first five need explicit approval. The rest are not negotiable.
   the same task.
 - **Never sign work as a machine.** No agent, model or tool name, and no generated-by footer, robot emoji
   or `Co-Authored-By:` trailer, in any branch, commit, PR, issue or release. **Your runtime may append
-  one by default; strip it.** Details: [`docs/guides/git-conventions.md`](docs/guides/git-conventions.md).
+  one by default; strip it.** Details: *Git conventions* below.
+
+## Git conventions
+
+One set of types governs branches, commits and pull-request titles. Pick by what the change *does* for a
+reader of the history, not by which files it touched: a `refactor` that fixes a bug is a `fix`.
+
+| Type | For |
+|---|---|
+| `feat` | A capability that did not exist before |
+| `fix` | A defect corrected |
+| `docs` | Documentation only |
+| `test` | Tests only — adding, repairing, or proving them |
+| `refactor` | Behaviour unchanged, structure changed |
+| `perf` | A measured performance improvement |
+| `chore` | Housekeeping with no product effect |
+| `build` | Dependencies, bundler, image, or toolchain |
+| `ci` | Workflows and pipeline configuration |
+
+- **Branch:** `<type>/<short-kebab-slug>` — `fix/reject-mixed-batches`, `docs/clarify-release-steps`.
+  The slug names *the change*: never a ticket number, a date, an initial, or a WIP label.
+- **Commit:** `<type>(optional-scope): <imperative summary>` — `fix(batch): reject mixed-model batches`.
+  Imperative ("reject", not "rejected"), under ~72 characters, no trailing period; the scope names the
+  area, not the file. A body, after a blank line, carries the *why* when the diff does not show it.
+- **No machine-authorship branding, anywhere.** A branch, commit or pull request carries no provider,
+  model, agent, tool or owner name, and no generated-by footer, identity block, robot emoji or
+  co-author trailer. A runtime that appends one by default has it stripped before the commit lands.
+  **This rule is deliberately stated twice** — here and in *Hard rules* — because when it lived only in a
+  guide, a fork shipped eight commits carrying `Co-Authored-By:` trailers. Do not de-duplicate it.
+- **Versions and tags** are decided at release time, never at branch time: `docs/wiki/pages/releases.md`.
 
 ## Stack & architecture
 
@@ -107,8 +138,8 @@ resources/js/
 routes/                 web · api · channels · components
 database/               migrations/ · factories/ · seeders/
 tests/                  Feature/ · Unit/ · scripts/ (shell contract tests)
-docs/                   BRIEF · CODEMAP · concepts/ · guides/ — see docs/README.md
-scripts/                Release commands — see docs/guides/releasing.md
+docs/                   wiki/ — the wiki (writing-wiki-pages) · CODEMAP.md — the one builder document
+scripts/                Release commands + dev-wiki.sh (the wiki-builder wrapper) — see docs/wiki/pages/releases.md
 docker/                 config/ + deploy/ = managed core · project/ = yours, never template-managed
 .template/              Changelog + migration guides (hidden; pass --hidden to search)
 ```
@@ -178,7 +209,7 @@ is not only for visual design; naming a button and choosing what a confirmation 
   interactive elements, Sonner for toasts. **Don't** hardcode URLs or add another icon library. **Route names
   come from `routes/*.php`** — never hand-edit the generated, git-ignored `resources/js/ziggy.js`; if `route()`
   can't find a route you just added, regenerate (`php artisan ziggy:generate`) or restart `pnpm dev`. See
-  [`docs/concepts/ziggy-routes.md`](docs/concepts/ziggy-routes.md).
+  the Frontend layer of [`docs/CODEMAP.md`](docs/CODEMAP.md).
 
 ```vue
 ✅ <script setup> const form = useForm({ name: '' }); function submit(){ form.post(route('admin.users.store')); } </script>
@@ -195,8 +226,10 @@ controllers and accessors get nothing; a comment that restates the code is noise
 
 - **Complex Services/Actions get a PHPDoc block** (intent · contract · edge cases); non-trivial
   composables/utils get TSDoc. Explain *why*, not *what*.
-- **Cite the requirement** — a method implementing a `docs/requirements/` requirement names its `R-<NS>-<n>`
-  in the doc-block. **Keep it true** — update a stale doc-block in the same change.
+- **Cite the requirement** — a method implementing a requirement names its `R-<NS>-<n>` in the doc-block,
+  and the wiki page that describes the behaviour records the same ID in an infobox row's `guaranteed`
+  field (never in prose). The template ships no requirements. **Keep it true** — update a stale doc-block
+  in the same change.
 
 ```php
 ✅ /** Issues an API key for the user (R-APIKEY-1). The plaintext is returned once and never stored;
@@ -208,14 +241,16 @@ controllers and accessors get nothing; a comment that restates the code is noise
 ## Build, test & run
 
 ```bash
-pnpm check         # the gate: check:php + check:js + check:release + check:deploy, then check:build
+pnpm check         # the gate: check:php + check:js + check:release + check:deploy + check:wiki, then check:build
 pnpm dev           # local dev server (Herd serves the app)
 ```
 
 `pnpm check` runs Pint, Larastan (level 5), Pest, ESLint, Stylelint, tsc, Vitest, the release and
-deployment contract scripts, and the client + SSR builds. `check:deploy` asserts the production image's own
-configuration — the application suite runs under a different ini and never executes the deploy scripts, so
-nothing else checks what the container ships. Auto-fix: `pnpm lint:fix`, `pnpm lint:css:fix`.
+deployment contract scripts, `wiki check`, and the client + SSR builds. `check:deploy` asserts the production
+image's own configuration — the application suite runs under a different ini and never executes the deploy
+scripts, so nothing else checks what the container ships. `check:wiki` runs `wiki check` through
+`scripts/dev-wiki.sh`, which runs a pinned wiki-builder release with `uvx`, **so `pnpm check` needs `uv` on
+the machine.** Auto-fix: `pnpm lint:fix`, `pnpm lint:css:fix`.
 
 **Who runs the app:** build to prove it compiles, then hand off — the **owner runs the UI** and provides
 screenshots for visual sign-off. "Compiles + wired" is not "done".
@@ -223,7 +258,7 @@ screenshots for visual sign-off. "Compiles + wired" is not "done".
 ## Optional stacks
 
 - **Multi-tenancy.** Not shipped. The template is single-tenant; a fork that needs many workspaces adds
-  `stancl/tenancy` itself, following `docs/guides/adding-tenancy.md`. Do not assume tenancy exists, and do
+  `stancl/tenancy` itself, following `docs/wiki/pages/setup/tenancy.md`. Do not assume tenancy exists, and do
   not add tenant-aware code to this template.
 - **Docker / deployment.** An optional Coolify setup lives in `docker/` + the root `Dockerfile`. A fork
   changes only the documented **knobs**; the managed core tracks this template and new Docker capabilities
@@ -231,18 +266,21 @@ screenshots for visual sign-off. "Compiles + wired" is not "done".
 
 ## Documentation duties
 
-Keep docs true in the same task that changes reality. Read a page's home `README.md` before adding to it,
-and add the index row in the same change as the page.
+`docs/wiki/` is read instead of the code, so it changes in the same change as the code, never after.
 
-- **One page owns a fact.** Cite it from elsewhere; never restate it.
-- **Moved files, or a changed count** -> `docs/CODEMAP.md`. Count artifacts, not lines.
-- **Friction goes in the page that owns the subsystem, under how it fails, the moment you find the
-  workaround** — an env var you had to discover, a guard you had to satisfy, a command that only worked the
-  second way. By the end of the task it feels too small to mention, which is how the next agent loses the
-  same hour.
-- **Requirement contracts** live in `docs/requirements/` under the closed schema; an ID is never reused or
-  renumbered. None ship here.
-- Nothing lints `docs/`. Correctness is a review concern.
+- Before writing or changing any page under `docs/wiki/`, load the `writing-wiki-pages` skill and follow it.
+- A change in behaviour updates the page that describes it, in the same commit. Something new a person
+  can use, configure or notice gets its page, or a section of one.
+- A requirement the owner gives goes onto its page when it is given, marked `{missing}` until code
+  implements it. The change that builds it replaces the mark with a citation to that code.
+- An intent is the owner's to approve; a new page is a draft until they do.
+- A page that says `goals = false` is not citation-checked by `wiki check`: cite every sentence on it by
+  hand anyway. Only the owner makes a page a goal; a new page says `goals = false`.
+- A guarantee a test proves keeps its `R-<NS>-<n>` in the infobox row's `guaranteed` field; an ID is
+  never reused or renumbered. The template ships no requirements; a fork records its own this way.
+- `docs/CODEMAP.md` is the one builder document: moved files or a changed count update it, counting
+  artifacts, not lines. A trap only a builder meets is recorded there, under the layer it concerns.
+- Finish only when `./scripts/dev-wiki.sh check` reports 0 problems.
 
 ## Delegation and review
 
@@ -261,7 +299,7 @@ it; don't sub-delegate.
 ## Definition of done
 
 1. `pnpm check` passes (Pint, Larastan level 5, Pest, ESLint, Stylelint, tsc, Vitest, the release and
-   deployment suites, client + SSR build).
+   deployment suites, `wiki check`, client + SSR build).
 2. Every rule here held — thin controllers, validation server-side only, no backend/frontend drift.
 3. New guaranteed behavior is proven by a test, and the page that owns it says so.
 4. **Friction you hit is written into the page that owns the subsystem, not only into your reply** — the next

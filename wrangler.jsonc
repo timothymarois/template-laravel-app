@@ -1,0 +1,21 @@
+{
+    // The documentation site: the published wiki served by a Cloudflare Worker
+    // behind a user name and password. Optional — nothing else reads this file.
+    //
+    // KNOB: `name` must equal the Worker's name in the Cloudflare dashboard. A
+    // fork names its own Worker and changes this line; everything else is
+    // template-managed. The dashboard build command is
+    //   pip install "git+https://github.com/timothymarois/wiki-builder@v0.5.0" && wiki check && wiki publish _site
+    // with the root directory left empty. WIKI_USER and WIKI_PASSWORD are Worker
+    // secrets, which the dashboard accepts only once a script-backed version has
+    // deployed.
+    "name": "template-laravel-app-docs",
+    "main": "docs/wiki/worker.js",
+    "compatibility_date": "2026-09-14",
+    "assets": {
+        "directory": "./_site",
+        "binding": "ASSETS",
+        "run_worker_first": true
+    },
+    "workers_dev": false
+}

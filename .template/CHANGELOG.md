@@ -8,6 +8,31 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.1.0 - 09/15/2026
+
+Replaces the hand-written `docs/` tree with a [wiki-builder](https://github.com/timothymarois/wiki-builder) wiki: every page written from the code, every sentence cited, and `wiki check` in the gate. Minor: docs, tooling and agent rules only, no application code, schema or dependency change.
+
+> ⚠️ Every fork acts: install the wrapper, convert its docs into wiki pages, and take the new `AGENTS.md`. `pnpm check` now needs `uv` on the machine.
+
+### Added
+
+- **`docs/wiki/`** — 41 pages written from the code, on wiki-builder v0.5.0; `scripts/dev-wiki.sh` runs the pinned release through `uvx`.
+- **`check:wiki`** in `pnpm check`, and a `Wiki check` GitHub job on every pull request and push to `main`.
+- **`writing-wiki-pages` skill** in `.claude/skills/`, installed by `wiki sync`; `AGENTS.md` routes every page under `docs/wiki/` to it.
+- **`wrangler.jsonc` + `docs/wiki/worker.js`** — an optional password-locked documentation site on a Cloudflare Worker; the Worker `name` is a fork knob.
+
+### Changed
+
+- ⚠️ **`docs/` holds only `wiki/` and `CODEMAP.md`.** Removed: `docs/BRIEF.md`, `docs/README.md`, `docs/concepts/`, `docs/guides/`. Builder-only material (troubleshooting traps, Ziggy, test conventions) moved into `CODEMAP.md`; git conventions moved into `AGENTS.md`.
+- **`AGENTS.md`/`CLAUDE.md`** — new `Git conventions` section, `Documentation duties` rewritten for the wiki, skill table and gate description updated. Template-managed: take the file wholesale.
+- ⚠️ **`maintaining-project-docs` skill removed.** It prescribed a `docs/` layout (`BRIEF.md`, `concepts/`, `guides/`, `requirements/`) the wiki replaces, and triggered on every file under `docs/`, so it contradicted `writing-wiki-pages` on wiki pages. `docs/CODEMAP.md` now follows `AGENTS.md` → *Documentation duties*.
+- **`.template/ADOPT.md`** — adopting a fork now rewrites the wiki for the product; upgrading applies a migration's page changes to the fork's copy.
+- **Wiki pages organized into families** (wiki-builder v0.5.0). `commands.md`, `admin.md` and `api.md` declare `[family]`, so `wiki check` refuses a member page that leaves its parent's layout, and each parent's member table is generated. `api-keys/issuing.md` moved to `admin/api-keys.md`; the sidebar runs Start, Application, Site, Interface, Operations, Setup, Reference; the release-script pages list every refusal their script makes.
+
+### Migration
+
+See [`migrations/template-v6.1.0.md`](migrations/template-v6.1.0.md). Parts A–F: every fork. Part G: forks that publish their docs.
+
 ## v6.0.2 - 09/08/2026
 
 Makes `AGENTS.md`/`CLAUDE.md` template-managed, and fixes the skill descriptions that decide when an agent loads a skill at all. Patch: rules, skills and docs only, no application code change.

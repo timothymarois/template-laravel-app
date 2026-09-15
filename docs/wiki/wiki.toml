@@ -1,0 +1,40 @@
+# The wiki for template-laravel-app: written from the code, built and checked by wiki-builder.
+
+[site]
+name = "template-laravel-app"
+tagline = "a Laravel starter every fork inherits"
+
+# No [budget]: the pages run on the defaults until a reader has measured them.
+
+[[section]]
+title = "Start"
+pages = ["index", "brief", "goals"]
+
+[[section]]
+title = "Application"
+pages = ["accounts", "admin", "api-keys", "api"]
+
+[[section]]
+title = "Site"
+pages = ["site", "seo"]
+
+[[section]]
+title = "Interface"
+pages = ["components"]
+
+[[section]]
+title = "Operations"
+pages = ["health", "releases", "deployment", "background-work", "logging"]
+
+[[section]]
+title = "Setup"
+pages = ["setup"]
+
+[[section]]
+title = "Reference"
+pages = ["commands"]
+
+# Written by `wiki sync`. Which release of the tool these pages
+# were written against; `wiki check` says so when they differ.
+[tool]
+version = "0.5.0"
