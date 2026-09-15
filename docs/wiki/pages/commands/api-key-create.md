@@ -41,7 +41,7 @@ rows = [
 
 `api-key:create` issues one key to an existing, active account and prints the plaintext once.[^signature]
 What a key is, which abilities exist and how a key expires is described on [API keys](../api-keys.md);
-the screen that issues one is described on [API keys](../admin/api-keys.md).
+the screen that issues one is described on [the API keys screen](../admin/api-keys.md).
 
 ## Usage
 

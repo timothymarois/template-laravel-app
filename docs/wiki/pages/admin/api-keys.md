@@ -26,8 +26,8 @@ group = "Rules"
 rows = [
   { label = "Fields", value = "Name, Abilities, Expires after (days), Never expires", cite = "form" },
   { label = "Plaintext", value = "one response, never the session", cite = "render" },
-  { label = "Removal", value = "deletes the key", cite = "revoke" },
-  { label = "Refusal", value = "another operator's key", cite = "policy" },
+  { label = "Removal", value = "a permanent delete", cite = "delete" },
+  { label = "Removal refused", value = "another operator's key", cite = "policy" },
 ]
 +++
 
@@ -60,7 +60,7 @@ that entry and reloads the list.[^render]
 ## Removal
 
 `Revoke` on a row asks `Revoke “name”? Any caller using it stops working immediately, and this cannot be
-undone.` and, confirmed, deletes the key and reports `API key “name” revoked`.[^revoke] An operator
+undone.` and, confirmed, deletes the key and reports `API key “name” revoked`.[^revoke] The deletion is permanent.[^delete] An operator
 revokes only their own keys: a guessed id belonging to another operator is answered `403`.[^policy]
 
 [^screen]: `routes/web.php` — the three `api-keys` routes under `admin`;
@@ -87,5 +87,7 @@ revokes only their own keys: a guessed id belonging to another operator is answe
 [^revoke]: `resources/js/pages/admin/api-keys/Index.vue` — the `Revoke` button, the confirmation
     message and the toasts; `app/Http/Controllers/Admin/ApiKeyController.php` — `destroy()` revokes and
     flashes `API key revoked.`.
+[^delete]: `app/Services/ApiKeyService.php` — `revoke()` deletes the key's row;
+    `vendor/laravel/sanctum/src/PersonalAccessToken.php` — the model uses no soft-delete trait.
 [^policy]: `app/Policies/ApiKeyPolicy.php` — `viewAny()` and `create()` need `canManageAllUsers()`, and
     `delete()` also needs the key to belong to the actor.

@@ -10,7 +10,7 @@ commands are not listed here.
 """
 
 [family]
-headings = ["Usage", "Options", "Arguments", "Output", "Exit codes"]
+headings = ["Usage", "Options", "Output", "Exit codes"]
 labels = [
   "Command", "Use", "Options", "Run by",
   "Generated password", "Default role", "Default ability", "Default lifetime", "Longest lifetime", "Folder mode",
@@ -30,8 +30,10 @@ rows = [
 
 Five commands sit beside the framework's own, each in its own class under the application's console
 commands folder.[^commands] Every one runs through `php artisan`, and `php artisan list` shows them with
-the framework's.[^artisan] Each command's page covers its usage, options, arguments, output and exit
-codes, in that order.[^commands]
+the framework's.[^artisan] The pages for [api-key:create](commands/api-key-create.md),
+[app:ensure-storage](commands/app-ensure-storage.md), [sitemap:generate](commands/sitemap-generate.md),
+[start:fresh](commands/start-fresh.md) and [user:create](commands/user-create.md) each cover the command's
+usage, options, output and exit codes, in that order, where the command has them.
 
 {family-table}
 

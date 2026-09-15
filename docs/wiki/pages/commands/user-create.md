@@ -27,7 +27,7 @@ rows = [
 [[infobox]]
 group = "Rules"
 rows = [
-  { label = "Changes", value = "one account", cite = "signature" },
+  { label = "Changes", value = "one account", cite = "exit" },
 ]
 
 [[infobox]]

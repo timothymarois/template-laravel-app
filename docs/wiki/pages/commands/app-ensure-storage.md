@@ -27,7 +27,7 @@ rows = [
 [[infobox]]
 group = "Rules"
 rows = [
-  { label = "Changes", value = "9 folders", note = "under storage/, each only when missing", cite = "folders" },
+  { label = "Changes", value = "missing storage folders and their .gitignore, of 9", cite = "folders" },
 ]
 
 [[infobox]]

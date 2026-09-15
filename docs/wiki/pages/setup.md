@@ -67,6 +67,15 @@ The seeded accounts are for a development database; a real deployment creates it
 command, described on [user:create](commands/user-create.md).{missing} A development database is emptied
 and rebuilt with [start:fresh](commands/start-fresh.md), which refuses to run in production.[^fresh]
 
+## Documentation
+
+`pnpm check` runs the wiki check with the other suites through `scripts/dev-wiki.sh`, which starts
+wiki-builder with `uvx`, so `pnpm check` needs `uv` on the machine.[^uv]
+
+[^uv]: `package.json` — `check` runs `pnpm check:wiki` with the other suites, and `check:wiki` runs
+    `./scripts/dev-wiki.sh check`; `scripts/dev-wiki.sh` — runs
+    `uvx --from "git+https://github.com/timothymarois/wiki-builder@$WIKI_VERSION" wiki` with
+    `WIKI_VERSION=v0.5.0` and `--root`.
 [^manifest]: `template-manifest.json` — `version` and `repo`; `.template/migrations/` — one guide per
     release, applied in order by a fork.
 [^deploy]: `template-manifest.json` — `deploy.repository`, `deploy.productionUrl` and

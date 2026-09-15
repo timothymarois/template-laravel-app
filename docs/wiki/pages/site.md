@@ -35,8 +35,8 @@ takes over.[^home][^ssr] What a crawler reads in the head of each page is descri
 The address `/` shows the home page.[^home] A missing address answers `404` with the page titled
 `Page Not Found`, a failure answers `500` with `Server Error`, and maintenance answers `503` with
 `Service Unavailable`; each keeps the site's layout and the first two offer a `Go Home` button.[^errors]
-A request under `/api/` gets the bare status instead of a page.[^errors] Their indexing is described on
-[SEO](seo.md).
+A request under `/api/` gets the bare status instead of a page.[^errors] The indexing of the three error
+pages is described on [SEO](seo.md).
 
 ## Server rendering
 

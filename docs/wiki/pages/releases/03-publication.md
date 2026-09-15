@@ -13,7 +13,7 @@ should hold the tag back rather than let it through.
 group = "Identity"
 rows = [
   { label = "Command", value = "scripts/publish-production-release", cite = "usage" },
-  { label = "Arguments", value = "--confirm", cite = "usage" },
+  { label = "Argument", value = "--confirm", cite = "usage" },
   { label = "Settings", value = "RELEASE_VERIFY_ATTEMPTS, RELEASE_VERIFY_INTERVAL_SECONDS", cite = "loop" },
 ]
 
@@ -78,6 +78,13 @@ On success the last line names the release.[^publish]
 Published v1.2.3: https://github.com/owner/repo/releases/tag/v1.2.3
 ```
 
+When the tag already points at the production head and no release exists, the script prints one more
+line after verification and before it creates the release, with `COMMIT` standing for the head
+commit.[^verified]
+```text
+Verified existing tag v1.2.3 at production commit COMMIT.
+```
+
 A refusal against the shipped manifest, from a local run:[^manifest]
 ```text
 Production release refused: deploy.repository: deploy.repository is still the template placeholder (owner/repo)
@@ -85,38 +92,10 @@ Production release refused: deploy.repository: deploy.repository is still the te
 
 ## Exit codes
 
-Every refusal prints `Production release refused:` and the reason, and exits 1; messages show the shipped
-`owner/repo` and `production`.[^fail][^manifest]
-
-| Code | Condition | Message |
-|---|---|---|
-| `0` | released and read back[^publish] | `Published v1.2.3: https://github.com/owner/repo/releases/tag/v1.2.3` |
-| `0` | already released on this commit[^existing] | `Release v1.2.3 already exists: ` and its address |
-| `1` | outside a Git checkout[^setup] | `run this inside the repository` |
-| `1` | a tool missing[^setup] | `curl is required`, `gh is required`, `git is required`, `python3 is required` |
-| `1` | no manifest[^manifest] | `deploy.repository: template-manifest.json is missing` |
-| `1` | no readable `deploy` block[^manifest] | `deploy.repository: template-manifest.json has no valid deploy block` |
-| `1` | a `deploy` value empty[^manifest] | `deploy.KEY: deploy.KEY is missing` |
-| `1` | a `deploy` placeholder | `deploy.repository: deploy.repository is still the template placeholder (owner/repo)`[^manifest] |
-| `1` | uncommitted files | `the worktree must be clean`[^fail] |
-| `1` | fetch failed[^fetch] | `could not fetch origin/production and tags` |
-| `1` | no branch on `origin`[^fetch] | `origin/production is unavailable` |
-| `1` | head behind `origin` | `HEAD must exactly match current origin/production`[^head] |
-| `1` | `gh` signed out | `authenticate the GitHub CLI with gh auth login`[^fail] |
-| `1` | `gh` on another repository | `GitHub CLI resolved other/repo, expected owner/repo`[^fail] |
-| `1` | no usable version | `the stored release version could not be resolved`[^version] |
-| `1` | tag unreadable[^existing] | `could not inspect v1.2.3 on origin` |
-| `1` | release without tag[^existing] | `GitHub Release v1.2.3 exists without a matching Git tag` |
-| `1` | tag on another commit | `tag v1.2.3 points to a different commit`[^existing] |
-| `1` | existing release misnamed[^existing] | `Production release refused: existing release must use tag and title v1.2.3` |
-| `1` | bad attempt count[^settings] | `RELEASE_VERIFY_ATTEMPTS must be a positive integer` |
-| `1` | bad pause[^settings] | `RELEASE_VERIFY_INTERVAL_SECONDS must be a non-negative integer` |
-| `1` | never verified | `v1.2.3 was not verified live and healthy within the allowed time (a 200 from /health with no stored checkResults does not count as healthy)`[^loop] |
-| `1` | release unreadable[^readback] | `could not verify the published release` |
-| `1` | published tag unreadable[^readback] | `could not verify the published tag` |
-| `1` | published tag elsewhere[^readback] | `published tag v1.2.3 does not point to production HEAD` |
-| `1` | published release misnamed[^readback] | `Production release refused: published release must use tag and title v1.2.3` |
-| `2` | argument not `--confirm`[^usage] | `Usage: scripts/publish-production-release --confirm` |
+The script exits 0 once the release is read back, and 1 on every refusal, which prints
+`Production release refused:` and the reason; anything but a single `--confirm` argument exits 2.[^publish][^fail][^usage]
+Every outcome, with its code and its message word for word, is listed on
+[Exit codes](03-publication/exit-codes.md).
 
 [^publish]: `scripts/publish-production-release` — after verification, `gh release create` with
     `--target` the head commit and `--generate-notes`, then `gh release view` and `remote_tag_commit()`
@@ -133,9 +112,6 @@ Every refusal prints `Production release refused:` and the reason, and exits 1; 
     reason and exits 1; every check from line 20 to line 171 calls it in turn, including the clean-tree
     (line 64), `gh auth` (line 72) and repository (line 73) checks, and the two Python blocks that raise
     `SystemExit` print the same prefix themselves, which `set -e` turns into exit 1.
-[^setup]: `scripts/publish-production-release` — line 20 fails with `run this inside the repository` when
-    `git rev-parse --show-toplevel` fails; the `for` loop on lines 23 to 25 fails with `{command} is
-    required` for each of `curl`, `gh`, `git` and `python3` not on the path.
 [^manifest]: `scripts/publish-production-release` — `manifest_deploy()` exits with `template-manifest.json
     is missing`, `template-manifest.json has no valid deploy block`, `deploy.{key} is missing` or
     `deploy.{key} is still the template placeholder ({value})`, for the placeholders `owner/repo` and
@@ -143,23 +119,7 @@ Every refusal prints `Production release refused:` and the reason, and exits 1; 
     that order, each wrapping the message in `fail "deploy.{key}: …"`; `template-manifest.json` — ships
     `owner/repo`, `https://example.com` and `production`; the sample is the output of a local run against
     the shipped manifest.
-[^fetch]: `scripts/publish-production-release` — line 66 fails with `could not fetch
-    origin/${production_branch} and tags` and line 69 with `origin/${production_branch} is unavailable`.
-[^version]: `scripts/publish-production-release` — line 84 fails with `the stored release version could
-    not be resolved` when `scripts/production-release-version` returns no matching version and tag;
-    `scripts/production-release-version` — prints `Release version refused:` with a missing manifest, a
-    manifest with no valid version, a version not in `MAJOR.MINOR.PATCH` form, versions that disagree, or
-    `0.0.0`.
-[^existing]: `scripts/publish-production-release` — line 96 fails with `could not inspect ${tag} on
-    origin` when `remote_tag_commit()` fails; the `existing_release` branch fails with `GitHub Release
-    ${tag} exists without a matching Git tag` when no tag exists, fails with `tag {tag} points to a
-    different commit` when the tag names another commit (as line 118 does with no release), raises
-    `Production release refused: existing release must use tag and title {expected_tag}` when the
-    release's tag or name differs, and otherwise prints `Release {tag} already exists: {url}` and exits 0.
-[^settings]: `scripts/publish-production-release` — line 123 requires `RELEASE_VERIFY_ATTEMPTS` to match
-    `^[1-9][0-9]*$` and line 124 requires `RELEASE_VERIFY_INTERVAL_SECONDS` to match `^[0-9]+$`, each
-    calling `fail()` with its message.
-[^readback]: `scripts/publish-production-release` — after `gh release create`, line 169 fails with `could
-    not verify the published release`, line 170 with `could not verify the published tag`, line 171 with
-    `published tag ${tag} does not point to ${production_branch} HEAD`, and the last Python block raises
-    `Production release refused: published release must use tag and title {expected_tag}`.
+[^verified]: `scripts/publish-production-release` — lines 158 to 160 print `Verified existing tag ${tag}
+    at ${production_branch} commit ${head_commit}.` when `remote_tag_commit()` found the tag, which by then
+    points at the head, after the verification loop and before `gh release create` on line 162; an
+    existing release has already ended the script by line 114.

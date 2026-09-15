@@ -14,31 +14,31 @@ digest = "743ddd87e816c511ad942368877a8a618bdfa622c28e5ba7711cb168844a93ab"
 
 ["admin"]
 updated = "2026-09-15"
-digest = "64ff3b3dd73d7e19e3dc77bd69fc543f3d04c691a068fc7242823d0b08c5c9af"
+digest = "eaf50897ba7c54ff2a7d2e547e1e486ba9bff019811274cbbed35d4deef87c2e"
 
 ["admin/api-keys"]
 updated = "2026-09-15"
-digest = "b4a90914a6777e25c27f7d4699ce623364356619e8d5fcf67c197784f0cd1d1a"
+digest = "fb388c58246897b308b2ed84b7fbe312b5e06746af20c0f435570a74210d1a2d"
 
 ["admin/users"]
 updated = "2026-09-15"
-digest = "cdbf81373099ae549b1c44aa81aa20797cae41e1f854281c49f34348ede49251"
+digest = "100bf24528f07e58dde3d112b1b11bdceaaba2ed83be6b8643ed5bd4055e2dcc"
 
 ["api"]
 updated = "2026-09-15"
-digest = "02d64fd03e9a94c73d6b3f08c9e62896f22a7850fcb330e125c24cc9f7be7b04"
+digest = "a367d000f0ec27565883fd8b11af1b43e81da54362b623229c773131971fec6a"
 
 ["api-keys"]
 updated = "2026-09-15"
-digest = "fe1bdd1293688e573e9aa537bfbf7691949aec54a36501f08b4c809d047928b6"
+digest = "77e6c0bf28940171b47cba65638bd160896e9f5d76bbd618d153f3a61e937b76"
 
 ["api/user"]
 updated = "2026-09-15"
-digest = "0d77bc0e8d2dec20d5233c967c0426dae172c174a58fe2acb8ffe02163e3c96b"
+digest = "de5ca7566443b10c1342716bf6c9ab317df4bbbbe94a1ea118fb5f14ff165c28"
 
 ["api/users"]
 updated = "2026-09-15"
-digest = "723ecd12f58b39bdc19ef14a77102a78124b37f0dc1b56e6868a9663046883e7"
+digest = "33a1572e5e591d09e65a653a992df986f6a89ec793733100af5f569513e289cb"
 
 ["background-work"]
 updated = "2026-09-14"
@@ -50,15 +50,15 @@ digest = "ef3b76135a84216022598da5906a87103aadb04d75b7ca4d92a9904252aa0eff"
 
 ["commands"]
 updated = "2026-09-15"
-digest = "bccc660893b89011a48e566b7d1b19ee0028a2b0a87599189c410e31ad07a1f4"
+digest = "9363ab1caac3a8f12aea7e3cf434ad7f0ad436bd89d67d023721f5b91e5ecde0"
 
 ["commands/api-key-create"]
 updated = "2026-09-15"
-digest = "361251c46a8a5fe345a2ee5e54bbfa03c2da41ad797657a972506c62a24db3a1"
+digest = "b0ae8c575ce51d5f9f14973f861759899b36237cbb8106d36063bd7a83102b99"
 
 ["commands/app-ensure-storage"]
 updated = "2026-09-15"
-digest = "6886cfb068df8ae5ba94f6d2147b856871275675bd5dd9f3ca653121c1439f6b"
+digest = "380491c4a93e8fb189772fec3c8195f10a3ff264d3c014f66673d44a0da74f98"
 
 ["commands/sitemap-generate"]
 updated = "2026-09-15"
@@ -70,7 +70,7 @@ digest = "e18d3e43fa9a56b9d6614abfe548ada40d6f7b5f05ce217843b1bfe5313c44cd"
 
 ["commands/user-create"]
 updated = "2026-09-15"
-digest = "0e149dccfcd62a399ca6fa3f1d5f61c4c38a491393d65b88858cd39867216ac0"
+digest = "e5d3b576e84d27f41e980c743a48a46eae896ad4b10a27ebb819010df5e14530"
 
 ["components"]
 updated = "2026-09-14"
@@ -122,7 +122,7 @@ digest = "209e06adffa9fb24883413e185de89813b039550be3274f300d20a3350ad4393"
 
 ["releases/01-preparation"]
 updated = "2026-09-15"
-digest = "a08beed0569e532e0ec172a50a6a7ca6946123c753da2f8477d3b5510bee7066"
+digest = "c1136786db6f68c094447f383bfa8dac83cba3d15bf0b911399d58247a8911a4"
 
 ["releases/02-production-pull-request"]
 updated = "2026-09-15"
@@ -130,7 +130,11 @@ digest = "e0267c58c661a2535349cbc527528d73610c7f0f5bc68091a86a33ebadcf8c87"
 
 ["releases/03-publication"]
 updated = "2026-09-15"
-digest = "355a0fd20972fd048b2a66fa8a93304599970e89e7c18344e7d45217077b4dc3"
+digest = "4f6b4c4b7c7e11309d01b9726f772adcfaddb327d4ac48ab1c09aea0df0d919a"
+
+["releases/03-publication/exit-codes"]
+updated = "2026-09-15"
+digest = "ed008d247fd8b44fb3e4954d708bce4010549254897a6f836629f0611e8aafa0"
 
 ["releases/04-reconciliation"]
 updated = "2026-09-15"
@@ -146,11 +150,11 @@ digest = "9719b70e6196f6c647a69f3420a098469f6850a572ae3a0dee3baf572eaf2426"
 
 ["setup"]
 updated = "2026-09-15"
-digest = "a6ef384d6d34c320f7531ab4e8f0db97471448a19b60001a3009a0ed06b5a88a"
+digest = "a2472af3c9058be9a256f1353c97bdf8af17c89e5ece3fc5bbf0c0782e128839"
 
 ["setup/documentation-site"]
 updated = "2026-09-15"
-digest = "b6b4e0500cd286af5a4aaa3f93b0d196dd17a26503d3fc33cc9a3021b80f63fd"
+digest = "eb646575ff50d7b4a8df51b005763d1df346be4d2c7bafd6cd25309f1b9f0681"
 
 ["setup/tenancy"]
 updated = "2026-09-14"
@@ -162,4 +166,4 @@ digest = "2704c20a0253cd0930a25322b28588e04e4ec484dbdea0fed66707338672f2af"
 
 ["site"]
 updated = "2026-09-15"
-digest = "78681f2ec0a8d40f33f292687f41291a649aa79197d85833ac68580c07f369eb"
+digest = "da2e9975def8420cd6a1f06229d149fceb30a8c7e9062ee28e1111e6ca107519"

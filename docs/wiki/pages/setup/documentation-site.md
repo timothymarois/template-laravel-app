@@ -54,9 +54,7 @@ the site answers only on the domain given to the Worker.[^workersdev]
 
 The build installs the same wiki-builder release `scripts/dev-wiki.sh` runs, checks the wiki and stops on
 any problem, then publishes the site into `_site`.[^build] `pnpm check:wiki` and the `Wiki check` job on
-every pull request run that check before a change reaches `main`.[^check] `pnpm check` runs it with the
-other suites through `scripts/dev-wiki.sh`, which starts wiki-builder with `uvx`, so `pnpm check` needs
-`uv` on the machine.[^uv]
+every pull request run that check before a change reaches `main`.[^check]
 
 ## Sign-in
 
@@ -98,11 +96,7 @@ are added and the Worker is deployed again.{missing}
     root directory is optional and defines where the build command runs, and the deploy command defaults
     to `npx wrangler deploy`.
 [^check]: `package.json` — `check:wiki` runs `./scripts/dev-wiki.sh check`; `.github/workflows/wiki.yml` —
-    the `Wiki check` job runs `timothymarois/wiki-builder@v0.5.0` on every pull request and a push to `main`.
-[^uv]: `package.json` — `check` runs `pnpm check:wiki` with the other suites; `scripts/dev-wiki.sh` — runs
-    `uvx --from "git+https://github.com/timothymarois/wiki-builder@$WIKI_VERSION" wiki` with
-    `WIKI_VERSION=v0.5.0` and `--root`.
-[^basic]: Cloudflare Docs — [HTTP Basic Authentication](https://developers.cloudflare.com/workers/examples/basic-auth/):
+    the `Wiki check` job runs `timothymarois/wiki-builder@v0.5.0` on every pull request and a push to `main`.[^basic]: Cloudflare Docs — [HTTP Basic Authentication](https://developers.cloudflare.com/workers/examples/basic-auth/):
     Basic authentication sends credentials unencrypted and must be used over HTTPS; credentials are
     compared with `crypto.subtle.timingSafeEqual`, and a `401` with `WWW-Authenticate` makes the browser
     prompt.

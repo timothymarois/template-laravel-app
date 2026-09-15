@@ -72,7 +72,8 @@ describes.[^route]
 |---|---|---|
 | `401` | no key, an unknown, expired or foreign key[^refusals] | `Unauthenticated.` |
 | `403` | the key's owner is not an administrator[^owner] | `This action is unauthorized.` |
-| `403` | a deactivated owner, or a key without `api:read`[^refusals] | `Your account has been deactivated.` or `Invalid ability provided.` |
+| `403` | the key's owner is deactivated[^refusals] | `Your account has been deactivated.` |
+| `403` | the key lacks `api:read`[^refusals] | `Invalid ability provided.` |
 | `422` | `perPage` above 100[^params] | `The per page field must not be greater than 100.` |
 | `422` | `sortField` outside the four[^params] | `The selected sort field is invalid.` |
 | `429` | the 61st request in a minute[^refusals] | `Too Many Attempts.` |

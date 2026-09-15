@@ -26,7 +26,7 @@ group = "Rules"
 rows = [
   { label = "Fields", value = "Name, Email, Role, all required", cite = "rules" },
   { label = "Removal", value = "a permanent delete", cite = "hard" },
-  { label = "Refusal", value = "the operator's own account", cite = "self" },
+  { label = "Removal refused", value = "the operator's own account", cite = "self" },
 ]
 +++
 
@@ -37,8 +37,8 @@ address.[^list] The search, sort, page size and chosen columns are kept for the 
 ## List
 
 `Search user name or email` matches either field.[^search] The page size is chosen at the foot of the
-list, and the columns and sort in the column menu.[^page] The list starts at 50 rows a page, ordered by
-name, and offers 15, 25, 50 or 100 rows a page.[^defaults] A name opens the account's own page at
+list, and the columns and sort in the column menu.[^page] The list offers 15, 25, 50 or 100 rows a
+page.[^defaults] A name opens the account's own page at
 `/admin/users/{id}`.[^show]
 
 ## Adding

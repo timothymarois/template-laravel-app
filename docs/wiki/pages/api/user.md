@@ -29,6 +29,7 @@ and their refusals, are described on [API](../api.md).
 
 ## Request
 
+The request is a `GET` with no parameters.[^route]
 ```http
 GET /api/user
 Authorization: Bearer KEY
@@ -51,7 +52,8 @@ The request carries the key as a bearer token and nothing else, and the key pass
 | Status | Condition | Message |
 |---|---|---|
 | `401` | no key, an unknown, expired or foreign key[^refusals] | `Unauthenticated.` |
-| `403` | a deactivated owner, or a key without `api:read`[^refusals] | `Your account has been deactivated.` or `Invalid ability provided.` |
+| `403` | the key's owner is deactivated[^refusals] | `Your account has been deactivated.` |
+| `403` | the key lacks `api:read`[^refusals] | `Invalid ability provided.` |
 | `429` | the 61st request in a minute[^refusals] | `Too Many Attempts.` |
 
 ## Example

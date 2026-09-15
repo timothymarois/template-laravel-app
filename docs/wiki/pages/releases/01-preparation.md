@@ -13,7 +13,7 @@ should be refused before a file changes.
 group = "Identity"
 rows = [
   { label = "Command", value = "scripts/prepare-production-release", cite = "usage" },
-  { label = "Arguments", value = "vMAJOR.MINOR.PATCH", cite = "usage" },
+  { label = "Argument", value = "vMAJOR.MINOR.PATCH", cite = "usage" },
   { label = "Release branch", value = "release/vMAJOR.MINOR.PATCH", cite = "conditions" },
 ]
 
@@ -62,9 +62,10 @@ Release preparation refused: the worktree must be clean
 
 A failed condition exits with `Release preparation refused:` and the reason.[^fail] The checks on the tag,
 the repository, both manifests existing, the worktree, the branch, `origin/main`, the existing tags and
-`python3` all run before a file changes.[^setup][^conditions] Each manifest's version, and whether its
-version line can be rewritten, is checked just before that manifest is rewritten, so a `package.json`
-refused on either count is refused after `composer.json` has already been rewritten.[^python] The
+`python3` all run before a file changes.[^setup][^conditions] Each manifest is parsed, and its version and
+version line checked, just before that manifest is rewritten, so a `package.json` refused on any of those
+counts is refused after `composer.json` has already been rewritten.[^python] That leaves `composer.json`
+modified, so the next run is refused with `the worktree must be clean`.[^python][^fail] The
 check that nothing but the two manifests changed runs last, after both are rewritten.[^files]
 
 | Code | Condition | Message |
@@ -81,6 +82,7 @@ check that nothing but the two manifests changed runs last, after both are rewri
 | `1` | the tag exists locally, or on `origin` | `tag v1.2.3 already exists locally`, `tag v1.2.3 already exists on origin`[^conditions] |
 | `1` | the tags on `origin` cannot be read | `could not verify tags on origin`[^conditions] |
 | `1` | `python3` is not installed | `python3 is required`[^fail] |
+| `1` | `composer.json` or `package.json` is not valid JSON | a Python traceback, with no `Release preparation refused:` prefix[^python] |
 | `1` | either manifest is not at `0.0.0` | `composer.json must start at version 0.0.0`[^python] |
 | `1` | a manifest's `"version"` does not open its own line, so it cannot be rewritten in place | `could not update composer.json safely`, or `package.json`[^python] |
 | `1` | anything but the two manifests changed | `unexpected files changed`[^files] |
@@ -104,7 +106,8 @@ check that nothing but the two manifests changed runs last, after both are rewri
     `composer.json` then `package.json`, exiting with `Release preparation refused: {filename} must start
     at version 0.0.0`, or with `Release preparation refused: could not update {filename} safely` when the
     pattern `(?m)^(\s*"version"\s*:\s*)"0\.0\.0"` matches no line (line 81), or writing that file before
-    it reads the next.
+    it reads the next; `json.loads()` on line 68 is not caught, so a manifest that is not valid JSON ends
+    the script with Python's traceback and exit 1, under `set -euo pipefail` on line 3.
 [^output]: `scripts/prepare-production-release` — the three closing `echo` lines, reached only after
     every check passed.
 [^run]: `scripts/prepare-production-release` — `fail()`; the sample is the output of running the script

@@ -38,7 +38,8 @@ rows = [
 Every API request carries a key as a bearer token and passes four checks in order: the request budget,
 the key, its owner's status and its ability.[^chain] Keys themselves are described on
 [API keys](api-keys.md). The endpoints, [GET /api/user](api/user.md) and [GET /api/users](api/users.md), each
-have a page covering the request, authentication, parameters, responses, errors and an example.
+have a page covering the request, authentication, parameters, responses, errors and an example, where the
+endpoint has them.
 
 ## Checks
 

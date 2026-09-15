@@ -10,8 +10,8 @@ operator role should see none of it.
 
 [family]
 headings = ["List", "Adding", "Editing", "Removal"]
-labels = ["Address", "Page size", "Sort", "Fields", "Plaintext", "Removal", "Refusal"]
-table = ["Address", "Removal", "Refusal"]
+labels = ["Address", "Page size", "Sort", "Fields", "Plaintext", "Removal", "Removal refused"]
+table = ["Address", "Removal", "Removal refused"]
 
 [[infobox]]
 group = "Identity"
@@ -36,7 +36,7 @@ rows = [
 The **admin area** is everything under `/admin`, and only an account with the `admin` role reaches it;
 every other signed-in account is answered `403`.[^gate] Accounts and roles are described on
 [Accounts](accounts.md). The [Users](admin/users.md) and [API keys](admin/api-keys.md) screens each have a
-page covering the list, adding, editing and removal.
+page covering the list, adding, editing and removal, where the screen has them.
 
 ## Gate
 

@@ -34,7 +34,7 @@ rows = [
 
 An **API key** is a bearer credential an operator issues to themselves for a machine caller; it carries one
 or more abilities and, unless asked otherwise, an expiry date.[^issue] Issuing and revoking
-on the admin screen are described on [API keys](admin/api-keys.md), and what a caller does with a key on
+are described on [the API keys screen](admin/api-keys.md), and what a caller does with a key on
 [API](api.md).
 
 ## Form
