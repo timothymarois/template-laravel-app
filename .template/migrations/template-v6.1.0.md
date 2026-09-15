@@ -137,6 +137,13 @@ commands). **Read each one against your code, sentence by sentence**, and correc
 route you renamed, a check you removed, a default you changed, a screen you do not ship. A page for
 something your code does not have is deleted, together with its entry in `wiki.toml` and any link to it.
 
+**Three template pages declare a page family** — `commands.md`, `admin.md` and `api.md` carry `[family]` in
+their front matter — and `wiki check` refuses a member page that leaves that layout. A command, admin
+screen or endpoint page you add under one of them takes its layout; a heading or infobox label your page
+needs goes into the parent's `[family]` list for every member, not onto one page. Then run
+`./scripts/dev-wiki.sh families` and, for each parent of your own that it lists, follow the skill's
+**Organization** task: group pages of one kind, get each layout approved, then declare it.
+
 Rewrite `docs/wiki/pages/brief.md` and `index.md` for **your product**. Scope and external systems are
 in your code; who it is for and what it refuses are not — those are the owner's words, or `{missing}`.
 
@@ -217,6 +224,20 @@ Loop until no `states something and cites nothing` and no infobox-row problem re
 Words the check refuses even inside a quoted label or diagram label: *currently*, *the one*, *may*,
 *just*, *anyone*, *no one*, and pointing words such as *this repository*. Write interface text as code,
 and name the part of the system that acts.
+
+---
+
+### Already converted on an earlier draft of this release?
+
+A fork that took this release before it shipped is missing what landed since. Apply each, then run
+`./scripts/dev-wiki.sh build && ./scripts/dev-wiki.sh check`:
+
+1. `WIKI_VERSION=v0.5.0` in `scripts/dev-wiki.sh`, `wiki-builder@v0.5.0` in `.github/workflows/wiki.yml`
+   and `wrangler.jsonc`, then `./scripts/dev-wiki.sh sync` (the skill gains `references/page-families.md`).
+2. Delete `.claude/skills/maintaining-project-docs` (Part A, step 4) and take the new `AGENTS.md` (Part D).
+3. If you kept the template's API keys screen page, move `api-keys/issuing.md` to `admin/api-keys.md` and
+   relink it; compare your `commands.md`, `admin.md` and `api.md` with the template's `[family]` tables.
+4. Run the families review above on your own pages.
 
 ---
 

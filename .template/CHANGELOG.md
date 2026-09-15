@@ -27,6 +27,7 @@ Replaces the hand-written `docs/` tree with a [wiki-builder](https://github.com/
 - **`AGENTS.md`/`CLAUDE.md`** — new `Git conventions` section, `Documentation duties` rewritten for the wiki, skill table and gate description updated. Template-managed: take the file wholesale.
 - ⚠️ **`maintaining-project-docs` skill removed.** It prescribed a `docs/` layout (`BRIEF.md`, `concepts/`, `guides/`, `requirements/`) the wiki replaces, and triggered on every file under `docs/`, so it contradicted `writing-wiki-pages` on wiki pages. `docs/CODEMAP.md` now follows `AGENTS.md` → *Documentation duties*.
 - **`.template/ADOPT.md`** — adopting a fork now rewrites the wiki for the product; upgrading applies a migration's page changes to the fork's copy.
+- **Wiki pages organized into families** (wiki-builder v0.5.0). `commands.md`, `admin.md` and `api.md` declare `[family]`, so `wiki check` refuses a member page that leaves its parent's layout, and each parent's member table is generated. `api-keys/issuing.md` moved to `admin/api-keys.md`; the sidebar runs Start, Application, Site, Interface, Operations, Setup, Reference; the release-script pages list every refusal their script makes.
 
 ### Migration
 
