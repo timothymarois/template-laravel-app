@@ -8,7 +8,7 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
-## v6.1.0 - 09/14/2026
+## v6.1.0 - 09/15/2026
 
 Replaces the hand-written `docs/` tree with a [wiki-builder](https://github.com/timothymarois/wiki-builder) wiki: every page written from the code, every sentence cited, and `wiki check` in the gate. Minor: docs, tooling and agent rules only, no application code, schema or dependency change.
 
