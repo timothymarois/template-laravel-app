@@ -75,7 +75,7 @@ wiki-builder with `uvx`, so `pnpm check` needs `uv` on the machine.[^uv]
 [^uv]: `package.json` — `check` runs `pnpm check:wiki` with the other suites, and `check:wiki` runs
     `./scripts/dev-wiki.sh check`; `scripts/dev-wiki.sh` — runs
     `uvx --from "git+https://github.com/timothymarois/wiki-builder@$WIKI_VERSION" wiki` with
-    `WIKI_VERSION=v0.5.0` and `--root`.
+    `WIKI_VERSION=v0.6.0` and `--root`.
 [^manifest]: `template-manifest.json` — `version` and `repo`; `.template/migrations/` — one guide per
     release, applied in order by a fork.
 [^deploy]: `template-manifest.json` — `deploy.repository`, `deploy.productionUrl` and

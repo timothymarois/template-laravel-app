@@ -105,6 +105,7 @@ You write markdown; the generator writes the site. The wiki is `docs/wiki` unles
 | Its place | its path | it nests under `pages/billing/invoices.md` in the sidebar |
 | The sidebar | `<wiki>/wiki.toml` | sections name only the pages that **start** a branch |
 | Pictures | `<wiki>/images/` | with `PICTURES.toml`, recording what each shows |
+| PDFs | `<wiki>/files/` | documents a page links; a build publishes only those, at most 20 MB each |
 | The site | `<wiki>/site/` | generated, ignored by git, rebuilt before it is served |
 | Dates | `<wiki>/UPDATED.toml` | written by the build; a date moves only when its page does, and an audit date only with `wiki audit` |
 
@@ -376,8 +377,8 @@ A session ends thirty minutes after its last request.[^expiry]
 
 - **A reference names code**: the file and function where the thing happens — not a requirements page, a
   concepts page or another wiki page. **The gate refuses a reference to
-  a markdown document**: a page of prose is another claim that can be wrong exactly as yours is, and
-  citing it turns one error into two.
+  a markdown document, or to a PDF the wiki keeps**: a document is another claim that can be wrong exactly
+  as yours is, and citing it turns one error into two.
 - **How an outside service behaves is cited to its own documentation** — a host's settings, a platform's
   defaults: the thing the project does not run. Name the publisher, link the page by its title, and say
   what it states. A `{missing}` on such a claim means that documentation has not been checked yet.
@@ -387,7 +388,7 @@ A session ends thirty minutes after its last request.[^expiry]
 - **Configuration counts as code** where a number lives there: name the function that reads it *and* the
   row.
 - **References are the only place a path belongs**, and a user build strips them.
-- **Link other pages and pictures relative to your own file**, so the link works in the markdown and in
+- **Link other pages, pictures and PDFs relative to your own file**, so the link works in the markdown and in
   the browser. A link to a page the wiki does not have is drawn red, and the gate refuses it: write the
   page, or link to one that exists.
 
@@ -479,6 +480,20 @@ Each picture has an entry in `PICTURES.toml` naming what it depicts. **When a de
 the picture has not been redrawn, the gate fails.** Redraw it, or run
 `wiki bless <picture> "<why it is still true>"` when the change left the picture true. The reason is the
 record that the picture was looked at.
+
+## PDFs
+
+A page can hand the reader a document the project keeps, such as a policy, as a PDF. Put it in
+`<wiki>/files/`, beside `images/`, and link it with an ordinary markdown link relative to your page:
+`[Refund policy](../files/refund-policy.pdf)`. The site writes its size after the link and, on a computer,
+opens it over the page.
+
+- **Only a PDF directly in `files/` is published.** The gate refuses a link to a PDF anywhere else, a link to
+  one that does not exist, and a PDF over 20 MB.
+- **A PDF is not a citation.** A sentence that links one still carries its own reference to the code, and a
+  reference that links one is refused.
+- **Name the document in the link text**: the reader sees it before the size, and as the title of the PDF
+  when it opens.
 
 ## Truthfulness
 

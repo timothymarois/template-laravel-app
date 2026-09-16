@@ -150,11 +150,11 @@ digest = "9719b70e6196f6c647a69f3420a098469f6850a572ae3a0dee3baf572eaf2426"
 
 ["setup"]
 updated = "2026-09-15"
-digest = "a2472af3c9058be9a256f1353c97bdf8af17c89e5ece3fc5bbf0c0782e128839"
+digest = "e7529a20a6052dfbd4cdbade7d4d3e0d8843f26da21473341700d329da4d6f3b"
 
 ["setup/documentation-site"]
 updated = "2026-09-15"
-digest = "eb646575ff50d7b4a8df51b005763d1df346be4d2c7bafd6cd25309f1b9f0681"
+digest = "19c5f9977d3ac3dfb6d52cdc39d84cccfe63fcc47098355874f7aef87af63157"
 
 ["setup/tenancy"]
 updated = "2026-09-14"

@@ -8,6 +8,26 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.1.1 - 09/15/2026
+
+Moves the wiki to [wiki-builder v0.6.0](https://github.com/timothymarois/wiki-builder/releases/tag/v0.6.0): a page can hand a reader a PDF, and a locally served wiki runs its own script again. Patch: tooling and docs only, no application code, schema or dependency change.
+
+> ⚠️ Every fork acts: bump the pin, run `wiki sync`, then fix what `wiki check` names. The new PDF check refuses a link that would be dead once published.
+
+### Added
+
+- **PDFs in a wiki** — a fork keeps them in `docs/wiki/files/`, links one as an ordinary markdown link, and the build publishes only the PDFs a page links, with the file's size beside each link.
+- **One dialog for PDFs and pictures** — a plain click opens the document over the page with `Open in new tab`, `Download` and `Close`; a modifier click, a middle click and "open in new tab" still open it directly, and a touch-first device skips the dialog.
+
+### Fixed
+
+- ⚠️ **A locally served wiki runs its own script again.** `wiki serve` answered every `.js` with `text/plain`, so the browser refused to execute the site's own script: no search, theme button, diagrams or lightbox under `./scripts/dev-wiki.sh serve`. A published site was never affected.
+- **The draft banner is five words** — **Draft** — not approved yet, in place of a three-clause sentence.
+
+### Migration
+
+See [`migrations/template-v6.1.1.md`](migrations/template-v6.1.1.md). One part, every fork.
+
 ## v6.1.0 - 09/15/2026
 
 Replaces the hand-written `docs/` tree with a [wiki-builder](https://github.com/timothymarois/wiki-builder) wiki: every page written from the code, every sentence cited, and `wiki check` in the gate. Minor: docs, tooling and agent rules only, no application code, schema or dependency change.

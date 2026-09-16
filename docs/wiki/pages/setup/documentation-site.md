@@ -48,7 +48,7 @@ the site answers only on the domain given to the Worker.[^workersdev]
 
 | Dashboard setting | Value |
 |---|---|
-| Build command | `pip install "git+https://github.com/timothymarois/wiki-builder@v0.5.0" && wiki check && wiki publish _site`[^build] |
+| Build command | `pip install "git+https://github.com/timothymarois/wiki-builder@v0.6.0" && wiki check && wiki publish _site`[^build] |
 | Root directory | empty[^root] |
 | Deploy command | the default, `npx wrangler deploy`[^root] |
 
@@ -88,7 +88,7 @@ are added and the Worker is deployed again.{missing}
     [Configuration](https://developers.cloudflare.com/workers/wrangler/configuration/): `workers_dev`
     enables the `*.workers.dev` subdomain and defaults to `true`.
 [^build]: `wrangler.jsonc` — the comment recording the build command; `scripts/dev-wiki.sh` —
-    `WIKI_VERSION=v0.5.0`; Cloudflare Docs —
+    `WIKI_VERSION=v0.6.0`; Cloudflare Docs —
     [Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/): the build
     command runs before the deploy command.
 [^root]: Cloudflare Docs —
@@ -96,7 +96,7 @@ are added and the Worker is deployed again.{missing}
     root directory is optional and defines where the build command runs, and the deploy command defaults
     to `npx wrangler deploy`.
 [^check]: `package.json` — `check:wiki` runs `./scripts/dev-wiki.sh check`; `.github/workflows/wiki.yml` —
-    the `Wiki check` job runs `timothymarois/wiki-builder@v0.5.0` on every pull request and a push to `main`.[^basic]: Cloudflare Docs — [HTTP Basic Authentication](https://developers.cloudflare.com/workers/examples/basic-auth/):
+    the `Wiki check` job runs `timothymarois/wiki-builder@v0.6.0` on every pull request and a push to `main`.[^basic]: Cloudflare Docs — [HTTP Basic Authentication](https://developers.cloudflare.com/workers/examples/basic-auth/):
     Basic authentication sends credentials unencrypted and must be used over HTTPS; credentials are
     compared with `crypto.subtle.timingSafeEqual`, and a `401` with `WWW-Authenticate` makes the browser
     prompt.
