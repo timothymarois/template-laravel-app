@@ -30,3 +30,52 @@ processes:
     auto_restart: false
     restart_when_changed: []
     env: {}
+  horizon:
+    command: php artisan horizon
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  schedule:
+    command: php artisan schedule:work
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  reverb:
+    command: php artisan reverb:start
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  migrate:
+    command: php artisan migrate
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  migrate:fresh:
+    command: php artisan migrate:fresh --seed
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  db:seed:
+    command: php artisan db:seed
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  optimize:clear:
+    command: php artisan optimize:clear
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
