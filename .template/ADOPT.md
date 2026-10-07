@@ -11,7 +11,7 @@ rules live.
 
 > **One version line.** The documentation is a [wiki-builder](https://github.com/timothymarois/wiki-builder)
 > wiki under `docs/wiki/`, written to the `writing-wiki-pages` skill that `wiki sync` puts in
-> `.claude/skills/`, and pinned to one wiki-builder release in `scripts/dev-wiki.sh`. A fork tracks
+> `.agents/skills/`, and pinned to one wiki-builder release in `scripts/dev-wiki.sh`. A fork tracks
 > exactly one template version, in `template-manifest.json`; the wiki-builder release is a line in the
 > wrapper script, bumped by a template release when the tool moves.
 
@@ -38,7 +38,7 @@ infer rather than guessing.
      Leave its "version" as-is; do not bump it.
 
 3. MAKE THE DOCS OURS. The documentation is a wiki-builder wiki under docs/wiki/, and every page of it
-   describes THE TEMPLATE. Load the writing-wiki-pages skill (in .claude/skills/) and follow it; run the
+   describes THE TEMPLATE. Load the writing-wiki-pages skill (in .agents/skills/) and follow it; run the
    tool through ./scripts/dev-wiki.sh (needs uv). Rewrite the wiki for OUR product:
    - docs/wiki/wiki.toml: site.name becomes OUR product name.
    - docs/wiki/pages/brief.md and index.md describe the template. Rewrite both for us from THIS codebase.
