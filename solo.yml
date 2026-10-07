@@ -1,0 +1,32 @@
+# Visit https://soloterm.com to learn more
+name: template-laravel-app
+icon: null
+processes:
+  pnpm:dev:
+    command: pnpm dev
+    working_dir: null
+    auto_start: true
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  pnpm:check:
+    command: pnpm check
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  pnpm:check:php:
+    command: pnpm check:php
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
+  pnpm:check:js:
+    command: pnpm check:js
+    working_dir: null
+    auto_start: false
+    auto_restart: false
+    restart_when_changed: []
+    env: {}
