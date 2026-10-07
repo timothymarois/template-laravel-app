@@ -8,6 +8,21 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.1.2 - 10/07/2026
+
+Moves the vendored agent skills to `.agents/skills`, read by every agent CLI, and refreshes them to the current skill library. Patch: agent tooling and docs only, no application code, schema or dependency change.
+
+> ⚠️ Every fork acts: move its skills folder and add the links. A fork that edited a skill copy moves those rules into its docs first.
+
+### Changed
+
+- ⚠️ **Skills live in `.agents/skills`** — `.claude/skills`, `.codex/skills` and `.grok/skills` link to it, so Codex and Grok get the same skills Claude Code does.
+- **All thirteen catalog skills refreshed** to the current skill library; `writing-wiki-pages` is still installed by `wiki sync`, now into `.agents/skills`.
+
+### Migration
+
+See [`migrations/template-v6.1.2.md`](migrations/template-v6.1.2.md). One part, every fork.
+
 ## v6.1.1 - 09/15/2026
 
 Moves the wiki to [wiki-builder v0.6.0](https://github.com/timothymarois/wiki-builder/releases/tag/v0.6.0): a page can hand a reader a PDF, and a locally served wiki runs its own script again. Patch: tooling and docs only, no application code, schema or dependency change.
