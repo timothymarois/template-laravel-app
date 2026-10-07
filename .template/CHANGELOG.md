@@ -8,6 +8,18 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.1.3 - 10/07/2026
+
+Adds `solo.yml`, so Solo can run the app and its everyday artisan commands. Patch: local tooling only, no application code, schema or dependency change.
+
+### Added
+
+- **`solo.yml`** — `pnpm dev` starts with the project; `pnpm check` and its halves, `horizon`, `schedule:work`, `reverb:start`, `migrate`, `migrate:fresh --seed`, `db:seed` and `optimize:clear` start by hand.
+
+### Migration
+
+None — drop-in. A fork that uses Solo copies `solo.yml` and sets its own `name`.
+
 ## v6.1.2 - 10/07/2026
 
 Moves the vendored agent skills to `.agents/skills`, read by every agent CLI, and refreshes them to the current skill library. Patch: agent tooling and docs only, no application code, schema or dependency change.
