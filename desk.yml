@@ -78,3 +78,4 @@ processes:
     auto_restart: false
     restart_when_changed: []
     env: {}
+skills_git: track
