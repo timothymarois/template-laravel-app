@@ -32,7 +32,7 @@ Production-grade applications require more than just code—they need authentica
 
 **Developer Experience**
 
-- ✅ Solo dev runner — all processes in one terminal
+- ✅ Local commands in `desk.yml` — every dev process and check, run from Rundesk
 - ✅ Ziggy routes — use Laravel named routes directly in Vue
 - ✅ Hot reload — instant feedback during development
 
@@ -216,7 +216,6 @@ See `AGENTS.md` for detailed component guidelines.
 |---------|-------------|
 | `pnpm dev` | Start development server |
 | `pnpm check` | Run all checks (use before committing) |
-| `php artisan solo` | Run all dev processes in one terminal |
 
 <details>
 <summary><strong>All available commands</strong></summary>
@@ -249,15 +248,10 @@ For production error tracking, [Sentry](https://docs.sentry.io/platforms/php/gui
 
 **Health checks:** `/up` is the lightweight container/load-balancer gate. `/health` (via `spatie/laravel-health`) deep-checks each dependency — database, Redis, Horizon, queue, scheduler, and Reverb — for uptime monitoring; each check self-gates to the services a project actually runs. See [health checks](docs/wiki/pages/health.md).
 
-### Solo (Dev Runner)
+### Local commands (desk.yml)
 
-[Solo](https://github.com/soloterm/solo) runs all development processes in a single terminal UI:
-
-```bash
-php artisan solo
-```
-
-Configured commands: SSR server, queue worker, Reverb, scheduler, and more. See `config/solo.php`.
+`desk.yml` lists every local process and check: the dev server, queue worker, Reverb, scheduler,
+and the test, lint and build commands. Rundesk runs them from its sidebar.
 
 ---
 

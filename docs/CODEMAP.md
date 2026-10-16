@@ -173,7 +173,7 @@ person follows: [`wiki/pages/releases.md`](wiki/pages/releases.md).
 
 ## Config (config/ — 22)
 
-Notable: `release.php` (reads `version` from `composer.json`, served by `/release`), `seo.php` (head defaults + the `indexable` switch), `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`, `solo.php`.
+Notable: `release.php` (reads `version` from `composer.json`, served by `/release`), `seo.php` (head defaults + the `indexable` switch), `health.php`, `horizon.php`, `reverb.php`, `broadcasting.php`, `sentry.php`.
 
 ## Testing
 
