@@ -48,28 +48,9 @@ Schema::table('posts', function (Blueprint $table) {
 
 Declare an approved index with the schema change when its representative query plan needs it. Do not
 index every filtered or joined column by checklist; indexes add write and storage cost, and foreign
-key conventions or the database may already supply one.
-
-Incorrect:
-```php
-Schema::create('orders', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->constrained();
-    $table->string('status');
-    $table->timestamps();
-});
-```
-
-Illustrative candidates — keep only those supported by actual access paths:
-```php
-Schema::create('orders', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->index()->constrained();
-    $table->string('status')->index();
-    $table->timestamp('shipped_at')->nullable()->index();
-    $table->timestamps();
-});
-```
+key conventions or the database may already supply one. Read
+[Database performance](db-performance.md#add-indexes-from-representative-query-plans) for how to
+choose the index.
 
 ## Mirror Defaults in Model `$attributes`
 
@@ -99,7 +80,16 @@ public function down(): void
 }
 ```
 
-For intentionally irreversible migrations (e.g., destructive data backfills), leave a clear comment and require a forward fix migration instead of pretending rollback is supported.
+Do not write a `down()` method that pretends deleted or transformed user data can be restored. For an
+intentionally irreversible migration, follow the repository's convention, or fail loudly and require
+a forward fix:
+
+```php
+public function down(): void
+{
+    throw new RuntimeException('This data migration is intentionally irreversible.');
+}
+```
 
 ## Keep Migrations Focused
 
@@ -141,20 +131,3 @@ Schema::table('orders', function (Blueprint $table) {
 Correct — first prove the index matches the representative query plan and choose the engine's safe
 online operation when the table size requires it. Generate the migration with Artisan so its name
 and timestamp follow project tooling.
-
-## Keep Defaults and Rollbacks Honest
-
-Mirror a database default in model `$attributes` only when unsaved model instances must expose the
-same value. Otherwise the application has two defaults that can drift.
-
-Do not write a `down()` method that pretends deleted or transformed user data can be restored:
-
-```php
-public function down(): void
-{
-    throw new RuntimeException('This data migration is intentionally irreversible.');
-}
-```
-
-Use the repository's irreversible-migration convention when it has one. For safely reversible
-schema changes, keep a real `down()` path.

@@ -1,20 +1,18 @@
 # Debugging source basis
 
-This package is a Rundesk synthesis of framework documentation, the debugging tools each ecosystem
-ships, and practitioner writing on debugging as a skill. `SKILL.md` holds the language-agnostic
-workflow; the per-framework references hold the mechanics. Use this file to audit or update a claim.
+Use this file to audit or update a claim in `SKILL.md` or a stack reference; it is not procedure.
 
 **Read in this order of authority.** Framework documentation states what a tool reports; practitioner
-sources carry the judgement about which observation to make next. Verified in **August 2026**,
-against GCC 15.3, GDB 17.2, Clang/LLDB 24 development documentation, CMake 4.4, Laravel 13,
-Laravel Herd 1.28.0, Vue 3.5 / Nuxt 4, and Python 3.14.
+sources carry the judgement about which observation to make next. Claims were checked against GCC
+15.3, GDB 17.2, Clang/LLDB 24 development documentation, CMake 4.4, Laravel 13, Laravel Herd 1.28.0,
+Vue 3.5 / Nuxt 4, React 19, and Python 3.14.
 
 ## Debugging as a skill
 
 - [Some ways to get better at debugging](https://jvns.ca/blog/2022/08/30/a-way-to-categorize-debugging-skills/) —
   **Julia Evans**. The five categories: learn the codebase, learn the system, learn your tools, learn
   strategies, get experience. Her finding that experts do not use different strategies but "formed
-  more correct hypotheses and were more efficient at finding the fault" is why `SKILL.md` is a
+  more correct hypotheses and were more efficient at finding the fault" supports a
   hypothesis loop rather than a tool list.
 - [A debugging manifesto](https://jvns.ca/blog/2022/12/08/a-debugging-manifesto/) and
   [The Pocket Guide to Debugging](https://jvns.ca/blog/2022/12/21/new-zine--the-pocket-guide-to-debugging/) —
@@ -47,8 +45,7 @@ Laravel Herd 1.28.0, Vue 3.5 / Nuxt 4, and Python 3.14.
   [Windows](https://herd.laravel.com/docs/windows/advanced-usage/command-line), plus
   [PHP versions](https://herd.laravel.com/docs/macos/technology/php-versions) — map the exact site,
   isolated PHP binary and ini, debugger, logs, TLS state, and service status before changing the
-  application. They support the good/bad runtime-identity pair in `herd.md`. Verified on August 7,
-  2026 against the Herd 1.28.0 command surface recorded by the changelog below.
+  application. They support the good/bad runtime-identity pair in `herd.md`.
 - [Sites](https://herd.laravel.com/docs/macos/getting-started/sites) and
   [managing sites](https://herd.laravel.com/docs/macos/sites/managing-sites) — parked directories,
   explicit links, per-site isolation, and the documented destructive Site Manager delete action;
@@ -105,19 +102,20 @@ Laravel Herd 1.28.0, Vue 3.5 / Nuxt 4, and Python 3.14.
 - [pytest — how to invoke](https://docs.pytest.org/en/stable/how-to/usage.html) — `-x`, `--lf`,
   `--pdb`.
 
+## C++
+
 ### Build identity and optimized code
 
 - [GCC 15.3 debugging options](https://gcc.gnu.org/onlinedocs/gcc-15.3.0/gcc/Debugging-Options.html) and
   [GDB 17.2: optimized code](https://sourceware.org/gdb/download/onlinedocs/gdb.html/Optimized-Code.html) —
   `-g` is independent of optimization; GCC recommends `-Og` when no other optimization is required;
   optimized code can remove variables, reorder statements, inline calls, and break the apparent
-  source-to-machine sequence. Verified on 2026-08-07.
+  source-to-machine sequence.
 - [CMake `CXXFLAGS`](https://cmake.org/cmake/help/latest/envvar/CXXFLAGS.html),
   [`GENERATOR_IS_MULTI_CONFIG`](https://cmake.org/cmake/help/latest/prop_gbl/GENERATOR_IS_MULTI_CONFIG.html),
   and [`cmake --build`](https://cmake.org/cmake/help/latest/manual/cmake.1.html#build-a-project) —
   `CXXFLAGS` initializes the cache only on first configuration, multi-config generators ignore
-  `CMAKE_BUILD_TYPE`, and `--config` / `--verbose` select and expose the actual build. Verified
-  against CMake 4.4.2 on 2026-08-07.
+  `CMAKE_BUILD_TYPE`, and `--config` / `--verbose` select and expose the actual build.
 
 ### GDB and LLDB mechanics
 
@@ -131,27 +129,22 @@ Laravel Herd 1.28.0, Vue 3.5 / Nuxt 4, and Python 3.14.
   [auto-loading](https://sourceware.org/gdb/download/onlinedocs/gdb.html/Auto_002dloading.html) —
   expression evaluation can call target code and alter or crash the process; attach stops the
   process; `run` after attach kills it; `-nx` plus early `set auto-load off` avoids scripts from an
-  untrusted artifact. Verified on 2026-08-07; the
-  [release documentation index](https://sourceware.org/gdb/download/onlinedocs/) identified 17.2 as
-  the latest release manual.
+  untrusted artifact.
 - [LLDB tutorial](https://lldb.llvm.org/use/tutorial.html) and
   [GDB-to-LLDB command map](https://lldb.llvm.org/use/map.html), plus the
   [LLDB breakpoint option source](https://github.com/llvm/llvm-project/blob/main/lldb/source/Commands/Options.td) —
   precise breakpoints including the C++ exception form, watchpoints, all-thread backtraces, frame
-  selection, and `frame variable` as the non-expression path for frame data. Pages were checked on
-  2026-08-07 against LLDB 24 development docs; `breakpoint set -E c++` was also verified with Apple
-  LLDB 2100.0.17.108 command help.
+  selection, and `frame variable` as the non-expression path for frame data. `breakpoint set -E c++` is also in Apple LLDB's command help.
 
 ### Optimized and checked-library evidence
 
 - [GNU libstdc++ debug mode](https://gcc.gnu.org/onlinedocs/libstdc%2B%2B/manual/debug_mode_using.html) —
   `_GLIBCXX_DEBUG` changes standard-template sizes and behavior, so debug and release translation
-  units cannot exchange affected container instantiations safely. Verified with GCC 15.3 docs on
-  2026-08-07.
+  units cannot exchange affected container instantiations safely.
 - [What Every C Programmer Should Know About Undefined Behavior](https://blog.llvm.org/2011/05/what-every-c-programmer-should-know.html) —
   **Chris Lattner**, LLVM project founder, 2011. Maintainer explanation of how UB licenses
   optimization transformations inherited by C++; supports treating optimization-only behavior as
-  a UB lead rather than proof of an optimizer defect. Checked 2026-08-07.
+  a UB lead rather than proof of an optimizer defect.
 
 ### Cores and crash reports
 
@@ -160,64 +153,11 @@ Laravel Herd 1.28.0, Vue 3.5 / Nuxt 4, and Python 3.14.
   postmortem loading and build-ID/debug-link matching between an executable and symbols.
 - Linux man-pages [`core(5)`](https://man7.org/linux/man-pages/man5/core.5.html) and
   [`systemd-coredump(8)`](https://man7.org/linux/man-pages/man8/systemd-coredump.8.html) — dump
-  suppression causes, `core_pattern` routing, and core files as process memory images. The catalog's
-  sensitive-artifact rule is the safety conclusion from that memory-image contract. Checked
-  2026-08-07.
+  suppression causes, `core_pattern` routing, and core files as process memory images. The
+  sensitive-artifact rule in `cpp.md` follows from that memory-image contract.
 - Apple [Analyzing a crash report](https://developer.apple.com/documentation/xcode/analyzing-a-crash-report)
   and [Adding identifiable symbol names](https://developer.apple.com/documentation/xcode/adding-identifiable-symbol-names-to-a-crash-report) —
-  use the complete OS report, require full symbolication, and match binary / `dSYM` UUIDs. Checked
-  2026-08-07.
-
-## Related skills in this catalog
-
-The framework references here deliberately stop at *how to observe*. The rules a symptom violates
-live with the language:
-
-## What this package deliberately does not cite
-
-- Tool round-ups that list every debugger without saying which question each answers.
-- Version-specific screenshots and UI walkthroughs, which age faster than the tools.
-- "Top N debugging tips" posts with no mechanism behind the advice.
-
-## Herd
-
-- Herd command line for [macOS](https://herd.laravel.com/docs/macos/advanced-usage/herd-cli) and
-  [Windows](https://herd.laravel.com/docs/windows/advanced-usage/command-line) — site, PHP, TLS,
-  debugging, logging, and service commands; verified against Herd 1.28.0 on August 7, 2026
-- [Sites](https://herd.laravel.com/docs/macos/getting-started/sites) and
-  [managing sites](https://herd.laravel.com/docs/macos/sites/managing-sites) — parked versus linked
-  directories, per-site isolation, and the destructive Site Manager delete action; the
-  [changelog](https://herd.laravel.com/docs/macos/changelog/index) records `herd link` updating
-  `.env` `APP_URL` and later adding `--update-env` to force that rewrite
-- [macOS common issues](https://herd.laravel.com/docs/macos/troubleshooting/common-issues) and
-  [Windows common issues](https://herd.laravel.com/docs/windows/troubleshooting/common-issues) —
-  platform-specific 404, bad gateway, DNS, helper, and log evidence
-- [Dumps](https://herd.laravel.com/docs/macos/debugging/dumps) — early PHP extension injection and
-  capture-feature isolation
-- [Browser-versus-CLI PHP mismatch](https://github.com/beyondcode/herd-community/issues/831) and
-  [CLI ini mismatch](https://github.com/beyondcode/herd-community/issues/267) — Herd maintainer
-  diagnoses of real failures caused by a different PHP or ini on the command path
-
-## Laravel
-
-- [Error handling](https://laravel.com/docs/13.x/errors) — the `bootstrap/app.php` handler, `report()`, log context, log levels, throttling, and the `APP_DEBUG` production warning
-- [Logging](https://laravel.com/docs/13.x/logging) · [Telescope](https://laravel.com/docs/13.x/telescope) — "not recommended for production environments" · [Pulse](https://laravel.com/docs/13.x/pulse)
-- [Queues](https://laravel.com/docs/13.x/queues) — failed jobs, `failed()`, `afterCommit`, timeout vs retry_after
-- [Configuration](https://laravel.com/docs/13.x/configuration) — the `config:cache` / `env()` warning
-- [Eloquent](https://laravel.com/docs/13.x/eloquent) — `preventLazyLoading`, and mass operations not firing events
-- [Nightwatch vs Telescope](https://nightwatch.laravel.com/nightwatch-vs-telescope) — which tool answers which question
-- [Debugging and logging in Laravel applications](https://laravel-news.com/debugging-and-logging-in-laravel-applications) — Laravel News
-
-## Python
-
-- [`pdb`](https://docs.python.org/3/library/pdb.html) — `breakpoint()`, `PYTHONBREAKPOINT`, post-mortem, conditional breakpoints, `display`, `interact`, `-m pdb -p`
-- [Python Development Mode](https://docs.python.org/3/library/devmode.html) — every check `-X dev` enables, and the faulthandler caveat about hangs
-- [`faulthandler`](https://docs.python.org/3/library/faulthandler.html) · [`tracemalloc`](https://docs.python.org/3/library/tracemalloc.html) — snapshot comparison for leaks
-- [`traceback`](https://docs.python.org/3/library/traceback.html) · [`logging`](https://docs.python.org/3/library/logging.html) — `logger.exception`
-- [`profile` and `cProfile`](https://docs.python.org/3/library/profile.html) — measure before optimizing
-- [py-spy](https://github.com/benfred/py-spy) — `dump` for hung processes, `--locals`, production safety
-- [Python Programming FAQ](https://docs.python.org/3/faq/programming.html) — circular imports, `importlib.reload` and stale instances
-- [pytest — how to invoke](https://docs.pytest.org/en/stable/how-to/usage.html) — `-x`, `--lf`, `--pdb`
+  use the complete OS report, require full symbolication, and match binary / `dSYM` UUIDs.
 
 ## React
 
@@ -239,26 +179,29 @@ live with the language:
   establish fallback capture, which is why a boundary can hide a failure.
 - The [error decoder](https://react.dev/errors) maps a minified production error code to its message.
 
-The symptom-ordering tables and the trap list are this package's operational conclusions, not claims
-made by those pages. Links checked 23 August 2026.
+The symptom-ordering tables and the trap lists are operational conclusions, not claims made by
+those pages.
 
-## Vue
+## C# and Godot
 
-- [Vue DevTools features](https://devtools.vuejs.org/getting-started/features) — what each tab answers
-- [Vue DevTools FAQ](https://devtools-v6.vuejs.org/guide/faq) — lazy reactivity and force refresh
-- [Reactivity in depth](https://vuejs.org/guide/extras/reactivity-in-depth) — `onRenderTracked` / `onRenderTriggered` and the `debugger` technique
-- [Composition API lifecycle hooks](https://vuejs.org/api/composition-api-lifecycle) · [Watchers](https://vuejs.org/guide/essentials/watchers.html) — `onTrack` / `onTrigger`
-- [Server-side rendering](https://vuejs.org/guide/scaling-up/ssr.html) — the three documented mismatch causes and the automatic-recovery cost
-- [Performance](https://vuejs.org/guide/best-practices/performance.html) — `app.config.performance`, prop stability
-- [Nuxt data fetching](https://nuxt.com/docs/4.x/getting-started/data-fetching) — the double-fetch warning
-- [Debugging guide: why your Vue component isn't updating](https://michaelnthiessen.com/debugging-guide-why-your-component-isnt-updating) — **Michael Thiessen**; the practical checklist this page's first table is built on
-## Attribution
+- [MSBuild binary log](https://learn.microsoft.com/visualstudio/msbuild/obtaining-build-logs-with-msbuild#save-a-binary-log) —
+  `-bl` records the complete evaluation and execution of a build, replayable as text.
+- [dotnet-counters](https://learn.microsoft.com/dotnet/core/diagnostics/dotnet-counters) and
+  [dotnet-dump](https://learn.microsoft.com/dotnet/core/diagnostics/dotnet-dump) — live runtime
+  counters without a rebuild, and dump capture with `clrthreads`, `clrstack` and `dumpheap`.
+- [`Dictionary<TKey,TValue>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2#remarks)
+  and [`string.GetHashCode`](https://learn.microsoft.com/dotnet/api/system.string.gethashcode#remarks) —
+  enumeration order is undefined, and string hash codes are randomized per process.
+- Godot's [C# basics](https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_basics.html)
+  and [`GodotObject.IsInstanceValid`](https://docs.godotengine.org/en/stable/classes/class_@globalscope.html#class-globalscope-method-is-instance-valid) —
+  the C# wrapper over a native object, IDE attach, and checking whether a freed object is still valid.
 
-This package adapts `skills/debugging-code/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.
+## Excluded sources
 
-Material modifications: the routing description narrowed against its neighbouring packages in this
-catalog; stack pointers retargeted to the `using-` packages and marked as non-dependencies;
-`references/react.md` added, written from React's official documentation, because the upstream
-package covered Vue but not React; and a maintainer validation record added.
+- Tool round-ups that list every debugger without saying which question each answers.
+- Version-specific screenshots and UI walkthroughs, which age faster than the tools.
+- "Top N debugging tips" posts with no mechanism behind the advice.
+
+## License
+
+Portions are adapted from material published by Rundesk AI under the MIT License.

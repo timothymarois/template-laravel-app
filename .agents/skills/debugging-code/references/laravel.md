@@ -77,7 +77,7 @@ config, so you can call the action or the query directly with no HTTP layer in t
 | Job fails with "model not found" intermittently | Dispatched inside a transaction without `afterCommit()` |
 | Job never runs at all | No worker on that queue/connection, or maintenance mode |
 | Job fails silently | Nothing implements `failed()`; check `queue:failed` |
-| 419 on a form | Session or CSRF — `PreventRequestForgery`, cookie domain, session driver |
+| 419 on a form | Session or CSRF — the CSRF middleware (`PreventRequestForgery` in Laravel 13, `ValidateCsrfToken` or `VerifyCsrfToken` before it), cookie domain, session driver |
 | 404 on an existing route | Stale route cache, or route-model binding found nothing |
 | Page slow, no obvious query | N+1. Turn on `preventLazyLoading` and re-run |
 | Works in tinker, fails over HTTP | Different environment, or an authenticated user with different authorization |

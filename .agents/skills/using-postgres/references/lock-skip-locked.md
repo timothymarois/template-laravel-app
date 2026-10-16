@@ -28,6 +28,9 @@ update jobs set status = 'processing' where id = $1;
 commit;
 ```
 
+`skip locked` returns an inconsistent view by design — it hides rows other transactions hold. That
+is right for a work queue and wrong for a report or a count.
+
 Complete queue pattern:
 
 ```sql

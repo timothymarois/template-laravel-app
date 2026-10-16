@@ -65,8 +65,6 @@ $posts = Post::select('id', 'title', 'user_id', 'created_at')
     ->get();
 ```
 
-When selecting columns on eager-loaded relationships, always include the foreign key column or the relationship won't match.
-
 ## Chunk Large Datasets
 
 Never load thousands of records at once. Use chunking for batch processing.
@@ -88,11 +86,12 @@ User::where('subscribed', true)->chunk(200, function ($users) {
 });
 ```
 
-Use `chunkById()` when modifying records during iteration — standard `chunk()` uses OFFSET which shifts when rows change:
+Use `chunkById()` when processing changes the filtered data — standard `chunk()` uses OFFSET, so
+rows that leave the filter shift the pages and others are skipped:
 
 ```php
-User::where('active', false)->chunkById(200, function ($users) {
-    $users->each->delete();
+User::whereNull('processed_at')->chunkById(500, function ($users) {
+    $users->each->update(['processed_at' => now()]);
 });
 ```
 
@@ -156,26 +155,11 @@ $posts = Post::withCount([
 ])->get();
 ```
 
-## Use `cursor()` for Memory-Efficient Iteration
+## Choose the Iteration Primitive by Behavior
 
-For read-only iteration over large result sets, `cursor()` loads one record at a time via a PHP generator.
-
-Incorrect:
-```php
-$users = User::where('active', true)->get();
-```
-
-Correct:
-```php
-foreach (User::where('active', true)->cursor() as $user) {
-    ProcessUser::dispatch($user->id);
-}
-```
-
-Use `cursor()` for read-only iteration. Use `chunk()` / `chunkById()` when modifying records.
-
-`cursor()` cannot eager load relationships and PDO may still buffer raw results. Use `lazy()` when
-relations are needed or when cursor buffering becomes the limiting factor.
+For read-only iteration over large result sets, use `cursor()` or `lazy()` instead of `get()`. Read
+[Collections](collections.md#choose-cursor-vs-lazy-correctly) for which one fits; `cursor()` cannot
+eager load relationships and PDO may still buffer raw results.
 
 ## No Queries in Blade Templates
 
@@ -215,25 +199,4 @@ Correct — include the related key and the foreign key needed for matching:
 $posts = Post::select(['id', 'author_id', 'title'])
     ->with('author:id,name')
     ->get();
-```
-
-## Choose the Growing-Read Primitive by Behavior
-
-Use `lazy()` when relations must be eager loaded, `cursor()` for one-model-at-a-time iteration with
-no eager loading, and `chunkById()` / `lazyById()` when processing changes the filtered data.
-
-Incorrect — offset pages can skip rows after the update moves them out of the filter:
-
-```php
-User::whereNull('processed_at')->chunk(500, function ($users) {
-    $users->each->update(['processed_at' => now()]);
-});
-```
-
-Correct:
-
-```php
-User::whereNull('processed_at')->chunkById(500, function ($users) {
-    $users->each->update(['processed_at' => now()]);
-});
 ```

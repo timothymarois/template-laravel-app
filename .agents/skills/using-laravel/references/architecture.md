@@ -2,7 +2,7 @@
 
 ## Single-Purpose Action Classes
 
-Extract discrete business operations into invokable Action classes.
+Extract discrete business operations into Action classes.
 
 Do this when the operation has multiple callers, coordinated steps, meaningful side effects, or an
 independent test boundary. A small CRUD action can remain in its controller; do not create an action

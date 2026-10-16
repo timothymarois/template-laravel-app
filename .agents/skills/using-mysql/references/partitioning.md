@@ -43,7 +43,8 @@ Partitioned InnoDB tables do not support foreign keys:
 - A partitioned table cannot define foreign key constraints to other tables.
 - Other tables cannot reference a partitioned table with a foreign key.
 
-If you need foreign keys, partitioning may not be an option.
+If you need foreign keys, partitioning may not be an option. Partitioned tables also cannot hold a
+`FULLTEXT` index or spatial columns.
 
 ## When Partitioning Helps vs Hurts
 **Helps:**
@@ -55,7 +56,7 @@ If you need foreign keys, partitioning may not be an option.
 **Hurts:**
 - Small tables (overhead without benefit)
 - Queries that don't filter by the partition key (no pruning)
-- Workloads that require foreign keys
+- Workloads that require foreign keys or `FULLTEXT` search
 - Complex UNIQUE key requirements (partition key columns must be included everywhere)
 
 ## Management Operations

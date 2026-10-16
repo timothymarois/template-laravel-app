@@ -10,9 +10,9 @@
 | Cross-component application state | Pinia | It is server data needing cache/refetch semantics |
 | Request/response transport | API function | A framework data layer already owns it |
 
-Vue explicitly supports extracting composables for organization as components grow. Anthony Fu's
-practitioner rule is “one thing at a time”: compose small connections instead of building one helper
-that fetches, routes, toasts, and mutates shared state.
+Vue explicitly supports extracting composables for organization as components grow. Do one thing
+at a time: compose small connections instead of building one helper that fetches, routes, toasts,
+and mutates shared state.
 
 ```ts
 // Bad: presentation, transport, cancellation, and transformation are inseparable.

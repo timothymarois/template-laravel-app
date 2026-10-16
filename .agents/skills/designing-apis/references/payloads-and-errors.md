@@ -35,9 +35,9 @@ generates. Problem Details is the specified default: a JSON object with `type`, 
   "type": "https://example.com/probs/validation",
   "title": "The invoice could not be created",
   "status": 422,
-  "code": "INVOICE_NUMBER_TAKEN",
+  "code": "INVOICE_INVALID",
   "errors": [
-    {"field": "number", "code": "TAKEN", "detail": "Invoice number 2026-001 is already in use."}
+    {"field": "due_date", "code": "BEFORE_ISSUE_DATE", "detail": "due_date must be on or after issue_date."}
   ]
 }
 ```

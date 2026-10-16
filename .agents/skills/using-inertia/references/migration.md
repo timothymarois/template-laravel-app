@@ -55,5 +55,3 @@ function layout components assigned directly to `.layout` must be wrapped in an 
 
 Translate older advice only after checking the v3 guide. The protocol's prop evaluation and redirect
 model remain useful; identifiers and configuration may not.
-
-mapping.

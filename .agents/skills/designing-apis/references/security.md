@@ -55,8 +55,8 @@ redirects. Do not rely on a blocklist of private ranges alone.
 
 - Do not return an internal error, stack trace, or database message to a caller.
 - Keep authentication failures uniform, so response differences do not enumerate valid accounts.
-- Decide once whether a forbidden resource answers `403` or `404`, and apply it consistently;
-  inconsistency is what reveals existence.
+- Decide once whether a forbidden resource answers `403` or `404`, per
+  [resources-and-methods.md](resources-and-methods.md#pick-the-status-code-that-matches-the-outcome).
 - Do not put secrets or identifiers in URLs, which are logged by everything in the path.
 - Ship no endpoint you cannot name. An undocumented, forgotten, or duplicated-in-staging endpoint is
   an attack surface nobody is maintaining, which is why the inventory in

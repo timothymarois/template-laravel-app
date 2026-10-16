@@ -2,17 +2,16 @@
 
 Use this mapping to verify a rule before changing it. The MySQL Reference Manual establishes InnoDB
 behavior and the syntax contracts; the release model establishes what "supported" means. Links are
-to the 8.4 LTS manual and were opened and checked on 23 August 2026.
+to the 8.4 LTS manual.
 
 ## Version scope
 
 - [MySQL releases: Innovation and LTS](https://dev.mysql.com/doc/refman/8.4/en/mysql-releases.html)
   establishes the two release tracks: an LTS series that receives only bug fixes within the series,
-  and Innovation releases that may add features and change behavior. On 23 August 2026 the current
-  LTS was 8.4, with 8.4.11 the latest community server in that series.
-- This package is written against 8.4 LTS and InnoDB. Confirm the server with
+  and Innovation releases that may add features and change behavior.
+- These rules are written against 8.4 LTS and InnoDB. Confirm the server with
   `select version(), @@default_storage_engine` before applying anything below described as
-  version-sensitive. The guardrail in `SKILL.md` requiring version-specific behavior to be named
+  version-sensitive. The first step in `SKILL.md`, naming the version an answer assumes,
   exists because several rules here changed between 5.7, 8.0, and 8.4.
 
 ## Schema design
@@ -44,8 +43,8 @@ to the 8.4 LTS manual and were opened and checked on 23 August 2026.
 - [Multiple-column indexes](https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html)
   establishes the leftmost-prefix rule: an index on `(a, b, c)` serves lookups on `a`, `(a, b)`, and
   `(a, b, c)` but not on `b` alone. It is the source of the composite-order rule in `SKILL.md` and
-  `composite-indexes.md`, and of the rule in `query-optimization-pitfalls.md` that a range predicate
-  stops the index being used for ordering on later columns.
+  `composite-indexes.md`, including that a range predicate stops the index filtering on later
+  columns.
 - [Column indexes](https://dev.mysql.com/doc/refman/8.4/en/column-indexes.html) establishes prefix
   indexes on string columns and their length limits, supporting `covering-indexes.md` and the
   long-string guidance in `composite-indexes.md`.
@@ -53,8 +52,8 @@ to the 8.4 LTS manual and were opened and checked on 23 August 2026.
   `FULLTEXT` indexes, natural-language and boolean modes, and the default minimum word length. It
   supports `fulltext-indexes.md`.
 - [The sys schema `schema_unused_indexes` view](https://dev.mysql.com/doc/refman/8.4/en/sys-schema-unused-indexes.html)
-  establishes the supported way to find indexes with no recorded reads, which is the mechanism
-  behind the audit step in `index-maintenance.md` and `SKILL.md`. It reports only what
+  establishes the supported way to find indexes with no recorded reads, used by the audit step in
+  `index-maintenance.md` and `SKILL.md`. It reports only what
   Performance Schema has observed since the last restart — a limitation `index-maintenance.md` must
   keep, because an index used only by a monthly job looks unused for four weeks.
 
@@ -64,15 +63,11 @@ to the 8.4 LTS manual and were opened and checked on 23 August 2026.
   the `type` column values including `ALL`, and the `Extra` values `Using filesort` and
   `Using temporary`. It is the source of the red-flag list in `SKILL.md` and `explain-analysis.md`.
   The manual is explicit that `Using filesort` does not necessarily mean a disk file, which is why
-  `explain-analysis.md` treats these as signals to investigate rather than as defects.
+  `SKILL.md` treats these as signals to investigate rather than as defects.
 - [Obtaining execution plan information](https://dev.mysql.com/doc/refman/8.4/en/explain.html)
   establishes `EXPLAIN ANALYZE`, which executes the statement and reports actual timings and row
   counts. That it executes is the reason it must not be aimed at a write statement outside a
   transaction that is rolled back.
-- [Optimizer hints](https://dev.mysql.com/doc/refman/8.4/en/optimizer-hints.html) establishes the
-  supported hint syntax and scope. It backs the position in `query-optimization-pitfalls.md` that
-  hints are a last resort after statistics and indexing have been addressed, because a hint freezes
-  a decision the optimizer would otherwise revisit as data changes.
 - [`LIMIT` optimization](https://dev.mysql.com/doc/refman/8.4/en/limit-optimization.html) establishes
   how the server handles `LIMIT` with `ORDER BY`, and is the basis for preferring cursor or keyset
   pagination over large `OFFSET` values in `query-optimization-pitfalls.md`.
@@ -96,8 +91,7 @@ to the 8.4 LTS manual and were opened and checked on 23 August 2026.
   deadlocks caused by inconsistent ordering or missing indexes.
 - [AUTO_INCREMENT handling in InnoDB](https://dev.mysql.com/doc/refman/8.4/en/innodb-auto-increment-handling.html)
   establishes the three `innodb_autoinc_lock_mode` values, that interleaved mode (2) is the default
-  in 8.0 and later, and the replication implications of each. `deadlocks.md` must keep the
-  qualification that mode 2 is only safe for a workload that tolerates non-consecutive values.
+  in 8.0 and later, and the replication implications of each.
 
 ## Partitioning
 
@@ -108,10 +102,7 @@ to the 8.4 LTS manual and were opened and checked on 23 August 2026.
 - [Partitioning limitations](https://dev.mysql.com/doc/refman/8.4/en/partitioning-limitations.html)
   establishes the remaining restrictions verbatim: "Partitioned tables using the `InnoDB` storage
   engine do not support foreign keys." It also states that partitioned tables support neither
-  `FULLTEXT` indexes nor spatial column types, and caps a table at 8192 partitions. These are
-  limitations `partitioning.md` must preserve rather than soften: the foreign-key restriction rules
-  partitioning out for many normalized schemas, and the `FULLTEXT` restriction means the technique
-  cannot be combined with the search guidance in `fulltext-indexes.md` on the same table.
+  `FULLTEXT` indexes nor spatial column types, and caps a table at 8192 partitions.
 
 ## Operations
 
@@ -123,22 +114,23 @@ to the 8.4 LTS manual and were opened and checked on 23 August 2026.
 - [Too many connections](https://dev.mysql.com/doc/refman/8.4/en/too-many-connections.html)
   establishes `max_connections`, the extra connection reserved for a privileged account, and the
   per-connection memory cost. It supports `connection-management.md`.
+- [Replica server options](https://dev.mysql.com/doc/refman/8.4/en/replication-options-replica.html)
+  establishes the 8.4 defaults for parallel apply (`replica_parallel_workers=4`, `LOGICAL_CLOCK`,
+  `replica_preserve_commit_order=ON`) and the deprecation of `replica_parallel_type`. It states no
+  `binlog_format` requirement for parallel apply.
 - [Replication replica status](https://dev.mysql.com/doc/refman/8.4/en/replication-administration-status.html)
   establishes how replication delay is observed and that `Seconds_Behind_Source` measures the
   applied position, not the round trip. `replication-lag.md` keeps that distinction, since the
   metric can read zero while a replica is stalled on a long transaction.
 
-## Catalog conclusions
+## Rules of thumb
 
-These are this package's judgments, not claims made by the manual:
+These are judgments, not claims made by the manual:
 
 - The numeric thresholds — partition time-series tables above roughly 50 million rows, other tables
   above roughly 100 million, batch inserts of 500 to 5000 rows — are operational rules of thumb.
   MySQL publishes no such numbers, and they must be re-derived from the actual workload rather than
   applied as limits.
-- The workflow order in `SKILL.md` and the preference for the smallest measurable change are catalog
-  process, not database behavior.
-- Requiring explicit human approval before a drop, delete, or truncate is a catalog safety rule.
 - Recommending `gh-ost` or `pt-online-schema-change` for very large tables points at third-party
   tools outside the manual; verify their current compatibility with the server version before use.
 
@@ -146,14 +138,9 @@ Omitted on purpose: undated tuning posts, `my.cnf` values copied without the har
 they were measured on, advice that does not state which major version it applies to, and MyISAM-era
 guidance presented as current InnoDB behavior.
 
-## Attribution
+## License
 
-The guidance adapted into this package originates with PlanetScale, published under the MIT License
-and republished by Rundesk AI in the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, path `skills/mysql-patterns/`. The upstream package
-carried its notice as an in-package `LICENSE.txt`, which this catalog's package contract does not
-permit; the notice is therefore reproduced here in full:
+Portions are adapted from material under this notice:
 
 ```text
 MIT License
@@ -178,13 +165,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-Material modifications: renamed to `using-mysql`; per-file YAML metadata removed; the routing
-description and workflow adapted to this catalog's package contract; this source map authored, as
-the upstream package shipped no `references/sources.md`; and a maintainer validation record added.
-
-## Attribution
-
-This package adapts `skills/mysql-patterns/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.

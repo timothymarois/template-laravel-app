@@ -1,10 +1,7 @@
 # Data Modelling Advanced Patterns
 
 Polymorphism, hierarchies, temporal history, JSON, denormalization, pagination, and safe schema
-change. DDL is written in SQLite dialect because it is the smallest — the shapes are portable, the
-spellings are not. `datetime('now')` is `now()` in PostgreSQL and `NOW()` in MySQL; `TEXT`
-timestamps are `timestamptz` and `DATETIME`; `INTEGER PRIMARY KEY` is `bigserial` and
-`BIGINT UNSIGNED AUTO_INCREMENT`.
+change. DDL is SQLite dialect; `SKILL.md` lists the spellings to translate.
 
 The indexes shown here exist to say *which access path the model requires*, not
 to teach index tuning.
@@ -170,7 +167,7 @@ CREATE INDEX idx_categories_path ON categories(path);
 -- Descendants: one index range scan.
 SELECT * FROM categories WHERE path LIKE '/1/5/%';
 
--- Ancestors: no index, but the row count is the depth.
+-- Ancestors: cannot use the index, so it scans every row; fine for small trees only.
 SELECT * FROM categories WHERE '/1/5/12/' LIKE path || '%' ORDER BY depth;
 ```
 
@@ -179,7 +176,8 @@ subtree move rewrites `path` on every descendant, and the paths are a denormaliz
 but your code keeps consistent. Good for trees that are read constantly and restructured rarely.
 
 The `LIKE '/1/5/%'` prefix only uses the index if the pattern is left-anchored and the collation
-requires.
+cooperates; each engine documents what it requires (a binary or `C` collation, or a pattern operator
+class).
 
 ### Closure table
 
@@ -223,6 +221,8 @@ Every hierarchy query is a plain indexed join, at the cost of O(depth) rows per 
 delete-and-reinsert of the affected pairs on every move. Do not maintain a closure table with an
 insert trigger that only writes the self-reference — that is the common half-implementation, and it
 makes every ancestor query silently return nothing.
+
+## History
 
 ### Versioned rows (SCD Type 2)
 
@@ -269,7 +269,7 @@ was, never who changed it. That is the audit log, in
 
 PostgreSQL and SQLite both take the `WHERE` clause shown. MySQL has no partial indexes: the
 equivalent is a generated column that holds the business key only while the row is open and is
-`NULL` otherwise, with a `UNIQUE` on it — nulls do not collide, so closed rows do not compete. See
+`NULL` otherwise, with a `UNIQUE` on it — nulls do not collide, so closed rows do not compete.
 
 ### Bitemporal
 
@@ -329,8 +329,7 @@ reader.
 
 Nothing constrains what is *inside* the document. There is no `NOT NULL` on `$.amount_cents`, no
 foreign key from `$.user_id`, and no type. Every read has to cope with absent and wrong-typed
-fields. PostgreSQL's `jsonb` and MySQL's `JSON` add typed storage and richer indexing — see those
-skills.
+fields. PostgreSQL's `jsonb` and MySQL's `JSON` add binary storage and richer indexing.
 
 ## Denormalization
 
@@ -384,7 +383,8 @@ END;
 
 Incremental maintenance drifts — a missed `UPDATE` trigger, a `DELETE` nobody handled, a bulk load
 that bypassed the trigger. Keep a recomputation query, run it on a schedule, and compare. A summary
-nobody can rebuild is a number nobody can trust. PostgreSQL's materialized views do this properly;
+nobody can rebuild is a number nobody can trust. PostgreSQL's materialized views make the rebuild a
+single `REFRESH MATERIALIZED VIEW`.
 
 ## Pagination
 
@@ -415,7 +415,8 @@ that is bounded and small.
 
 ## Schema Change
 
-lock. What the *model* owes is a sequence in which every intermediate state is valid for the code
+The mechanics of applying a change without downtime are engine-specific — online DDL, a table
+rebuild, which DDL takes which lock. What the *model* owes is a sequence in which every intermediate state is valid for the code
 running against it.
 
 ### Adding a required column

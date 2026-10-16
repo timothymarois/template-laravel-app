@@ -10,8 +10,6 @@ why.
 
 Read only the files mapped to the current task. Verify exact API syntax and version-sensitive
 behavior against the installed framework or the official documentation for the installed version.
-Where a documentation-search tool is available in the environment, use it as an accelerator; never
-assume one exists, and never let its absence become a reason to guess.
 
 ## Consistency First
 
@@ -76,7 +74,7 @@ Cross-cutting changes often need more than one rule file.
 - Check the installed framework version before using a rule's version-sensitive API. New Laravel
   11+ applications use streamlined configuration, while upgraded applications may retain older
   kernel and exception-handler boundaries.
-- Choosing test layers and auditing coverage is a separate, language-neutral concern; this package
-  owns only the Laravel-specific testing integration in its testing rule file.
+- Choosing test layers and auditing coverage is a separate, language-neutral concern; this skill
+  covers only the Laravel-specific testing integration in its testing rule file.
 - Read [`references/sources.md`](references/sources.md) only when auditing or changing a factual
   claim or example.

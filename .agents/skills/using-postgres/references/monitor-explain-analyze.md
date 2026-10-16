@@ -25,12 +25,15 @@ select * from orders where customer_id = 123 and status = 'pending';
 -- Execution Time: 450.500 ms
 ```
 
+`analyze` executes the statement. Wrap an `insert`, `update`, or `delete` in `begin; … rollback;`
+before explaining it, or it changes the data.
+
 Key things to look for:
 
 ```sql
--- Seq Scan on large tables = missing index
+-- Seq Scan on a large table returning few rows = likely missing index
 -- Rows Removed by Filter = poor selectivity or missing index
--- Buffers: read >> hit = data not cached, needs more memory
+-- Buffers: read >> hit = data not cached (cold cache or working set larger than memory)
 -- Nested Loop with high loops = consider different join strategy
 -- Sort Method: external merge = work_mem too low
 ```

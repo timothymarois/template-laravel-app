@@ -22,10 +22,10 @@ Restore with a copy, never with version control:
 
 ```sh
 # Good: the working tree is untouched, including anything uncommitted.
-cp src/pricing.py /tmp/pricing.py.bak
+cp src/pricing.py <scratch>/pricing.py.bak
 <edit src/pricing.py to break the behavior>
 <run the test; observe the failure>
-cp /tmp/pricing.py.bak src/pricing.py
+cp <scratch>/pricing.py.bak src/pricing.py
 
 # Bad: discards every uncommitted change in that file, including work you did not make.
 git checkout -- src/pricing.py

@@ -38,7 +38,7 @@ WHERE name COLLATE utf8mb4_0900_as_cs = 'José';
 ```sql
 -- Find columns still using utf8
 SELECT table_name, column_name FROM information_schema.columns
-WHERE table_schema = 'mydb' AND character_set_name = 'utf8';
+WHERE table_schema = 'mydb' AND character_set_name IN ('utf8', 'utf8mb3');  -- 8.0.30+ reports utf8mb3
 -- Convert
 ALTER TABLE users CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 ```

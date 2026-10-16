@@ -23,14 +23,6 @@ ALTER TABLE events
 
 Always use `->>` (unquote) in WHERE clauses, otherwise you compare against `"foo"` (with quotes).
 
-Tip: the generated column example above can be written more concisely as:
-
-```sql
-ALTER TABLE events
-  ADD COLUMN event_type VARCHAR(50) GENERATED ALWAYS AS (data->>'$.type') VIRTUAL,
-  ADD INDEX idx_event_type (event_type);
-```
-
 ## Multi-Valued Indexes (MySQL 8.0.17+)
 If you store arrays in JSON (e.g., `tags: ["electronics","sale"]`), MySQL 8.0.17+ supports multi-valued indexes to index array elements:
 

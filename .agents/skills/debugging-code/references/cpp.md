@@ -1,7 +1,8 @@
 # Debugging C++
 
-Use these mechanics with the hypothesis loop in `SKILL.md`. Keep language rules and prevention in
-this reference chooses evidence and explains what the tools can mislead you about.
+Use these mechanics with the hypothesis loop in `SKILL.md`. Language rules and prevention belong to
+the language's own guidance; this reference chooses evidence and explains what the tools can mislead
+you about.
 
 ## Match the symptom to the first useful evidence
 
@@ -14,12 +15,14 @@ this reference chooses evidence and explains what the tools can mislead you abou
 | A value changes unexpectedly | A data watchpoint on the smallest stable field or address |
 | Exception appears far from its throw | An exception catchpoint, then the first caller in project code |
 | Iterator, bounds, or container contract failure | A fully rebuilt standard-library debug or hardening variant |
+| Memory, undefined-behavior, or race symptom | A separate sanitizer build, then its first complete report |
 
 Pick the instrument that can distinguish the leading hypotheses, then reduce the failing input or
 call path. Line-by-line stepping before that decision produces volume without testing a cause.
 
-proof. Return here with the instrumented artifact and report; do not maintain a second sanitizer
-recipe in this reference.
+For a sanitizer, follow the project's sanitizer preset or the toolchain's documentation for flags
+and report handling, in a build tree separate from the failing one. Return here with the
+instrumented artifact and its first complete report.
 
 ## Prove what was built
 

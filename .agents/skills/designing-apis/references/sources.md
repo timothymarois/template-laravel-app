@@ -39,7 +39,7 @@ conventions rather than requirements where they differ. Every link below was ope
   which is retained here only so older references to 7807 can be recognized as superseded.
 - [RFC 8259](https://www.rfc-editor.org/rfc/rfc8259.html) defines JSON and permits any value at the
   top level. The top-level-object rule in `payloads-and-errors.md` is therefore an extensibility
-  convention of this package, not a format requirement.
+  convention of the skill, not a format requirement.
 - [RFC 6902 JSON Patch](https://www.rfc-editor.org/rfc/rfc6902.html) and
   [RFC 7396 JSON Merge Patch](https://www.rfc-editor.org/rfc/rfc7396.html) define the two standard
   patch documents. Merge Patch's use of `null` to remove a member is the documented basis for
@@ -50,7 +50,7 @@ conventions rather than requirements where they differ. Every link below was ope
   for signalling that a resource is deprecated, used in `evolution.md`.
 - The [Idempotency-Key header field draft](https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-idempotency-key-header)
   describes the mechanism in `reliability.md`. It is an Internet-Draft, not a published standard —
-  the header is widely deployed by convention, and this package presents it as a convention.
+  the header is widely deployed by convention, and the skill presents it as a convention.
 
 ## Contracts and documentation
 
@@ -74,7 +74,7 @@ conventions rather than requirements where they differ. Every link below was ope
 
 ## Industry conventions
 
-These are widely used house styles, not standards. They are cited where this package follows a
+These are widely used house styles, not standards. They are cited where the skill follows a
 convention rather than a specification, and they do not always agree with each other.
 
 - [Google API Improvement/Design Guide](https://cloud.google.com/apis/design) and the
@@ -86,15 +86,15 @@ convention rather than a specification, and they do not always agree with each o
   field clients switch on as a compatibility hazard. That distinction is the source of the nuanced
   "additive is not automatically safe" rule in `evolution.md`.
 - [JSON:API](https://jsonapi.org/format/) is one fully specified envelope and pagination convention.
-  This package does not require it; it is cited as evidence that a documented envelope is a
+  The skill does not require it; it is cited as evidence that a documented envelope is a
   recognized solution to the top-level-array problem.
 - [MDN's HTTP status reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status)
   and [conditional requests guide](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Conditional_requests)
   are used as accessible restatements of the RFC behavior, not as the authority for it.
 
-## Catalog conclusions
+## Judgments not stated by the sources
 
-These are this package's judgments, not claims made by the sources above:
+These are the skill's judgments, not claims made by the sources above:
 
 - The six-step working order in `SKILL.md` is a local method.
 - Requiring a top-level JSON object is an extensibility convention; JSON permits otherwise, and
@@ -103,21 +103,9 @@ These are this package's judgments, not claims made by the sources above:
   local ranking of two legitimate techniques.
 - Treating the endpoint inventory as a security control as much as a documentation one follows from
   OWASP API9 but is stated more strongly here.
-- "Follow the repository's existing convention unless it causes a defect" is this catalog's rule,
+- "Follow the repository's existing convention unless it causes a defect" is the skill's rule,
   applied to APIs because inconsistency is more expensive for clients than imperfection.
 
 Omitted on purpose: undated blog posts restating REST maturity models, guidance that presents one
 vendor's house style as a standard, and advice about GraphQL, gRPC, or event-stream schema design,
-which are outside this package's boundary.
-
-## Attribution
-
-This package was written from the specifications above rather than migrated from an existing
-package, with one exception: the rules in `naming.md` are adapted from the naming and grammar
-guidance in the Rundesk skills catalog at <https://github.com/rundesk-ai/rundesk-skills>, commit
-Rundesk AI under the MIT License.
-
-Its REST path, API field, error code, and published-event sections are carried into this package,
-rewritten for an API-design audience, so that an API can be named correctly without a second package
-installed. The naming skill's wider scope — code identifiers, log keys, interface copy, and the
-product lexicon — is deliberately not reproduced here; it belongs to that package.
+which are outside the skill's boundary.

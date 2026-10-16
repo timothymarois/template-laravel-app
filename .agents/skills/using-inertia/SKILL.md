@@ -1,6 +1,6 @@
 ---
 name: using-inertia
-description: Use when building, reviewing, debugging, or upgrading an Inertia.js application, including page responses and props, visits and forms, partial or deferred data, shared state, authorization exposure, history, assets, SSR, and adapter or major-version compatibility. It supplies provider-neutral defaults and source-backed failure patterns for server and client adapters. Do not use for a conventional API SPA, Blade-only pages, Livewire work, or for Laravel, Vue, or React behavior that does not cross the Inertia boundary.
+description: Use when building, reviewing, debugging, or upgrading an Inertia.js application, including page responses and props, visits and forms, partial or deferred data, shared state, authorization exposure, history, assets, SSR, and adapter or major-version compatibility. It supplies adapter-neutral defaults and source-backed failure patterns for server and client adapters. Do not use for a conventional API SPA, Blade-only pages, Livewire work, or for Laravel, Vue, or React behavior that does not cross the Inertia boundary.
 ---
 
 # Use Inertia
@@ -12,9 +12,9 @@ Treat Inertia as a server-driven page protocol:
 - An Inertia mutation normally redirects to the next page response. Standalone HTTP calls are a
   separate workflow.
 
-This package owns the Inertia protocol only. Compose it with the server-framework and
-in this catalog — when that guidance is available; none of it is required for this package to be
-useful, and this package never owns Laravel, Vue, or React behavior of its own.
+This skill covers the Inertia protocol only. Pair it with the server-framework and client-framework
+guidance actually in use when that guidance is available; behavior that never crosses the Inertia
+boundary belongs to the framework, not to this skill.
 
 ## Work in this order
 

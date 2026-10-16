@@ -32,7 +32,7 @@ SET GLOBAL interactive_timeout = 300;  -- Interactive connections (CLI)
 
 ### Active Query Timeouts
 ```sql
--- Increase for bulk operations or large result sets (default: 30 seconds)
+-- Increase for bulk operations or large result sets (defaults: net_read_timeout 30s, net_write_timeout 60s)
 SET GLOBAL net_read_timeout = 60;      -- Time server waits for data from client
 SET GLOBAL net_write_timeout = 60;     -- Time server waits to send data to client
 ```
@@ -48,7 +48,7 @@ MySQL also caches threads for reuse. If connections fluctuate frequently, increa
 - **ORM default pools too large**: Rails default is 5 per process — 20 Puma workers = 100 connections from one app server. Multiply by app server count.
 - **No pool at all**: PHP/CGI models open a new connection per request. Use persistent connections or ProxySQL.
 - **Connection storms on deploy**: All app servers reconnect simultaneously when restarted, potentially exhausting `max_connections`. Mitigations: stagger deployments, use connection pool warm-up (gradually open connections), or use a proxy layer.
-- **Idle transactions**: Connections with open transactions (`BEGIN` without `COMMIT`/`ROLLBACK`) are **not** closed by `wait_timeout` and hold locks. This causes deadlocks and connection leaks. Always commit or rollback promptly, and use application-level transaction timeouts.
+- **Idle transactions**: A connection with an open transaction (`BEGIN` without `COMMIT`/`ROLLBACK`) holds its row locks for as long as it sits idle, blocking other writers until `wait_timeout` finally disconnects it and rolls the transaction back — hours, at the default. Commit or roll back promptly, use application-level transaction timeouts, and find offenders in `information_schema.innodb_trx` ordered by `trx_started`.
 
 ## Prepared Statements
 Use prepared statements with connection pooling for performance and safety:

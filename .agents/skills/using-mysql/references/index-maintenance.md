@@ -9,8 +9,10 @@ SELECT object_schema, object_name, index_name, COUNT_READ, COUNT_WRITE
 FROM performance_schema.table_io_waits_summary_by_index_usage
 WHERE object_schema = 'mydb'
   AND index_name IS NOT NULL AND index_name != 'PRIMARY'
-  AND COUNT_READ = 0 AND COUNT_WRITE = 0
-ORDER BY COUNT_WRITE DESC;
+  AND COUNT_READ = 0 AND COUNT_WRITE = 0;
+
+-- Or the sys schema view built on the same counters (MySQL 5.7.7+)
+SELECT * FROM sys.schema_unused_indexes WHERE object_schema = 'mydb';
 ```
 
 Sometimes you'll also see indexes with **writes but no reads** (overhead without query benefit). Review these carefully: some are required for constraints (UNIQUE/PK) even if not used in query plans.
@@ -24,7 +26,7 @@ WHERE object_schema = 'mydb'
 ORDER BY COUNT_WRITE DESC;
 ```
 
-Counters reset on restart — ensure 1+ full business cycle of uptime before dropping.
+Counters reset on restart — ensure 1+ full business cycle of uptime before dropping, and make the index invisible first (below) so the drop can be undone instantly.
 
 ## Find Redundant Indexes
 

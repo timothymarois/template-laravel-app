@@ -152,30 +152,6 @@ reference easy to find. Do not instantiate models only to satisfy a universal st
 
 **Exception — migrations:** In migrations, hardcoded table names via `DB::table('settings')` are acceptable and preferred. Models change over time but migrations are frozen snapshots — referencing a model that is later renamed or deleted would break the migration.
 
-## Reserve Global Scopes for Universal Constraints
-
-Incorrect — every admin, report, and queued query silently loses drafts:
-
-```php
-protected static function booted(): void
-{
-    static::addGlobalScope('published', fn ($query) => $query->whereNotNull('published_at'));
-}
-```
-
-Correct — use a named local scope when callers legitimately need both views:
-
-```php
-#[Scope]
-protected function published(Builder $query): void
-{
-    $query->whereNotNull('published_at');
-}
-
-$publicPosts = Post::published()->get();
-$allPosts = Post::query()->get();
-```
-
 ## Treat Mass Operations as Eventless
 
 Eloquent mass updates and deletes do not hydrate models, so corresponding model events do not run.

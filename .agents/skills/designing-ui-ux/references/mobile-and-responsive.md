@@ -2,7 +2,7 @@
 
 Use these patterns for responsive web interfaces and mobile web apps. Do not treat “mobile” as one
 screen size, one input method, or a slow network. Each pair is mapped to standards, maintained design
-systems, or empirical practitioner research in
+systems, or empirical practitioner research in [sources.md](sources.md).
 
 ## Preserve the task, not the desktop arrangement
 

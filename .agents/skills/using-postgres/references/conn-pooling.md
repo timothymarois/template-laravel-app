@@ -29,11 +29,12 @@ select count(*) from pg_stat_activity;  -- 10 connections
 PgBouncer pool modes:
 
 - **Transaction mode**: connection returned after each transaction (best for most apps)
-- **Session mode**: connection held for entire session (needed for prepared statements, temp tables)
+- **Session mode**: connection held for entire session (needed for session state such as temp tables)
 
 Transaction mode is what makes pooling effective, but it breaks anything that assumes
-session state survives between statements — named prepared statements, `SET` outside a
-transaction, session-level advisory locks, `LISTEN`/`NOTIFY`, and temp tables. Use session
+session state survives between transactions — `SET` outside a transaction, session-level advisory
+locks, `LISTEN`/`NOTIFY`, temp tables, and SQL-level `PREPARE` (protocol-level prepared statements
+work on PgBouncer 1.21+; see [conn-prepared-statements](conn-prepared-statements.md)). Use session
 mode for those connections, or keep the state inside a single transaction.
 
 Reference: [Number of database connections](https://wiki.postgresql.org/wiki/Number_Of_Database_Connections)

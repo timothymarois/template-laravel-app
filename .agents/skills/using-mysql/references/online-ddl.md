@@ -7,7 +7,7 @@ Not all `ALTER TABLE` is equal — some block writes for the entire duration.
 | Algorithm | What Happens | DML During? |
 |---|---|---|
 | `INSTANT` | Metadata-only change | Yes |
-| `INPLACE` | Rebuilds in background | Usually yes |
+| `INPLACE` | Works in the storage engine without a table copy; some operations still rebuild the table | Usually yes |
 | `COPY` | Full table copy to tmp table | **Blocked** |
 
 MySQL picks the fastest available. Specify explicitly to fail-safe:

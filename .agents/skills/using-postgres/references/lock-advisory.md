@@ -19,7 +19,9 @@ select * from resource_locks where resource_name = 'report_generator' for update
 **Correct (advisory locks):**
 
 ```sql
--- Session-level advisory lock (released on disconnect or unlock)
+-- Session-level advisory lock (released on disconnect or unlock). Behind a transaction-mode
+-- pooler the connection outlives your request, so a forgotten unlock leaks the lock;
+-- prefer the transaction-level form below.
 select pg_advisory_lock(hashtext('report_generator'));
 -- ... do exclusive work ...
 select pg_advisory_unlock(hashtext('report_generator'));

@@ -61,8 +61,11 @@ Incorrect: `class="bg-white text-slate-900 dark:bg-slate-900 dark:text-white"` r
 Correct:
 ```css
 @theme { --color-surface: white; --color-ink: oklch(0.2 0 0); }
-@variant dark { --color-surface: oklch(0.2 0 0); --color-ink: white; }
+:root { @variant dark { --color-surface: oklch(0.2 0 0); --color-ink: white; } }
 ```
+
+`@variant` applies a variant inside a rule, so it needs a selector such as `:root`; at the top level
+its declarations have nothing to attach to.
 ```html
 <div class="bg-surface text-ink">
 ```

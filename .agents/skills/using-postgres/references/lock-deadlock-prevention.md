@@ -46,16 +46,16 @@ where id in (1, 2);
 commit;
 ```
 
-Detect deadlocks in logs:
+Detect deadlocks:
 
 ```sql
--- Check for recent deadlocks
-select * from pg_stat_database where deadlocks > 0;
-
--- Enable deadlock logging
-set log_lock_waits = on;
-set deadlock_timeout = '1s';
+-- Deadlock count per database since the last stats reset
+select datname, deadlocks from pg_stat_database where deadlocks > 0;
 ```
+
+Every detected deadlock is written to the server log with both statements. To also log lock waits
+that last longer than `deadlock_timeout`, enable `log_lock_waits` in the server configuration
+(it is a superuser setting, not a per-session `set`).
 
 Reference:
 [Deadlocks](https://www.postgresql.org/docs/current/explicit-locking.html#LOCKING-DEADLOCKS)

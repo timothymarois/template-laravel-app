@@ -1,6 +1,6 @@
 ---
 name: using-tailwindcss
-description: Use for CSS and styling work — layout, spacing, typography, colour, theming and design tokens, dark mode, responsive and container behaviour, transitions, focus and state styling, and the cascade, specificity, and custom properties underneath them. Covers Tailwind CSS v4 — utility composition, the theme, custom utilities and variants, and class detection in source files. Not for deciding what an interface should do, or for a non-web styling system.
+description: Use when styling a web interface or fixing a CSS problem — layout, spacing, typography, colour and design tokens, dark mode, responsive or container behaviour, transitions, focus and state styling, stacking, or cascade and specificity conflicts — or when working with Tailwind CSS v4 utilities, theme, custom utilities and variants, or class detection. It supplies the CSS mechanisms and v4 rules that decide what actually renders. Do not use for deciding what an interface should do, or for a non-web styling system.
 ---
 
 # Use CSS and Tailwind
@@ -12,8 +12,8 @@ than a JavaScript object.
 Utilities do not replace understanding CSS. A cascade conflict, a stacking context, or a collapsing
 layout is a CSS problem wearing utility classes.
 
-This package owns styling. What the interface should do is a design decision made elsewhere;
-component structure belongs to the framework in use.
+This skill covers styling. What the interface should do is a design decision; component structure
+belongs to the framework in use.
 
 ## Check the version first
 
@@ -21,8 +21,9 @@ component structure belongs to the framework in use.
 npm ls tailwindcss
 ```
 
-This package targets v4, which needs Safari 16.4+, Chrome 111+, and Firefox 128+. A project below
-that floor belongs on v3.4, where none of this applies. v4 does not work with Sass, Less, or Stylus.
+The Tailwind guidance targets v4, which needs Safari 16.4+, Chrome 111+, and Firefox 128+. A project
+below that floor belongs on v3.4, where the Tailwind references do not apply; [css.md](references/css.md)
+applies to any CSS, with or without Tailwind. v4 does not work with Sass, Less, or Stylus.
 
 v3 examples are common online and do not transfer: config, scales, defaults, and variant order all
 changed.

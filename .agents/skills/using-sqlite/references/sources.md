@@ -1,8 +1,7 @@
 # SQLite source basis
 
-This package is a Rundesk synthesis of SQLite's official documentation. The operational guidance
-is fully contained in the other local Markdown references; use this file to audit or update the
-technical basis. Prefer these primary sources over blogs, copied PRAGMA bundles, or binding-specific
+SQLite's official documentation behind the references. Read this to audit or update a technical
+claim. Prefer these primary sources over blogs, copied PRAGMA bundles, or binding-specific
 defaults.
 
 ## Engine fit and file model
@@ -57,8 +56,6 @@ defaults.
 - [SQLite FTS5 Extension](https://www.sqlite.org/fts5.html): table modes, external-content
   synchronization, query syntax, rank, integrity checking, rebuild, and optimize commands.
 
-## Attribution
+## License
 
-This package adapts `skills/sqlite-patterns/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.
+Portions are adapted from material copyright (c) Rundesk AI, published under the MIT License.

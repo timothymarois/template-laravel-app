@@ -48,10 +48,9 @@ W3C establish the CSS underneath. Every link was opened and checked on 23 August
 - The [upgrade guide](https://tailwindcss.com/docs/upgrade-guide) establishes that separately
   bundled stylesheets — CSS modules, Vue and Svelte `<style>` blocks — have no access to theme
   variables and need `@reference`, and that using the variable directly is the alternative.
-- [tailwind-merge](https://github.com/dcastil/tailwind-merge) and
-  [class-variance-authority](https://cva.style/docs) are the conflict-resolution and variant helpers
-  named in `composition.md`. They are community libraries, not part of Tailwind, and are cited as
-  the established solution to the class-order problem rather than as a requirement.
+- [tailwind-merge](https://github.com/dcastil/tailwind-merge) is the merge helper used in
+  `composition.md`. It is a community library, not part of Tailwind, and is cited as the established
+  solution to the class-order problem rather than as a requirement.
 - [prettier-plugin-tailwindcss](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) is the
   official class sorter; sorting is cosmetic and does not affect which utility wins.
 - Adam Wathan,
@@ -79,7 +78,7 @@ W3C establish the CSS underneath. Every link was opened and checked on 23 August
   need `@reference`, variant stacking order is left-to-right, `outline-none` became
   `outline-hidden`, `space-y-*` and `divide-*` changed selector, `@utility` replaces
   `@layer utilities`, arbitrary variables use `bg-(--var)`, and `theme()` gives way to CSS
-  variables. This package targets v4 only and does not carry a migration workflow.
+  variables. The skill targets v4 only and does not carry a migration workflow.
 - [Installing with Vite](https://tailwindcss.com/docs/installation/using-vite) documents the
   `@tailwindcss/vite` plugin; PostCSS uses `@tailwindcss/postcss` and the CLI is
   `@tailwindcss/cli`.
@@ -116,10 +115,10 @@ W3C establish the CSS underneath. Every link was opened and checked on 23 August
 - [WCAG 2.2, Understanding Focus Appearance](https://www.w3.org/WAI/WCAG22/Understanding/focus-appearance)
   establishes that a visible focus indicator is a conformance requirement, not a preference.
 
-## Catalog conclusions
+## Judgments not stated by the sources
 
 - The order of the reuse hierarchy is Tailwind's; treating `@apply` as a last resort *behind* plain
-  CSS with theme variables is this package's reading of its own documented example.
+  CSS with theme variables is the skill's reading of Tailwind's own documented example.
 - "Promote a repeated arbitrary value into a token" is a local rule; the documentation permits
   arbitrary values without a threshold.
 - The defaults table in `SKILL.md` and the diagnosis-before-classes framing are operational

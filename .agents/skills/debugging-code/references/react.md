@@ -1,6 +1,7 @@
 # Debugging React
 
 This page is mechanics: where the evidence already is, and how to get more. Which rule the symptom
+violates belongs to React's own guidance.
 
 ## See what actually happened
 

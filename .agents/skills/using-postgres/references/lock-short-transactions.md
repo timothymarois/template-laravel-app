@@ -33,11 +33,15 @@ commit;  -- Lock held for milliseconds
 Use `statement_timeout` to prevent runaway transactions:
 
 ```sql
--- Abort queries running longer than 30 seconds
+-- Abort statements running longer than 30 seconds, for the rest of this session
 set statement_timeout = '30s';
 
--- Or per-session
+-- Or only for the current transaction
 set local statement_timeout = '5s';
+
+-- A transaction left open while the application waits is caught by a different setting;
+-- see conn-idle-timeout.md
+set idle_in_transaction_session_timeout = '30s';
 ```
 
 Reference: [Transaction Management](https://www.postgresql.org/docs/current/tutorial-transactions.html)

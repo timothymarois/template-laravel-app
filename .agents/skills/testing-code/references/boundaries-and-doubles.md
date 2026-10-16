@@ -64,14 +64,9 @@ control.
 | Third-party network service | Fake or stub in tests, plus a contract test that catches drift |
 | Another team's service you own an interface to | Contract test on both sides |
 
-Naming a test after its folder is not a claim about what it exercised. An "integration" test that
-doubles the serializer proves nothing about the stored format. **Report which dependencies were
-real**, because the label varies between teams and tells the reader nothing.
-
-Prefer the narrowest boundary that contains the risk, and add a wider test only when it answers a
-question the narrow one cannot. Broad end-to-end tests are the most flake-prone and slowest to
-diagnose, so keep them to a small number of critical journeys rather than replaying every edge case
-through the whole system.
+Naming a test after its folder is not a claim about what it exercised: an "integration" test that
+doubles the serializer proves nothing about the stored format. `SKILL.md` owns the narrowest-boundary
+rule and the requirement to report which dependencies were real.
 
 ## Doubles you own versus doubles you impose
 

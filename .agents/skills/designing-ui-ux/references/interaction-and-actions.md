@@ -1,7 +1,7 @@
 # Interaction and actions
 
 Use these patterns when a control's purpose, state, or activation is unclear. Each pair is mapped to
-the standards and practitioner evidence in
+the standards and practitioner evidence in [sources.md](sources.md).
 
 ## Match element to behavior
 
@@ -32,7 +32,11 @@ states, and a pointer cursor when enabled.
 <button type="button" class="button">Add member</button>
 ```
 
-Apply the hand cursor consistently to enabled activation targets:
+Apply the hand cursor to every enabled activation target: buttons, links, clickable cards, menu
+triggers, icon actions, toggles, checkbox and radio labels, and equivalent controls. Disabled
+controls are not activation targets; drag, resize, text-selection, and similar interactions keep
+their truthful operation-specific cursors. A pointer cursor never substitutes for native semantics,
+keyboard behavior, focus, or a visible pressed state.
 
 ```css
 .button:not(:disabled) { cursor: pointer; }

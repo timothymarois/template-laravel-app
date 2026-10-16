@@ -2,10 +2,10 @@
 
 Credentials, PII, tenant isolation, permissions, audit trails, immutability, optimistic locking,
 retention, and constraints that carry a business rule. These are modelling decisions — what the
-tables are and what the database refuses to store — not query defence. For injection and parameter
-for `GRANT`, roles, and row-level security enforced by the server see
+tables are and what the database refuses to store — not query defence. Parameter binding, `GRANT`,
+roles, and row-level security enforced by the server are the engine's.
 
-DDL is SQLite dialect; the shapes are portable and the spellings are not.
+DDL is SQLite dialect; `SKILL.md` lists the spellings to translate.
 
 ## Credentials
 
@@ -114,7 +114,8 @@ CREATE INDEX idx_documents_tenant ON documents(tenant_id, id DESC);
 - **Every unique constraint is scoped to the tenant.** `UNIQUE(slug)` is a bug in a multi-tenant
   schema — it lets one tenant's data collide with another's. `UNIQUE(tenant_id, slug)`.
 - **Filtering in application code is one forgotten `WHERE` away from a cross-tenant leak.** The
-  or per-tenant credentials elsewhere. Application filtering is the weakest of the options, not the
+  database can enforce this itself: PostgreSQL row-level security, and views or per-tenant
+  credentials elsewhere. Application filtering is the weakest of the options, not the
   default.
 - **A join can leak what the base table protects.** Filtering `documents` by tenant but joining an
   unfiltered `comments` returns other tenants' comments. Every table in the query needs the
@@ -264,7 +265,8 @@ Money is `INTEGER` minor units, or the engine's exact decimal type. Never a floa
 not `0.3`, and a ledger that does not sum is worse than no ledger.
 
 These triggers stop the application. They do not stop someone with a direct connection, who can drop
-the trigger. Real immutability is a permissions question — see the engine skills.
+the trigger. Real immutability is a permissions question: revoke `UPDATE` and `DELETE` from every
+role that writes the table.
 
 ## Optimistic Locking
 

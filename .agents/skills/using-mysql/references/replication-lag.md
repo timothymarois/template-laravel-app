@@ -17,8 +17,6 @@ SHOW REPLICA STATUS\G
 
 **GTID-based lag**: for more accurate tracking, compare `@@global.gtid_executed` (replica) to primary GTID position, or use `WAIT_FOR_EXECUTED_GTID_SET()` to wait for a specific transaction.
 
-**Note**: parallel replication with `replica_parallel_type=LOGICAL_CLOCK` requires `binlog_format=ROW`. Statement-based replication (`binlog_format=STATEMENT`) is more limited for parallel apply.
-
 ## Mitigation Strategies
 
 | Strategy | How | Trade-off |
@@ -31,7 +29,8 @@ SHOW REPLICA STATUS\G
 ## Common Pitfalls
 - **Large transactions cause lag spikes**: A single `INSERT ... SELECT` of 1M rows replays as one big transaction on the replica. Break into batches.
 - **DDL blocks replication**: `ALTER TABLE` with `ALGORITHM=COPY` on primary replays on replica, blocking other relay-log events during execution. `INSTANT` and `INPLACE` DDL are less blocking but still require brief metadata locks.
-- **Long queries on replica**: A slow `SELECT` on the replica can block relay-log application. Use `replica_parallel_workers` (8.0+) with `replica_parallel_type=LOGICAL_CLOCK` for parallel apply. Note: LOGICAL_CLOCK requires `binlog_format=ROW` and `slave_preserve_commit_order=ON` (or `replica_preserve_commit_order=ON`) to preserve commit order.
+- **Single-threaded apply**: From 8.0.27, and in 8.4, replicas apply in parallel by default (`replica_parallel_workers=4`, `LOGICAL_CLOCK`, `replica_preserve_commit_order=ON`). A replica configured with one worker applies every transaction serially; raise `replica_parallel_workers` and make sure every table has a primary key. `replica_parallel_type` is deprecated in 8.4, with `LOGICAL_CLOCK` the only scheduling expected to remain.
+- **Locks on the replica**: a long query or DDL holding a metadata lock on the replica blocks the applier for the transactions that touch that table.
 - **IO thread bottlenecks**: Network latency, disk I/O, or `relay_log_space_limit` exhaustion can cause lag even when the SQL apply thread isn't saturated. Monitor `Relay_Log_Space` and connectivity.
 
 ## Guidelines

@@ -26,8 +26,6 @@ Schedule::command('billing:charge')->monthly()->environments(['production']);
 ## Bound Long-Running Processing With Supported APIs
 
 A task running every 15 minutes that processes an unbounded cursor can overlap with the next run.
-Laravel does not document a built-in `takeUntilTimeout()` scheduler method. If the application uses
-that name, first prove it owns a macro or package implementation.
 
 Use the installed version's supported APIs, a bounded batch, and an explicit checkpoint:
 

@@ -1,19 +1,16 @@
 # Postgres source basis
 
 Use this mapping to verify a rule before changing it. The PostgreSQL manual establishes the
-contracts and the planner behavior; the version policy establishes what "supported" means. Every
-link below was opened and checked on 23 August 2026.
+contracts and the planner behavior; the version policy establishes what "supported" means.
 
 ## Version scope
 
 - [Versioning policy](https://www.postgresql.org/support/versioning/) establishes the five-year
-  support window for each major and the annual major release. On 23 August 2026 the supported
-  majors were 14 through 18, with 14 reaching end of life on 12 November 2026 and 19 in beta.
-  `https://www.postgresql.org/docs/current/` therefore resolves to 18.
-- This package targets currently supported majors. Confirm the server's own version with
+  support window for each major and the annual major release.
+- These rules target currently supported majors. Confirm the server's own version with
   `select version()` before applying any rule described below as version-sensitive; the planner and
-  the available index capabilities change between majors, which is why the guardrail in `SKILL.md`
-  requires stating the version an answer assumes.
+  the available index capabilities change between majors, which is why the first step in `SKILL.md`
+  states the version an answer assumes.
 
 ## Query performance
 
@@ -50,8 +47,10 @@ link below was opened and checked on 23 August 2026.
 - [`PREPARE`](https://www.postgresql.org/docs/current/sql-prepare.html) establishes that a prepared
   statement lives for the duration of the session and that generic plans may be chosen after
   repeated executions. This is the mechanism behind the transaction-pooling incompatibility in
-  `conn-prepared-statements.md`: a pooler that reassigns a server connection between statements
-  breaks anything holding session state.
+  `conn-prepared-statements.md`.
+- [PgBouncer configuration](https://www.pgbouncer.org/config.html#max_prepared_statements)
+  establishes `max_prepared_statements` (1.21+), which tracks protocol-level prepared statements in
+  transaction mode.
 
 ## Security and row-level security
 
@@ -76,6 +75,8 @@ link below was opened and checked on 23 August 2026.
   character, date/time, and `identity` behavior behind `schema-data-types.md` and
   `schema-primary-keys.md`, including that `varchar(n)` and `text` have no performance difference in
   Postgres and that `numeric` is exact but slower than the float types.
+- [UUID functions](https://www.postgresql.org/docs/current/functions-uuid.html) establishes
+  `uuidv7()` from PostgreSQL 18, used in `schema-primary-keys.md`.
 - [Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html) establishes check,
   not-null, unique, primary key, foreign key, and exclusion constraints, and the referential
   actions. It supports `schema-constraints.md`.
@@ -117,7 +118,7 @@ link below was opened and checked on 23 August 2026.
   the basis of the bulk path in `data-batch-inserts.md`.
 - [Queries: `LIMIT` and `OFFSET`](https://www.postgresql.org/docs/current/queries-limit.html) states
   that rows skipped by `OFFSET` still have to be computed, which is the cost keyset pagination
-  avoids in `data-pagination.md`.
+  avoids.
 
 ## Monitoring and diagnostics
 
@@ -153,20 +154,8 @@ link below was opened and checked on 23 August 2026.
   a long blocking scan.
 - [`CREATE INDEX`](https://www.postgresql.org/docs/current/sql-createindex.html) establishes
   `CONCURRENTLY`, that it cannot run inside a transaction block, and that a failed concurrent build
-  leaves an invalid index that must be dropped. This is the source of the guardrail in `SKILL.md`
-  requiring approval for a non-concurrent index build on a live table.
-
-## Catalog conclusions
-
-These are this package's judgments, not claims made by the manual:
-
-- The eight-category priority ordering in `SKILL.md` and `_sections.md`, with query performance and
-  connection management rated CRITICAL, is a local operational ranking. PostgreSQL publishes no such
-  ranking.
-- Requiring measured before-and-after evidence, and treating a rule that does not appear in the plan
-  or timings as not having applied, is a local evidence standard.
-- Requiring explicit human approval before a destructive or blocking operation is a catalog safety
-  rule, not a database behavior.
+  leaves an invalid index that must be dropped. Together with `ALTER TABLE` it is the basis of
+  `schema-safe-migrations.md`.
 
 Omitted on purpose: undated tuning blog posts, configuration numbers copied without the hardware and
 workload they were measured on, and advice that does not name the major version it applies to. The
@@ -174,13 +163,6 @@ workload they were measured on, and advice that does not name the major version 
 is retained as community orientation only; it is not treated as normative where it and the manual
 differ.
 
-## Attribution
+## License
 
-This package adapts `skills/postgres-patterns/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.
-
-Material modifications: renamed to `using-postgres`; per-file YAML metadata removed; the routing
-description adapted to this catalog's package contract; this source map authored, as the upstream
-package shipped no `references/sources.md` and its `SKILL.md` carried only two bare links, which are
-preserved above; and a maintainer validation record added.
+Portions are adapted from material copyright (c) Rundesk AI, published under the MIT License.

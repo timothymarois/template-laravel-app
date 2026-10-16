@@ -30,4 +30,8 @@ create index orders_status_idx on orders (status) include (customer_id, total);
 select status, customer_id, total from orders where status = 'shipped';
 ```
 
+An index-only scan still checks the visibility map and fetches from the heap for pages not marked
+all-visible, so it only stays index-only on a table that vacuum keeps up with
+([monitor-vacuum-analyze](monitor-vacuum-analyze.md)). `INCLUDE` needs PostgreSQL 11+.
+
 Reference: [Index-Only Scans](https://www.postgresql.org/docs/current/indexes-index-only-scans.html)

@@ -29,7 +29,7 @@ advice is marked in the owning reference instead of maintaining a patch/support 
 - [Spatie's controller guidelines](https://github.com/spatie/guidelines.spatie.be/blob/master/content/code-style/laravel-php.md#controllers)
   — keep controllers to resource actions and extract a new controller when responsibilities diverge.
 - [Laravel directory structure](https://laravel.com/docs/13.x/structure) — Laravel imposes few class
-  location restrictions. Therefore this catalog presents actions/services as conditional
+  location restrictions. Therefore the skill presents actions/services as conditional
   practitioner judgment, never framework law.
 - [Eloquent events](https://laravel.com/docs/13.x/eloquent#events) — mass update/delete event gaps
   establish why observers cannot guarantee behavior for every write path.
@@ -66,12 +66,12 @@ advice is marked in the owning reference instead of maintaining a patch/support 
   boundary and silent-discard behavior.
 - [Mass updates](https://laravel.com/docs/13.x/eloquent#mass-updates) and
   [mass deletes](https://laravel.com/docs/13.x/eloquent#deleting-models-using-queries) — model events do
-  not run when models are not retrieved. The bulk-update pair is this catalog's minimized application
+  not run when models are not retrieved. The bulk-update pair is the skill's minimized application
   of that documented failure.
 - [Upserts](https://laravel.com/docs/13.x/eloquent#upserts) — unique-index requirement and MySQL /
   MariaDB `uniqueBy` behavior.
 - [Transactions](https://laravel.com/docs/13.x/database#database-transactions) — automatic rollback
-  and deadlock retry count. Keeping transactions clear of external calls is the catalog's lock-scope
+  and deadlock retry count. Keeping transactions clear of external calls is the skill's lock-scope
   conclusion, not a quoted Laravel rule.
 - [Migrations: online index creation](https://laravel.com/docs/13.x/migrations#online-index-creation)
   — large index builds can block reads/writes and support is database-specific.
@@ -236,8 +236,8 @@ advice is marked in the owning reference instead of maintaining a patch/support 
 - [Event fakes](https://laravel.com/docs/13.x/events#testing),
   [mail fakes](https://laravel.com/docs/13.x/mail#testing-mailable-sending), and
   [notification fakes](https://laravel.com/docs/13.x/notifications#testing) — framework test
-  doubles and scoped/subset fakes. Creating event-dependent setup before a broad fake is this
-  catalog's consequence of the fake replacing dispatch, not a quoted framework rule.
+  doubles and scoped/subset fakes. Creating event-dependent setup before a broad fake is the
+  skill's consequence of the fake replacing dispatch, not a quoted framework rule.
 - [Blade escaping](https://laravel.com/docs/13.x/blade#displaying-data),
   [components](https://laravel.com/docs/13.x/blade#components),
   [component attributes](https://laravel.com/docs/13.x/blade#component-attributes), and
@@ -270,42 +270,3 @@ advice is marked in the owning reference instead of maintaining a patch/support 
   and [custom collections](https://laravel.com/docs/13.x/eloquent-collections#custom-collections) —
   cursor buffering/eager-load limits, lazy collections, collection-to-query conversion, and the
   `CollectedBy` attribute.
-
-## Deliberate removals
-
-- Patch numbers and support countdowns were removed because they age faster than the workflow. Inspect
-  the installed package and current release notes instead.
-- The former claim that Laravel 13 documentation forbids the database queue in production was
-  removed. Current Laravel 13 deployment and queue docs do not make that statement.
-- Blanket rules to index every foreign key, always implement `down()`, forbid repositories, or ban
-  business logic from every model were weakened or removed because the cited sources do not justify
-  those absolutes.
-- No blanket rule prefers `whereIn()` over `whereHas()`, a correlated subquery over a join, or one
-  compound-index order for every sort. Representative query plans and engine behavior decide.
-- No blanket rule requires newest-first ordering, action classes, interfaces for every dependency,
-  queued notifications, `failed()` on every job, Horizon, cache failover, or view composers. Each
-  adds behavior or operations that must answer a concrete application need.
-- Markdown mailables are an available responsive HTML/plain-text path, not a universal requirement;
-  preserve the application's established mail rendering and brand system.
-- Undocumented scheduler helpers are not taught as framework contracts. Bound long-running work with
-  APIs present in the installed version, overlap protection, and an observable checkpoint strategy.
-- `LazilyRefreshDatabase` is not presented as a universal replacement for `RefreshDatabase`; the
-  current framework documentation teaches `RefreshDatabase`, and the repository's database/test
-  lifecycle remains the governing convention.
-- Convenience syntax such as request magic properties, global helpers, higher-order collection
-  messages, `Str`, or `Arr` is not automatically more readable. The skill preserves the local style
-  and adopts a helper only when it clarifies semantics or prevents a concrete encoding/path failure.
-- Controller line counts, action classes, constructor-only injection, custom collection classes, and
-  model-derived table names are not framework correctness boundaries. Use them when they expose a
-  real dependency or reusable domain operation, not to satisfy a universal shape.
-- DDL and data movement are not forbidden from one migration by category alone. Decide from the
-  engine's transaction/locking behavior, deployment duration, resumability, and rollback path.
-- A time-based retry deadline does not imply one universal `$tries` value across Laravel versions and
-  worker configuration. Verify the installed job/worker attempt precedence and test the terminal
-  boundary.
-
-## Attribution
-
-This package adapts `skills/laravel-patterns/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.

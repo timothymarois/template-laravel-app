@@ -6,9 +6,8 @@ traps and replacements. Verified 7 August 2026.
 
 ## Version boundary
 
-The npm registry reported Vue 3.5.41, Pinia 4.0.2, Vue Router 5.2.0, Nuxt 4.5.2, Vite 8.2.1, and
-Vue Test Utils 2.4.11 on the verification date. This is a snapshot; inspect the target lockfile and
-re-check registry dist-tags before making current-version claims.
+The skill assumes Vue 3.5, Pinia 4, Vue Router 5, and Nuxt 4 as the current majors. Inspect the
+target lockfile and re-check registry dist-tags before making current-version claims.
 
 - [Vue releases](https://github.com/vuejs/core/releases) and
   [release policy](https://vuejs.org/about/releases): stable versus prerelease status.
@@ -107,7 +106,7 @@ re-check registry dist-tags before making current-version claims.
 - [Vue composables—organization](https://vuejs.org/guide/reusability/composables.html#extracting-composables-for-code-organization):
   extraction by logical concern when components become hard to reason about.
 - Anthony Fu's “Composable Vue” above supplies the one-concern and composition judgment. The layer
-  table is this catalog's scoped synthesis of those sources, not a Vue-mandated folder structure.
+  table is a scoped synthesis of those sources, not a Vue-mandated folder structure.
 - Reactivity, component, watcher, and SSR sources above prove the deterministic boundary rules. File
   layout and container/presentational splits were deliberately omitted as universal requirements.
 
@@ -131,9 +130,3 @@ re-check registry dist-tags before making current-version claims.
 - Unmeasured performance rankings, arbitrary list-size thresholds, and prerelease performance claims.
 - Folder structures or state-scope preferences presented as framework requirements.
 - Advice whose source only proves that an API exists, without a failure or preferred replacement.
-
-## Attribution
-
-This package adapts `skills/vue-patterns/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.

@@ -164,15 +164,8 @@ Http::fake([
 ]);
 ```
 
-Call `Http::preventStrayRequests()` so an unrecognized URL cannot silently reach the network during
-a test.
-
-```php
-Http::preventStrayRequests();
-Http::fake([
-    'inventory.example/*' => Http::response(['available' => true]),
-]);
-```
+`Http::preventStrayRequests()` makes an unrecognized URL fail instead of silently reaching the
+network during a test.
 
 ## Reconcile Unknown Remote Outcomes
 
@@ -197,5 +190,4 @@ $response = Http::withHeaders([
   ->throw();
 ```
 
-Retry selected transient connection or server failures, not every 4xx response. Pool only independent
-requests, preserve response identity, and inspect every result.
+Retry selected transient connection or server failures, not every 4xx response.

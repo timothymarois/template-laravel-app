@@ -128,7 +128,8 @@ ordering, not the test.
 - **`print` from a subprocess, a thread, or a crashed process may never flush.** Use
   `print(..., flush=True)`, or logging, or you will conclude the code never reached that line.
 - **The mutable-default and late-binding traps produce wrong values with no error**, which reads as
-  `documented-traps.md` before rewriting the logic.
+  "the logic is wrong" rather than "the language did something." Rule out a shared default argument
+  and a closure capturing a loop variable before rewriting the logic.
 - **A circular import fails only in one direction.** CPython's FAQ: circular imports "are fine where
   both modules use the `import <module>` form… they fail when the 2nd module wants to grab a name out
   of the first (`from module import name`) and the import is at the top level."

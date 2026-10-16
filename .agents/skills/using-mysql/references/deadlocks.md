@@ -6,7 +6,7 @@ InnoDB auto-detects deadlocks and rolls back one transaction (the "victim").
 1. **Opposite row ordering** — Transactions accessing the same rows in different order can deadlock. Fix: always access rows in a consistent order (typically by primary key or a common index) so locks are acquired in the same sequence.
 2. **Next-key lock conflicts** (REPEATABLE READ) — InnoDB uses next-key locks (row + gap) to prevent phantoms. Fix: use READ COMMITTED (reduces gap locking) or narrow lock scope.
 3. **Missing index on WHERE column** — UPDATE/DELETE without an index may require a full table scan, locking many rows unnecessarily and increasing deadlock risk.
-4. **AUTO_INCREMENT lock contention** — Concurrent INSERT patterns can deadlock while contending on the auto-inc lock. Fix: use `innodb_autoinc_lock_mode=2` (interleaved) for better concurrency when safe for your workload, or batch inserts.
+4. **AUTO_INCREMENT lock contention** — Concurrent bulk INSERT patterns can contend on the table-level auto-inc lock under `innodb_autoinc_lock_mode` 0 or 1. Mode 2 (interleaved) is the default from 8.0 and avoids it; check the setting before blaming the lock, and keep mode 2 only where non-consecutive values within one statement are acceptable.
 
 Note: SERIALIZABLE also uses gap/next-key locks. READ COMMITTED reduces some gap-lock deadlocks but doesn't eliminate deadlocks from opposite ordering or missing indexes.
 

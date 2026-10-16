@@ -127,8 +127,7 @@ Pass data to JS via data attributes or use a dedicated PHP-to-JS package.
 
 ## No Unnecessary Comments
 
-Code should be readable on its own. Use descriptive method and variable names instead of comments. The only exception is config files, where descriptive comments are expected.
-
+Code should be readable on its own. Use descriptive method and variable names instead of comments.
 Comment non-obvious constraints and reasons that names cannot express. Avoid comments that only
 narrate the syntax; configuration files are not the only valid place for useful rationale.
 

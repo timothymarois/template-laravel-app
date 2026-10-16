@@ -9,7 +9,14 @@ acceptable.
 
 ## Use `afterCommit()` on Mailables Inside Transactions
 
-A queued mailable dispatched inside a transaction may process before the commit. Use `$this->afterCommit()` in the constructor.
+A queued mailable dispatched inside a transaction may process before the commit. Call
+`afterCommit()` on the mailable, or rely on the queue connection's after-commit behavior.
+
+```php
+Mail::to($user)->queue(
+    (new ReceiptMail($order))->afterCommit(),
+);
+```
 
 ## Use `assertQueued()` Not `assertSent()` for Queued Mailables
 
@@ -30,12 +37,3 @@ They are not a universal replacement for an application's established rendering 
 Content tests: instantiate the mailable directly, call `assertSeeInHtml()`.
 Sending tests: use `Mail::fake()` and `assertSent()`/`assertQueued()`.
 Don't mix them — it conflates concerns and makes tests brittle.
-
-When mail depends on rows written in a transaction, use `afterCommit()` or the queue connection's
-after-commit behavior.
-
-```php
-Mail::to($user)->queue(
-    (new ReceiptMail($order))->afterCommit(),
-);
-```

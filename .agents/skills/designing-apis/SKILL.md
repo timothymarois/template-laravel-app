@@ -1,6 +1,6 @@
 ---
 name: designing-apis
-description: Use when designing, reviewing, documenting, or evolving an HTTP or RESTful API, including resource and URL modelling, method and status-code choice, request and response payloads, error formats, collections and pagination, filtering, idempotency and concurrency control, rate limits, authentication and authorization boundaries, versioning and deprecation, and the OpenAPI contract. Do not use for implementing a specific framework's routing, for consuming somebody else's API inside application code, or for GraphQL, gRPC, or event-stream schema design.
+description: Use when designing, reviewing, documenting, or evolving an HTTP or RESTful API, including resource and URL modelling, method and status-code choice, request and response payloads, error formats, collections and pagination, filtering, idempotency and concurrency control, rate limits, authentication and authorization boundaries, versioning and deprecation, and documenting the OpenAPI contract. It supplies HTTP-semantics defaults, compatibility rules, and the evidence that proves an API meets its contract. Do not use for implementing a specific framework's routing, for consuming somebody else's API inside application code, or for GraphQL, gRPC, or event-stream schema design.
 ---
 
 # Design APIs
@@ -9,7 +9,7 @@ An API is a contract you cannot take back. Once a client depends on a field, a s
 ordering, changing it is a breaking change regardless of how the server is implemented. Design for
 the client you cannot see.
 
-This package owns the interface: what the resources are, what the methods and status codes mean,
+This skill covers the interface: what the resources are, what the methods and status codes mean,
 what crosses the wire, and how it changes over time. It does not own the framework that serves it or
 the data model behind it.
 
@@ -42,10 +42,6 @@ GET /orders/42/cancel
 POST /orders/42/cancellation
 ```
 
-Do not signal failure with `200` and an error body. A client that must parse the body to learn
-whether the call worked cannot use any of HTTP's generic machinery, and every intermediary between
-you and it is now misinformed.
-
 ## Prefer failure-preventing replacements
 
 | Avoid | Prefer | Failure prevented |
@@ -63,7 +59,7 @@ you and it is now misinformed.
 
 ## Read only the needed depth
 
-- Naming paths, fields, enum values, error codes, and events, and renaming safely once published:
+- Naming paths, fields, enum values, and error codes, and renaming safely once published:
   [naming.md](references/naming.md)
 - Resource shape, URLs, method semantics, and status-code choice:
   [resources-and-methods.md](references/resources-and-methods.md)
@@ -81,7 +77,7 @@ you and it is now misinformed.
   [contracts-and-docs.md](references/contracts-and-docs.md)
 - Claim-to-source audit map: [sources.md](references/sources.md)
 
-## Follow the repository before following this package
+## Follow the repository before following this skill
 
 Where an API already exists, its established conventions win. A second pagination style, a second
 error shape, or a second identifier format is worse for clients than an imperfect but consistent

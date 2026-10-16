@@ -26,13 +26,12 @@ maintainer examples and community reports show the failures those contracts prev
   success and validation, automatic errors, checkbox values, remembered-password exclusion, manual
   router submissions, and the distinction between visits and non-Inertia submissions.
 - [HTTP requests](https://inertiajs.com/docs/v3/the-basics/http-requests) explicitly permits
-  `useHttp`, XHR, or `fetch` for standalone requests. This corrects the earlier unsupported blanket
-  ban on Axios/fetch.
+  `useHttp`, XHR, or `fetch` for standalone requests.
 - [File uploads](https://inertiajs.com/docs/v3/the-basics/file-uploads) establishes automatic
   `FormData` conversion and Laravel method spoofing for multipart `PUT`/`PATCH` updates.
 - [Partial reloads](https://inertiajs.com/docs/v3/data-props/partial-reloads) establishes Laravel's
-  `errors` as an `always` prop and `preserveErrors`. It also corrects the earlier false claim that an
-  Inertia validation flow receives a `422` response.
+  `errors` as an `always` prop and `preserveErrors`, and shows that an Inertia validation flow does
+  not consume a `422` response.
 - [Layouts](https://inertiajs.com/docs/v3/the-basics/layouts) establishes that a page-wrapped layout
   is destroyed and recreated on visits while a persistent layout stays alive. [Manual visits](https://inertiajs.com/docs/v3/the-basics/manual-visits)
   establishes when page state is recreated or preserved, and [issue #1211](https://github.com/inertiajs/inertia/issues/1211)
@@ -95,12 +94,3 @@ maintainer examples and community reports show the failures those contracts prev
 Omitted on purpose: generic framework introductions, uncited listicles, v2 tutorials presented as
 current, and community claims that could not be tied to a reproduced failure or a documented
 replacement.
-
-## Attribution
-
-This package adapts `skills/inertia-patterns/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License. The
-adaptation renames the package to `using-inertia`, rewrites the routing description and the
-composition boundary for this catalog, and adds the maintainer validation record required here. The
-technical guidance, examples, and source mapping are carried forward.

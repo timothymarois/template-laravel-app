@@ -1,6 +1,6 @@
 ---
 name: testing-code
-description: Use when designing, adding, repairing, assessing, or speeding up automated tests and their local or CI feedback loop, including choosing a boundary, finding untested behavior, reproducing a defect, or diagnosing flaky, brittle, slow, or falsely green results. It supplies a runner-neutral workflow for deterministic cases, trustworthy assertions, measured performance changes, and auditable evidence. Do not use it for a framework's test syntax alone, to review a completed change, or to diagnose a failure whose cause is unknown.
+description: Use when designing, adding, repairing, assessing, or speeding up automated tests and their local or CI feedback loop, including choosing a boundary, finding untested behavior, turning a reported defect into a failing case, or diagnosing flaky, brittle, slow, or falsely green tests and suites. It supplies a runner-neutral workflow for deterministic cases, trustworthy assertions, measured feedback-time changes, and auditable evidence. Do not use it for a framework's test syntax alone, to review a completed change, or to find the cause of one specific failure that is not yet proved, which is debugging.
 ---
 
 # Test code
@@ -25,11 +25,12 @@ expensive boundary.
 ## Load the stack's own mechanics
 
 This skill supplies the method — the boundary, the assertion, and the proof. A runner's fixtures,
-doubles, isolation, cleanup, and the idioms a reviewer of that stack expects belong to the package
+doubles, isolation, cleanup, and the idioms a reviewer of that stack expects belong to that stack's
+own guidance.
 
-Read the package for every language, framework, and data store the code under test uses, as soon as
-you know what they are. A framework and the database under it are two packages, not one. None of them
-needs to be installed for the method here to work.
+Load the guidance for every language, framework, and data store the code under test uses, as soon as
+you know what they are. A framework and the database under it are two stacks, not one. None of that
+guidance needs to be installed for the method here to work.
 
 ## Choose the boundary that contains the risk
 

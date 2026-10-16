@@ -1,6 +1,6 @@
 ---
 name: designing-ui-ux
-description: Use when designing, implementing, or critiquing web UI and UX, including pages, applications, dashboards, forms, navigation, components, design systems, responsive and mobile behavior, interaction and focus states, accessibility, interface text and the naming of controls, error recovery, usability, or visual polish. It supplies an evidence-backed workflow for task flow, hierarchy, affordances, feedback, and rendered verification. Do not use for backend behavior with no interface, for marketing or brand copy, or for standalone image and asset production.
+description: Use when designing, implementing, or critiquing web UI and UX, including pages, applications, dashboards, forms, navigation, components, design systems, responsive and mobile behavior, interaction and focus states, accessibility, error recovery, usability, or visual polish. It supplies an evidence-backed workflow for task flow, hierarchy, affordances, feedback, and rendered verification. Do not use for backend behavior with no interface, for marketing or brand copy, for standalone image and asset production, for CSS or Tailwind mechanics alone, for a campaign landing page, or for a storefront purchase journey.
 ---
 
 # Design UI and UX
@@ -38,18 +38,14 @@ personal preference or current aesthetic trend into a user requirement.
   states without moving the control or hiding its label unexpectedly.
 - Make enabled click or tap targets look interactive before hover. Use control shape, label,
   contrast, placement, state changes, and cursor together.
-- Apply `cursor: pointer` to every enabled activation target: buttons, links, clickable cards, menu
-  triggers, icon actions, toggles, checkbox and radio labels, and equivalent controls. Disabled
-  controls are not activation targets; drag, resize, text-selection, and similar interactions keep
-  their truthful operation-specific cursors. A pointer cursor never substitutes for native
-  semantics, keyboard behavior, focus, or a visible pressed state.
+- Apply `cursor: pointer` to every enabled activation target, as specified in
+  [interaction-and-actions.md](references/interaction-and-actions.md#make-clickability-visible).
 - Make the entire visible control activate the action. Use generous hit areas; provide a single-
   pointer alternative to dragging and never hide required behavior behind hover.
 
-Read [naming.md](references/naming.md) whenever you write a title, label, button, column header,
-empty state, error, or confirmation. What a control is called is part of whether it is
-understandable, not a copy pass afterwards, and the same words must hold from the control through
-the confirmation to the result.
+Decide what a control is called while designing it, not in a copy pass afterwards: a control the
+user cannot name is usually one whose behavior is not decided. Follow the product's interface-
+language conventions for titles, labels, column headers, empty states, errors, and confirmations.
 
 Read [interaction-and-actions.md](references/interaction-and-actions.md) when building or reviewing
 buttons, links, clickable cards, menus, dialogs, icon controls, destructive actions, cursor behavior,
@@ -79,9 +75,9 @@ weak when it appears only because no decision was made.
 
 - Respond visibly to every action. Keep the initiating control and affected content understandable
   while work is pending, then show the stored result or a specific recovery path.
-- Do not disable a primary action merely to conceal incomplete validation. When an action is truly
-  unavailable, explain what enables it; when submission begins, preserve the label, show progress,
-  and prevent accidental duplicate effects at the system boundary.
+- Do not disable a primary action merely to conceal incomplete validation; read
+  [forms-and-feedback.md](references/forms-and-feedback.md) for disabled, pending, and duplicate
+  submission behavior.
 - Preserve entered values after validation failure. Put a specific message beside each field and,
   for longer forms, provide a linked summary and deliberate focus placement.
 - Match interruption to consequence. Prefer undo for cheap reversible actions; require explicit
@@ -140,8 +136,8 @@ Render the result whenever tooling permits and inspect it rather than trusting s
 Compare approved references at the same viewport. Iterate while a difference affects hierarchy,
 usability, responsiveness, accessibility, interaction feedback, or the chosen visual direction.
 
-The evidence and lesson mapping for this package are in [sources.md](references/sources.md).
+Read [sources.md](references/sources.md) when auditing or changing a factual claim.
 
-*Portions of this package are modified from Anthropic's Apache-2.0 `frontend-design` Agent Skill.
+*Portions of this skill are modified from Anthropic's Apache-2.0 `frontend-design` Agent Skill.
 The notice, the license, and the modifications are recorded in
 [references/sources.md](references/sources.md).*

@@ -5,22 +5,8 @@ The N+1 pattern occurs when you fetch N parent records, then execute N additiona
 
 Example: 1 query for users + N queries for posts.
 
-## ORM Fixes (Quick Reference)
-
-- **SQLAlchemy 1.x**: `session.query(User).options(joinedload(User.posts))`
-- **SQLAlchemy 2.0**: `select(User).options(joinedload(User.posts))`
-- **Django**: `select_related('fk_field')` for FK/O2O, `prefetch_related('m2m_field')` for M2M/reverse FK
-- **ActiveRecord**: `User.includes(:orders)`
-- **Prisma**: `findMany({ include: { orders: true } })`
-- **Drizzle**: use `.leftJoin()` instead of loop queries
-
-```typescript
-// Drizzle example: avoid N+1 with a join
-const rows = await db
-  .select()
-  .from(users)
-  .leftJoin(posts, eq(users.id, posts.userId));
-```
+The fix in application code is the ORM's eager-loading feature; this page covers what MySQL shows
+and the SQL shapes that replace the loop.
 
 ## Detecting in MySQL Production
 

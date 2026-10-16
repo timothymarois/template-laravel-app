@@ -2,7 +2,7 @@
 
 This page is about the model: which access paths the schema must serve, what makes a shape
 indexable at all, and what a row's growth does to it. What index type serves a path, and what a
-planner does with it, belongs to the engine package you are running.
+planner does with it, belongs to the engine in use.
 
 Design-time performance is not tuning. Tuning changes the plan for a query the schema already
 supports; this page is about not building a shape that no plan can rescue.
@@ -45,7 +45,7 @@ model-wide decisions, not table-local ones:
   database-generated one cannot. That is a modelling property, and sometimes the deciding one.
 
 Where a random identifier is required externally, keep it as a separate unique column and let the
-internal key stay narrow and ordered. The engine packages state what each engine does with this;
+internal key stay narrow and ordered. What each engine does with this is the engine's documentation;
 the decision to separate the two is the model's.
 
 ## Let time and volume into the design
@@ -70,7 +70,8 @@ and own its staleness.
 -- Bad: a counter kept on the parent with nothing keeping it true.
 ALTER TABLE posts ADD COLUMN comment_count INTEGER NOT NULL DEFAULT 0;
 
--- Good: the derived value is declared as derived, and the refresh path is named.
+-- Good: the derived value is declared as derived, with its own freshness column; the job or
+-- trigger that refreshes it is named beside the table and tested against a recount.
 CREATE TABLE post_comment_counts (
   post_id        INTEGER PRIMARY KEY REFERENCES posts(id) ON DELETE CASCADE,
   comment_count  INTEGER NOT NULL,

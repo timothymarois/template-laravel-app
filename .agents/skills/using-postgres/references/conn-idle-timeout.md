@@ -21,7 +21,8 @@ where state = 'idle in transaction';
 -- Terminate connections idle in transaction after 30 seconds
 alter system set idle_in_transaction_session_timeout = '30s';
 
--- Terminate completely idle connections after 10 minutes
+-- Terminate completely idle connections after 10 minutes (PostgreSQL 14+). Do not set this
+-- for connections a pooler holds open; let the pooler retire them instead.
 alter system set idle_session_timeout = '10min';
 
 -- Reload configuration

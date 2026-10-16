@@ -2,16 +2,16 @@
 
 Accessed 7 August 2026. Standards establish minimum behavior; maintained design systems and
 practitioner research show how teams apply those contracts and where users encounter failures.
-External cursor conventions disagree. This catalog therefore records `cursor: pointer` for every
+External cursor conventions disagree. The skill therefore records `cursor: pointer` for every
 enabled activation target as its own universal UI standard, not as a WCAG or CSS requirement.
 
 ## Upstream adaptation
 
-- [Anthropic `frontend-design` at commit `2235be7c`](https://github.com/anthropics/skills/tree/2235be7c60b551f5de82ade908fd3816455afcda/skills/frontend-design)
-  supplies the Apache-2.0 base for subject-specific visual direction, deliberate composition, and a
-  memorable signature element. This adaptation retains those ideas while adding the sourced UI/UX
-  workflow, interaction rules, failure patterns, and verification criteria in this package.
-  The notice, the full license, and the modifications are recorded under `## Attribution` below.
+- Anthropic's `frontend-design` Agent Skill supplies the Apache-2.0 base for subject-specific visual
+  direction, deliberate composition, and a memorable signature element. This adaptation retains
+  those ideas while adding the sourced UI/UX workflow, interaction rules, failure patterns, and
+  verification criteria. The notice, the full license, and the modifications are recorded under
+  `## Attribution` below.
 
 ## Core UX workflow
 
@@ -53,7 +53,7 @@ enabled activation target as its own universal UI standard, not as a WCAG or CSS
   disabled states.
 - [SAP Fiori: Cursors](https://www.sap.com/design-system/fiori-design-web/v1-136/foundations/interaction/cursors)
   uses the pointer over clickable elements. Spectrum and MDN establish that external conventions
-  differ; SAP demonstrates the activation-cursor convention this catalog adopts universally.
+  differ; SAP demonstrates the activation-cursor convention this skill adopts universally.
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/) establishes keyboard operation, visible and unobscured
   focus, status messages, orientation independence, concurrent input, pointer-gesture and dragging
   alternatives, pointer cancellation, and a 24-by-24 CSS-pixel AA target-size minimum with
@@ -195,7 +195,7 @@ omitted; the public sources above define the auditable platform and accessibilit
 ## Scope limits
 
 - These sources do not establish `cursor: pointer` on command buttons as a WCAG requirement. It is a
-  deliberate catalog standard. Button order, validation timing, and confirmation patterns remain
+  deliberate standard of this skill. Button order, validation timing, and confirmation patterns remain
   context-dependent and should be tested with representative users when consequential.
 - Web target sizes use CSS pixels; do not substitute native-platform units. Safe-area handling is
   for intentional edge-to-edge layouts, and viewport units do not solve every keyboard behavior.
@@ -204,35 +204,20 @@ omitted; the public sources above define the auditable platform and accessibilit
 
 ## Attribution
 
-**This package contains Apache-2.0 licensed material.** The rest of this catalog is MIT; this
-package is the exception, and the notice below travels with it.
-
-Portions are modified from Anthropic's `frontend-design` Agent Skill, at
-<https://github.com/anthropics/skills/tree/2235be7c60b551f5de82ade908fd3816455afcda/skills/frontend-design>,
-licensed under the Apache License, Version 2.0. Those portions supply the base for subject-specific
-visual direction, deliberate composition, and choosing one signature element.
-
-That material reached this package by way of the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, path `skills/frontend-design/`, which had already
-adapted it and added the sourced UI/UX workflow, interaction rules, failure patterns, and
-verification criteria recorded above.
+This skill contains Apache-2.0 licensed material. Portions are modified from Anthropic's
+`frontend-design` Agent Skill, licensed under the Apache License, Version 2.0. Those portions supply
+the base for subject-specific visual direction, deliberate composition, and choosing one signature
+element.
 
 ### Statement of modifications
 
-As required by section 4(b) of the license, the files in this package are modified from the original
+As required by section 4(b) of the license, the files in this skill are modified from the original
 work. The modifications are:
 
-- the package is renamed `designing-ui-ux` and its routing description rewritten for this catalog;
-- the sourced UI/UX workflow, interaction and cursor rules, forms and feedback guidance, responsive
-  and mobile references, accessibility criteria, and rendered-verification steps were added by
-  Rundesk AI in the intermediate catalog and are carried forward here;
-- `references/naming.md` was added in this catalog, adapted from the MIT-licensed naming and grammar
-  guidance described below;
-- the in-package `LICENSE.txt` and the pointer to a repository-level third-party notices file were
-  removed, because this catalog's package contract permits only `SKILL.md` and `references/`; the
-  notice and the full license are reproduced here instead; and
-- a maintainer validation record was added.
+- the skill is renamed `designing-ui-ux` and its routing description rewritten;
+- a sourced UI/UX workflow, interaction and cursor rules, forms and feedback guidance, responsive
+  and mobile references, accessibility criteria, and rendered-verification steps were added; and
+- the original `LICENSE.txt` is replaced by the full license reproduced below.
 
 ### Apache License 2.0
 
@@ -400,14 +385,3 @@ accepting any such warranty or additional liability.
 
 END OF TERMS AND CONDITIONS
 ```
-
-### Naming guidance
-
-`references/naming.md` is adapted from the naming and grammar guidance in the Rundesk skills catalog
-at <https://github.com/rundesk-ai/rundesk-skills>, commit
-Rundesk AI under the MIT License. Its interface-text sections — capitalization and punctuation,
-column headers, field labels, placeholders, buttons and menu items, enum display values, metrics and
-charts, empty states, validation, conflict, system and partial-failure errors, and success
-confirmation — are carried here and rewritten for a design audience, so an interface can be named
-correctly without a second package installed. That package's wider scope, covering code identifiers,
-stored data, and the product lexicon, is deliberately not reproduced.

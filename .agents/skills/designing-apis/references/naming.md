@@ -60,60 +60,10 @@ Code form is `SCREAMING_SNAKE_CASE`, `{ENTITY}_{CONDITION}`, and stable forever.
 The status code says which class of failure it is; the code says which specific condition. A client
 that can only see `400` has to parse prose to decide what to do.
 
-Messages are written for their audience, and they are not the code: interface text needs recovery
-information, logs need safe diagnostics, API clients need the stable code.
-
-| Don't | Do |
-|---|---|
-| `Something already goes by that name` | `An invoice with that name already exists.` |
-| `Invalid value` | `retry_limit must be between 1 and 8.` |
-| `SQLSTATE[23000]: Integrity constraint violation` | Map it to a domain error at the boundary |
-
-Include a reference identifier on unexpected errors so a user's report maps to a log line.
-
-## Events name a fact that already happened
-
-Common form is `{entity}.{past-tense verb}`, lowercase and dotted.
-
-| Don't | Do |
-|---|---|
-| `invoiceUpdate`, `INVOICE_EVENT`, `invoice.change` | `invoice.archived`, `invoice.payment_terms_updated` |
-| `invoice.archive` (imperative) | Past tense — if it has not happened, it is a command |
-| `row_updated` | The business fact |
-
-`invoice.paid` survives a schema redesign; `invoices_updated` forces every consumer to diff payloads
-to work out what happened. Do not put transport promises such as `once` or `unique` in an event name
-unless the published contract actually establishes them.
-
-## Keep one canonical term across the layers
-
-The concept in the column, the API field, the form field, the label, and the export header should
-trace back to one term. Parity means shared meaning, not identical spelling: a published contract, a
-localization, or a privacy boundary can require a different surface form, and that mapping gets
-recorded. Accidental drift does not.
-
-Use one verb per meaning across the whole API. `get`, `fetch`, and `retrieve` for the same act imply
-three distinctions that do not exist.
-
-Take the vocabulary from the domain. If practitioners say "endorsement", the field is `endorsement`,
-not `policy_change` — plain language means avoiding invented abstraction, not avoiding the reader's
-actual words.
-
-## Test a name before you publish it
-
-1. **Meaning.** What fact or value does this establish? If the answer is a sentence, the name is
-   carrying an explanation that belongs in the documentation slot.
-2. **Canonical term.** Does this concept already have a name in this API? Reuse it rather than
-   coining a synonym.
-3. **Constraint.** Is the spelling fixed by a published contract, a regulation, or a platform
-   convention? Preserve it and document the mapping.
-4. **Fortieth time.** Read it as the engineer meeting it for the fortieth time at 2 AM in a stack
-   trace. Does it help them scan, or make them read?
+Messages and correlation identifiers belong to the error format in
+[payloads-and-errors.md](payloads-and-errors.md).
 
 ## Renaming a published name is a versioned change
 
-Treat the contract as published vocabulary. Renaming a field, a code, or a path is breaking. Add the
-replacement alongside the old name, mark the old one deprecated in the contract, give consumers a
-window, and remove it only after that window — the sequence in
-[evolution.md](evolution.md). Never repurpose an existing name to mean something new; that is the
-one change no client can detect until it is already wrong.
+Renaming a field, a code, or a path is breaking. Follow the deprecation sequence in
+[evolution.md](evolution.md), which also covers why a name is never repurposed.

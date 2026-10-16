@@ -14,7 +14,7 @@ create table orders (
 -- No index on customer_id!
 -- JOINs and ON DELETE CASCADE both require full table scan
 select * from orders where customer_id = 123;  -- Seq Scan
-delete from customers where id = 123;          -- Locks table, scans all orders
+delete from customers where id = 123;          -- Scans all of orders for each deleted customer
 ```
 
 **Correct (indexed foreign key):**

@@ -2,7 +2,7 @@
 
 Use this map to audit a lesson, not as more testing procedure. Tool documentation establishes
 observable runner and environment contracts; practitioner sources establish recurring failures and
-field-tested replacements. Links were checked 7 August 2026.
+field-tested replacements.
 
 ## Contract, boundary, and maintainability
 
@@ -30,7 +30,7 @@ field-tested replacements. Links were checked 7 August 2026.
   demonstrates both traps behind test helpers: noisy fixtures obscure relevance, while over-extracted
   setup hides critical values and their relationship to the assertion.
 
-Two rules in this section are catalog conclusions rather than source claims. Where a locally
+Two rules in this section are operational conclusions rather than source claims. Where a locally
 computed value is stored or decides an action elsewhere, the narrowest boundary containing its risk
 reaches that consumer: Pact establishes that producer and consumer must agree on the message and the
 pyramid establishes that a wider case must answer a question a narrower one cannot, but neither says
@@ -107,8 +107,7 @@ conclusion applied to inputs.
   and [Pact](https://docs.pact.io/) establish contract testing as the mechanism that catches a
   double drifting from the real service.
 
-The dependency-default table and the "doubles you own" rule are this package's operational
-conclusions. Links checked 23 August 2026.
+The dependency-default table and the "doubles you own" rule are operational conclusions.
 
 ## Flaky diagnosis
 
@@ -139,7 +138,7 @@ conclusions. Links checked 23 August 2026.
   is in use.
 
 The ordering of the isolation table, the reproduction-rate step, and the do-not list are this
-package's operational conclusions. Links checked 23 August 2026.
+operational conclusions.
 
 ## Proving teeth
 
@@ -163,7 +162,7 @@ package's operational conclusions. Links checked 23 August 2026.
   correctness risk rather than a tidiness one.
 
 The break/observe/restore ordering, the false-pass table, and the copy-not-`git checkout` rule are
-this package's operational conclusions. Links checked 23 August 2026.
+operational conclusions.
 
 ## Assessing a suite
 
@@ -180,10 +179,10 @@ task of judging an existing suite rather than one change.
   states that tests do not test themselves and asks whether a test would fail when the code is
   broken. It is the basis for probing the load-bearing mappings instead of accepting them.
 
-Catalog conclusions, and local heuristics rather than sourced findings: working from a behavior
+Operational conclusions, and local heuristics rather than sourced findings: working from a behavior
 inventory instead of the test directory, the three mapping outcomes, treating a case that executes
 the line while asserting something else as the failure a percentage cannot show, ranking by the cost
-of the defect, and the list of absences not worth reporting. Links checked 24 August 2026.
+of the defect, and the list of absences not worth reporting.
 
 ## Test and CI performance
 
@@ -198,7 +197,7 @@ of the defect, and the list of absences not worth reporting. Links checked 24 Au
   are authorized to add this plugin.
 - Python's [`unittest` class and module fixtures](https://docs.python.org/3/library/unittest.html#class-and-module-fixtures)
   documents `setUpClass()` and `addClassCleanup()`, including cleanup after setup failure; the same
-  manual documents `--durations` as added in Python 3.12. The read-only restriction is this catalog's
+  manual documents `--durations` as added in Python 3.12. The read-only restriction is this skill's
   isolation rule, not a promise made by `unittest`.
 - Pest's [Optimizing Tests](https://pestphp.com/docs/optimizing-tests) documents `--profile`,
   `--parallel`, explicit process counts, parallel-isolation requirements, and time-balanced CI
@@ -222,7 +221,7 @@ of the defect, and the list of absences not worth reporting. Links checked 24 Au
   carried into the skill.
 - Playwright's [Parallelism](https://playwright.dev/docs/test-parallel) documents worker isolation,
   worker limits, sharding, and maximum-failure controls. The requirement to preserve and merge
-  complete reports is this catalog's proof rule.
+  complete reports is this skill's proof rule.
 - CMake's [`ctest(1)`](https://cmake.org/cmake/help/latest/manual/ctest.1.html) documents focused
   selection, parallel level, processor accounting, job-server integration, load limits, resource
   specifications, and JUnit output. It establishes why C++ build time, test time, and constrained
@@ -233,7 +232,7 @@ of the defect, and the list of absences not worth reporting. Links checked 24 Au
 - GitHub's [Dependency caching reference](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching)
   documents exact and partial key matching, automatic save after a successful job, setup-action
   support for common package managers, branch scope, cache-poisoning boundaries, and the prohibition
-  on storing secrets. The complete-key and clean-regeneration checks are catalog conclusions from
+  on storing secrets. The complete-key and clean-regeneration checks are operational conclusions from
   that invalidation and trust model.
 - GitHub's [workflow syntax](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax)
   documents matrix jobs and `strategy.fail-fast`, including cancellation of queued and in-progress
@@ -248,16 +247,8 @@ first-failure latency separately; distinguish queue time and phase timing; compa
 caches; remove duplicate proof before tuning workers; isolate before parallelizing; balance shards by
 duration; prove the shard union; optimize the CI graph after test work; and accept a speed claim only
 when comparable before/after runs preserve discovery, assertion strength, failure sensitivity, and
-clean regeneration. Links checked 26 August 2026.
+clean regeneration.
 
-## Attribution
+## License
 
-This package adapts `skills/testing-code/` from the Rundesk skills catalog at
-<https://github.com/rundesk-ai/rundesk-skills>, commit
-`680e3d720547dbb563e6e15808e15c8f5bdd4083`, published by Rundesk AI under the MIT License.
-
-Material modifications: the routing description narrowed against its neighbouring packages in this
-catalog; a maintainer validation record added; the consumer-reaching boundary rule, the
-partition-derivation rule, and the unspecified-behavior rule added; the stack-mechanics step and the
-suite-assessment reference added; and measured local and CI performance guidance added. The boundary
-table, trap replacements, and run-evidence rules are carried forward unchanged.
+Portions are adapted from material published by Rundesk AI under the MIT License.

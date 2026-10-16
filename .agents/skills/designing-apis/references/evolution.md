@@ -56,5 +56,3 @@ calling one a minor because it felt small does not make it compatible.
 
 An internal API with known callers can move faster than a public one. What does not change is the
 order: replacement first, signal second, removal last.
-
-Renaming rules for published names are in [naming.md](naming.md).

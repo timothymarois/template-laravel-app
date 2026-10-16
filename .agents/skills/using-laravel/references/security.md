@@ -82,17 +82,8 @@ User::whereRaw('LOWER(name) = ?', [strtolower($request->name)])->get();
 
 ## Escape Output to Prevent XSS
 
-Use `{{ }}` for HTML escaping. Only use `{!! !!}` for trusted, pre-sanitized content.
-
-Incorrect:
-```blade
-{!! $user->bio !!}
-```
-
-Correct:
-```blade
-{{ $user->bio }}
-```
+Use `{{ }}` for HTML escaping. Read [Blade](blade-views.md#escape-or-sanitize-at-one-deliberate-boundary)
+before using raw `{!! !!}` output.
 
 ## CSRF Protection
 
@@ -115,12 +106,13 @@ Correct:
 
 ## Rate Limit Auth and API Routes
 
-Apply `throttle` middleware to abuse-sensitive authentication and API routes. The values below are
-an example, not a universal threshold.
+Apply named `throttle` limiters to login, public-write, and other abuse-sensitive routes, but do not
+paste one universal threshold. Choose the key, response, and rate from abuse risk, legitimate
+traffic, proxy configuration, and product behavior. The values below are an example.
 
 ```php
 RateLimiter::for('login', function (Request $request) {
-    return Limit::perMinute(5)->by($request->ip());
+    return Limit::perMinute(5)->by(Str::lower($request->string('email')).'|'.$request->ip());
 });
 
 Route::post('/login', LoginController::class)->middleware('throttle:login');
@@ -147,21 +139,8 @@ $path = $request->file('avatar')->store('avatars', 'public');
 
 ## Keep Secrets Out of Code
 
-Never commit `.env`. Access secrets via `config()` only.
-
-Incorrect:
-```php
-$key = env('API_KEY');
-```
-
-Correct:
-```php
-// config/services.php
-'api_key' => env('API_KEY'),
-
-// In application code
-$key = config('services.api_key');
-```
+Never commit `.env`. Read secrets through `config()`, never `env()` in application code; read
+[Configuration](config.md) for why and for encrypted environment files.
 
 ## Audit Dependencies
 
@@ -224,16 +203,4 @@ Correct — either keep SVG disabled or add an explicit sanitizer and safe deliv
 
 ```php
 'logo' => ['required', File::types(['png', 'jpg', 'webp'])->max('2mb')],
-```
-
-## Derive Rate Limits From the Boundary
-
-Use named limiters for login and public-write routes, but do not paste one universal threshold.
-Choose the key, response, and rate from abuse risk, legitimate traffic, proxy configuration, and
-product behavior.
-
-```php
-RateLimiter::for('login', function (Request $request) {
-    return Limit::perMinute(5)->by(Str::lower($request->string('email')).'|'.$request->ip());
-});
 ```

@@ -23,9 +23,9 @@ A composable that registers a listener, timer, observer, socket, or request also
 cleanup. Put DOM-specific setup in `onMounted` for SSR safety and teardown in `onUnmounted`; cancel
 stale watcher work with `onWatcherCleanup` (Vue 3.5+) or positional `onCleanup`.
 
-Bryce Andy's watcher case study shows the practical symptoms: growing heap, lingering network work,
-and stacked handlers after repeated changes. The replacement is not merely “remember cleanup”; make
-cleanup part of the composable's contract.
+A missing cleanup shows up as a growing heap, lingering network work, and stacked handlers after
+repeated changes. Make cleanup part of the composable's contract, not something callers must
+remember.
 
 ## Call with an active Vue scope
 
@@ -38,8 +38,8 @@ conditional, or manually stop what you create.
 ## Keep one concern
 
 Use `useX` for reactive stateful logic, `createX` for a factory, and an ordinary function for pure
-transformation. Anthony Fu's VueUse guidance is to keep composables small, composable, and
-self-cleaning. A function with no reactivity or lifecycle does not gain anything from a `use` name.
+transformation. Keep composables small, composable, and self-cleaning. A function with no
+reactivity or lifecycle does not gain anything from a `use` name.
 
 Do not hoist user-specific refs to module scope in an SSR application. The module is reused between
 requests; create app-scoped state with `createX` plus provide/inject, or use Pinia.

@@ -1,6 +1,6 @@
 ---
 name: debugging-code
-description: Use when software crashes, hangs, regresses, behaves inconsistently, returns wrong results, or fails a test, build, or runtime check and the cause is not yet proved. It supplies a language-agnostic workflow to reproduce the failure, preserve evidence, isolate the responsible boundary, test one hypothesis at a time, and prove the smallest safe correction, plus stack mechanics for Laravel and Herd, Vue and Nuxt, React, Python, C# and C++. Do not use it to judge a completed change, to explain a cause that is already proved, or to write tests as the main task.
+description: Use when software crashes, hangs, regresses, behaves inconsistently, returns wrong results, or fails a build or runtime check, or a specific test fails, and the cause is not yet proved. It supplies a language-agnostic workflow to reproduce the failure, preserve evidence, isolate the responsible boundary, test one hypothesis at a time, and prove the smallest safe correction, plus stack mechanics for Laravel and Herd, Vue and Nuxt, React, Python, C#, Godot C# and C++. Do not use it to judge a completed change, to explain a cause that is already proved, to write tests as the main task, for a flaky or slow test suite, or for slowness and performance regressions.
 ---
 
 # Debug code
@@ -22,12 +22,18 @@ diagnosis the wrong way.
 - [references/react.md](references/react.md) — React: DevTools evidence, Strict Mode double
   invocation, stale closures, render loops, hydration, and errors that never surface.
 - [references/python.md](references/python.md) — tracebacks, `pdb`, development mode, hangs, leaks.
-- [references/csharp.md](references/csharp.md) — binlogs, the managed exception, native object
-  lifetime, dumps and live counters.
+- [references/csharp.md](references/csharp.md) — .NET binlogs, build identity, the managed
+  exception, dumps, live counters, and determinism traps.
+- [references/godot-csharp.md](references/godot-csharp.md) — Godot C#: swallowed callback
+  exceptions, assembly reload, freed native objects, and engine crashes. Read it after `csharp.md`
+  when Godot hosts the failing code.
 - [references/cpp.md](references/cpp.md) — build identity, GDB/LLDB, sanitizers, cores, optimized code.
-- [references/sources.md](references/sources.md) — the citation basis for the above.
+- [references/sources.md](references/sources.md) — the citation basis; read it only when auditing or
+  updating a claim.
 
 These supply mechanics only: where a stack records evidence and how to get more. The rule a symptom
+violates belongs to that language's or framework's own guidance; none of it needs to be installed for
+the mechanics here to work.
 
 ## Establish the failure
 

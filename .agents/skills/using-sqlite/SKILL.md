@@ -7,7 +7,8 @@ description: Use when designing, querying, reviewing, migrating, tuning, backing
 
 Treat SQLite as an embedded database engine operating on files, not as a small client/server
 database. Its file lifecycle, connection settings, dynamic typing, and single-writer model define
-the safe design.
+the safe design. Engine-neutral modelling — tables, keys, relationships, history — is decided before
+this; the rules here are what SQLite adds to it.
 
 ## Confirm SQLite fits
 
@@ -80,5 +81,5 @@ a tuning bundle into every database. WAL persists in the database, while `foreig
   restore, maintenance, disk safety, permissions, and encryption boundaries.
 - [FTS5](references/fts5.md): full-text schema choices, external-content triggers, safe queries,
   ranking, integrity checks, and rebuilds.
-- [Source basis](references/sources.md): official SQLite documentation used to verify this package;
+- [Source basis](references/sources.md): official SQLite documentation behind these rules;
   read when reviewing, updating, or challenging a technical claim.

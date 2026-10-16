@@ -106,12 +106,12 @@ Bus::batch([
 
 ## Reconcile `retryUntil()` With Attempt Limits
 
-Current Laravel 13 gives `retryUntil()` precedence when both it and an attempt limit are defined. Do
+Laravel 13 gives `retryUntil()` precedence when both it and an attempt limit are defined. Do
 not add `$tries = 0` merely because a job has a retry deadline. On older applications, verify the
-installed job/worker precedence and test the terminal boundary before adopting this legacy form.
+installed job/worker precedence and test the terminal boundary before adopting this older form.
 
 ```php
-// Legacy only when the installed version and worker configuration require unlimited attempts:
+// Only when the installed version and worker configuration require unlimited attempts:
 public $tries = 0;
 
 public function retryUntil(): \DateTimeInterface
