@@ -16,6 +16,7 @@ Load light; pull depth only when the task needs it.
 
    | The work | Load |
    |---|---|
+   | Scoping, planning or delivering a change | `managing-development-work` |
    | Controller, route, request, service, job, command | `using-laravel` |
    | Anything a person sees or clicks | `designing-ui-ux` + `using-vuejs` |
    | Props, redirects, partial reloads | `using-inertia` |
