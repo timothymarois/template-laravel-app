@@ -62,8 +62,9 @@ auto-imports.d.ts
 
 /resources/old-presets
 
-# Agent skills are vendored into .agents/skills and committed (.claude, .codex and .grok link to it);
-# Claude Code's per-machine permission rules are not.
+# Agent skills live in .agents/skills (.claude links to it). Rundesk adds the general ones and keeps
+# them out of git through .git/info/exclude; only a skill this repository owns is committed.
+# Claude Code's per-machine permission rules are not committed either.
 /.claude/settings.local.json
 
 # wiki-builder — the rendered site, a published build and wrangler state
