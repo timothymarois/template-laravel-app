@@ -20,12 +20,12 @@ Load light; pull depth only when the task needs it.
    | Controller, route, request, service, job, command | `using-laravel` |
    | Anything a person sees or clicks | `designing-ui-ux` + `using-vuejs` |
    | Props, redirects, partial reloads | `using-inertia` |
-   | Migration, column, index, naming | `designing-databases` + the engine skill |
+   | Migration, column, index, naming | `designing-databases` + `using-mysql`, `using-postgres` and `using-sqlite` — forks run any of them |
    | Endpoint, URL, payload, status code | `designing-apis` |
    | CSS, spacing, breakpoints | `using-tailwindcss` |
    | Something broken, cause unknown | `debugging-code` |
-   | Any page under `docs/wiki/` | `writing-wiki-pages` |
-   | `docs/CODEMAP.md` | no skill — *Documentation duties* below |
+   | A wiki page | `writing-wiki-pages` |
+   | The code map | no skill — *Documentation duties* below |
    | Any change in behaviour | `testing-code` **and** `writing-wiki-pages` |
    | PR, issue, release, tag | `managing-github` |
 
