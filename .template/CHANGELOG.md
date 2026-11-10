@@ -8,6 +8,20 @@ This is the change history for `template-laravel-app` — the migration log fork
 
 # Released
 
+## v6.1.4 - 10/22/2026
+
+Stops vendoring the catalog agent skills: Rundesk installs them per machine and keeps them out of git. Patch: agent tooling only, no application code, schema or dependency change.
+
+> ⚠️ Every fork acts: untrack its catalog skill copies.
+
+### Changed
+
+- ⚠️ **Removed: the vendored catalog skills** in `.agents/skills` — Rundesk adds them from the `rundesk-ai/skills` package and lists them in `.git/info/exclude`; only `writing-wiki-pages`, which `wiki sync` owns, stays committed.
+
+### Migration
+
+- See [migrations/template-v6.1.4.md](migrations/template-v6.1.4.md)
+
 ## v6.1.3 - 10/07/2026
 
 Adds `solo.yml`, so Solo can run the app and its everyday artisan commands. Patch: local tooling only, no application code, schema or dependency change.
