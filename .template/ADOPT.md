@@ -10,10 +10,10 @@ rules live.
 > from itself.
 
 > **One version line.** The documentation is a [wiki-builder](https://github.com/timothymarois/wiki-builder)
-> wiki under `docs/wiki/`, written to the `writing-wiki-pages` skill that `wiki sync` puts in
-> `.agents/skills/`, and pinned to one wiki-builder release in `scripts/dev-wiki.sh`. A fork tracks
-> exactly one template version, in `template-manifest.json`; the wiki-builder release is a line in the
-> wrapper script, bumped by a template release when the tool moves.
+> wiki under `docs/wiki/`, written to the `writing-wiki-pages` skill that Rundesk adds to
+> `.agents/skills/` from its `timothymarois/wiki-builder` package, and pinned to one wiki-builder release
+> in `scripts/dev-wiki.sh`. A fork tracks exactly one template version, in `template-manifest.json`; the
+> wiki-builder release is a line in the wrapper script, bumped by a template release when the tool moves.
 
 ---
 
